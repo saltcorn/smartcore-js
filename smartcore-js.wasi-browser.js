@@ -11,7 +11,7 @@ const __wasi = new __WASI({
   version: 'preview1',
 })
 
-const __wasmUrl = new URL('./package-template.wasm32-wasi.wasm', import.meta.url).href
+const __wasmUrl = new URL('./smartcore-js.wasm32-wasi.wasm', import.meta.url).href
 const __emnapiContext = __emnapiGetDefaultContext()
 
 
@@ -56,4 +56,8 @@ const {
   },
 })
 export default __napiModule.exports
-export const plus100 = __napiModule.exports.plus100
+export const F64DenseMatrix = __napiModule.exports.F64DenseMatrix
+export const F64Pca = __napiModule.exports.F64Pca
+export const F64PCA = __napiModule.exports.F64PCA
+export const PcaParameters = __napiModule.exports.PcaParameters
+export const PCAParameters = __napiModule.exports.PCAParameters
