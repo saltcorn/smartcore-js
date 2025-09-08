@@ -1,1 +1,1 @@
-export * from '@napi-rs/package-template-wasm32-wasi'
+export * from '@saltcorn/smartcore-js-wasm32-wasi'
