@@ -11,6 +11,8 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use smartcore::dataset::Dataset as LibDataset;
 
+use crate::linalg::basic::matrix::F32DenseMatrix;
+
 #[napi]
 pub struct DatasetF32F32 {
   inner: LibDataset<f32, f32>,
@@ -55,6 +57,16 @@ impl DatasetF32F32 {
   #[napi(getter)]
   pub fn description(&self) -> String {
     self.inner.description.to_owned()
+  }
+
+  #[napi]
+  pub fn dense_matrix(&self, column_major: Option<bool>) -> Result<F32DenseMatrix> {
+    F32DenseMatrix::new(
+      self.num_samples(),
+      self.num_features(),
+      self.data(),
+      column_major,
+    )
   }
 }
 
@@ -110,6 +122,16 @@ impl DatasetF32U32 {
   #[napi(getter)]
   pub fn description(&self) -> String {
     self.inner.description.to_owned()
+  }
+
+  #[napi]
+  pub fn dense_matrix(&self, column_major: Option<bool>) -> Result<F32DenseMatrix> {
+    F32DenseMatrix::new(
+      self.num_samples(),
+      self.num_features(),
+      self.data(),
+      column_major,
+    )
   }
 }
 
