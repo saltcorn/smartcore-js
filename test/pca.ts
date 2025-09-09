@@ -1,5 +1,5 @@
 // Use
-//     $ yarn ts-node main.ts
+//     $ yarn ts-node pca.ts
 // to run this file.
 
 import { dataset, PcaParameters, F32Pca } from '../index'

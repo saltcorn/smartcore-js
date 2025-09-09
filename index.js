@@ -422,4 +422,5 @@ module.exports.R2U32 = nativeBinding.R2U32
 module.exports.RecallF32 = nativeBinding.RecallF32
 module.exports.RidgeRegressionF32 = nativeBinding.RidgeRegressionF32
 module.exports.RidgeRegressionParameters = nativeBinding.RidgeRegressionParameters
+module.exports.RidgeRegressionSolverName = nativeBinding.RidgeRegressionSolverName
 module.exports.trainTestSplitF32F32 = nativeBinding.trainTestSplitF32F32

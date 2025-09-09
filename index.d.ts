@@ -126,11 +126,20 @@ export declare class RecallF32 {
 
 export declare class RidgeRegressionF32 {
   constructor()
-  static fit(x: F32DenseMatrix, y: Uint32Array, parameters: RidgeRegressionParameters): RidgeRegressionF32
+  static fit(x: F32DenseMatrix, y: Float32Array, parameters: RidgeRegressionParameters): RidgeRegressionF32
+  predict(x: F32DenseMatrix): Float32Array
 }
 
 export declare class RidgeRegressionParameters {
+  constructor()
+  withAlpha(alpha: number): void
+  withNormalize(normalize: boolean): void
+  withSolver(solver: RidgeRegressionSolverName): void
+}
 
+export declare const enum RidgeRegressionSolverName {
+  Cholesky = 0,
+  SVD = 1
 }
 
 export declare function trainTestSplitF32F32(x: F32DenseMatrix, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [F32DenseMatrix, F32DenseMatrix, Float32Array, Float32Array]
