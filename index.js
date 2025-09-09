@@ -393,8 +393,33 @@ if (!nativeBinding) {
 }
 
 module.exports = nativeBinding
-module.exports.F64DenseMatrix = nativeBinding.F64DenseMatrix
-module.exports.F64Pca = nativeBinding.F64Pca
-module.exports.F64PCA = nativeBinding.F64PCA
+module.exports.AccuracyF32 = nativeBinding.AccuracyF32
+module.exports.Aucf32 = nativeBinding.Aucf32
+module.exports.AUCF32 = nativeBinding.AUCF32
+module.exports.boston = nativeBinding.boston
+module.exports.Boston = nativeBinding.Boston
+module.exports.BreastCancer = nativeBinding.BreastCancer
+module.exports.dataset = nativeBinding.dataset
+module.exports.Dataset = nativeBinding.Dataset
+module.exports.DatasetF32F32 = nativeBinding.DatasetF32F32
+module.exports.DatasetF32U32 = nativeBinding.DatasetF32U32
+module.exports.Diabetes = nativeBinding.Diabetes
+module.exports.Digits = nativeBinding.Digits
+module.exports.F1F32 = nativeBinding.F1F32
+module.exports.F32DenseMatrix = nativeBinding.F32DenseMatrix
+module.exports.F32Pca = nativeBinding.F32Pca
+module.exports.F32PCA = nativeBinding.F32PCA
+module.exports.Generator = nativeBinding.Generator
+module.exports.HcvScoreU32 = nativeBinding.HcvScoreU32
+module.exports.HCVScoreU32 = nativeBinding.HCVScoreU32
+module.exports.Iris = nativeBinding.Iris
+module.exports.MeanAbsoluteErrorF32 = nativeBinding.MeanAbsoluteErrorF32
+module.exports.MeanSquareErrorF32 = nativeBinding.MeanSquareErrorF32
 module.exports.PcaParameters = nativeBinding.PcaParameters
 module.exports.PCAParameters = nativeBinding.PCAParameters
+module.exports.PrecisionF32 = nativeBinding.PrecisionF32
+module.exports.R2U32 = nativeBinding.R2U32
+module.exports.RecallF32 = nativeBinding.RecallF32
+module.exports.RidgeRegressionF32 = nativeBinding.RidgeRegressionF32
+module.exports.RidgeRegressionParameters = nativeBinding.RidgeRegressionParameters
+module.exports.trainTestSplitF32F32 = nativeBinding.trainTestSplitF32F32

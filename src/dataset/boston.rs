@@ -1,10 +1,16 @@
 use napi_derive::napi;
-use smartcore::dataset::boston::load_dataset as lib_load_dataset;
 
 use super::DatasetF32F32;
+use smartcore::dataset::boston::load_dataset as lib_load_dataset;
+
+#[napi(js_name = "boston")]
+pub struct Boston {}
 
 #[napi]
-pub fn load_dataset() -> DatasetF32F32 {
-  let dataset = lib_load_dataset();
-  DatasetF32F32::new(dataset)
+impl Boston {
+  #[napi]
+  pub fn load_dataset(&self) -> DatasetF32F32 {
+    let dataset = lib_load_dataset();
+    DatasetF32F32::new(dataset)
+  }
 }

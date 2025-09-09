@@ -108,8 +108,33 @@ const { instance: __napiInstance, module: __wasiModule, napiModule: __napiModule
   },
 })
 module.exports = __napiModule.exports
-module.exports.F64DenseMatrix = __napiModule.exports.F64DenseMatrix
-module.exports.F64Pca = __napiModule.exports.F64Pca
-module.exports.F64PCA = __napiModule.exports.F64PCA
+module.exports.AccuracyF32 = __napiModule.exports.AccuracyF32
+module.exports.Aucf32 = __napiModule.exports.Aucf32
+module.exports.AUCF32 = __napiModule.exports.AUCF32
+module.exports.boston = __napiModule.exports.boston
+module.exports.Boston = __napiModule.exports.Boston
+module.exports.BreastCancer = __napiModule.exports.BreastCancer
+module.exports.dataset = __napiModule.exports.dataset
+module.exports.Dataset = __napiModule.exports.Dataset
+module.exports.DatasetF32F32 = __napiModule.exports.DatasetF32F32
+module.exports.DatasetF32U32 = __napiModule.exports.DatasetF32U32
+module.exports.Diabetes = __napiModule.exports.Diabetes
+module.exports.Digits = __napiModule.exports.Digits
+module.exports.F1F32 = __napiModule.exports.F1F32
+module.exports.F32DenseMatrix = __napiModule.exports.F32DenseMatrix
+module.exports.F32Pca = __napiModule.exports.F32Pca
+module.exports.F32PCA = __napiModule.exports.F32PCA
+module.exports.Generator = __napiModule.exports.Generator
+module.exports.HcvScoreU32 = __napiModule.exports.HcvScoreU32
+module.exports.HCVScoreU32 = __napiModule.exports.HCVScoreU32
+module.exports.Iris = __napiModule.exports.Iris
+module.exports.MeanAbsoluteErrorF32 = __napiModule.exports.MeanAbsoluteErrorF32
+module.exports.MeanSquareErrorF32 = __napiModule.exports.MeanSquareErrorF32
 module.exports.PcaParameters = __napiModule.exports.PcaParameters
 module.exports.PCAParameters = __napiModule.exports.PCAParameters
+module.exports.PrecisionF32 = __napiModule.exports.PrecisionF32
+module.exports.R2U32 = __napiModule.exports.R2U32
+module.exports.RecallF32 = __napiModule.exports.RecallF32
+module.exports.RidgeRegressionF32 = __napiModule.exports.RidgeRegressionF32
+module.exports.RidgeRegressionParameters = __napiModule.exports.RidgeRegressionParameters
+module.exports.trainTestSplitF32F32 = __napiModule.exports.trainTestSplitF32F32

@@ -120,3 +120,39 @@ impl Deref for DatasetF32U32 {
     &self.inner
   }
 }
+
+#[napi(js_name = "dataset")]
+pub struct Dataset {}
+
+#[napi]
+impl Dataset {
+  #[napi]
+  pub fn boston() -> boston::Boston {
+    boston::Boston {}
+  }
+
+  #[napi]
+  pub fn breast_cancer() -> breast_cancer::BreastCancer {
+    breast_cancer::BreastCancer {}
+  }
+
+  #[napi]
+  pub fn diabetes() -> diabetes::Diabetes {
+    diabetes::Diabetes {}
+  }
+
+  #[napi]
+  pub fn digits() -> digits::Digits {
+    digits::Digits {}
+  }
+
+  #[napi]
+  pub fn generator() -> generator::Generator {
+    generator::Generator {}
+  }
+
+  #[napi]
+  pub fn iris() -> iris::Iris {
+    iris::Iris {}
+  }
+}
