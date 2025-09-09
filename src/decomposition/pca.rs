@@ -8,7 +8,7 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix,
 };
 
-use crate::linalg::basic::matrix::F64DenseMatrix;
+use crate::linalg::basic::matrix::F32DenseMatrix;
 
 #[napi]
 #[derive(Debug, Default)]
@@ -47,28 +47,28 @@ impl Deref for PCAParameters {
 }
 
 #[napi]
-pub struct F64PCA {
-  inner: LibPCA<f64, DenseMatrix<f64>>,
+pub struct F32PCA {
+  inner: LibPCA<f32, DenseMatrix<f32>>,
 }
 
 #[napi]
-impl F64PCA {
+impl F32PCA {
   #[napi(constructor)]
-  pub fn fit(data: &F64DenseMatrix, parameters: &PCAParameters) -> Result<Self> {
+  pub fn fit(data: &F32DenseMatrix, parameters: &PCAParameters) -> Result<Self> {
     let pca = LibPCA::fit(
-      data as &DenseMatrix<f64>,
+      data as &DenseMatrix<f32>,
       (parameters as &LibPCAParameters).to_owned(),
     )
     .unwrap();
-    Ok(F64PCA { inner: pca })
+    Ok(F32PCA { inner: pca })
   }
 
   #[napi]
-  pub fn transform(&self, x: &F64DenseMatrix) -> Result<F64DenseMatrix> {
+  pub fn transform(&self, x: &F32DenseMatrix) -> Result<F32DenseMatrix> {
     let matrix = self
       .inner
       .transform(x)
       .map_err(|e| Error::new(Status::InvalidArg, format!("{}", e)))?;
-    Ok(F64DenseMatrix::from_inner(matrix))
+    Ok(F32DenseMatrix::from_inner(matrix))
   }
 }
