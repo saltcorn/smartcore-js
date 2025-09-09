@@ -38,6 +38,7 @@ export declare class DatasetF32F32 {
   get featureNames(): Array<string>
   get targetNames(): Array<string>
   get description(): string
+  denseMatrix(columnMajor?: boolean | undefined | null): F32DenseMatrix
 }
 
 export declare class DatasetF32U32 {
@@ -48,6 +49,7 @@ export declare class DatasetF32U32 {
   get featureNames(): Array<string>
   get targetNames(): Array<string>
   get description(): string
+  denseMatrix(columnMajor?: boolean | undefined | null): F32DenseMatrix
 }
 
 export declare class Diabetes {
