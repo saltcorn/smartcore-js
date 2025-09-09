@@ -137,4 +137,5 @@ module.exports.R2U32 = __napiModule.exports.R2U32
 module.exports.RecallF32 = __napiModule.exports.RecallF32
 module.exports.RidgeRegressionF32 = __napiModule.exports.RidgeRegressionF32
 module.exports.RidgeRegressionParameters = __napiModule.exports.RidgeRegressionParameters
+module.exports.RidgeRegressionSolverName = __napiModule.exports.RidgeRegressionSolverName
 module.exports.trainTestSplitF32F32 = __napiModule.exports.trainTestSplitF32F32

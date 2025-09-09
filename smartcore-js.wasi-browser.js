@@ -85,4 +85,5 @@ export const R2U32 = __napiModule.exports.R2U32
 export const RecallF32 = __napiModule.exports.RecallF32
 export const RidgeRegressionF32 = __napiModule.exports.RidgeRegressionF32
 export const RidgeRegressionParameters = __napiModule.exports.RidgeRegressionParameters
+export const RidgeRegressionSolverName = __napiModule.exports.RidgeRegressionSolverName
 export const trainTestSplitF32F32 = __napiModule.exports.trainTestSplitF32F32
