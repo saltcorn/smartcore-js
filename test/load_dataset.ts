@@ -21,7 +21,8 @@ interface DeserializeResult {
 export function loadDataset(): Dataset {
   try {
     // Read the binary file - adjust path as needed
-    const filePath = 'digits.xy' // or './digits.xy'
+    //const filePath = 'digits.xy' // or './digits.xy'
+    const filePath = path.join(__dirname, 'digits.xy')
     const bytes = fs.readFileSync(filePath)
 
     const { x, y, numSamples, numFeatures } = deserializeData(bytes)
