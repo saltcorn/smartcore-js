@@ -1,8 +1,8 @@
 import assert from 'assert'
-import { dataset, KnnClassifierf32U32, Accuracyu32 } from '../index'
+import { dataset, KnnClassifierf32U32, Accuracyu32 } from '../../index'
 
-describe('Iris Flower Classification', () => {
-  it('example runs with no errors', () => {
+export default () => {
+  it('Iris Flower Classification', () => {
     let loadedData = dataset.iris().loadDataset()
     let x = loadedData.denseMatrix()
     let y = loadedData.target
@@ -10,4 +10,4 @@ describe('Iris Flower Classification', () => {
     let accuracy = new Accuracyu32().getScore(y, y_hat)
     assert(accuracy)
   })
-})
+}
