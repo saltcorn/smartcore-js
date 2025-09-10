@@ -61,6 +61,7 @@
     "prepublishOnly": "napi prepublish -t npm",
     "test": "ava",
     "ts-test": "ts-node test/main.ts",
+    "test": "mocha",
     "version": "napi version",
     "prepare": "husky"
   },
@@ -71,11 +72,12 @@
     "@oxc-node/core": "^0.0.32",
     "@taplo/cli": "^0.7.0",
     "@tybys/wasm-util": "^0.10.0",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^24.3.1",
-    "ava": "^6.4.1",
     "chalk": "^5.4.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",
+    "mocha": "^11.7.2",
     "npm-run-all2": "^8.0.4",
     "oxlint": "^1.8.0",
     "prettier": "^3.6.2",
@@ -92,20 +94,6 @@
     ],
     "*.toml": [
       "taplo format"
-    ]
-  },
-  "ava": {
-    "extensions": {
-      "ts": "module"
-    },
-    "timeout": "2m",
-    "workerThreads": false,
-    "environmentVariables": {
-      "OXC_TSCONFIG_PATH": "./__test__/tsconfig.json"
-    },
-    "nodeArguments": [
-      "--import",
-      "@oxc-node/core/register"
     ]
   },
   "prettier": {

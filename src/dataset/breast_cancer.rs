@@ -1,7 +1,7 @@
 use napi_derive::napi;
 use smartcore::dataset::breast_cancer::load_dataset as lib_load_dataset;
 
-use super::DatasetF32U32;
+use super::Datasetf32u32;
 
 #[napi]
 pub struct BreastCancer {}
@@ -9,8 +9,8 @@ pub struct BreastCancer {}
 #[napi]
 impl BreastCancer {
   #[napi]
-  pub fn load_dataset(&self) -> DatasetF32U32 {
+  pub fn load_dataset(&self) -> Datasetf32u32 {
     let dataset = lib_load_dataset();
-    DatasetF32U32::new(dataset)
+    Datasetf32u32::new(dataset)
   }
 }

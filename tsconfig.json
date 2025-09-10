@@ -9,6 +9,9 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
+  "ts-node": {
+    "transpileOnly": true // Speeds up compilation
+  },
   "include": ["."],
   "exclude": ["node_modules", "bench", "__test__"]
 }

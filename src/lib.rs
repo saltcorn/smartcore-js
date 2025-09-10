@@ -4,3 +4,4 @@ pub mod linalg;
 pub mod linear;
 pub mod metrics;
 pub mod model_selection;
+pub mod neighbors;
