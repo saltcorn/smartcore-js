@@ -4,7 +4,7 @@ use napi_derive::napi;
 
 use smartcore::decomposition::pca::PCAParameters as LibPCAParameters;
 
-#[napi]
+#[napi(js_name = "PCAParameters")]
 #[derive(Debug, Default)]
 pub struct PCAParameters {
   inner: LibPCAParameters,

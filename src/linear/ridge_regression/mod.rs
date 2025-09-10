@@ -20,7 +20,7 @@ use parameters::{RidgeRegressionParametersf32, RidgeRegressionParametersf64};
 macro_rules! ridge_regression_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi]
+        #[napi(js_name=""[<RidgeRegression $x:upper $y:upper>]"")]
         #[derive(Debug)]
         pub struct [<RidgeRegression $x $y>] {
             inner: LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>,

@@ -3,7 +3,7 @@ use napi_derive::napi;
 use super::Datasetf32f32;
 use smartcore::dataset::boston::load_dataset as lib_load_dataset;
 
-#[napi(js_name = "boston")]
+#[napi]
 pub struct Boston {}
 
 #[napi]
