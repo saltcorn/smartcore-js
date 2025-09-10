@@ -169,6 +169,34 @@ export declare class KNNClassifierF32U32 {
 }
 export type KNNClassifierf32u32 = KNNClassifierF32U32
 
+export declare class LogisticRegressionF32U32 {
+  constructor()
+  static fit(x: DenseMatrixf32, y: Uint32Array, parameters: LogisticRegressionParametersF32): LogisticRegressionF32U32
+  predict(x: DenseMatrixf32): Uint32Array
+}
+export type LogisticRegressionf32u32 = LogisticRegressionF32U32
+
+export declare class LogisticRegressionF64U64 {
+  constructor()
+  static fit(x: DenseMatrixf64, y: BigUint64Array, parameters: LogisticRegressionParametersF64): LogisticRegressionF64U64
+  predict(x: DenseMatrixf64): BigUint64Array
+}
+export type LogisticRegressionf64u64 = LogisticRegressionF64U64
+
+export declare class LogisticRegressionParametersF32 {
+  constructor()
+  withAlpha(alpha: number): void
+  withSolver(solver: LogisticRegressionSolverName): void
+}
+export type LogisticRegressionParametersf32 = LogisticRegressionParametersF32
+
+export declare class LogisticRegressionParametersF64 {
+  constructor()
+  withAlpha(alpha: number): void
+  withSolver(solver: LogisticRegressionSolverName): void
+}
+export type LogisticRegressionParametersf64 = LogisticRegressionParametersF64
+
 export declare class Mahalanobisf64 {
   constructor(data: DenseMatrixf64)
   distance(x: Float64Array, y: Float64Array): number
@@ -306,6 +334,10 @@ export declare class RidgeRegressionParametersF64 {
   withSolver(solver: RidgeRegressionSolverName): void
 }
 export type RidgeRegressionParametersf64 = RidgeRegressionParametersF64
+
+export declare const enum LogisticRegressionSolverName {
+  LBFGS = 0
+}
 
 export declare const enum RidgeRegressionSolverName {
   Cholesky = 0,
