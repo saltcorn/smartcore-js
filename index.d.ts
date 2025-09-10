@@ -18,11 +18,17 @@ export declare class AccuracyU32 {
 }
 export type Accuracyu32 = AccuracyU32
 
-export declare class Aucf32 {
+export declare class AUCF32 {
   constructor()
-  getScoreF32(yTrue: Float32Array, yPred: Float32Array): number
+  getScore(yTrue: Float32Array, yPred: Float32Array): number
 }
-export type AUCF32 = Aucf32
+export type AUCf32 = AUCF32
+
+export declare class AUCF64 {
+  constructor()
+  getScore(yTrue: Float64Array, yPred: Float64Array): number
+}
+export type AUCf64 = AUCF64
 
 export declare class Boston {
   loadDataset(): Datasetf32f32
@@ -114,8 +120,15 @@ export declare class Euclidianu64 {
 
 export declare class F1F32 {
   constructor()
-  getScoreF32(yTrue: Float32Array, yPred: Float32Array): number
+  getScore(yTrue: Float32Array, yPred: Float32Array): number
 }
+export type F1f32 = F1F32
+
+export declare class F1F64 {
+  constructor()
+  getScore(yTrue: Float64Array, yPred: Float64Array): number
+}
+export type F1f64 = F1F64
 
 export declare class Generator {
   makeBlobs(numSamples: number, numFeatures: number, numCenters: number): Datasetf32f32
@@ -153,11 +166,17 @@ export declare class Hammingu64 {
   distance(x: BigUint64Array, y: BigUint64Array): number
 }
 
-export declare class HcvScoreU32 {
+export declare class HCVScoreU32 {
   constructor()
-  getScoreU32(yTrue: Uint32Array, yPred: Uint32Array): number
+  getScore(yTrue: Uint32Array, yPred: Uint32Array): number
 }
-export type HCVScoreU32 = HcvScoreU32
+export type HCVScoreu32 = HCVScoreU32
+
+export declare class HCVScoreU64 {
+  constructor()
+  getScore(yTrue: BigUint64Array, yPred: BigUint64Array): number
+}
+export type HCVScoreu64 = HCVScoreU64
 
 export declare class Iris {
   loadDataset(): Datasetf32u32
@@ -234,13 +253,27 @@ export declare class Manhattanu64 {
 
 export declare class MeanAbsoluteErrorF32 {
   constructor()
-  getScoreF32(yTrue: Float32Array, yPred: Float32Array): number
+  getScore(yTrue: Float32Array, yPred: Float32Array): number
 }
+export type MeanAbsoluteErrorf32 = MeanAbsoluteErrorF32
+
+export declare class MeanAbsoluteErrorF64 {
+  constructor()
+  getScore(yTrue: Float64Array, yPred: Float64Array): number
+}
+export type MeanAbsoluteErrorf64 = MeanAbsoluteErrorF64
 
 export declare class MeanSquareErrorF32 {
   constructor()
-  getScoreF32(yTrue: Float32Array, yPred: Float32Array): number
+  getScore(yTrue: Float32Array, yPred: Float32Array): number
 }
+export type MeanSquareErrorf32 = MeanSquareErrorF32
+
+export declare class MeanSquareErrorF64 {
+  constructor()
+  getScore(yTrue: Float64Array, yPred: Float64Array): number
+}
+export type MeanSquareErrorf64 = MeanSquareErrorF64
 
 export declare class Minkowskif32 {
   constructor(p: number)
@@ -292,18 +325,39 @@ export declare class PCAParameters {
 
 export declare class PrecisionF32 {
   constructor()
-  getScoreF32(yTrue: Float32Array, yPred: Float32Array): number
+  getScore(yTrue: Float32Array, yPred: Float32Array): number
 }
+export type Precisionf32 = PrecisionF32
+
+export declare class PrecisionF64 {
+  constructor()
+  getScore(yTrue: Float64Array, yPred: Float64Array): number
+}
+export type Precisionf64 = PrecisionF64
 
 export declare class R2U32 {
   constructor()
-  getScoreU32(yTrue: Uint32Array, yPred: Uint32Array): number
+  getScore(yTrue: Uint32Array, yPred: Uint32Array): number
 }
+export type R2u32 = R2U32
+
+export declare class R2U64 {
+  constructor()
+  getScore(yTrue: BigUint64Array, yPred: BigUint64Array): number
+}
+export type R2u64 = R2U64
 
 export declare class RecallF32 {
   constructor()
-  getScoreF32(yTrue: Float32Array, yPred: Float32Array): number
+  getScore(yTrue: Float32Array, yPred: Float32Array): number
 }
+export type Recallf32 = RecallF32
+
+export declare class RecallF64 {
+  constructor()
+  getScore(yTrue: Float64Array, yPred: Float64Array): number
+}
+export type Recallf64 = RecallF64
 
 export declare class RidgeRegressionF32F32 {
   constructor()
@@ -311,6 +365,13 @@ export declare class RidgeRegressionF32F32 {
   predict(x: DenseMatrixf32): Float32Array
 }
 export type RidgeRegressionf32f32 = RidgeRegressionF32F32
+
+export declare class RidgeRegressionF32U32 {
+  constructor()
+  static fit(x: DenseMatrixf32, y: Uint32Array, parameters: RidgeRegressionParametersF32): RidgeRegressionF32U32
+  predict(x: DenseMatrixf32): Uint32Array
+}
+export type RidgeRegressionf32u32 = RidgeRegressionF32U32
 
 export declare class RidgeRegressionF64F64 {
   constructor()
@@ -345,5 +406,7 @@ export declare const enum RidgeRegressionSolverName {
 }
 
 export declare function trainTestSplitF32F32(x: DenseMatrixf32, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixf32, DenseMatrixf32, Float32Array, Float32Array]
+
+export declare function trainTestSplitF32U32(x: DenseMatrixf32, y: Uint32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixf32, DenseMatrixf32, Uint32Array, Uint32Array]
 
 export declare function trainTestSplitF64F64(x: DenseMatrixf64, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixf64, DenseMatrixf64, Float64Array, Float64Array]
