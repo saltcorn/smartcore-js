@@ -16,7 +16,7 @@ pub enum RidgeRegressionSolverName {
 macro_rules! ridge_regression_parameters_struct {
   ( $ty:ty ) => {
     paste! {
-        #[napi]
+        #[napi(js_name=""[<RidgeRegressionParameters $ty:upper>]"")]
         #[derive(Debug, Clone, Default)]
         pub struct [<RidgeRegressionParameters $ty>] {
             inner: LibRidgeRegressionParameters<$ty>,

@@ -10,7 +10,7 @@ use crate::linalg::basic::matrix::{DenseMatrixf32, DenseMatrixf64};
 macro_rules! train_test_split_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi]
+        #[napi(js_name=""[<trainTestSplit $x:upper $y:upper>]"")]
         pub fn [<train_test_split_ $x _ $y>](
             x: &$xs,
             y: $ys,

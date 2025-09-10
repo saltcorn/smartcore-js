@@ -14,7 +14,7 @@ use parameters::PCAParameters;
 macro_rules! pca_struct {
   ($ty:ty) => {
     paste! {
-        #[napi]
+        #[napi(js_name=""[<PCA $ty:upper>]"")]
         #[derive(Debug)]
         pub struct [<PCA $ty>] {
             inner: LibPCA<$ty, DenseMatrix<$ty>>,

@@ -11,7 +11,7 @@ use crate::linalg::basic::matrix::DenseMatrixf32;
 macro_rules! knn_classifier_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty, $d:ty ) => {
     paste! {
-        #[napi]
+        #[napi(js_name=""[<KNNClassifier $x:upper $y:upper>]"")]
         #[derive(Debug)]
         pub struct [<KNNClassifier $x $y>] {
             inner: LibKNNClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>, $d>,

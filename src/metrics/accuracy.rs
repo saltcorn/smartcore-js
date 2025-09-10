@@ -6,7 +6,7 @@ use smartcore::metrics::{accuracy::Accuracy as LibAccuracy, Metrics};
 macro_rules! accuracy_struct {
   ( $ty:ty, $xs:ty ) => {
     paste! {
-        #[napi]
+        #[napi(js_name=""[<Accuracy $ty:upper>]"")]
         pub struct [<Accuracy $ty>] {
             inner: LibAccuracy<$ty>,
         }
