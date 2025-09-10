@@ -1,0 +1,71 @@
+use std::ops::Deref;
+
+use napi_derive::napi;
+use paste::paste;
+use smartcore::linear::ridge_regression::{
+  RidgeRegressionParameters as LibRidgeRegressionParameters,
+  RidgeRegressionSolverName as LibRidgeRegressionSolverName,
+};
+
+#[napi]
+pub enum RidgeRegressionSolverName {
+  Cholesky,
+  Svd,
+}
+
+macro_rules! ridge_regression_parameters_struct {
+  ( $ty:ty ) => {
+    paste! {
+        #[napi]
+        #[derive(Debug, Clone, Default)]
+        pub struct [<RidgeRegressionParameters $ty>] {
+            inner: LibRidgeRegressionParameters<$ty>,
+        }
+
+        #[napi]
+        impl [<RidgeRegressionParameters $ty>] {
+            #[napi(constructor)]
+            pub fn new() -> Self {
+                Self {
+                    inner: LibRidgeRegressionParameters::<$ty>::default(),
+                }
+            }
+
+            #[napi]
+            pub fn with_alpha(&mut self, alpha: f64) {
+                self.inner = self.inner.clone().with_alpha(alpha as $ty)
+            }
+
+            #[napi]
+            pub fn with_normalize(&mut self, normalize: bool) {
+                self.inner = self.inner.clone().with_normalize(normalize)
+            }
+
+            #[napi]
+            pub fn with_solver(&mut self, solver: RidgeRegressionSolverName) {
+                self.inner = match solver {
+                RidgeRegressionSolverName::Cholesky => self
+                    .inner
+                    .clone()
+                    .with_solver(LibRidgeRegressionSolverName::Cholesky),
+                RidgeRegressionSolverName::Svd => self
+                    .inner
+                    .clone()
+                    .with_solver(LibRidgeRegressionSolverName::SVD),
+                };
+            }
+        }
+
+        impl Deref for [<RidgeRegressionParameters $ty>] {
+            type Target = LibRidgeRegressionParameters<$ty>;
+
+            fn deref(&self) -> &Self::Target {
+                &self.inner
+            }
+        }
+    }
+  };
+}
+
+ridge_regression_parameters_struct! {f32}
+ridge_regression_parameters_struct! {f64}
