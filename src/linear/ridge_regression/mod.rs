@@ -76,3 +76,4 @@ macro_rules! ridge_regression_struct {
 
 ridge_regression_struct! {f32, f32, DenseMatrixf32, Float32Array}
 ridge_regression_struct! {f64, f64, DenseMatrixf64, Float64Array}
+ridge_regression_struct! {f32, u32, DenseMatrixf32, Uint32Array}
