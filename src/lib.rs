@@ -1,3 +1,4 @@
+pub mod algorithm;
 pub mod dataset;
 pub mod decomposition;
 pub mod linalg;

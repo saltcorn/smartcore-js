@@ -5,7 +5,7 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix, model_selection::train_test_split as lib_train_test_split,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixf32, DenseMatrixf64};
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 
 macro_rules! train_test_split_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -33,6 +33,6 @@ macro_rules! train_test_split_struct {
   };
 }
 
-train_test_split_struct! {f32, f32, DenseMatrixf32, Float32Array}
-train_test_split_struct! {f64, f64, DenseMatrixf64, Float64Array}
-train_test_split_struct! {f32, u32, DenseMatrixf32, Uint32Array}
+train_test_split_struct! {f32, f32, DenseMatrixF32, Float32Array}
+train_test_split_struct! {f64, f64, DenseMatrixF64, Float64Array}
+train_test_split_struct! {f32, u32, DenseMatrixF32, Uint32Array}

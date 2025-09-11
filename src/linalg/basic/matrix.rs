@@ -8,14 +8,14 @@ use smartcore::linalg::basic::matrix::DenseMatrix as LibDenseMatrix;
 macro_rules! dense_matrix_struct {
   ( $ty:ty, $values:ty ) => {
     paste! {
-        #[napi]
+        #[napi(js_name=""[<DenseMatrix $ty:upper>]"")]
         #[derive(Debug, Clone)]
-        pub struct [<DenseMatrix $ty>] {
+        pub struct [<DenseMatrix $ty:upper>] {
             inner: LibDenseMatrix<$ty>,
         }
 
         #[napi]
-        impl [<DenseMatrix $ty>] {
+        impl [<DenseMatrix $ty:upper>] {
             #[napi(constructor)]
             pub fn new(
                 nrows: u32,
@@ -39,7 +39,7 @@ macro_rules! dense_matrix_struct {
             }
         }
 
-        impl Deref for [<DenseMatrix $ty>] {
+        impl Deref for [<DenseMatrix $ty:upper>] {
             type Target = LibDenseMatrix<$ty>;
 
             fn deref(&self) -> &Self::Target {

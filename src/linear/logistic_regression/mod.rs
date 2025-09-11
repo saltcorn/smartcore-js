@@ -14,7 +14,7 @@ use smartcore::{
   },
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixf32, DenseMatrixf64};
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 use parameters::{LogisticRegressionParametersf32, LogisticRegressionParametersf64};
 
 macro_rules! logistic_regression_struct {
@@ -74,5 +74,5 @@ macro_rules! logistic_regression_struct {
   };
 }
 
-logistic_regression_struct! {f32, u32, DenseMatrixf32, Uint32Array}
-logistic_regression_struct! {f64, u64, DenseMatrixf64, BigUint64Array}
+logistic_regression_struct! {f32, u32, DenseMatrixF32, Uint32Array}
+logistic_regression_struct! {f64, u64, DenseMatrixF64, BigUint64Array}

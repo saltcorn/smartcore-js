@@ -8,7 +8,7 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixf32, DenseMatrixf64};
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 use parameters::PCAParameters;
 
 macro_rules! pca_struct {
@@ -23,7 +23,7 @@ macro_rules! pca_struct {
         #[napi]
         impl [<PCA $ty>] {
             #[napi(constructor)]
-            pub fn fit(data: &[<DenseMatrix $ty>], parameters: &PCAParameters) -> Result<Self> {
+            pub fn fit(data: &[<DenseMatrix $ty:upper>], parameters: &PCAParameters) -> Result<Self> {
                 let pca = LibPCA::fit(
                     data as &DenseMatrix<$ty>,
                     (parameters as &LibPCAParameters).to_owned(),
@@ -33,12 +33,12 @@ macro_rules! pca_struct {
             }
 
             #[napi]
-            pub fn transform(&self, x: &[<DenseMatrix $ty>]) -> Result<[<DenseMatrix $ty>]> {
+            pub fn transform(&self, x: &[<DenseMatrix $ty:upper>]) -> Result<[<DenseMatrix $ty:upper>]> {
                 let matrix = self
                     .inner
                     .transform(x)
                     .map_err(|e| Error::new(Status::InvalidArg, format!("{}", e)))?;
-                Ok([<DenseMatrix $ty>]::from_inner(matrix))
+                Ok([<DenseMatrix $ty:upper>]::from_inner(matrix))
             }
         }
     }

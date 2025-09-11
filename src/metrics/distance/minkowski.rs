@@ -8,19 +8,23 @@ use smartcore::metrics::distance::{minkowski::Minkowski as LibMinkowski, Distanc
 macro_rules! minkowski_struct {
   ( $ty:ty ) => {
     paste! {
-        #[napi]
+        #[napi(js_name=""[<Minkowski $ty:upper>]"")]
         #[derive(Debug, Clone)]
-        pub struct [<Minkowski $ty>] {
+        pub struct [<Minkowski $ty:upper>] {
             inner: LibMinkowski<$ty>,
         }
 
         #[napi]
-        impl [<Minkowski $ty>] {
+        impl [<Minkowski $ty:upper>] {
             #[napi(constructor)]
             pub fn new(p: u32) -> Self {
                 Self {
                     inner: LibMinkowski::<$ty>::new(p as u16)
                 }
+            }
+
+            pub fn owned_inner(&self) -> LibMinkowski<$ty> {
+                self.inner.to_owned()
             }
         }
     }
@@ -31,7 +35,7 @@ macro_rules! minkowski_distance_impl {
   ( $ty:ty, $x:ty, $y:ty ) => {
     paste! {
         #[napi]
-        impl [<Minkowski $ty>] {
+        impl [<Minkowski $ty:upper>] {
             #[napi]
             pub fn distance(&self, x: $x, y: $y) -> f64 {
                 let x = x.to_vec();

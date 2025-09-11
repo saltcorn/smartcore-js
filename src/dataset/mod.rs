@@ -12,18 +12,18 @@ use napi_derive::napi;
 use paste::paste;
 use smartcore::dataset::Dataset as LibDataset;
 
-use crate::linalg::basic::matrix::DenseMatrixf32;
+use crate::linalg::basic::matrix::DenseMatrixF32;
 
 macro_rules! dataset_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi]
-        pub struct [<Dataset $x $y>] {
+        #[napi(js_name=""[<Dataset $x:upper $y:upper>]"")]
+        pub struct [<Dataset $x:upper $y:upper>] {
             inner: LibDataset<$x, $y>,
         }
 
         #[napi]
-        impl [<Dataset $x $y>] {
+        impl [<Dataset $x:upper $y:upper>] {
             fn new(inner: LibDataset<$x, $y>) -> Self {
                 Self { inner }
             }
@@ -64,8 +64,8 @@ macro_rules! dataset_struct {
             }
 
             #[napi]
-            pub fn dense_matrix(&self, column_major: Option<bool>) -> Result<[<DenseMatrix $x>]> {
-                [<DenseMatrix $x>]::new(
+            pub fn dense_matrix(&self, column_major: Option<bool>) -> Result<[<DenseMatrix $x:upper>]> {
+                [<DenseMatrix $x:upper>]::new(
                     self.num_samples(),
                     self.num_features(),
                     self.data(),
@@ -74,7 +74,7 @@ macro_rules! dataset_struct {
             }
         }
 
-        impl Deref for [<Dataset $x $y>] {
+        impl Deref for [<Dataset $x:upper $y:upper>] {
             type Target = LibDataset<$x, $y>;
 
             fn deref(&self) -> &Self::Target {

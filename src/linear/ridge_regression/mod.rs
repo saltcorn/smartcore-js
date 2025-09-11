@@ -14,7 +14,7 @@ use smartcore::{
   },
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixf32, DenseMatrixf64};
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 use parameters::{RidgeRegressionParametersf32, RidgeRegressionParametersf64};
 
 macro_rules! ridge_regression_struct {
@@ -74,6 +74,6 @@ macro_rules! ridge_regression_struct {
   };
 }
 
-ridge_regression_struct! {f32, f32, DenseMatrixf32, Float32Array}
-ridge_regression_struct! {f64, f64, DenseMatrixf64, Float64Array}
-ridge_regression_struct! {f32, u32, DenseMatrixf32, Uint32Array}
+ridge_regression_struct! {f32, f32, DenseMatrixF32, Float32Array}
+ridge_regression_struct! {f64, f64, DenseMatrixF64, Float64Array}
+ridge_regression_struct! {f32, u32, DenseMatrixF32, Uint32Array}

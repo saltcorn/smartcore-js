@@ -8,19 +8,23 @@ use smartcore::metrics::distance::{euclidian::Euclidian as LibEuclidian, Distanc
 macro_rules! euclidian_struct {
   ( $ty:ty ) => {
     paste! {
-        #[napi]
+        #[napi(js_name=""[<Euclidian $ty>]"")]
         #[derive(Debug, Clone, Default)]
-        pub struct [<Euclidian $ty>] {
+        pub struct [<Euclidian $ty:upper>] {
             inner: LibEuclidian<$ty>,
         }
 
         #[napi]
-        impl [<Euclidian $ty>] {
+        impl [<Euclidian $ty:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self {
                     inner: LibEuclidian::<$ty>::new()
                 }
+            }
+
+            pub fn owned_inner(&self) -> LibEuclidian<$ty> {
+                self.inner.to_owned()
             }
         }
     }
@@ -31,7 +35,7 @@ macro_rules! euclidian_distance_impl {
   ( $ty:ty, $x:ty, $y:ty ) => {
     paste! {
         #[napi]
-        impl [<Euclidian $ty>] {
+        impl [<Euclidian $ty:upper>] {
             #[napi]
             pub fn distance(&self, x: $x, y: $y) -> f64 {
                 let x = x.to_vec();
