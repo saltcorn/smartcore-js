@@ -2,7 +2,7 @@ import { dataset, RidgeRegressionParametersF32, trainTestSplitF32U32, R2U32, KNN
 import assert from 'assert'
 
 export default () => {
-  it('K-Nearest Neighbors', () => {
+  it('Nearest Neighbors Classification', () => {
     let loadedDataset = dataset.breastCancer().loadDataset()
 
     let matrix = loadedDataset.denseMatrix()

@@ -40,3 +40,4 @@ macro_rules! knn_classifier_struct {
 }
 
 knn_classifier_struct! {f32, u32, DenseMatrixF32, Uint32Array, Euclidian<f32>}
+knn_classifier_struct! {f32, f32, DenseMatrixF32, Float32Array, Euclidian<f32>}

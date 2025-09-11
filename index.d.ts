@@ -190,7 +190,32 @@ export declare class KNNClassifierF32U32 {
   static fit(x: DenseMatrixF32, y: Uint32Array): KNNClassifierF32U32
   predict(x: DenseMatrixF32): Uint32Array
 }
-export type KNNClassifierf32u32 = KNNClassifierF32U32
+
+export declare class KNNRegressorF32F32 {
+  static fit(x: DenseMatrixF32, y: Float32Array): KNNRegressorF32F32
+  predict(x: DenseMatrixF32): Float32Array
+}
+
+export declare class KNNRegressorF32U32 {
+  static fit(x: DenseMatrixF32, y: Uint32Array): KNNRegressorF32U32
+  predict(x: DenseMatrixF32): Uint32Array
+}
+
+export declare class KNNRegressorParametersF32EuclidianF32 {
+  withK(k: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  static withWeight(weight: KNNWeightFunction): KNNRegressorParametersF32EuclidianF32
+  constructor()
+  static withDistanceHammingF32(distance: HammingF32): KNNRegressorParametersF32EuclidianF32
+}
+export type EuclidianF32KNNRegressorParametersf32 = KNNRegressorParametersF32EuclidianF32
+
+export declare class KNNRegressorParametersF32HammingF32 {
+  withK(k: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  static withWeight(weight: KNNWeightFunction): KNNRegressorParametersF32HammingF32
+}
+export type HammingF32KNNRegressorParametersf32 = KNNRegressorParametersF32HammingF32
 
 export declare class KNNRegressorParametersF32EuclidianF32 {
   withK(k: number): void
