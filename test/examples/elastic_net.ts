@@ -10,9 +10,9 @@ export default () => {
     let parameters = new ElasticNetParameters()
     parameters.withAlpha(0.5)
     parameters.withL1Ratio(0.5)
-    let y_hat_lasso = ElasticNetF32F32.fit(matrix, loadedDataset.target, parameters).predict(x_test)
+    let y_hat_en = ElasticNetF32F32.fit(matrix, loadedDataset.target, parameters).predict(x_test)
     let mean_square_error = new MeanSquareErrorF32()
-    let score = mean_square_error.getScore(y_test, y_hat_lasso)
+    let score = mean_square_error.getScore(y_test, y_hat_en)
     assert(score)
   })
 }
