@@ -217,6 +217,32 @@ export declare class KNNRegressorParametersF32HammingF32 {
 }
 export type HammingF32KNNRegressorParametersf32 = KNNRegressorParametersF32HammingF32
 
+export declare class LinearRegressionF32F32 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: Float32Array, parameters: LinearRegressionParameters): LinearRegressionF32F32
+  predict(x: DenseMatrixF32): Float32Array
+}
+export type LinearRegressionf32f32 = LinearRegressionF32F32
+
+export declare class LinearRegressionF32U32 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LinearRegressionParameters): LinearRegressionF32U32
+  predict(x: DenseMatrixF32): Uint32Array
+}
+export type LinearRegressionf32u32 = LinearRegressionF32U32
+
+export declare class LinearRegressionF64F64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: Float64Array, parameters: LinearRegressionParameters): LinearRegressionF64F64
+  predict(x: DenseMatrixF64): Float64Array
+}
+export type LinearRegressionf64f64 = LinearRegressionF64F64
+
+export declare class LinearRegressionParameters {
+  constructor()
+  withSolver(solver: LinearRegressionSolverName): void
+}
+
 export declare class LogisticRegressionF32U32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LogisticRegressionParametersF32): LogisticRegressionF32U32
@@ -433,6 +459,11 @@ export declare const enum KNNAlgorithmName {
 export declare const enum KNNWeightFunction {
   Uniform = 0,
   Distance = 1
+}
+
+export declare const enum LinearRegressionSolverName {
+  Qr = 0,
+  Svd = 1
 }
 
 export declare const enum LogisticRegressionSolverName {
