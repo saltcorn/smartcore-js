@@ -217,6 +217,35 @@ export declare class KNNRegressorParametersF32HammingF32 {
 }
 export type HammingF32KNNRegressorParametersf32 = KNNRegressorParametersF32HammingF32
 
+export declare class LassoF32F32 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: Float32Array, parameters: LassoParameters): LassoF32F32
+  predict(x: DenseMatrixF32): Float32Array
+}
+export type Lassof32f32 = LassoF32F32
+
+export declare class LassoF32U32 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LassoParameters): LassoF32U32
+  predict(x: DenseMatrixF32): Uint32Array
+}
+export type Lassof32u32 = LassoF32U32
+
+export declare class LassoF64F64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: Float64Array, parameters: LassoParameters): LassoF64F64
+  predict(x: DenseMatrixF64): Float64Array
+}
+export type Lassof64f64 = LassoF64F64
+
+export declare class LassoParameters {
+  constructor()
+  withAlpha(alpha: number): void
+  withNormalize(normalize: boolean): void
+  withTol(tol: number): void
+  withMaxIter(maxIter: number): void
+}
+
 export declare class LinearRegressionF32F32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Float32Array, parameters: LinearRegressionParameters): LinearRegressionF32F32
