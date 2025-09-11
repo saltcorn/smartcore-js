@@ -86,6 +86,36 @@ export declare class Digits {
   loadDataset(): DatasetF32F32
 }
 
+export declare class ElasticNetF32F32 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: Float32Array, parameters: ElasticNetParameters): ElasticNetF32F32
+  predict(x: DenseMatrixF32): Float32Array
+}
+export type ElasticNetf32f32 = ElasticNetF32F32
+
+export declare class ElasticNetF32U32 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: ElasticNetParameters): ElasticNetF32U32
+  predict(x: DenseMatrixF32): Uint32Array
+}
+export type ElasticNetf32u32 = ElasticNetF32U32
+
+export declare class ElasticNetF64F64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: Float64Array, parameters: ElasticNetParameters): ElasticNetF64F64
+  predict(x: DenseMatrixF64): Float64Array
+}
+export type ElasticNetf64f64 = ElasticNetF64F64
+
+export declare class ElasticNetParameters {
+  constructor()
+  withAlpha(alpha: number): void
+  withL1Ratio(l1Ratio: number): void
+  withNormalize(normalize: boolean): void
+  withTol(tol: number): void
+  withMaxIter(maxIter: number): void
+}
+
 export declare class Euclidianf32 {
   constructor()
   distance(x: Float32Array, y: Float32Array): number

@@ -5,6 +5,7 @@ import nearest_neighbor_classification from './nearest_neighbor_classification'
 import nearest_neighbor_regression from './nearest_neighbor_regression'
 import linear_regression from './linear_regression'
 import lasso from './lasso'
+import elastic_net from './elastic_net'
 
 describe('Examples', () => {
   describe('Quickstart', () => {
@@ -17,6 +18,7 @@ describe('Examples', () => {
     linear_regression()
     ridge_regression()
     lasso()
+    elastic_net()
   })
 
   describe('Unsupervised Learning', () => {
