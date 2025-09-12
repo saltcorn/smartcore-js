@@ -21,7 +21,7 @@ const __wasi = new __nodeWASI({
   env: process.env,
   preopens: {
     [__rootDir]: __rootDir,
-  },
+  }
 })
 
 const __emnapiContext = __emnapiGetDefaultContext()
@@ -41,19 +41,13 @@ if (__nodeFs.existsSync(__wasmDebugFilePath)) {
   try {
     __wasmFilePath = __nodePath.resolve('@saltcorn/smartcore-js-wasm32-wasi')
   } catch {
-    throw new Error(
-      'Cannot find smartcore-js.wasm32-wasi.wasm file, and @saltcorn/smartcore-js-wasm32-wasi package is not installed.',
-    )
+    throw new Error('Cannot find smartcore-js.wasm32-wasi.wasm file, and @saltcorn/smartcore-js-wasm32-wasi package is not installed.')
   }
 }
 
-const {
-  instance: __napiInstance,
-  module: __wasiModule,
-  napiModule: __napiModule,
-} = __emnapiInstantiateNapiModuleSync(__nodeFs.readFileSync(__wasmFilePath), {
+const { instance: __napiInstance, module: __wasiModule, napiModule: __napiModule } = __emnapiInstantiateNapiModuleSync(__nodeFs.readFileSync(__wasmFilePath), {
   context: __emnapiContext,
-  asyncWorkPoolSize: (function () {
+  asyncWorkPoolSize: (function() {
     const threadsSizeFromEnv = Number(process.env.NAPI_RS_ASYNC_WORK_POOL_SIZE ?? process.env.UV_THREADPOOL_SIZE)
     // NaN > 0 is false
     if (threadsSizeFromEnv > 0) {
@@ -78,17 +72,21 @@ const {
     // According to https://github.com/nodejs/node/blob/19e0d472728c79d418b74bddff588bea70a403d0/lib/internal/worker.js#L415,
     // a worker is consist of two handles: kPublicPort and kHandle.
     {
-      const kPublicPort = Object.getOwnPropertySymbols(worker).find((s) => s.toString().includes('kPublicPort'))
+      const kPublicPort = Object.getOwnPropertySymbols(worker).find(s =>
+        s.toString().includes("kPublicPort")
+      );
       if (kPublicPort) {
-        worker[kPublicPort].ref = () => {}
+        worker[kPublicPort].ref = () => {};
       }
 
-      const kHandle = Object.getOwnPropertySymbols(worker).find((s) => s.toString().includes('kHandle'))
+      const kHandle = Object.getOwnPropertySymbols(worker).find(s =>
+        s.toString().includes("kHandle")
+      );
       if (kHandle) {
-        worker[kHandle].ref = () => {}
+        worker[kHandle].ref = () => {};
       }
 
-      worker.unref()
+      worker.unref();
     }
     return worker
   },
@@ -163,7 +161,8 @@ module.exports.HCVScoreU64 = __napiModule.exports.HCVScoreU64
 module.exports.HCVScoreu64 = __napiModule.exports.HCVScoreu64
 module.exports.Iris = __napiModule.exports.Iris
 module.exports.KNNClassifierF32U32 = __napiModule.exports.KNNClassifierF32U32
-module.exports.KNNClassifierf32u32 = __napiModule.exports.KNNClassifierf32u32
+module.exports.KNNRegressorF32F32 = __napiModule.exports.KNNRegressorF32F32
+module.exports.KNNRegressorF32U32 = __napiModule.exports.KNNRegressorF32U32
 module.exports.KNNRegressorParametersF32EuclidianF32 = __napiModule.exports.KNNRegressorParametersF32EuclidianF32
 module.exports.EuclidianF32KNNRegressorParametersf32 = __napiModule.exports.EuclidianF32KNNRegressorParametersf32
 module.exports.KNNRegressorParametersF32HammingF32 = __napiModule.exports.KNNRegressorParametersF32HammingF32

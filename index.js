@@ -446,7 +446,6 @@ module.exports.HCVScoreU64 = nativeBinding.HCVScoreU64
 module.exports.HCVScoreu64 = nativeBinding.HCVScoreu64
 module.exports.Iris = nativeBinding.Iris
 module.exports.KNNClassifierF32U32 = nativeBinding.KNNClassifierF32U32
-module.exports.KNNClassifierf32u32 = nativeBinding.KNNClassifierf32u32
 module.exports.KNNRegressorF32F32 = nativeBinding.KNNRegressorF32F32
 module.exports.KNNRegressorF32U32 = nativeBinding.KNNRegressorF32U32
 module.exports.KNNRegressorParametersF32EuclidianF32 = nativeBinding.KNNRegressorParametersF32EuclidianF32

@@ -254,21 +254,6 @@ export declare class KNNRegressorParametersF32HammingF32 {
 }
 export type HammingF32KNNRegressorParametersf32 = KNNRegressorParametersF32HammingF32
 
-export declare class KNNRegressorParametersF32EuclidianF32 {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  static withWeight(weight: KNNWeightFunction): KNNRegressorParametersF32EuclidianF32
-  constructor()
-  static withDistanceHammingF32(distance: HammingF32): KNNRegressorParametersF32EuclidianF32
-}
-export type EuclidianF32KNNRegressorParametersf32 = KNNRegressorParametersF32EuclidianF32
-
-export declare class KNNRegressorParametersF32HammingF32 {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  static withWeight(weight: KNNWeightFunction): KNNRegressorParametersF32HammingF32
-}
-export type HammingF32KNNRegressorParametersf32 = KNNRegressorParametersF32HammingF32
 export declare class LassoF32F32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Float32Array, parameters: LassoParameters): LassoF32F32

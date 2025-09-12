@@ -109,7 +109,6 @@ export const HCVScoreU64 = __napiModule.exports.HCVScoreU64
 export const HCVScoreu64 = __napiModule.exports.HCVScoreu64
 export const Iris = __napiModule.exports.Iris
 export const KNNClassifierF32U32 = __napiModule.exports.KNNClassifierF32U32
-export const KNNClassifierf32u32 = __napiModule.exports.KNNClassifierf32u32
 export const KNNRegressorF32F32 = __napiModule.exports.KNNRegressorF32F32
 export const KNNRegressorF32U32 = __napiModule.exports.KNNRegressorF32U32
 export const KNNRegressorParametersF32EuclidianF32 = __napiModule.exports.KNNRegressorParametersF32EuclidianF32
