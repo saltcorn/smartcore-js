@@ -52,8 +52,8 @@ macro_rules! pca_struct {
                 Ok(Buffer::from(encoded))
             }
 
-            #[napi(constructor)]
-            pub fn deserialize(&self, data: Buffer) -> Result<Self> {
+            #[napi(factory)]
+            pub fn deserialize(data: Buffer) -> Result<Self> {
                 let inner = decode_from_slice::<LibPCA<$ty, DenseMatrix<$ty>>, _>(data.as_ref(), standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
                 Ok(Self { inner })
