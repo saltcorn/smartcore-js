@@ -31,11 +31,11 @@ export declare class AUCF64 {
 export type AUCf64 = AUCF64
 
 export declare class Boston {
-  loadDataset(): Datasetf32f32
+  loadDataset(): DatasetF32F32
 }
 
 export declare class BreastCancer {
-  loadDataset(): Datasetf32u32
+  loadDataset(): DatasetF32U32
 }
 
 export declare class dataset {
@@ -48,7 +48,7 @@ export declare class dataset {
 }
 export type Dataset = dataset
 
-export declare class Datasetf32F32 {
+export declare class DatasetF32F32 {
   get data(): Float32Array
   get target(): Float32Array
   get numSamples(): number
@@ -56,11 +56,10 @@ export declare class Datasetf32F32 {
   get featureNames(): Array<string>
   get targetNames(): Array<string>
   get description(): string
-  denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixf32
+  denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF32
 }
-export type Datasetf32f32 = Datasetf32F32
 
-export declare class Datasetf32U32 {
+export declare class DatasetF32U32 {
   get data(): Float32Array
   get target(): Uint32Array
   get numSamples(): number
@@ -68,55 +67,60 @@ export declare class Datasetf32U32 {
   get featureNames(): Array<string>
   get targetNames(): Array<string>
   get description(): string
-  denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixf32
+  denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF32
 }
-export type Datasetf32u32 = Datasetf32U32
 
-export declare class DenseMatrixf32 {
+export declare class DenseMatrixF32 {
   constructor(nrows: number, ncols: number, values: Float32Array, columnMajor?: boolean | undefined | null)
 }
 
-export declare class DenseMatrixf64 {
+export declare class DenseMatrixF64 {
   constructor(nrows: number, ncols: number, values: Float64Array, columnMajor?: boolean | undefined | null)
 }
 
 export declare class Diabetes {
-  loadDataset(): Datasetf32u32
+  loadDataset(): DatasetF32U32
 }
 
 export declare class Digits {
-  loadDataset(): Datasetf32f32
+  loadDataset(): DatasetF32F32
 }
 
 export declare class Euclidianf32 {
   constructor()
   distance(x: Float32Array, y: Float32Array): number
 }
+export type EuclidianF32 = Euclidianf32
 
 export declare class Euclidianf64 {
   constructor()
   distance(x: Float64Array, y: Float64Array): number
 }
+export type EuclidianF64 = Euclidianf64
 
 export declare class Euclidiani32 {
   constructor()
   distance(x: Int32Array, y: Int32Array): number
 }
+export type EuclidianI32 = Euclidiani32
 
 export declare class Euclidiani64 {
   constructor()
   distance(x: BigInt64Array, y: BigInt64Array): number
 }
+export type EuclidianI64 = Euclidiani64
 
 export declare class Euclidianu32 {
   constructor()
   distance(x: Uint32Array, y: Uint32Array): number
 }
+export type EuclidianU32 = Euclidianu32
 
 export declare class Euclidianu64 {
   constructor()
   distance(x: BigUint64Array, y: BigUint64Array): number
 }
+export type EuclidianU64 = Euclidianu64
 
 export declare class F1F32 {
   constructor()
@@ -131,37 +135,37 @@ export declare class F1F64 {
 export type F1f64 = F1F64
 
 export declare class Generator {
-  makeBlobs(numSamples: number, numFeatures: number, numCenters: number): Datasetf32f32
-  makeCircles(numSamples: number, factor: number, noise: number): Datasetf32u32
-  makeMoons(numSamples: number, noise: number): Datasetf32u32
+  makeBlobs(numSamples: number, numFeatures: number, numCenters: number): DatasetF32F32
+  makeCircles(numSamples: number, factor: number, noise: number): DatasetF32U32
+  makeMoons(numSamples: number, noise: number): DatasetF32U32
 }
 
-export declare class Hammingf32 {
+export declare class HammingF32 {
   constructor()
   distance(x: Float32Array, y: Float32Array): number
 }
 
-export declare class Hammingf64 {
+export declare class HammingF64 {
   constructor()
   distance(x: Float64Array, y: Float64Array): number
 }
 
-export declare class Hammingi32 {
+export declare class HammingI32 {
   constructor()
   distance(x: Int32Array, y: Int32Array): number
 }
 
-export declare class Hammingi64 {
+export declare class HammingI64 {
   constructor()
   distance(x: BigInt64Array, y: BigInt64Array): number
 }
 
-export declare class Hammingu32 {
+export declare class HammingU32 {
   constructor()
   distance(x: Uint32Array, y: Uint32Array): number
 }
 
-export declare class Hammingu64 {
+export declare class HammingU64 {
   constructor()
   distance(x: BigUint64Array, y: BigUint64Array): number
 }
@@ -179,26 +183,42 @@ export declare class HCVScoreU64 {
 export type HCVScoreu64 = HCVScoreU64
 
 export declare class Iris {
-  loadDataset(): Datasetf32u32
+  loadDataset(): DatasetF32U32
 }
 
 export declare class KNNClassifierF32U32 {
-  static fit(x: DenseMatrixf32, y: Uint32Array): KNNClassifierF32U32
-  predict(x: DenseMatrixf32): Uint32Array
+  static fit(x: DenseMatrixF32, y: Uint32Array): KNNClassifierF32U32
+  predict(x: DenseMatrixF32): Uint32Array
 }
 export type KNNClassifierf32u32 = KNNClassifierF32U32
 
+export declare class KNNRegressorParametersF32EuclidianF32 {
+  withK(k: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  static withWeight(weight: KNNWeightFunction): KNNRegressorParametersF32EuclidianF32
+  constructor()
+  static withDistanceHammingF32(distance: HammingF32): KNNRegressorParametersF32EuclidianF32
+}
+export type EuclidianF32KNNRegressorParametersf32 = KNNRegressorParametersF32EuclidianF32
+
+export declare class KNNRegressorParametersF32HammingF32 {
+  withK(k: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  static withWeight(weight: KNNWeightFunction): KNNRegressorParametersF32HammingF32
+}
+export type HammingF32KNNRegressorParametersf32 = KNNRegressorParametersF32HammingF32
+
 export declare class LogisticRegressionF32U32 {
   constructor()
-  static fit(x: DenseMatrixf32, y: Uint32Array, parameters: LogisticRegressionParametersF32): LogisticRegressionF32U32
-  predict(x: DenseMatrixf32): Uint32Array
+  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LogisticRegressionParametersF32): LogisticRegressionF32U32
+  predict(x: DenseMatrixF32): Uint32Array
 }
 export type LogisticRegressionf32u32 = LogisticRegressionF32U32
 
 export declare class LogisticRegressionF64U64 {
   constructor()
-  static fit(x: DenseMatrixf64, y: BigUint64Array, parameters: LogisticRegressionParametersF64): LogisticRegressionF64U64
-  predict(x: DenseMatrixf64): BigUint64Array
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: LogisticRegressionParametersF64): LogisticRegressionF64U64
+  predict(x: DenseMatrixF64): BigUint64Array
 }
 export type LogisticRegressionf64u64 = LogisticRegressionF64U64
 
@@ -216,37 +236,37 @@ export declare class LogisticRegressionParametersF64 {
 }
 export type LogisticRegressionParametersf64 = LogisticRegressionParametersF64
 
-export declare class Mahalanobisf64 {
-  constructor(data: DenseMatrixf64)
+export declare class MahalanobisF64 {
+  constructor(data: DenseMatrixF64)
   distance(x: Float64Array, y: Float64Array): number
 }
 
-export declare class Manhattanf32 {
+export declare class ManhattanF32 {
   constructor()
   distance(x: Float32Array, y: Float32Array): number
 }
 
-export declare class Manhattanf64 {
+export declare class ManhattanF64 {
   constructor()
   distance(x: Float64Array, y: Float64Array): number
 }
 
-export declare class Manhattani32 {
+export declare class ManhattanI32 {
   constructor()
   distance(x: Int32Array, y: Int32Array): number
 }
 
-export declare class Manhattani64 {
+export declare class ManhattanI64 {
   constructor()
   distance(x: BigInt64Array, y: BigInt64Array): number
 }
 
-export declare class Manhattanu32 {
+export declare class ManhattanU32 {
   constructor()
   distance(x: Uint32Array, y: Uint32Array): number
 }
 
-export declare class Manhattanu64 {
+export declare class ManhattanU64 {
   constructor()
   distance(x: BigUint64Array, y: BigUint64Array): number
 }
@@ -275,45 +295,45 @@ export declare class MeanSquareErrorF64 {
 }
 export type MeanSquareErrorf64 = MeanSquareErrorF64
 
-export declare class Minkowskif32 {
+export declare class MinkowskiF32 {
   constructor(p: number)
   distance(x: Float32Array, y: Float32Array): number
 }
 
-export declare class Minkowskif64 {
+export declare class MinkowskiF64 {
   constructor(p: number)
   distance(x: Float64Array, y: Float64Array): number
 }
 
-export declare class Minkowskii32 {
+export declare class MinkowskiI32 {
   constructor(p: number)
   distance(x: Int32Array, y: Int32Array): number
 }
 
-export declare class Minkowskii64 {
+export declare class MinkowskiI64 {
   constructor(p: number)
   distance(x: BigInt64Array, y: BigInt64Array): number
 }
 
-export declare class Minkowskiu32 {
+export declare class MinkowskiU32 {
   constructor(p: number)
   distance(x: Uint32Array, y: Uint32Array): number
 }
 
-export declare class Minkowskiu64 {
+export declare class MinkowskiU64 {
   constructor(p: number)
   distance(x: BigUint64Array, y: BigUint64Array): number
 }
 
 export declare class PCAF32 {
-  constructor(data: DenseMatrixf32, parameters: PCAParameters)
-  transform(x: DenseMatrixf32): DenseMatrixf32
+  constructor(data: DenseMatrixF32, parameters: PCAParameters)
+  transform(x: DenseMatrixF32): DenseMatrixF32
 }
 export type PCAf32 = PCAF32
 
 export declare class PCAF64 {
-  constructor(data: DenseMatrixf64, parameters: PCAParameters)
-  transform(x: DenseMatrixf64): DenseMatrixf64
+  constructor(data: DenseMatrixF64, parameters: PCAParameters)
+  transform(x: DenseMatrixF64): DenseMatrixF64
 }
 export type PCAf64 = PCAF64
 
@@ -361,22 +381,22 @@ export type Recallf64 = RecallF64
 
 export declare class RidgeRegressionF32F32 {
   constructor()
-  static fit(x: DenseMatrixf32, y: Float32Array, parameters: RidgeRegressionParametersF32): RidgeRegressionF32F32
-  predict(x: DenseMatrixf32): Float32Array
+  static fit(x: DenseMatrixF32, y: Float32Array, parameters: RidgeRegressionParametersF32): RidgeRegressionF32F32
+  predict(x: DenseMatrixF32): Float32Array
 }
 export type RidgeRegressionf32f32 = RidgeRegressionF32F32
 
 export declare class RidgeRegressionF32U32 {
   constructor()
-  static fit(x: DenseMatrixf32, y: Uint32Array, parameters: RidgeRegressionParametersF32): RidgeRegressionF32U32
-  predict(x: DenseMatrixf32): Uint32Array
+  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: RidgeRegressionParametersF32): RidgeRegressionF32U32
+  predict(x: DenseMatrixF32): Uint32Array
 }
 export type RidgeRegressionf32u32 = RidgeRegressionF32U32
 
 export declare class RidgeRegressionF64F64 {
   constructor()
-  static fit(x: DenseMatrixf64, y: Float64Array, parameters: RidgeRegressionParametersF64): RidgeRegressionF64F64
-  predict(x: DenseMatrixf64): Float64Array
+  static fit(x: DenseMatrixF64, y: Float64Array, parameters: RidgeRegressionParametersF64): RidgeRegressionF64F64
+  predict(x: DenseMatrixF64): Float64Array
 }
 export type RidgeRegressionf64f64 = RidgeRegressionF64F64
 
@@ -396,6 +416,16 @@ export declare class RidgeRegressionParametersF64 {
 }
 export type RidgeRegressionParametersf64 = RidgeRegressionParametersF64
 
+export declare const enum KNNAlgorithmName {
+  LinearSearch = 0,
+  CoverTree = 1
+}
+
+export declare const enum KNNWeightFunction {
+  Uniform = 0,
+  Distance = 1
+}
+
 export declare const enum LogisticRegressionSolverName {
   LBFGS = 0
 }
@@ -405,8 +435,8 @@ export declare const enum RidgeRegressionSolverName {
   Svd = 1
 }
 
-export declare function trainTestSplitF32F32(x: DenseMatrixf32, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixf32, DenseMatrixf32, Float32Array, Float32Array]
+export declare function trainTestSplitF32F32(x: DenseMatrixF32, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF32, DenseMatrixF32, Float32Array, Float32Array]
 
-export declare function trainTestSplitF32U32(x: DenseMatrixf32, y: Uint32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixf32, DenseMatrixf32, Uint32Array, Uint32Array]
+export declare function trainTestSplitF32U32(x: DenseMatrixF32, y: Uint32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF32, DenseMatrixF32, Uint32Array, Uint32Array]
 
-export declare function trainTestSplitF64F64(x: DenseMatrixf64, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixf64, DenseMatrixf64, Float64Array, Float64Array]
+export declare function trainTestSplitF64F64(x: DenseMatrixF64, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, Float64Array, Float64Array]
