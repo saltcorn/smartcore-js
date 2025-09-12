@@ -542,6 +542,11 @@ export declare class SVCF64U64 {
   static setFitData(xRef: DenseMatrixF64, yRef: BigUint64Array, parametersRef: SVCParametersF64U64): SVCF64U64
   fit(): void
   predict(xRef: DenseMatrixF64): Float64Array
+  static fit(xRef: DenseMatrixF32, yRef: Uint32Array, parametersRef: SVCParametersF32U32): SVCF32U32
+}
+
+export declare class SVCF64U64 {
+  static fit(xRef: DenseMatrixF64, yRef: BigUint64Array, parametersRef: SVCParametersF64U64): SVCF64U64
 }
 
 export declare class SVCParametersF32U32 {
