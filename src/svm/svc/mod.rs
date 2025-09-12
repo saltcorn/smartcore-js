@@ -13,7 +13,6 @@ use parameters::{SVCParametersF32U32, SVCParametersF64U64};
 
 macro_rules! svm_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty, $inner_xs:ty ) => {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
         #[napi(js_name = [<"SVC" $x:upper $y:upper>])]
         pub struct [<SVC $x:upper $y:upper>] {
@@ -21,7 +20,6 @@ macro_rules! svm_struct {
             y_data: Vec<$y>,
             parameters: SharedReference<[<SVCParameters $x:upper $y:upper>], &'static LibSVCParameters<$x, $y, DenseMatrix<$x>, Vec<$y>>>,
             inner: Option<SharedReference<[<SVCParameters $x:upper $y:upper>],LibSVC<'static, $x, $y, DenseMatrix<$x>, Vec<$y>>>>,
-            inner: Option<LibSVC<'static, $x, $y, DenseMatrix<$x>, Vec<$y>>>,
         }
 
         #[napi]
@@ -29,7 +27,6 @@ macro_rules! svm_struct {
 
             #[napi(factory)]
             pub fn set_fit_data(
-            pub fn fit(
                 x_ref: Reference<$xs>,
                 y_ref: Reference<$ys>,
                 parameters_ref: Reference<[<SVCParameters $x:upper $y:upper>]>,
@@ -50,22 +47,11 @@ macro_rules! svm_struct {
                     Ok(params.inner())
                 })?;
 
-                    Ok(&*params.inner())
-                })?;
-
-                let model = LibSVC::fit(
-                    &**x_matrix,
-                    &y_data,
-                    &*parameters
-                )
-                .map_err(|e| Error::new(Status::GenericFailure, format!("SVM fit failed: {}", e)))?;
-
                 Ok(Self {
                     x_matrix,
                     y_data,
                     parameters,
                     inner: None,
-                    inner: Some(model),
                 })
             }
 
@@ -91,7 +77,6 @@ macro_rules! svm_struct {
 
             #[napi]
             pub fn predict(&self, x_ref: Reference<$xs>, env: Env) -> Result<$inner_xs> {
-            pub fn predict(&self, x_ref: Reference<$xs>, env: Env) -> Result<Vec<$x>> {
                 let x_matrix = x_ref.share_with(env, |x| {
                     Ok(&**x)
                 })?;
@@ -103,7 +88,6 @@ macro_rules! svm_struct {
                     .map_err(|e| Error::new(Status::GenericFailure, format!("SVM predict failed: {}", e)))?;
 
                 Ok($inner_xs::new(prediction))
-                Ok(prediction)
             }
         }
     }
@@ -112,5 +96,3 @@ macro_rules! svm_struct {
 
 svm_struct! {f32, u32, DenseMatrixF32, Uint32Array, Float32Array}
 svm_struct! {f64, u64, DenseMatrixF64, BigUint64Array, Float64Array}
-svm_struct! {f32, u32, DenseMatrixF32, Uint32Array}
-svm_struct! {f64, u64, DenseMatrixF64, BigUint64Array}
