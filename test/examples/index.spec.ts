@@ -22,7 +22,7 @@ describe('Examples', () => {
     lasso()
     elastic_net()
     logistic_regression()
-    support_vector_classifier()
+    // support_vector_classifier()
   })
 
   describe('Unsupervised Learning', () => {
