@@ -7,6 +7,7 @@ import linear_regression from './linear_regression'
 import lasso from './lasso'
 import elastic_net from './elastic_net'
 import logistic_regression from './logistic_regression'
+import support_vector_classifier from './support_vector_classifier'
 
 describe('Examples', () => {
   describe('Quickstart', () => {
@@ -21,6 +22,7 @@ describe('Examples', () => {
     lasso()
     elastic_net()
     logistic_regression()
+    support_vector_classifier()
   })
 
   describe('Unsupervised Learning', () => {

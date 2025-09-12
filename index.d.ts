@@ -72,10 +72,14 @@ export declare class DatasetF32U32 {
 
 export declare class DenseMatrixF32 {
   constructor(nrows: number, ncols: number, values: Float32Array, columnMajor?: boolean | undefined | null)
+  serialize(): Buffer
+  static deserialize(data: Buffer): DenseMatrixF32
 }
 
 export declare class DenseMatrixF64 {
   constructor(nrows: number, ncols: number, values: Float64Array, columnMajor?: boolean | undefined | null)
+  serialize(): Buffer
+  static deserialize(data: Buffer): DenseMatrixF64
 }
 
 export declare class Diabetes {
@@ -90,18 +94,24 @@ export declare class ElasticNetF32F32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Float32Array, parameters: ElasticNetParameters): ElasticNetF32F32
   predict(x: DenseMatrixF32): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ElasticNetF32F32
 }
 
 export declare class ElasticNetF32U32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Uint32Array, parameters: ElasticNetParameters): ElasticNetF32U32
   predict(x: DenseMatrixF32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ElasticNetF32U32
 }
 
 export declare class ElasticNetF64F64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: ElasticNetParameters): ElasticNetF64F64
   predict(x: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ElasticNetF64F64
 }
 
 export declare class ElasticNetParameters {
@@ -263,18 +273,24 @@ export declare class LassoF32F32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Float32Array, parameters: LassoParameters): LassoF32F32
   predict(x: DenseMatrixF32): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LassoF32F32
 }
 
 export declare class LassoF32U32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LassoParameters): LassoF32U32
   predict(x: DenseMatrixF32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LassoF32U32
 }
 
 export declare class LassoF64F64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: LassoParameters): LassoF64F64
   predict(x: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LassoF64F64
 }
 
 export declare class LassoParameters {
@@ -289,18 +305,24 @@ export declare class LinearRegressionF32F32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Float32Array, parameters: LinearRegressionParameters): LinearRegressionF32F32
   predict(x: DenseMatrixF32): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LinearRegressionF32F32
 }
 
 export declare class LinearRegressionF32U32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LinearRegressionParameters): LinearRegressionF32U32
   predict(x: DenseMatrixF32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LinearRegressionF32U32
 }
 
 export declare class LinearRegressionF64F64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: LinearRegressionParameters): LinearRegressionF64F64
   predict(x: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LinearRegressionF64F64
 }
 
 export declare class LinearRegressionParameters {
@@ -312,12 +334,16 @@ export declare class LogisticRegressionF32U32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LogisticRegressionParametersF32): LogisticRegressionF32U32
   predict(x: DenseMatrixF32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LogisticRegressionF32U32
 }
 
 export declare class LogisticRegressionF64U64 {
   constructor()
   static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: LogisticRegressionParametersF64): LogisticRegressionF64U64
   predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LogisticRegressionF64U64
 }
 
 export declare class LogisticRegressionParametersF32 {
@@ -424,11 +450,15 @@ export declare class MinkowskiU64 {
 export declare class PCAF32 {
   constructor(data: DenseMatrixF32, parameters: PCAParameters)
   transform(x: DenseMatrixF32): DenseMatrixF32
+  serialize(): Buffer
+  static deserialize(data: Buffer): PCAF32
 }
 
 export declare class PCAF64 {
   constructor(data: DenseMatrixF64, parameters: PCAParameters)
   transform(x: DenseMatrixF64): DenseMatrixF64
+  serialize(): Buffer
+  static deserialize(data: Buffer): PCAF64
 }
 
 export declare class PCAParameters {
@@ -477,18 +507,24 @@ export declare class RidgeRegressionF32F32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Float32Array, parameters: RidgeRegressionParametersF32): RidgeRegressionF32F32
   predict(x: DenseMatrixF32): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RidgeRegressionF32F32
 }
 
 export declare class RidgeRegressionF32U32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Uint32Array, parameters: RidgeRegressionParametersF32): RidgeRegressionF32U32
   predict(x: DenseMatrixF32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RidgeRegressionF32U32
 }
 
 export declare class RidgeRegressionF64F64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: RidgeRegressionParametersF64): RidgeRegressionF64F64
   predict(x: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RidgeRegressionF64F64
 }
 
 export declare class RidgeRegressionParametersF32 {
@@ -506,11 +542,15 @@ export declare class RidgeRegressionParametersF64 {
 }
 
 export declare class SVCF32U32 {
-  static fit(xRef: DenseMatrixF32, yRef: Uint32Array, parametersRef: SVCParametersF32U32): SVCF32U32
+  static setFitData(xRef: DenseMatrixF32, yRef: Uint32Array, parametersRef: SVCParametersF32U32): SVCF32U32
+  fit(): void
+  predict(xRef: DenseMatrixF32): Float32Array
 }
 
 export declare class SVCF64U64 {
-  static fit(xRef: DenseMatrixF64, yRef: BigUint64Array, parametersRef: SVCParametersF64U64): SVCF64U64
+  static setFitData(xRef: DenseMatrixF64, yRef: BigUint64Array, parametersRef: SVCParametersF64U64): SVCF64U64
+  fit(): void
+  predict(xRef: DenseMatrixF64): Float64Array
 }
 
 export declare class SVCParametersF32U32 {
