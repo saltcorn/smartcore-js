@@ -13,12 +13,12 @@ macro_rules! knn_classifier_struct {
     paste! {
         #[napi(js_name=""[<KNNClassifier $x:upper $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<KNNClassifier $x $y>] {
+        pub struct [<KNNClassifier $x:upper $y:upper>] {
             inner: LibKNNClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>, $d>,
         }
 
         #[napi]
-        impl [<KNNClassifier $x $y>] {
+        impl [<KNNClassifier $x:upper $y:upper>] {
             #[napi(factory)]
             pub fn fit(x: &$xs, y: $ys) -> Result<Self> {
                 let y = y.to_vec();

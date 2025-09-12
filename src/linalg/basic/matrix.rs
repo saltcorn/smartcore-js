@@ -1,5 +1,9 @@
 use std::ops::Deref;
 
+use bincode::{
+  config::standard,
+  serde::{decode_from_slice, encode_to_vec},
+};
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
@@ -36,6 +40,20 @@ macro_rules! dense_matrix_struct {
 
             pub fn from_inner(inner: LibDenseMatrix<$ty>) -> Self {
                 Self { inner }
+            }
+
+            #[napi]
+            pub fn serialize(&self) -> Result<Buffer> {
+                let encoded = encode_to_vec(&self.inner, standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                Ok(Buffer::from(encoded))
+            }
+
+            #[napi(factory)]
+            pub fn deserialize(data: Buffer) -> Result<Self> {
+                let inner = decode_from_slice::<LibDenseMatrix<$ty>, _>(data.as_ref(), standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
+                Ok(Self { inner })
             }
         }
 

@@ -12,46 +12,46 @@ use paste::paste;
 use smartcore::{
   api::SupervisedEstimator,
   linalg::basic::matrix::DenseMatrix,
-  linear::logistic_regression::{
-    LogisticRegression as LibLogisticRegression,
-    LogisticRegressionParameters as LibLogisticRegressionParameters,
+  linear::linear_regression::{
+    LinearRegression as LibLinearRegression,
+    LinearRegressionParameters as LibLinearRegressionParameters,
   },
 };
 
 use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-use parameters::{LogisticRegressionParametersF32, LogisticRegressionParametersF64};
+use parameters::LinearRegressionParameters;
 
-macro_rules! logistic_regression_struct {
+macro_rules! linear_regression_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<LogisticRegression $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<LinearRegression $x:upper $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<LogisticRegression $x:upper $y:upper>] {
-            inner: LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>,
+        pub struct [<LinearRegression $x:upper $y:upper>] {
+            inner: LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
-        impl Default for [<LogisticRegression $x:upper $y:upper>] {
+        impl Default for [<LinearRegression $x:upper $y:upper>] {
             fn default() -> Self {
                 Self {
-                    inner: LibLogisticRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
+                    inner: LibLinearRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
                 }
             }
         }
 
         #[napi]
-        impl [<LogisticRegression $x:upper $y:upper>] {
+        impl [<LinearRegression $x:upper $y:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self::default()
             }
 
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &[<LogisticRegressionParameters $x:upper>]) -> Result<Self> {
+            pub fn fit(x: &$xs, y: $ys, parameters: &LinearRegressionParameters) -> Result<Self> {
                 let y = y.to_vec();
-                let inner = LibLogisticRegression::fit(
+                let inner = LibLinearRegression::fit(
                     x as &DenseMatrix<$x>,
                     &y,
-                    (parameters as &LibLogisticRegressionParameters<$x>).to_owned(),
+                    (parameters as &LibLinearRegressionParameters).to_owned(),
                 )
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok(Self { inner })
@@ -75,14 +75,14 @@ macro_rules! logistic_regression_struct {
 
             #[napi(factory)]
             pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
+                let inner = decode_from_slice::<LibLinearRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
                 Ok(Self { inner })
             }
         }
 
-        impl Deref for [<LogisticRegression $x:upper $y:upper>] {
-            type Target = LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>;
+        impl Deref for [<LinearRegression $x:upper $y:upper>] {
+            type Target = LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>;
 
             fn deref(&self) -> &Self::Target {
                 &self.inner
@@ -92,5 +92,6 @@ macro_rules! logistic_regression_struct {
   };
 }
 
-logistic_regression_struct! {f32, u32, DenseMatrixF32, Uint32Array}
-logistic_regression_struct! {f64, u64, DenseMatrixF64, BigUint64Array}
+linear_regression_struct! {f32, f32, DenseMatrixF32, Float32Array}
+linear_regression_struct! {f64, f64, DenseMatrixF64, Float64Array}
+linear_regression_struct! {f32, u32, DenseMatrixF32, Uint32Array}

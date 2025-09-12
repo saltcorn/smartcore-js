@@ -38,4 +38,5 @@ macro_rules! r2_struct {
 }
 
 r2_struct! {u32, Uint32Array}
+r2_struct! {f32, Float32Array}
 r2_struct! {u64, BigUint64Array}

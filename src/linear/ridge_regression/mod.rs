@@ -2,6 +2,10 @@ mod parameters;
 
 use std::ops::Deref;
 
+use bincode::{
+  config::standard,
+  serde::{decode_from_slice, encode_to_vec},
+};
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
@@ -15,18 +19,18 @@ use smartcore::{
 };
 
 use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-use parameters::{RidgeRegressionParametersf32, RidgeRegressionParametersf64};
+use parameters::{RidgeRegressionParametersF32, RidgeRegressionParametersF64};
 
 macro_rules! ridge_regression_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
         #[napi(js_name=""[<RidgeRegression $x:upper $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<RidgeRegression $x $y>] {
+        pub struct [<RidgeRegression $x:upper $y:upper>] {
             inner: LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
-        impl Default for [<RidgeRegression $x $y>] {
+        impl Default for [<RidgeRegression $x:upper $y:upper>] {
             fn default() -> Self {
                 Self {
                     inner: LibRidgeRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
@@ -35,14 +39,14 @@ macro_rules! ridge_regression_struct {
         }
 
         #[napi]
-        impl [<RidgeRegression $x $y>] {
+        impl [<RidgeRegression $x:upper $y:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self::default()
             }
 
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &[<RidgeRegressionParameters $x>]) -> Result<Self> {
+            pub fn fit(x: &$xs, y: $ys, parameters: &[<RidgeRegressionParameters $x:upper>]) -> Result<Self> {
                 let y = y.to_vec();
                 let inner = LibRidgeRegression::fit(
                     x as &DenseMatrix<$x>,
@@ -61,9 +65,23 @@ macro_rules! ridge_regression_struct {
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok($ys::new(prediction_result))
             }
+
+            #[napi]
+            pub fn serialize(&self) -> Result<Buffer> {
+                let encoded = encode_to_vec(&self.inner, standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                Ok(Buffer::from(encoded))
+            }
+
+            #[napi(factory)]
+            pub fn deserialize(data: Buffer) -> Result<Self> {
+                let inner = decode_from_slice::<LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
+                Ok(Self { inner })
+            }
         }
 
-        impl Deref for [<RidgeRegression $x $y>] {
+        impl Deref for [<RidgeRegression $x:upper $y:upper>] {
             type Target = LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>;
 
             fn deref(&self) -> &Self::Target {
