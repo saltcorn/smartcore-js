@@ -1,6 +1,6 @@
 {
   "name": "@saltcorn/smartcore-js",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Template project for writing node package with napi-rs",
   "main": "index.js",
   "repository": {
@@ -59,9 +59,8 @@
     "format:rs": "cargo fmt",
     "lint": "oxlint .",
     "prepublishOnly": "napi prepublish -t npm",
-    "test": "ava",
-    "ts-test": "ts-node test/main.ts",
     "test": "mocha",
+    "ts-test": "ts-node test/main.ts",
     "version": "napi version",
     "prepare": "husky"
   },
@@ -103,5 +102,21 @@
     "singleQuote": true,
     "arrowParens": "always"
   },
-  "packageManager": "yarn@4.9.4"
+  "packageManager": "yarn@4.9.4",
+  "optionalDependencies": {
+    "@saltcorn/smartcore-js-win32-x64-msvc": "0.1.0",
+    "@saltcorn/smartcore-js-darwin-x64": "0.1.0",
+    "@saltcorn/smartcore-js-linux-x64-gnu": "0.1.0",
+    "@saltcorn/smartcore-js-linux-x64-musl": "0.1.0",
+    "@saltcorn/smartcore-js-linux-arm64-gnu": "0.1.0",
+    "@saltcorn/smartcore-js-win32-ia32-msvc": "0.1.0",
+    "@saltcorn/smartcore-js-linux-arm-gnueabihf": "0.1.0",
+    "@saltcorn/smartcore-js-darwin-arm64": "0.1.0",
+    "@saltcorn/smartcore-js-android-arm64": "0.1.0",
+    "@saltcorn/smartcore-js-freebsd-x64": "0.1.0",
+    "@saltcorn/smartcore-js-linux-arm64-musl": "0.1.0",
+    "@saltcorn/smartcore-js-win32-arm64-msvc": "0.1.0",
+    "@saltcorn/smartcore-js-android-arm-eabi": "0.1.0",
+    "@saltcorn/smartcore-js-wasm32-wasi": "0.1.0"
+  }
 }
