@@ -2,6 +2,10 @@ mod parameters;
 
 use std::ops::Deref;
 
+use bincode::{
+  config::standard,
+  serde::{decode_from_slice, encode_to_vec},
+};
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
@@ -22,11 +26,11 @@ macro_rules! linear_regression_struct {
     paste! {
         #[napi(js_name=""[<LinearRegression $x:upper $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<LinearRegression $x $y>] {
+        pub struct [<LinearRegression $x:upper $y:upper>] {
             inner: LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
-        impl Default for [<LinearRegression $x $y>] {
+        impl Default for [<LinearRegression $x:upper $y:upper>] {
             fn default() -> Self {
                 Self {
                     inner: LibLinearRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
@@ -35,7 +39,7 @@ macro_rules! linear_regression_struct {
         }
 
         #[napi]
-        impl [<LinearRegression $x $y>] {
+        impl [<LinearRegression $x:upper $y:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self::default()
@@ -61,9 +65,23 @@ macro_rules! linear_regression_struct {
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok($ys::new(prediction_result))
             }
+
+            #[napi]
+            pub fn serialize(&self) -> Result<Buffer> {
+                let encoded = encode_to_vec(&self.inner, standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                Ok(Buffer::from(encoded))
+            }
+
+            #[napi(constructor)]
+            pub fn deserialize(&self, data: Buffer) -> Result<Self> {
+                let inner = decode_from_slice::<LibLinearRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
+                Ok(Self { inner })
+            }
         }
 
-        impl Deref for [<LinearRegression $x $y>] {
+        impl Deref for [<LinearRegression $x:upper $y:upper>] {
             type Target = LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>;
 
             fn deref(&self) -> &Self::Target {
