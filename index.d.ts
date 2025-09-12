@@ -91,21 +91,18 @@ export declare class ElasticNetF32F32 {
   static fit(x: DenseMatrixF32, y: Float32Array, parameters: ElasticNetParameters): ElasticNetF32F32
   predict(x: DenseMatrixF32): Float32Array
 }
-export type ElasticNetf32f32 = ElasticNetF32F32
 
 export declare class ElasticNetF32U32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Uint32Array, parameters: ElasticNetParameters): ElasticNetF32U32
   predict(x: DenseMatrixF32): Uint32Array
 }
-export type ElasticNetf32u32 = ElasticNetF32U32
 
 export declare class ElasticNetF64F64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: ElasticNetParameters): ElasticNetF64F64
   predict(x: DenseMatrixF64): Float64Array
 }
-export type ElasticNetf64f64 = ElasticNetF64F64
 
 export declare class ElasticNetParameters {
   constructor()
@@ -252,21 +249,18 @@ export declare class LassoF32F32 {
   static fit(x: DenseMatrixF32, y: Float32Array, parameters: LassoParameters): LassoF32F32
   predict(x: DenseMatrixF32): Float32Array
 }
-export type Lassof32f32 = LassoF32F32
 
 export declare class LassoF32U32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LassoParameters): LassoF32U32
   predict(x: DenseMatrixF32): Uint32Array
 }
-export type Lassof32u32 = LassoF32U32
 
 export declare class LassoF64F64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: LassoParameters): LassoF64F64
   predict(x: DenseMatrixF64): Float64Array
 }
-export type Lassof64f64 = LassoF64F64
 
 export declare class LassoParameters {
   constructor()
@@ -281,21 +275,18 @@ export declare class LinearRegressionF32F32 {
   static fit(x: DenseMatrixF32, y: Float32Array, parameters: LinearRegressionParameters): LinearRegressionF32F32
   predict(x: DenseMatrixF32): Float32Array
 }
-export type LinearRegressionf32f32 = LinearRegressionF32F32
 
 export declare class LinearRegressionF32U32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LinearRegressionParameters): LinearRegressionF32U32
   predict(x: DenseMatrixF32): Uint32Array
 }
-export type LinearRegressionf32u32 = LinearRegressionF32U32
 
 export declare class LinearRegressionF64F64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: LinearRegressionParameters): LinearRegressionF64F64
   predict(x: DenseMatrixF64): Float64Array
 }
-export type LinearRegressionf64f64 = LinearRegressionF64F64
 
 export declare class LinearRegressionParameters {
   constructor()
@@ -307,28 +298,24 @@ export declare class LogisticRegressionF32U32 {
   static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LogisticRegressionParametersF32): LogisticRegressionF32U32
   predict(x: DenseMatrixF32): Uint32Array
 }
-export type LogisticRegressionf32u32 = LogisticRegressionF32U32
 
 export declare class LogisticRegressionF64U64 {
   constructor()
   static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: LogisticRegressionParametersF64): LogisticRegressionF64U64
   predict(x: DenseMatrixF64): BigUint64Array
 }
-export type LogisticRegressionf64u64 = LogisticRegressionF64U64
 
 export declare class LogisticRegressionParametersF32 {
   constructor()
   withAlpha(alpha: number): void
   withSolver(solver: LogisticRegressionSolverName): void
 }
-export type LogisticRegressionParametersf32 = LogisticRegressionParametersF32
 
 export declare class LogisticRegressionParametersF64 {
   constructor()
   withAlpha(alpha: number): void
   withSolver(solver: LogisticRegressionSolverName): void
 }
-export type LogisticRegressionParametersf64 = LogisticRegressionParametersF64
 
 export declare class MahalanobisF64 {
   constructor(data: DenseMatrixF64)
@@ -423,13 +410,11 @@ export declare class PCAF32 {
   constructor(data: DenseMatrixF32, parameters: PCAParameters)
   transform(x: DenseMatrixF32): DenseMatrixF32
 }
-export type PCAf32 = PCAF32
 
 export declare class PCAF64 {
   constructor(data: DenseMatrixF64, parameters: PCAParameters)
   transform(x: DenseMatrixF64): DenseMatrixF64
 }
-export type PCAf64 = PCAF64
 
 export declare class PCAParameters {
   constructor()
@@ -478,21 +463,18 @@ export declare class RidgeRegressionF32F32 {
   static fit(x: DenseMatrixF32, y: Float32Array, parameters: RidgeRegressionParametersF32): RidgeRegressionF32F32
   predict(x: DenseMatrixF32): Float32Array
 }
-export type RidgeRegressionf32f32 = RidgeRegressionF32F32
 
 export declare class RidgeRegressionF32U32 {
   constructor()
   static fit(x: DenseMatrixF32, y: Uint32Array, parameters: RidgeRegressionParametersF32): RidgeRegressionF32U32
   predict(x: DenseMatrixF32): Uint32Array
 }
-export type RidgeRegressionf32u32 = RidgeRegressionF32U32
 
 export declare class RidgeRegressionF64F64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: RidgeRegressionParametersF64): RidgeRegressionF64F64
   predict(x: DenseMatrixF64): Float64Array
 }
-export type RidgeRegressionf64f64 = RidgeRegressionF64F64
 
 export declare class RidgeRegressionParametersF32 {
   constructor()
@@ -500,7 +482,6 @@ export declare class RidgeRegressionParametersF32 {
   withNormalize(normalize: boolean): void
   withSolver(solver: RidgeRegressionSolverName): void
 }
-export type RidgeRegressionParametersf32 = RidgeRegressionParametersF32
 
 export declare class RidgeRegressionParametersF64 {
   constructor()
@@ -508,7 +489,30 @@ export declare class RidgeRegressionParametersF64 {
   withNormalize(normalize: boolean): void
   withSolver(solver: RidgeRegressionSolverName): void
 }
-export type RidgeRegressionParametersf64 = RidgeRegressionParametersF64
+
+export declare class SVCF32U32 {
+  static fit(xRef: DenseMatrixF32, yRef: Uint32Array, parametersRef: SVCParametersF32U32): SVCF32U32
+}
+
+export declare class SVCF64U64 {
+  static fit(xRef: DenseMatrixF64, yRef: BigUint64Array, parametersRef: SVCParametersF64U64): SVCF64U64
+}
+
+export declare class SVCParametersF32U32 {
+  constructor()
+  withEpoch(epoch: number): void
+  withC(c: number): void
+  withTol(tol: number): void
+  withSeed(seed?: bigint | undefined | null): void
+}
+
+export declare class SVCParametersF64U64 {
+  constructor()
+  withEpoch(epoch: number): void
+  withC(c: number): void
+  withTol(tol: number): void
+  withSeed(seed?: bigint | undefined | null): void
+}
 
 export declare const enum KNNAlgorithmName {
   LinearSearch = 0,

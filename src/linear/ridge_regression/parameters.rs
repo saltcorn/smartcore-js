@@ -18,12 +18,12 @@ macro_rules! ridge_regression_parameters_struct {
     paste! {
         #[napi(js_name=""[<RidgeRegressionParameters $ty:upper>]"")]
         #[derive(Debug, Clone, Default)]
-        pub struct [<RidgeRegressionParameters $ty>] {
+        pub struct [<RidgeRegressionParameters $ty:upper>] {
             inner: LibRidgeRegressionParameters<$ty>,
         }
 
         #[napi]
-        impl [<RidgeRegressionParameters $ty>] {
+        impl [<RidgeRegressionParameters $ty:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self {
@@ -56,7 +56,7 @@ macro_rules! ridge_regression_parameters_struct {
             }
         }
 
-        impl Deref for [<RidgeRegressionParameters $ty>] {
+        impl Deref for [<RidgeRegressionParameters $ty:upper>] {
             type Target = LibRidgeRegressionParameters<$ty>;
 
             fn deref(&self) -> &Self::Target {

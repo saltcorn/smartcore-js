@@ -2,6 +2,10 @@ mod parameters;
 
 use std::ops::Deref;
 
+use bincode::{
+  config::standard,
+  serde::{decode_from_slice, encode_to_vec},
+};
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
@@ -15,18 +19,18 @@ use smartcore::{
 };
 
 use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-use parameters::{LogisticRegressionParametersf32, LogisticRegressionParametersf64};
+use parameters::{LogisticRegressionParametersF32, LogisticRegressionParametersF64};
 
 macro_rules! logistic_regression_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
         #[napi(js_name=""[<LogisticRegression $x:upper $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<LogisticRegression $x $y>] {
+        pub struct [<LogisticRegression $x:upper $y:upper>] {
             inner: LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
-        impl Default for [<LogisticRegression $x $y>] {
+        impl Default for [<LogisticRegression $x:upper $y:upper>] {
             fn default() -> Self {
                 Self {
                     inner: LibLogisticRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
@@ -35,14 +39,14 @@ macro_rules! logistic_regression_struct {
         }
 
         #[napi]
-        impl [<LogisticRegression $x $y>] {
+        impl [<LogisticRegression $x:upper $y:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self::default()
             }
 
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &[<LogisticRegressionParameters $x>]) -> Result<Self> {
+            pub fn fit(x: &$xs, y: $ys, parameters: &[<LogisticRegressionParameters $x:upper>]) -> Result<Self> {
                 let y = y.to_vec();
                 let inner = LibLogisticRegression::fit(
                     x as &DenseMatrix<$x>,
@@ -61,9 +65,23 @@ macro_rules! logistic_regression_struct {
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok($ys::new(prediction_result))
             }
+
+            #[napi]
+            pub fn serialize(&self) -> Result<Buffer> {
+                let encoded = encode_to_vec(&self.inner, standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                Ok(Buffer::from(encoded))
+            }
+
+            #[napi(constructor)]
+            pub fn deserialize(&self, data: Buffer) -> Result<Self> {
+                let inner = decode_from_slice::<LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
+                Ok(Self { inner })
+            }
         }
 
-        impl Deref for [<LogisticRegression $x $y>] {
+        impl Deref for [<LogisticRegression $x:upper $y:upper>] {
             type Target = LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>;
 
             fn deref(&self) -> &Self::Target {
