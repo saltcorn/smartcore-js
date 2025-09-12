@@ -464,6 +464,12 @@ export declare class PrecisionF64 {
 }
 export type Precisionf64 = PrecisionF64
 
+export declare class R2F32 {
+  constructor()
+  getScore(yTrue: Float32Array, yPred: Float32Array): number
+}
+export type R2f32 = R2F32
+
 export declare class R2U32 {
   constructor()
   getScore(yTrue: Uint32Array, yPred: Uint32Array): number
