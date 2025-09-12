@@ -37,7 +37,6 @@
       "x86_64-unknown-freebsd",
       "aarch64-unknown-linux-musl",
       "aarch64-pc-windows-msvc",
-      "armv7-linux-androideabi",
       "wasm32-wasip1-threads"
     ]
   },
@@ -102,21 +101,5 @@
     "singleQuote": true,
     "arrowParens": "always"
   },
-  "packageManager": "yarn@4.9.4",
-  "optionalDependencies": {
-    "@saltcorn/smartcore-js-win32-x64-msvc": "0.1.0",
-    "@saltcorn/smartcore-js-darwin-x64": "0.1.0",
-    "@saltcorn/smartcore-js-linux-x64-gnu": "0.1.0",
-    "@saltcorn/smartcore-js-linux-x64-musl": "0.1.0",
-    "@saltcorn/smartcore-js-linux-arm64-gnu": "0.1.0",
-    "@saltcorn/smartcore-js-win32-ia32-msvc": "0.1.0",
-    "@saltcorn/smartcore-js-linux-arm-gnueabihf": "0.1.0",
-    "@saltcorn/smartcore-js-darwin-arm64": "0.1.0",
-    "@saltcorn/smartcore-js-android-arm64": "0.1.0",
-    "@saltcorn/smartcore-js-freebsd-x64": "0.1.0",
-    "@saltcorn/smartcore-js-linux-arm64-musl": "0.1.0",
-    "@saltcorn/smartcore-js-win32-arm64-msvc": "0.1.0",
-    "@saltcorn/smartcore-js-android-arm-eabi": "0.1.0",
-    "@saltcorn/smartcore-js-wasm32-wasi": "0.1.0"
-  }
+  "packageManager": "yarn@4.9.4"
 }
