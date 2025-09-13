@@ -10,28 +10,28 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 use smartcore::{
-  linalg::basic::matrix::DenseMatrix, naive_bayes::gaussian::GaussianNB as LibGaussianNB,
+  linalg::basic::matrix::DenseMatrix, naive_bayes::categorical::CategoricalNB as LibCategoricalNB,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-use parameters::GaussianNBParameters;
+use crate::linalg::basic::matrix::{DenseMatrixU32, DenseMatrixU64};
+use parameters::CategoricalNBParameters;
 
-macro_rules! gaussian_nb_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+macro_rules! categorical_nb_struct {
+  ( $t:ty, $ts1:ty, $ts2:ty ) => {
     paste! {
-        #[napi(js_name=""[<GaussianNB $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<CategoricalNB $t:upper>]"")]
         #[derive(Debug)]
-        pub struct [<GaussianNB $x:upper $y:upper>] {
-            inner: LibGaussianNB<$x, $y, DenseMatrix<$x>, Vec<$y>>,
+        pub struct [<CategoricalNB $t:upper>] {
+            inner: LibCategoricalNB<$t, DenseMatrix<$t>, Vec<$t>>,
         }
 
         #[napi]
-        impl [<GaussianNB $x:upper $y:upper>] {
+        impl [<CategoricalNB $t:upper>] {
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &GaussianNBParameters) -> Result<Self> {
+            pub fn fit(x: &$ts1, y: $ts2, parameters: &CategoricalNBParameters) -> Result<Self> {
                 let y = y.to_vec();
-                let inner = LibGaussianNB::fit(
-                    x as &DenseMatrix<$x>,
+                let inner = LibCategoricalNB::fit(
+                    x as &DenseMatrix<$t>,
                     &y,
                     parameters.owned_inner(),
                 )
@@ -40,12 +40,12 @@ macro_rules! gaussian_nb_struct {
             }
 
             #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
+            pub fn predict(&self, x: &$ts1) -> Result<$ts2> {
                 let prediction_result = self
                 .inner
-                .predict(x as &DenseMatrix<$x>)
+                .predict(x as &DenseMatrix<$t>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
+                Ok($ts2::new(prediction_result))
             }
 
             #[napi]
@@ -57,14 +57,14 @@ macro_rules! gaussian_nb_struct {
 
             #[napi(factory)]
             pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibGaussianNB<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
+                let inner = decode_from_slice::<LibCategoricalNB<$t, DenseMatrix<$t>, Vec<$t>>, _>(data.as_ref(), standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
                 Ok(Self { inner })
             }
         }
 
-        impl Deref for [<GaussianNB $x:upper $y:upper>] {
-            type Target = LibGaussianNB<$x, $y, DenseMatrix<$x>, Vec<$y>>;
+        impl Deref for [<CategoricalNB $t:upper>] {
+            type Target = LibCategoricalNB<$t, DenseMatrix<$t>, Vec<$t>>;
 
             fn deref(&self) -> &Self::Target {
                 &self.inner
@@ -74,5 +74,5 @@ macro_rules! gaussian_nb_struct {
   };
 }
 
-gaussian_nb_struct! {f32, u32, DenseMatrixF32, Uint32Array}
-gaussian_nb_struct! {f64, u64, DenseMatrixF64, BigUint64Array}
+categorical_nb_struct! {u32, DenseMatrixU32, Uint32Array}
+categorical_nb_struct! {u64, DenseMatrixU64, BigUint64Array}

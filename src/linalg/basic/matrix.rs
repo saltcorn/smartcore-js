@@ -70,3 +70,5 @@ macro_rules! dense_matrix_struct {
 
 dense_matrix_struct! {f32, Float32Array}
 dense_matrix_struct! {f64, Float64Array}
+dense_matrix_struct! {u32, Uint32Array}
+dense_matrix_struct! {u64, BigUint64Array}
