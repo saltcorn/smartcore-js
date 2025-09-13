@@ -30,12 +30,45 @@ export declare class AUCF64 {
 }
 export type AUCf64 = AUCF64
 
+export declare class BernoulliNBParametersF32 {
+  constructor()
+  withPriors(priors: Float64Array): void
+  withAlpha(alpha: number): void
+  withBinarize(binarize: number): void
+}
+
+export declare class BernoulliNBParametersF64 {
+  constructor()
+  withPriors(priors: Float64Array): void
+  withAlpha(alpha: number): void
+  withBinarize(binarize: number): void
+}
+
 export declare class Boston {
   loadDataset(): DatasetF32F32
 }
 
 export declare class BreastCancer {
   loadDataset(): DatasetF32U32
+}
+
+export declare class CategoricalNBParameters {
+  constructor()
+  withAlpha(alpha: number): void
+}
+
+export declare class CategoricalNBU32 {
+  static fit(x: DenseMatrixU32, y: Uint32Array, parameters: CategoricalNBParameters): CategoricalNBU32
+  predict(x: DenseMatrixU32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): CategoricalNBU32
+}
+
+export declare class CategoricalNBU64 {
+  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: CategoricalNBParameters): CategoricalNBU64
+  predict(x: DenseMatrixU64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): CategoricalNBU64
 }
 
 export declare class dataset {
@@ -70,6 +103,42 @@ export declare class DatasetF32U32 {
   denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF32
 }
 
+export declare class DecisionTreeClassifierParameters {
+  constructor()
+  withCriterion(criterion: SplitCriterion): void
+  withMaxDepth(maxDepth: number): void
+  withMinSamplesLeaf(minSamplesLeaf: bigint): void
+  withMinSamplesSplit(minSamplesSplit: bigint): void
+}
+
+export declare class DecisionTreeClassifierU32U32 {
+  static fit(x: DenseMatrixU32, y: Uint32Array, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierU32U32
+  predict(x: DenseMatrixU32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DecisionTreeClassifierU32U32
+}
+
+export declare class DecisionTreeClassifierU32U64 {
+  static fit(x: DenseMatrixU32, y: BigUint64Array, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierU32U64
+  predict(x: DenseMatrixU32): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DecisionTreeClassifierU32U64
+}
+
+export declare class DecisionTreeClassifierU64U32 {
+  static fit(x: DenseMatrixU64, y: Uint32Array, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierU64U32
+  predict(x: DenseMatrixU64): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DecisionTreeClassifierU64U32
+}
+
+export declare class DecisionTreeClassifierU64U64 {
+  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierU64U64
+  predict(x: DenseMatrixU64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DecisionTreeClassifierU64U64
+}
+
 export declare class DenseMatrixF32 {
   constructor(nrows: number, ncols: number, values: Float32Array, columnMajor?: boolean | undefined | null)
   serialize(): Buffer
@@ -80,6 +149,18 @@ export declare class DenseMatrixF64 {
   constructor(nrows: number, ncols: number, values: Float64Array, columnMajor?: boolean | undefined | null)
   serialize(): Buffer
   static deserialize(data: Buffer): DenseMatrixF64
+}
+
+export declare class DenseMatrixU32 {
+  constructor(nrows: number, ncols: number, values: Uint32Array, columnMajor?: boolean | undefined | null)
+  serialize(): Buffer
+  static deserialize(data: Buffer): DenseMatrixU32
+}
+
+export declare class DenseMatrixU64 {
+  constructor(nrows: number, ncols: number, values: BigUint64Array, columnMajor?: boolean | undefined | null)
+  serialize(): Buffer
+  static deserialize(data: Buffer): DenseMatrixU64
 }
 
 export declare class Diabetes {
@@ -172,17 +253,31 @@ export declare class F1F64 {
 export type F1f64 = F1F64
 
 export declare class GausianNBF32U32 {
-  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: GaussianNBParameters): GausianNBF32U32
+  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: BernoulliNBParametersF32): GausianNBF32U32
   predict(x: DenseMatrixF32): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): GausianNBF32U32
 }
 
 export declare class GausianNBF64U64 {
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: GaussianNBParameters): GausianNBF64U64
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: BernoulliNBParametersF64): GausianNBF64U64
   predict(x: DenseMatrixF64): BigUint64Array
   serialize(): Buffer
   static deserialize(data: Buffer): GausianNBF64U64
+}
+
+export declare class GaussianNBF32U32 {
+  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: GaussianNBParameters): GaussianNBF32U32
+  predict(x: DenseMatrixF32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): GaussianNBF32U32
+}
+
+export declare class GaussianNBF64U64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: GaussianNBParameters): GaussianNBF64U64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): GaussianNBF64U64
 }
 
 export declare class GaussianNBParameters {
@@ -458,6 +553,40 @@ export declare class MinkowskiU64 {
   distance(x: BigUint64Array, y: BigUint64Array): number
 }
 
+export declare class MultinomialNBParameters {
+  constructor()
+  withAlpha(alpha: number): void
+  withPriors(priors: Float64Array): void
+}
+
+export declare class MultinomialNBU32U32 {
+  static fit(x: DenseMatrixU32, y: Uint32Array, parameters: MultinomialNBParameters): MultinomialNBU32U32
+  predict(x: DenseMatrixU32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU32U32
+}
+
+export declare class MultinomialNBU32U64 {
+  static fit(x: DenseMatrixU32, y: BigUint64Array, parameters: MultinomialNBParameters): MultinomialNBU32U64
+  predict(x: DenseMatrixU32): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU32U64
+}
+
+export declare class MultinomialNBU64U32 {
+  static fit(x: DenseMatrixU64, y: Uint32Array, parameters: MultinomialNBParameters): MultinomialNBU64U32
+  predict(x: DenseMatrixU64): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU64U32
+}
+
+export declare class MultinomialNBU64U64 {
+  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: MultinomialNBParameters): MultinomialNBU64U64
+  predict(x: DenseMatrixU64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU64U64
+}
+
 export declare class PCAF32 {
   constructor(data: DenseMatrixF32, parameters: PCAParameters)
   transform(x: DenseMatrixF32): DenseMatrixF32
@@ -636,6 +765,12 @@ export declare const enum LogisticRegressionSolverName {
 export declare const enum RidgeRegressionSolverName {
   Cholesky = 0,
   Svd = 1
+}
+
+export declare const enum SplitCriterion {
+  Gini = 0,
+  Entropy = 1,
+  ClassificationError = 2
 }
 
 export declare function trainTestSplitF32F32(x: DenseMatrixF32, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF32, DenseMatrixF32, Float32Array, Float32Array]

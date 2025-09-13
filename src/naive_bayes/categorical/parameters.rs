@@ -2,9 +2,17 @@ use napi_derive::napi;
 use smartcore::naive_bayes::categorical::CategoricalNBParameters as LibCategoricalNBParameters;
 
 #[napi(js_name = "CategoricalNBParameters")]
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct CategoricalNBParameters {
   inner: Option<LibCategoricalNBParameters>,
+}
+
+impl Default for CategoricalNBParameters {
+  fn default() -> Self {
+    Self {
+      inner: Some(LibCategoricalNBParameters::default()),
+    }
+  }
 }
 
 #[napi]

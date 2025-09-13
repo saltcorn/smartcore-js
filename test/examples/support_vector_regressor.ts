@@ -15,9 +15,9 @@ export default () => {
     // let svm = SVRF32.setFitData(x, y, params)
     // svm.fit()
     // let yHatSVM = svm.predict(xTest)
-    let mean_square_error = new MeanSquareErrorF32()
+    let meanSquareError = new MeanSquareErrorF32()
     // Failed to reproduce: yTest expects Float32Array but is Uint32Array
-    // let score = mean_square_error.getScore(yTest, yHatSVM)
+    // let score = meanSquareError.getScore(yTest, yHatSVM)
     assert.fail('Irreproducible')
   })
 }

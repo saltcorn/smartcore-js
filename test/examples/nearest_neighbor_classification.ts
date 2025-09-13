@@ -11,10 +11,10 @@ export default () => {
     parameters.withAlpha(0.5)
 
     let y = loadedDataset.target
-    let [, x_test, , y_test] = trainTestSplitF32U32(matrix, y, 0.2, true)
-    let y_hat_knn = KNNClassifierF32U32.fit(matrix, loadedDataset.target).predict(x_test)
+    let [, xTest, , yTest] = trainTestSplitF32U32(matrix, y, 0.2, true)
+    let yHatKnn = KNNClassifierF32U32.fit(matrix, loadedDataset.target).predict(xTest)
     let r2 = new R2U32()
-    let score = r2.getScore(y_test, y_hat_knn)
+    let score = r2.getScore(yTest, yHatKnn)
     assert(score)
   })
 }

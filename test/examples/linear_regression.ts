@@ -12,11 +12,11 @@ export default () => {
     let loadedDataset = dataset.boston().loadDataset()
     let matrix = loadedDataset.denseMatrix()
     let y = loadedDataset.target
-    let [, x_test, , y_test] = trainTestSplitF32F32(matrix, y, 0.2, true)
+    let [, xTest, , yTest] = trainTestSplitF32F32(matrix, y, 0.2, true)
     let parameters = new LinearRegressionParameters()
-    let y_hat_lr = LinearRegressionF32F32.fit(matrix, loadedDataset.target, parameters).predict(x_test)
-    let mean_square_error = new MeanSquareErrorF32()
-    let score = mean_square_error.getScore(y_test, y_hat_lr)
+    let yHatLr = LinearRegressionF32F32.fit(matrix, loadedDataset.target, parameters).predict(xTest)
+    let meanSquareError = new MeanSquareErrorF32()
+    let score = meanSquareError.getScore(yTest, yHatLr)
     assert(score)
   })
 }

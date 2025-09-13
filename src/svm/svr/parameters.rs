@@ -8,18 +8,24 @@ macro_rules! svr_parameters_struct {
   ( $y:ty, $y_to:ty ) => {
     paste! {
         #[napi(js_name=""[<SVRParameters $y_to:upper>]"")]
-        #[derive(Debug, Default)]
+        #[derive(Debug)]
         pub struct [<SVRParameters $y_to:upper>] {
             inner: Option<LibSVRParameters<$y_to>>,
+        }
+
+        impl Default for [<SVRParameters $y_to:upper>] {
+            fn default() -> Self {
+                Self {
+                    inner: Some(LibSVRParameters::<$y_to>::default()),
+                }
+            }
         }
 
         #[napi]
         impl [<SVRParameters $y_to:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
-                Self {
-                    inner: Some(LibSVRParameters::<$y_to>::default()),
-                }
+                Self::default()
             }
 
             #[napi]

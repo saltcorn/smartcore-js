@@ -3,9 +3,17 @@ use napi_derive::napi;
 use smartcore::naive_bayes::multinomial::MultinomialNBParameters as LibMultinomialNBParameters;
 
 #[napi(js_name = "MultinomialNBParameters")]
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct MultinomialNBParameters {
   inner: Option<LibMultinomialNBParameters>,
+}
+
+impl Default for MultinomialNBParameters {
+  fn default() -> Self {
+    Self {
+      inner: Some(LibMultinomialNBParameters::default()),
+    }
+  }
 }
 
 #[napi]

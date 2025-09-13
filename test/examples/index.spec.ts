@@ -9,6 +9,7 @@ import elastic_net from './elastic_net'
 import logistic_regression from './logistic_regression'
 import support_vector_classifier from './support_vector_classifier'
 import support_vector_regressor from './support_vector_regressor'
+import decision_tree_classifier from './decision_tree_classifier'
 
 describe('Examples', () => {
   describe('Quickstart', () => {
@@ -25,6 +26,7 @@ describe('Examples', () => {
     logistic_regression()
     support_vector_classifier()
     support_vector_regressor()
+    decision_tree_classifier()
   })
 
   describe('Unsupervised Learning', () => {

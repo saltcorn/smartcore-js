@@ -12,8 +12,8 @@ export default () => {
     let loadedData = dataset.iris().loadDataset()
     let x = loadedData.denseMatrix()
     let y = loadedData.target
-    let y_hat = KNNClassifierF32U32.fit(x, y).predict(x)
-    let accuracy = new AccuracyU32().getScore(y, y_hat)
+    let yHat = KNNClassifierF32U32.fit(x, y).predict(x)
+    let accuracy = new AccuracyU32().getScore(y, yHat)
     assert(accuracy)
   })
 
@@ -22,8 +22,8 @@ export default () => {
     let x = loadedData.denseMatrix()
     let y = loadedData.target
     let params = new LogisticRegressionParametersF32()
-    let y_hat = LogisticRegressionF32U32.fit(x, y, params).predict(x)
-    let accuracy = new AccuracyU32().getScore(y, y_hat)
+    let yHat = LogisticRegressionF32U32.fit(x, y, params).predict(x)
+    let accuracy = new AccuracyU32().getScore(y, yHat)
     assert(accuracy)
   })
 }

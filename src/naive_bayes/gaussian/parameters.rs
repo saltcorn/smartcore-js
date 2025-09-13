@@ -3,9 +3,17 @@ use napi_derive::napi;
 use smartcore::naive_bayes::gaussian::GaussianNBParameters as LibGaussianNBParameters;
 
 #[napi(js_name = "GaussianNBParameters")]
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct GaussianNBParameters {
   inner: Option<LibGaussianNBParameters>,
+}
+
+impl Default for GaussianNBParameters {
+  fn default() -> Self {
+    Self {
+      inner: Some(LibGaussianNBParameters::default()),
+    }
+  }
 }
 
 #[napi]

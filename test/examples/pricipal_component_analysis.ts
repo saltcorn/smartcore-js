@@ -8,7 +8,7 @@ export default () => {
     let pca_params = new PCAParameters()
     pca_params.withNComponents(2)
     let pca = new PCAF32(matrix, pca_params)
-    let matrix_tranformed = pca.transform(matrix)
-    assert(matrix_tranformed)
+    let matrixTranformed = pca.transform(matrix)
+    assert(matrixTranformed)
   })
 }
