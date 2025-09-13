@@ -1,6 +1,7 @@
 pub mod algorithm;
 pub mod dataset;
 pub mod decomposition;
+pub mod ensemble;
 pub mod linalg;
 pub mod linear;
 pub mod metrics;

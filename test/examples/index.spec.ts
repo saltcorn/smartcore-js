@@ -10,6 +10,7 @@ import logistic_regression from './logistic_regression'
 import support_vector_classifier from './support_vector_classifier'
 import support_vector_regressor from './support_vector_regressor'
 import decision_tree_classifier from './decision_tree_classifier'
+import random_forest_regressor from './random_forest_regressor'
 
 describe('Examples', () => {
   describe('Quickstart', () => {
@@ -27,6 +28,7 @@ describe('Examples', () => {
     support_vector_classifier()
     support_vector_regressor()
     decision_tree_classifier()
+    random_forest_regressor()
   })
 
   describe('Unsupervised Learning', () => {

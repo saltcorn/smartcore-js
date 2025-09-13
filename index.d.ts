@@ -139,6 +139,41 @@ export declare class DecisionTreeClassifierU64U64 {
   static deserialize(data: Buffer): DecisionTreeClassifierU64U64
 }
 
+export declare class DecisionTreeRegressorParameters {
+  constructor()
+  withMaxDepth(maxDepth: number): void
+  withMinSamplesLeaf(minSamplesLeaf: bigint): void
+  withMinSamplesSplit(minSamplesSplit: bigint): void
+}
+
+export declare class DecisionTreeRegressorU32U32 {
+  static fit(x: DenseMatrixU32, y: Uint32Array, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorU32U32
+  predict(x: DenseMatrixU32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DecisionTreeRegressorU32U32
+}
+
+export declare class DecisionTreeRegressorU32U64 {
+  static fit(x: DenseMatrixU32, y: BigUint64Array, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorU32U64
+  predict(x: DenseMatrixU32): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DecisionTreeRegressorU32U64
+}
+
+export declare class DecisionTreeRegressorU64U32 {
+  static fit(x: DenseMatrixU64, y: Uint32Array, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorU64U32
+  predict(x: DenseMatrixU64): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DecisionTreeRegressorU64U32
+}
+
+export declare class DecisionTreeRegressorU64U64 {
+  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorU64U64
+  predict(x: DenseMatrixU64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DecisionTreeRegressorU64U64
+}
+
 export declare class DenseMatrixF32 {
   constructor(nrows: number, ncols: number, values: Float32Array, columnMajor?: boolean | undefined | null)
   serialize(): Buffer
@@ -636,6 +671,45 @@ export declare class R2U64 {
   getScore(yTrue: BigUint64Array, yPred: BigUint64Array): number
 }
 export type R2u64 = R2U64
+
+export declare class RandomForestRegressorF32F32 {
+  static fit(x: DenseMatrixF32, y: Float32Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32F32
+  predict(x: DenseMatrixF32): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestRegressorF32F32
+}
+
+export declare class RandomForestRegressorF32U32 {
+  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32U32
+  predict(x: DenseMatrixF32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestRegressorF32U32
+}
+
+export declare class RandomForestRegressorF64F64 {
+  static fit(x: DenseMatrixF64, y: Float64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64F64
+  predict(x: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestRegressorF64F64
+}
+
+export declare class RandomForestRegressorF64U64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64U64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestRegressorF64U64
+}
+
+export declare class RandomForestRegressorParameters {
+  constructor()
+  withMaxDepth(maxDepth: number): void
+  withMinSamplesLeaf(minSamplesLeaf: bigint): void
+  withMinSamplesSplit(minSamplesSplit: bigint): void
+  withNTrees(nTrees: number): void
+  withM(m: number): void
+  withKeepSamples(keepSamples: boolean): void
+  withSeed(seed: number): void
+}
 
 export declare class RecallF32 {
   constructor()
