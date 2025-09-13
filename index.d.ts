@@ -223,6 +223,13 @@ export declare class Iris {
   loadDataset(): DatasetF32U32
 }
 
+export declare class Kernels {
+  static linear(): Kernels
+  static rbf(gamma: number): Kernels
+  static polynomial(gamma: number, degree: number): Kernels
+  static sigmoid(gamma: number, coef0: number): Kernels
+}
+
 export declare class KNNClassifierF32U32 {
   static fit(x: DenseMatrixF32, y: Uint32Array): KNNClassifierF32U32
   predict(x: DenseMatrixF32): Uint32Array
@@ -558,6 +565,34 @@ export declare class SVCParametersF64U64 {
   withC(c: number): void
   withTol(tol: number): void
   withSeed(seed?: bigint | undefined | null): void
+}
+
+export declare class SVRF32 {
+  static setFitData(xRef: DenseMatrixF32, yRef: Float32Array, parametersRef: SVRParametersF32): SVRF32
+  fit(): void
+  predict(xRef: DenseMatrixF32): Float32Array
+}
+
+export declare class SVRF64 {
+  static setFitData(xRef: DenseMatrixF64, yRef: Float64Array, parametersRef: SVRParametersF64): SVRF64
+  fit(): void
+  predict(xRef: DenseMatrixF64): Float64Array
+}
+
+export declare class SVRParametersF32 {
+  constructor()
+  withEps(eps: number): void
+  withC(c: number): void
+  withTol(tol: number): void
+  withKernel(kernel: Kernels): void
+}
+
+export declare class SVRParametersF64 {
+  constructor()
+  withEps(eps: number): void
+  withC(c: number): void
+  withTol(tol: number): void
+  withKernel(kernel: Kernels): void
 }
 
 export declare const enum KNNAlgorithmName {
