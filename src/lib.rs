@@ -5,5 +5,6 @@ pub mod linalg;
 pub mod linear;
 pub mod metrics;
 pub mod model_selection;
+pub mod naive_bayes;
 pub mod neighbors;
 pub mod svm;

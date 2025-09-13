@@ -171,6 +171,25 @@ export declare class F1F64 {
 }
 export type F1f64 = F1F64
 
+export declare class GausianNBF32U32 {
+  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: GaussianNBParameters): GausianNBF32U32
+  predict(x: DenseMatrixF32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): GausianNBF32U32
+}
+
+export declare class GausianNBF64U64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: GaussianNBParameters): GausianNBF64U64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): GausianNBF64U64
+}
+
+export declare class GaussianNBParameters {
+  constructor()
+  withPriors(priors: Float64Array): void
+}
+
 export declare class Generator {
   makeBlobs(numSamples: number, numFeatures: number, numCenters: number): DatasetF32F32
   makeCircles(numSamples: number, factor: number, noise: number): DatasetF32U32
