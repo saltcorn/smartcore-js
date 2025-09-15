@@ -1,4 +1,4 @@
-import { dataset, trainTestSplitF32F32, MeanSquareErrorF32, LassoF32F32, LassoParameters } from '../../index'
+import { dataset, trainTestSplitF32F32, MeanSquareErrorF32, LassoF32F32, LassoParameters } from '../../../index'
 import assert from 'assert'
 
 export default () => {

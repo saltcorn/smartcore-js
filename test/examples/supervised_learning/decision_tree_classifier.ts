@@ -4,7 +4,7 @@ import {
   DecisionTreeClassifierU32U32,
   DecisionTreeClassifierParameters,
   R2U32,
-} from '../../index'
+} from '../../../index'
 import assert from 'assert'
 
 export default () => {

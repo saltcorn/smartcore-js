@@ -4,7 +4,7 @@ import {
   RandomForestRegressorF32F32,
   RandomForestRegressorParameters,
   MeanSquareErrorF32,
-} from '../../index'
+} from '../../../index'
 import assert from 'assert'
 
 export default () => {

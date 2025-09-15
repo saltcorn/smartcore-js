@@ -1,4 +1,4 @@
-import { dataset, RidgeRegressionParametersF32, trainTestSplitF32U32, R2U32, KNNClassifierF32U32 } from '../../index'
+import { dataset, RidgeRegressionParametersF32, trainTestSplitF32U32, R2U32, KNNClassifierF32U32 } from '../../../index'
 import assert from 'assert'
 
 export default () => {

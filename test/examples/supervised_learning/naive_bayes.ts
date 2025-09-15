@@ -1,4 +1,4 @@
-import { dataset, GausianNBF32U32, GaussianNBParameters, AccuracyU32 } from '../../index'
+import { dataset, GausianNBF32U32, GaussianNBParameters, AccuracyU32 } from '../../../index'
 import assert from 'assert'
 
 export default () => {

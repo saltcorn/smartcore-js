@@ -1,4 +1,10 @@
-import { dataset, trainTestSplitF32F32, MeanSquareErrorF32, ElasticNetF32F32, ElasticNetParameters } from '../../index'
+import {
+  dataset,
+  trainTestSplitF32F32,
+  MeanSquareErrorF32,
+  ElasticNetF32F32,
+  ElasticNetParameters,
+} from '../../../index'
 import assert from 'assert'
 
 export default () => {

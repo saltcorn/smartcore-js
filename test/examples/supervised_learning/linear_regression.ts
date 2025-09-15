@@ -4,7 +4,7 @@ import {
   MeanSquareErrorF32,
   LinearRegressionF32F32,
   LinearRegressionParameters,
-} from '../../index'
+} from '../../../index'
 import assert from 'assert'
 
 export default () => {

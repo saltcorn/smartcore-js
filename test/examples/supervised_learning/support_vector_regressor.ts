@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { dataset, Kernels, MeanSquareErrorF32, SVRF32, SVRParametersF32, trainTestSplitF32U32 } from '../../index'
+import { dataset, Kernels, MeanSquareErrorF32, SVRF32, SVRParametersF32, trainTestSplitF32U32 } from '../../../index'
 
 export default () => {
   it.skip('Support Vector Regressor (SVR)', () => {

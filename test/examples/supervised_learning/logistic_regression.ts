@@ -4,7 +4,7 @@ import {
   R2U32,
   LogisticRegressionF32U32,
   LogisticRegressionParametersF32,
-} from '../../index'
+} from '../../../index'
 import assert from 'assert'
 
 export default () => {

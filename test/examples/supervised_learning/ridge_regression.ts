@@ -1,14 +1,14 @@
 import {
   dataset,
+  RidgeRegressionF32F32,
   RidgeRegressionParametersF32,
   trainTestSplitF32F32,
-  KNNRegressorF32F32,
   MeanSquareErrorF32,
-} from '../../index'
+} from '../../../index'
 import assert from 'assert'
 
 export default () => {
-  it('Nearest Neighbors Regression', () => {
+  it('Ridge Regression', () => {
     let loadedDataset = dataset.boston().loadDataset()
 
     let matrix = loadedDataset.denseMatrix()
@@ -18,9 +18,9 @@ export default () => {
 
     let y = loadedDataset.target
     let [, xTest, , yTest] = trainTestSplitF32F32(matrix, y, 0.2, true)
-    let yHatKnn = KNNRegressorF32F32.fit(matrix, loadedDataset.target).predict(xTest)
-    let meanSquareError = new MeanSquareErrorF32()
-    let score = meanSquareError.getScore(yTest, yHatKnn)
+    let yHatRr = RidgeRegressionF32F32.fit(matrix, loadedDataset.target, parameters).predict(xTest)
+    let meanSquaredError = new MeanSquareErrorF32()
+    let score = meanSquaredError.getScore(yTest, yHatRr)
     assert(score)
   })
 }

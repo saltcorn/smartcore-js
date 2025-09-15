@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { AUCF32, dataset, SVCF32U32, SVCParametersF32U32, trainTestSplitF32U32 } from '../../index'
+import { AUCF32, dataset, SVCF32U32, SVCParametersF32U32, trainTestSplitF32U32 } from '../../../index'
 
 export default () => {
   it.skip('Support Vector Classifier (SVC)', () => {

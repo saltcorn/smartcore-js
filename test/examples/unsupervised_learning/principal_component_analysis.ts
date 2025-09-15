@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { dataset, PCAParameters, PCAF32 } from '../../index'
+import { dataset, PCAParameters, PCAF32 } from '../../../index'
 
 export default () => {
   it('Principal Component Analysis (PCA)', () => {
