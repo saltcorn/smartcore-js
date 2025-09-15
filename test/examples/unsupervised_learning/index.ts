@@ -1,8 +1,9 @@
-import pricipal_component_analysis from './principal_component_analysis'
 import clustering from './clustering'
+import dimensionality_reduction from './dimensionality_reduction'
 
 export default () => {
-  describe('Clustering', clustering)
-
-  pricipal_component_analysis()
+  describe('Unsupervised Learning', () => {
+    clustering()
+    dimensionality_reduction()
+  })
 }

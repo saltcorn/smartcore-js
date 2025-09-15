@@ -11,15 +11,17 @@ import decision_tree_classifier from './decision_tree_classifier'
 import random_forest_regressor from './random_forest_regressor'
 
 export default () => {
-  nearest_neighbor_classification()
-  nearest_neighbor_regression()
-  linear_regression()
-  ridge_regression()
-  lasso()
-  elastic_net()
-  logistic_regression()
-  support_vector_classifier()
-  support_vector_regressor()
-  decision_tree_classifier()
-  random_forest_regressor()
+  describe('Supervised Learning', () => {
+    nearest_neighbor_classification()
+    nearest_neighbor_regression()
+    linear_regression()
+    ridge_regression()
+    lasso()
+    elastic_net()
+    logistic_regression()
+    support_vector_classifier()
+    support_vector_regressor()
+    decision_tree_classifier()
+    random_forest_regressor()
+  })
 }
