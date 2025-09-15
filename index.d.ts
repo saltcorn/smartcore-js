@@ -907,6 +907,25 @@ export declare class SVCParametersF64U64 {
   withSeed(seed?: bigint | undefined | null): void
 }
 
+export declare class SVDF32 {
+  constructor(data: DenseMatrixF32, parameters: SVDParameters)
+  transform(x: DenseMatrixF32): DenseMatrixF32
+  serialize(): Buffer
+  static deserialize(data: Buffer): SVDF32
+}
+
+export declare class SVDF64 {
+  constructor(data: DenseMatrixF64, parameters: SVDParameters)
+  transform(x: DenseMatrixF64): DenseMatrixF64
+  serialize(): Buffer
+  static deserialize(data: Buffer): SVDF64
+}
+
+export declare class SVDParameters {
+  constructor()
+  withNComponents(nComponents: number): void
+}
+
 export declare class SVRF32 {
   static setFitData(xRef: DenseMatrixF32, yRef: Float32Array, parametersRef: SVRParametersF32): SVRF32
   fit(): void
