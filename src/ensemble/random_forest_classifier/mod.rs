@@ -1,4 +1,4 @@
-pub mod parameters;
+mod parameters;
 
 use std::ops::Deref;
 
@@ -10,28 +10,28 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 use smartcore::{
+  ensemble::random_forest_classifier::RandomForestClassifier as LibRandomForestClassifier,
   linalg::basic::matrix::DenseMatrix,
-  tree::decision_tree_classifier::DecisionTreeClassifier as LibDecisionTreeClassifier,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixU32, DenseMatrixU64};
-use parameters::DecisionTreeClassifierParameters;
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use parameters::RandomForestClassifierParameters;
 
-macro_rules! decision_tree_classifier_nb_struct {
+macro_rules! random_forest_classifier_nb_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<DecisionTreeClassifier $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<RandomForestClassifier $x:upper $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<DecisionTreeClassifier $x:upper $y:upper>] {
-            inner: LibDecisionTreeClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>>,
+        pub struct [<RandomForestClassifier $x:upper $y:upper>] {
+            inner: LibRandomForestClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
         #[napi]
-        impl [<DecisionTreeClassifier $x:upper $y:upper>] {
+        impl [<RandomForestClassifier $x:upper $y:upper>] {
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &DecisionTreeClassifierParameters) -> Result<Self> {
+            pub fn fit(x: &$xs, y: $ys, parameters: &RandomForestClassifierParameters) -> Result<Self> {
                 let y = y.to_vec();
-                let inner = LibDecisionTreeClassifier::fit(
+                let inner = LibRandomForestClassifier::fit(
                     x as &DenseMatrix<$x>,
                     &y,
                     parameters.owned_inner(),
@@ -58,14 +58,14 @@ macro_rules! decision_tree_classifier_nb_struct {
 
             #[napi(factory)]
             pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibDecisionTreeClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
+                let inner = decode_from_slice::<LibRandomForestClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
                 Ok(Self { inner })
             }
         }
 
-        impl Deref for [<DecisionTreeClassifier $x:upper $y:upper>] {
-            type Target = LibDecisionTreeClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>>;
+        impl Deref for [<RandomForestClassifier $x:upper $y:upper>] {
+            type Target = LibRandomForestClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>>;
 
             fn deref(&self) -> &Self::Target {
                 &self.inner
@@ -75,7 +75,5 @@ macro_rules! decision_tree_classifier_nb_struct {
   };
 }
 
-decision_tree_classifier_nb_struct! {u32, u32, DenseMatrixU32, Uint32Array}
-decision_tree_classifier_nb_struct! {u32, u64, DenseMatrixU32, BigUint64Array}
-decision_tree_classifier_nb_struct! {u64, u64, DenseMatrixU64, BigUint64Array}
-decision_tree_classifier_nb_struct! {u64, u32, DenseMatrixU64, Uint32Array}
+random_forest_classifier_nb_struct! {f32, u32, DenseMatrixF32, Uint32Array}
+random_forest_classifier_nb_struct! {f64, u64, DenseMatrixF64, BigUint64Array}
