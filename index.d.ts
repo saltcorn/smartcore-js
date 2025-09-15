@@ -183,12 +183,22 @@ export declare class DenseMatrixF32 {
   constructor(nrows: number, ncols: number, values: Float32Array, columnMajor?: boolean | undefined | null)
   serialize(): Buffer
   static deserialize(data: Buffer): DenseMatrixF32
+  static fill(nrows: number, ncols: number, value: number): DenseMatrixF32
+  matmul(other: DenseMatrixF32): DenseMatrixF32
+  transpose(): DenseMatrixF32
+  svdSolve(b: DenseMatrixF32): DenseMatrixF32
+  svd(): SVDF32DenseMatrixF32
 }
 
 export declare class DenseMatrixF64 {
   constructor(nrows: number, ncols: number, values: Float64Array, columnMajor?: boolean | undefined | null)
   serialize(): Buffer
   static deserialize(data: Buffer): DenseMatrixF64
+  static fill(nrows: number, ncols: number, value: number): DenseMatrixF64
+  matmul(other: DenseMatrixF64): DenseMatrixF64
+  transpose(): DenseMatrixF64
+  svdSolve(b: DenseMatrixF64): DenseMatrixF64
+  svd(): SVDF64DenseMatrixF64
 }
 
 export declare class DenseMatrixU32 {
@@ -428,6 +438,14 @@ export type HCVScoreu64 = HCVScoreU64
 
 export declare class Iris {
   loadDataset(): DatasetF32U32
+}
+
+export declare class JsDenseMatrixF32Ref {
+
+}
+
+export declare class JsDenseMatrixF64Ref {
+
 }
 
 export declare class Kernels {
@@ -914,11 +932,23 @@ export declare class SVDF32 {
   static deserialize(data: Buffer): SVDF32
 }
 
+export declare class SVDF32DenseMatrixF32 {
+  U(): JsDenseMatrixF32Ref
+  V(): DenseMatrixF32
+  S(): DenseMatrixF32
+}
+
 export declare class SVDF64 {
   constructor(data: DenseMatrixF64, parameters: SVDParameters)
   transform(x: DenseMatrixF64): DenseMatrixF64
   serialize(): Buffer
   static deserialize(data: Buffer): SVDF64
+}
+
+export declare class SVDF64DenseMatrixF64 {
+  U(): JsDenseMatrixF64Ref
+  V(): DenseMatrixF64
+  S(): DenseMatrixF64
 }
 
 export declare class SVDParameters {

@@ -42,6 +42,14 @@ macro_rules! dense_matrix_struct {
                 Self { inner }
             }
 
+            pub fn owned_inner(&self) -> LibDenseMatrix<$ty> {
+                self.inner.to_owned()
+            }
+
+            pub fn inner(&self) -> &LibDenseMatrix<$ty> {
+                &self.inner
+            }
+
             #[napi]
             pub fn serialize(&self) -> Result<Buffer> {
                 let encoded = encode_to_vec(&self.inner, standard())
@@ -64,6 +72,16 @@ macro_rules! dense_matrix_struct {
                 &self.inner
             }
         }
+
+        pub struct [<DenseMatrix $ty:upper Ref>]<'a> {
+            inner: &'a LibDenseMatrix<$ty>,
+        }
+
+        impl<'a> [<DenseMatrix $ty:upper Ref>]<'a> {
+            pub fn from_inner(inner: &'a LibDenseMatrix<$ty>) -> Self {
+                Self { inner }
+            }
+        }
     }
   };
 }
@@ -72,3 +90,6 @@ dense_matrix_struct! {f32, Float32Array}
 dense_matrix_struct! {f64, Float64Array}
 dense_matrix_struct! {u32, Uint32Array}
 dense_matrix_struct! {u64, BigUint64Array}
+
+mod array_2;
+mod svd;
