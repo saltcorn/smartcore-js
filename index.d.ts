@@ -418,6 +418,40 @@ export declare class Kernels {
   static sigmoid(gamma: number, coef0: number): Kernels
 }
 
+export declare class KMeansF32F32 {
+  static fit(x: DenseMatrixF32, parameters: KMeansParameters): KMeansF32F32
+  predict(x: DenseMatrixF32): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KMeansF32F32
+}
+
+export declare class KMeansF32U32 {
+  static fit(x: DenseMatrixF32, parameters: KMeansParameters): KMeansF32U32
+  predict(x: DenseMatrixF32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KMeansF32U32
+}
+
+export declare class KMeansF64F64 {
+  static fit(x: DenseMatrixF64, parameters: KMeansParameters): KMeansF64F64
+  predict(x: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KMeansF64F64
+}
+
+export declare class KMeansF64U64 {
+  static fit(x: DenseMatrixF64, parameters: KMeansParameters): KMeansF64U64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KMeansF64U64
+}
+
+export declare class KMeansParameters {
+  constructor()
+  withMaxIter(maxIter: number): void
+  withK(k: number): void
+}
+
 export declare class KNNClassifierF32U32 {
   static fit(x: DenseMatrixF32, y: Uint32Array): KNNClassifierF32U32
   predict(x: DenseMatrixF32): Uint32Array

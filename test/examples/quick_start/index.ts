@@ -1,4 +1,4 @@
-import iris_flower_classification from './iris_flower_classification'
+import iris_flower_classification from './k_nearest_neighbors'
 import logistic_regression from './logistic_regression'
 
 export default () => {
