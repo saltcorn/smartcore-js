@@ -81,6 +81,10 @@ macro_rules! dense_matrix_struct {
             pub fn from_inner(inner: &'a LibDenseMatrix<$ty>) -> Self {
                 Self { inner }
             }
+
+            pub fn inner(&'a self) -> &'a LibDenseMatrix<$ty> {
+                self.inner
+            }
         }
     }
   };

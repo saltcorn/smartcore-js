@@ -1,23 +1,47 @@
-use std::cell::Ref;
-
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
-use smartcore::linalg::{basic::matrix::DenseMatrix as LibDenseMatrix, traits::svd::SVD as LibSVD};
+use smartcore::linalg::{
+  basic::{arrays::Array2, matrix::DenseMatrix as LibDenseMatrix},
+  traits::svd::SVD as LibSVD,
+};
 
 use crate::linalg::basic::matrix::{
   DenseMatrixF32, DenseMatrixF32Ref, DenseMatrixF64, DenseMatrixF64Ref,
 };
 
-#[napi]
-pub struct JsDenseMatrixF32Ref {
-  inner: SharedReference<SVDF32DenseMatrixF32, DenseMatrixF32Ref<'static>>,
+macro_rules! js_dense_matrix_struct {
+  ( $ty:ty, $ts_name:ty, $p_ref_name:ty ) => {
+    paste! {
+        #[napi]
+        pub struct [<JsDenseMatrix $ty:upper Ref>] {
+            inner: SharedReference<$p_ref_name, [<$ts_name Ref>]<'static>>,
+        }
+
+        #[napi]
+        impl [<JsDenseMatrix $ty:upper Ref>] {
+            #[napi]
+            pub fn matmul(&self, other: &[<JsDenseMatrix $ty:upper Ref>]) -> $ts_name {
+                let inner = self.inner.inner().matmul(other.inner());
+                $ts_name::from_inner(inner)
+            }
+
+            #[napi]
+            pub fn transpose(&self) -> $ts_name {
+                let inner = self.inner.inner().transpose();
+                $ts_name::from_inner(inner)
+            }
+
+            pub fn inner(&self) -> &LibDenseMatrix<$ty> {
+                self.inner.inner()
+            }
+        }
+    }
+  };
 }
 
-#[napi]
-pub struct JsDenseMatrixF64Ref {
-  inner: SharedReference<SVDF64DenseMatrixF64, DenseMatrixF64Ref<'static>>,
-}
+js_dense_matrix_struct! { f32, DenseMatrixF32, SVDF32DenseMatrixF32 }
+js_dense_matrix_struct! { f64, DenseMatrixF64, SVDF64DenseMatrixF64 }
 
 macro_rules! svd_struct {
   ( $t:ty, $ts:ty, $ts_name:ty ) => {
@@ -41,9 +65,12 @@ macro_rules! svd_struct {
 
             #[napi(js_name="V")]
             #[allow(non_snake_case)]
-            pub fn V(&self) -> Result<$ts_name> {
-                let inner = self.inner.V.to_owned();
-                Ok($ts_name::from_inner(inner))
+            pub fn V(&self, env: Env, reference: Reference<[<SVD $t:upper $ts_name>]>) -> Result<[<Js $ts_name Ref>]> {
+                Ok([<JsDenseMatrix $t:upper Ref>] {
+                    inner: reference.share_with(env, |svd| {
+                        Ok([<DenseMatrix $t:upper Ref>]::from_inner(&svd.inner().V))
+                    })?
+                })
             }
 
             #[napi(js_name="S")]

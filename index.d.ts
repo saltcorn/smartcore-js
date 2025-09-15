@@ -441,11 +441,13 @@ export declare class Iris {
 }
 
 export declare class JsDenseMatrixF32Ref {
-
+  matmul(other: JsDenseMatrixF32Ref): DenseMatrixF32
+  transpose(): DenseMatrixF32
 }
 
 export declare class JsDenseMatrixF64Ref {
-
+  matmul(other: JsDenseMatrixF64Ref): DenseMatrixF64
+  transpose(): DenseMatrixF64
 }
 
 export declare class Kernels {
@@ -934,7 +936,7 @@ export declare class SVDF32 {
 
 export declare class SVDF32DenseMatrixF32 {
   U(): JsDenseMatrixF32Ref
-  V(): DenseMatrixF32
+  V(): JsDenseMatrixF32Ref
   S(): DenseMatrixF32
 }
 
@@ -947,7 +949,7 @@ export declare class SVDF64 {
 
 export declare class SVDF64DenseMatrixF64 {
   U(): JsDenseMatrixF64Ref
-  V(): DenseMatrixF64
+  V(): JsDenseMatrixF64Ref
   S(): DenseMatrixF64
 }
 
