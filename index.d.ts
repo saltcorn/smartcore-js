@@ -103,6 +103,11 @@ export declare class DatasetF32U32 {
   denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF32
 }
 
+export declare class DBSCANF32F32 {
+  static fit(x: DenseMatrixF32, parameters: EuclidianF32DBSCANF32Parameters): DBSCANF32F32
+  predict(x: DenseMatrixF32): Float32Array
+}
+
 export declare class DecisionTreeClassifierParameters {
   constructor()
   withCriterion(criterion: SplitCriterion): void
@@ -245,6 +250,14 @@ export declare class Euclidianf32 {
 }
 export type EuclidianF32 = Euclidianf32
 
+export declare class EuclidianF32DBSCANF32Parameters {
+  withMinSamples(minSamples: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withEps(eps: number): void
+  constructor()
+  static withDistanceHammingF32(distance: HammingF32): EuclidianF32DBSCANF32Parameters
+}
+
 export declare class Euclidianf64 {
   constructor()
   distance(x: Float64Array, y: Float64Array): number
@@ -370,6 +383,12 @@ export declare class HammingF32 {
   distance(x: Float32Array, y: Float32Array): number
 }
 
+export declare class HammingF32DBSCANF32Parameters {
+  withMinSamples(minSamples: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withEps(eps: number): void
+}
+
 export declare class HammingF64 {
   constructor()
   distance(x: Float64Array, y: Float64Array): number
@@ -470,18 +489,18 @@ export declare class KNNRegressorF32U32 {
 export declare class KNNRegressorParametersF32EuclidianF32 {
   withK(k: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
-  static withWeight(weight: KNNWeightFunction): KNNRegressorParametersF32EuclidianF32
+  withWeight(weight: KNNWeightFunction): void
   constructor()
   static withDistanceHammingF32(distance: HammingF32): KNNRegressorParametersF32EuclidianF32
 }
-export type EuclidianF32KNNRegressorParametersf32 = KNNRegressorParametersF32EuclidianF32
+export type EuclidianF32KNNRegressorParametersF32 = KNNRegressorParametersF32EuclidianF32
 
 export declare class KNNRegressorParametersF32HammingF32 {
   withK(k: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
-  static withWeight(weight: KNNWeightFunction): KNNRegressorParametersF32HammingF32
+  withWeight(weight: KNNWeightFunction): void
 }
-export type HammingF32KNNRegressorParametersf32 = KNNRegressorParametersF32HammingF32
+export type HammingF32KNNRegressorParametersF32 = KNNRegressorParametersF32HammingF32
 
 export declare class LassoF32F32 {
   constructor()

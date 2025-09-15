@@ -15,12 +15,12 @@ macro_rules! knn_regressor_parameters_struct {
     paste! {
         #[napi(js_name=""[<KNNRegressorParameters $y:upper $d_name>]"")]
         #[derive(Debug, Clone)]
-        pub struct [<$d_name KNNRegressorParameters $y>] {
+        pub struct [<$d_name KNNRegressorParameters $y:upper>] {
             inner: LibKNNRegressorParameters<$y, $d>,
         }
 
         #[napi]
-        impl [<$d_name KNNRegressorParameters $y>] {
+        impl [<$d_name KNNRegressorParameters $y:upper>] {
             #[napi]
             pub fn with_k(&mut self, k: u32) {
                 self.inner = self.inner.to_owned().with_k(k as usize)
@@ -31,7 +31,7 @@ macro_rules! knn_regressor_parameters_struct {
                 self.inner = self.inner.to_owned().with_algorithm(algorithm.into());
             }
 
-            #[napi(factory)]
+            #[napi]
             pub fn with_weight(&mut self, weight: KNNWeightFunction) {
                 self.inner = self.inner.to_owned().with_weight(weight.into());
             }
@@ -65,14 +65,14 @@ macro_rules! knn_regressor_parameters_struct_distance_impl {
 
 knn_regressor_parameters_struct! {f32, Euclidian<f32>, EuclidianF32 }
 
-impl Default for EuclidianF32KNNRegressorParametersf32 {
+impl Default for EuclidianF32KNNRegressorParametersF32 {
   fn default() -> Self {
     Self::new()
   }
 }
 
 #[napi]
-impl EuclidianF32KNNRegressorParametersf32 {
+impl EuclidianF32KNNRegressorParametersF32 {
   #[napi(constructor)]
   pub fn new() -> Self {
     Self {
@@ -82,4 +82,4 @@ impl EuclidianF32KNNRegressorParametersf32 {
 }
 
 knn_regressor_parameters_struct! {f32, Hamming<f32>, HammingF32 }
-knn_regressor_parameters_struct_distance_impl! {EuclidianF32KNNRegressorParametersf32, HammingF32KNNRegressorParametersf32, HammingF32}
+knn_regressor_parameters_struct_distance_impl! {EuclidianF32KNNRegressorParametersF32, HammingF32KNNRegressorParametersF32, HammingF32}
