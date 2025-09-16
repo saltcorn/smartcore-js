@@ -2,19 +2,19 @@
 /* eslint-disable */
 export declare class AccuracyF32 {
   constructor()
-  getScore(yTrue: Float32Array, yPred: Float32Array): number
+  getScore(yTrue: DatasetF32F32JsVecRef, yPred: Float32Array): number
 }
 export type Accuracyf32 = AccuracyF32
 
 export declare class AccuracyF64 {
   constructor()
-  getScore(yTrue: Float64Array, yPred: Float64Array): number
+  getScore(yTrue: DatasetF64F64JsVecRef, yPred: Float64Array): number
 }
 export type Accuracyf64 = AccuracyF64
 
 export declare class AccuracyU32 {
   constructor()
-  getScore(yTrue: Uint32Array, yPred: Uint32Array): number
+  getScore(yTrue: DatasetF32U32JsVecRef, yPred: Uint32Array): number
 }
 export type Accuracyu32 = AccuracyU32
 
@@ -115,6 +115,36 @@ export declare class DatasetF32U32 {
 }
 
 export declare class DatasetF32U32JsVecRef {
+
+}
+
+export declare class DatasetF64F64 {
+  get data(): Float64Array
+  get target(): DatasetF64F64JsVecRef
+  get numSamples(): number
+  get numFeatures(): number
+  get featureNames(): Array<string>
+  get targetNames(): Array<string>
+  get description(): string
+  denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF64
+}
+
+export declare class DatasetF64F64JsVecRef {
+
+}
+
+export declare class DatasetF64U64 {
+  get data(): Float64Array
+  get target(): DatasetF64U64JsVecRef
+  get numSamples(): number
+  get numFeatures(): number
+  get featureNames(): Array<string>
+  get targetNames(): Array<string>
+  get description(): string
+  denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF64
+}
+
+export declare class DatasetF64U64JsVecRef {
 
 }
 
@@ -598,7 +628,7 @@ export declare class KMeansParameters {
 }
 
 export declare class KNNClassifierF32U32 {
-  static fit(x: DenseMatrixF32, y: Uint32Array): KNNClassifierF32U32
+  static fit(x: DenseMatrixF32, y: DatasetF32U32JsVecRef): KNNClassifierF32U32
   predict(x: DenseMatrixF32): Uint32Array
 }
 

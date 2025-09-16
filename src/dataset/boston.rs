@@ -10,7 +10,6 @@ pub struct Boston {}
 impl Boston {
   #[napi]
   pub fn load_dataset(&self) -> DatasetF32F32 {
-    let dataset = lib_load_dataset();
-    DatasetF32F32::new(dataset)
+    lib_load_dataset().into()
   }
 }

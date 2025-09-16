@@ -2,7 +2,7 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 
-use crate::dataset::{DatasetF32F32, DatasetF32U32};
+use crate::dataset::{DatasetF32F32, DatasetF32U32, DatasetF64F64, DatasetF64U64};
 
 macro_rules! js_vec_ref {
   ( $provider:ty, $t:ty ) => {
@@ -28,8 +28,8 @@ macro_rules! js_vec_ref {
             inner: SharedReference<$provider, [<$provider VecRef>]<'static>>
         }
 
-        impl [<$provider JsVecRef>] {
-            pub fn inner(&self) -> &Vec<$t> {
+        impl AsRef<Vec<$t>> for [<$provider JsVecRef>] {
+            fn as_ref(&self) -> &Vec<$t> {
                 self.inner.inner()
             }
         }
@@ -45,3 +45,5 @@ macro_rules! js_vec_ref {
 
 js_vec_ref! {DatasetF32F32, f32}
 js_vec_ref! {DatasetF32U32, u32}
+js_vec_ref! {DatasetF64F64, f64}
+js_vec_ref! {DatasetF64U64, u64}

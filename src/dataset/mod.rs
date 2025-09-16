@@ -5,16 +5,17 @@ pub mod digits;
 pub mod generator;
 pub mod iris;
 
-use std::ops::Deref;
-
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 use smartcore::dataset::Dataset as LibDataset;
 
 use crate::{
-  linalg::basic::matrix::DenseMatrixF32,
-  refs::{DatasetF32F32JsVecRef, DatasetF32F32VecRef, DatasetF32U32JsVecRef, DatasetF32U32VecRef},
+  linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64},
+  refs::{
+    DatasetF32F32JsVecRef, DatasetF32F32VecRef, DatasetF32U32JsVecRef, DatasetF32U32VecRef,
+    DatasetF64F64JsVecRef, DatasetF64F64VecRef, DatasetF64U64JsVecRef, DatasetF64U64VecRef,
+  },
 };
 
 macro_rules! dataset_struct {
@@ -27,10 +28,6 @@ macro_rules! dataset_struct {
 
         #[napi]
         impl [<Dataset $x:upper $y:upper>] {
-            fn new(inner: LibDataset<$x, $y>) -> Self {
-                Self { inner }
-            }
-
             #[napi(getter)]
             pub fn data(&self) -> $xs {
                 $xs::with_data_copied(&self.inner.data)
@@ -39,7 +36,7 @@ macro_rules! dataset_struct {
             #[napi(getter)]
             pub fn target(&self, reference: Reference<[<Dataset $x:upper $y:upper>]>, env: Env) -> Result<[<Dataset $x:upper $y:upper JsVecRef>]> {
                 let inner = reference.share_with(env, |dataset| {
-                    Ok([<Dataset $x:upper $y:upper VecRef>]::from(&dataset.target))
+                    Ok([<Dataset $x:upper $y:upper VecRef>]::from(&dataset.inner.target))
                 })?;
                 Ok([<Dataset $x:upper $y:upper JsVecRef>]::from(inner))
             }
@@ -80,11 +77,15 @@ macro_rules! dataset_struct {
             }
         }
 
-        impl Deref for [<Dataset $x:upper $y:upper>] {
-            type Target = LibDataset<$x, $y>;
-
-            fn deref(&self) -> &Self::Target {
+        impl AsRef<LibDataset<$x, $y>> for [<Dataset $x:upper $y:upper>] {
+            fn as_ref(&self) -> &LibDataset<$x, $y> {
                 &self.inner
+            }
+        }
+
+        impl From<LibDataset<$x, $y>> for [<Dataset $x:upper $y:upper>] {
+            fn from(inner: LibDataset<$x, $y>) -> Self {
+                Self { inner }
             }
         }
     }
@@ -93,6 +94,8 @@ macro_rules! dataset_struct {
 
 dataset_struct! {f32, f32, Float32Array, Float32Array}
 dataset_struct! {f32, u32, Float32Array, Uint32Array}
+dataset_struct! {f64, f64, Float64Array, Float64Array}
+dataset_struct! {f64, u64, Float64Array, Uint64Array}
 
 #[napi(js_name = "dataset")]
 pub struct Dataset {}
