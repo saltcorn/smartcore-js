@@ -48,9 +48,9 @@ macro_rules! dense_matrix_svd_impl {
         #[napi]
         impl $inner_name {
             #[napi]
-            pub fn fill(nrows: i64, ncols: i64, value: $js_inner) -> Result<Self> {
+            pub fn fill(nrows: i64, ncols: i64, value: $js_inner) -> Self {
                 let inner = LibDenseMatrix::<$rs_inner>::fill(nrows as usize, ncols as usize, value as $rs_inner);
-                Ok(Self::from_inner(inner))
+                Self::from_inner(inner)
             }
 
             #[napi]
@@ -91,45 +91,38 @@ macro_rules! dense_matrix_svd_impl {
             }
 
             #[napi]
-            pub fn zeros(nrows: i64, ncols: i64) -> Result<Self> {
-                let inner = LibDenseMatrix::<$rs_inner>::zeros(nrows as usize, ncols as usize);
-                Ok(Self::from_inner(inner))
+            pub fn zeros(nrows: i64, ncols: i64) -> Self {
+                Self::from_inner(LibDenseMatrix::<$rs_inner>::zeros(nrows as usize, ncols as usize))
             }
 
             #[napi]
-            pub fn ones(nrows: i64, ncols: i64) -> Result<Self> {
-                let inner = LibDenseMatrix::<$rs_inner>::ones(nrows as usize, ncols as usize);
-                Ok(Self::from_inner(inner))
+            pub fn ones(nrows: i64, ncols: i64) -> Self {
+                Self::from_inner(LibDenseMatrix::<$rs_inner>::ones(nrows as usize, ncols as usize))
             }
 
             #[napi]
-            pub fn eye(size: i64) -> Result<Self> {
-                let inner = LibDenseMatrix::<$rs_inner>::eye(size as usize);
-                Ok(Self::from_inner(inner))
+            pub fn eye(size: i64) -> Self {
+                Self::from_inner(LibDenseMatrix::<$rs_inner>::eye(size as usize))
             }
 
             #[napi]
-            pub fn rand(nrows: i64, ncols: i64) -> Result<Self> {
-                let inner = LibDenseMatrix::<$rs_inner>::rand(nrows as usize, ncols as usize);
-                Ok(Self::from_inner(inner))
+            pub fn rand(nrows: i64, ncols: i64) -> Self {
+                Self::from_inner(LibDenseMatrix::<$rs_inner>::rand(nrows as usize, ncols as usize))
             }
 
             #[napi]
-            pub fn from_slice(slice: &$inner_name) -> Result<Self> {
-                let inner = LibDenseMatrix::<$rs_inner>::from_slice(slice.inner());
-                Ok(Self::from_inner(inner))
+            pub fn from_slice(slice: &$inner_name) -> Self {
+                Self::from_inner(LibDenseMatrix::<$rs_inner>::from_slice(slice.inner()))
             }
 
             #[napi]
-            pub fn from_row(slice: $ys) -> Result<Self> {
-                let inner = LibDenseMatrix::<$rs_inner>::from_row(&slice.as_ref());
-                Ok(Self::from_inner(inner))
+            pub fn from_row(slice: $ys) -> Self {
+                Self::from_inner(LibDenseMatrix::<$rs_inner>::from_row(&slice.as_ref()))
             }
 
             #[napi]
-            pub fn from_column(slice: $ys) -> Result<Self> {
-                let inner = LibDenseMatrix::<$rs_inner>::from_column(&slice.as_ref());
-                Ok(Self::from_inner(inner))
+            pub fn from_column(slice: $ys) -> Self {
+                Self::from_inner(LibDenseMatrix::<$rs_inner>::from_column(&slice.as_ref()))
             }
 
             #[napi]
@@ -138,9 +131,8 @@ macro_rules! dense_matrix_svd_impl {
             }
 
             #[napi]
-            pub fn reshape(&self, nrows: i64, ncols: i64, axis: i8) -> Result<Self> {
-                let inner = self.inner.reshape(nrows as usize, ncols as usize, axis as u8);
-                Ok(Self::from_inner(inner))
+            pub fn reshape(&self, nrows: i64, ncols: i64, axis: i8) -> Self {
+                Self::from_inner(self.inner.reshape(nrows as usize, ncols as usize, axis as u8))
             }
 
             #[napi]
@@ -199,40 +191,35 @@ macro_rules! dense_matrix_svd_impl {
             }
 
             #[napi]
-            pub fn take(&self, index: BigInt64Array, axis: i8) -> Result<Self> {
+            pub fn take(&self, index: BigInt64Array, axis: i8) -> Self {
                 let index = index.to_vec().into_iter().map(|i| i as usize).collect::<Vec<_>>();
                 let inner = self.inner.take(&index, axis as u8);
-                Ok(Self::from_inner(inner))
+                Self::from_inner(inner)
             }
 
             #[napi]
-            pub fn take_column(&self, column_index: i64) -> Result<Self> {
-                let inner = self.inner.take_column(column_index as usize);
-                Ok(Self::from_inner(inner))
+            pub fn take_column(&self, column_index: i64) -> Self {
+                Self::from_inner(self.inner.take_column(column_index as usize))
             }
 
             #[napi]
-            pub fn add_scalar(&self, x: $js_inner) -> Result<Self> {
-                let inner = self.inner.add_scalar(x as $rs_inner);
-                Ok(Self::from_inner(inner))
+            pub fn add_scalar(&self, x: $js_inner) -> Self {
+                Self::from_inner(self.inner.add_scalar(x as $rs_inner))
             }
 
             #[napi]
-            pub fn sub_scalar(&self, x: $js_inner) -> Result<Self> {
-                let inner = self.inner.sub_scalar(x as $rs_inner);
-                Ok(Self::from_inner(inner))
+            pub fn sub_scalar(&self, x: $js_inner) -> Self {
+                Self::from_inner(self.inner.sub_scalar(x as $rs_inner))
             }
 
             #[napi]
-            pub fn div_scalar(&self, x: $js_inner) -> Result<Self> {
-                let inner = self.inner.div_scalar(x as $rs_inner);
-                Ok(Self::from_inner(inner))
+            pub fn div_scalar(&self, x: $js_inner) -> Self {
+                Self::from_inner(self.inner.div_scalar(x as $rs_inner))
             }
 
             #[napi]
-            pub fn mul_scalar(&self, x: $js_inner) -> Result<Self> {
-                let inner = self.inner.mul_scalar(x as $rs_inner);
-                Ok(Self::from_inner(inner))
+            pub fn mul_scalar(&self, x: $js_inner) -> Self {
+                Self::from_inner(self.inner.mul_scalar(x as $rs_inner))
             }
 
             #[napi]
@@ -256,24 +243,24 @@ macro_rules! dense_matrix_svd_impl {
             }
 
             #[napi]
-            pub fn abs(&self) -> Result<Self> {
-                Ok(Self::from_inner(self.inner.abs()))
+            pub fn abs(&self) -> Self {
+                Self::from_inner(self.inner.abs())
             }
 
             #[napi]
-            pub fn neg(&self) -> Result<Self> {
-                Ok(Self::from_inner(self.inner.neg()))
+            pub fn neg(&self) -> Self {
+                Self::from_inner(self.inner.neg())
             }
 
             #[napi]
-            pub fn pow(&self, p: $js_inner) -> Result<Self> {
-                Ok(Self::from_inner(self.inner.pow(p as $rs_inner)))
+            pub fn pow(&self, p: $js_inner) -> Self {
+                Self::from_inner(self.inner.pow(p as $rs_inner))
             }
 
             #[napi]
-            pub fn column_mean(&self) -> Result<Float64Array> {
+            pub fn column_mean(&self) -> Float64Array {
                 let mean = self.inner.column_mean();
-                Ok(Float64Array::new(mean))
+                Float64Array::new(mean)
             }
 
             #[napi]
@@ -282,8 +269,8 @@ macro_rules! dense_matrix_svd_impl {
             }
 
             #[napi]
-            pub fn approximate_eq(&self, other: &$inner_name, error: $js_inner) -> Result<bool> {
-                Ok(self.inner.approximate_eq(other, error as $rs_inner))
+            pub fn approximate_eq(&self, other: &$inner_name, error: $js_inner) -> bool {
+                self.inner.approximate_eq(other, error as $rs_inner)
             }
         }
     }
