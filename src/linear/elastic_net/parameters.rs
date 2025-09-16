@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 use napi_derive::napi;
 use smartcore::linear::elastic_net::ElasticNetParameters as LibElasticNetParameters;
 
@@ -42,12 +40,14 @@ impl ElasticNetParameters {
   pub fn with_max_iter(&mut self, max_iter: u32) {
     self.inner = self.inner.to_owned().with_max_iter(max_iter as usize);
   }
+
+  pub fn owned_inner(&self) -> LibElasticNetParameters {
+    self.inner.to_owned()
+  }
 }
 
-impl Deref for ElasticNetParameters {
-  type Target = LibElasticNetParameters;
-
-  fn deref(&self) -> &Self::Target {
+impl AsRef<LibElasticNetParameters> for ElasticNetParameters {
+  fn as_ref(&self) -> &LibElasticNetParameters {
     &self.inner
   }
 }

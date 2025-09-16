@@ -9,5 +9,6 @@ pub mod metrics;
 pub mod model_selection;
 pub mod naive_bayes;
 pub mod neighbors;
+pub mod refs;
 pub mod svm;
 pub mod tree;

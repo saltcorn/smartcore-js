@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 use napi_derive::napi;
 use paste::paste;
 use smartcore::linear::logistic_regression::{
@@ -45,12 +43,14 @@ macro_rules! logistic_regression_parameters_struct {
                     .with_solver(LibLogisticRegressionSolverName::LBFGS)
                 };
             }
+
+            pub fn owned_inner(&self) -> LibLogisticRegressionParameters<$ty> {
+                self.inner.to_owned()
+            }
         }
 
-        impl Deref for [<LogisticRegressionParameters $ty:upper>] {
-            type Target = LibLogisticRegressionParameters<$ty>;
-
-            fn deref(&self) -> &Self::Target {
+        impl AsRef<LibLogisticRegressionParameters<$ty>> for [<LogisticRegressionParameters $ty:upper>] {
+            fn as_ref(&self) -> &LibLogisticRegressionParameters<$ty> {
                 &self.inner
             }
         }

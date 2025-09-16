@@ -1,3 +1,6 @@
+pub mod cross_validate;
+pub mod kfold;
+
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;

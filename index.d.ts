@@ -71,6 +71,13 @@ export declare class CategoricalNBU64 {
   static deserialize(data: Buffer): CategoricalNBU64
 }
 
+export declare class CrossValidationResult {
+  testScore(): Float64Array
+  trainScore(): Float64Array
+  meanTestScore(): number
+  meanTrainScore(): number
+}
+
 export declare class dataset {
   static boston(): Boston
   static breastCancer(): BreastCancer
@@ -83,7 +90,7 @@ export type Dataset = dataset
 
 export declare class DatasetF32F32 {
   get data(): Float32Array
-  get target(): Float32Array
+  get target(): DatasetF32F32JsVecRef
   get numSamples(): number
   get numFeatures(): number
   get featureNames(): Array<string>
@@ -92,15 +99,23 @@ export declare class DatasetF32F32 {
   denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF32
 }
 
+export declare class DatasetF32F32JsVecRef {
+
+}
+
 export declare class DatasetF32U32 {
   get data(): Float32Array
-  get target(): Uint32Array
+  get target(): DatasetF32U32JsVecRef
   get numSamples(): number
   get numFeatures(): number
   get featureNames(): Array<string>
   get targetNames(): Array<string>
   get description(): string
   denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF32
+}
+
+export declare class DatasetF32U32JsVecRef {
+
 }
 
 export declare class DBSCANF32F32 {
@@ -541,6 +556,11 @@ export declare class Kernels {
   static rbf(gamma: number): Kernels
   static polynomial(gamma: number, degree: number): Kernels
   static sigmoid(gamma: number, coef0: number): Kernels
+}
+
+export declare class KFold {
+  constructor()
+  withNSplits(nSplits: number): void
 }
 
 export declare class KMeansF32F32 {
@@ -1071,6 +1091,22 @@ export declare class SVRParametersF64 {
   withTol(tol: number): void
   withKernel(kernel: Kernels): void
 }
+
+export declare function crossValidateElasticNetF32F32(xs: DenseMatrixF32, ys: Float32Array, parameters: ElasticNetParameters, cv: KFold, score: (arg0: Float32Array, arg1: Float32Array) => number): CrossValidationResult
+
+export declare function crossValidateElasticNetF32U32(xs: DenseMatrixF32, ys: Uint32Array, parameters: ElasticNetParameters, cv: KFold, score: (arg0: Uint32Array, arg1: Uint32Array) => number): CrossValidationResult
+
+export declare function crossValidateElasticNetF64F64(xs: DenseMatrixF64, ys: Float64Array, parameters: ElasticNetParameters, cv: KFold, score: (arg0: Float64Array, arg1: Float64Array) => number): CrossValidationResult
+
+export declare function crossValidateLassoF32F32(xs: DenseMatrixF32, ys: Float32Array, parameters: LassoParameters, cv: KFold, score: (arg0: Float32Array, arg1: Float32Array) => number): CrossValidationResult
+
+export declare function crossValidateLassoF32U32(xs: DenseMatrixF32, ys: Uint32Array, parameters: LassoParameters, cv: KFold, score: (arg0: Uint32Array, arg1: Uint32Array) => number): CrossValidationResult
+
+export declare function crossValidateLassoF64F64(xs: DenseMatrixF64, ys: Float64Array, parameters: LassoParameters, cv: KFold, score: (arg0: Float64Array, arg1: Float64Array) => number): CrossValidationResult
+
+export declare function crossValidateLogisticRegressionF32U32(xs: DenseMatrixF32, ys: Uint32Array, parameters: LogisticRegressionParametersF32, cv: KFold, score: (arg0: Uint32Array, arg1: Uint32Array) => number): CrossValidationResult
+
+export declare function crossValidateLogisticRegressionF64U64(xs: DenseMatrixF64, ys: BigUint64Array, parameters: LogisticRegressionParametersF64, cv: KFold, score: (arg0: BigUint64Array, arg1: BigUint64Array) => number): CrossValidationResult
 
 export declare const enum KNNAlgorithmName {
   LinearSearch = 0,

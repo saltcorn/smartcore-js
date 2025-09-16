@@ -12,7 +12,10 @@ use napi_derive::napi;
 use paste::paste;
 use smartcore::dataset::Dataset as LibDataset;
 
-use crate::linalg::basic::matrix::DenseMatrixF32;
+use crate::{
+  linalg::basic::matrix::DenseMatrixF32,
+  refs::{DatasetF32F32JsVecRef, DatasetF32F32VecRef, DatasetF32U32JsVecRef, DatasetF32U32VecRef},
+};
 
 macro_rules! dataset_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -34,8 +37,11 @@ macro_rules! dataset_struct {
             }
 
             #[napi(getter)]
-            pub fn target(&self) -> $ys {
-                $ys::with_data_copied(&self.inner.target)
+            pub fn target(&self, reference: Reference<[<Dataset $x:upper $y:upper>]>, env: Env) -> Result<[<Dataset $x:upper $y:upper JsVecRef>]> {
+                let inner = reference.share_with(env, |dataset| {
+                    Ok([<Dataset $x:upper $y:upper VecRef>]::from(&dataset.target))
+                })?;
+                Ok([<Dataset $x:upper $y:upper JsVecRef>]::from(inner))
             }
 
             #[napi(getter)]

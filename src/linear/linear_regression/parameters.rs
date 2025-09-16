@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 use napi_derive::napi;
 use smartcore::linear::linear_regression::{
   LinearRegressionParameters as LibLinearRegressionParameters,
@@ -40,12 +38,14 @@ impl LinearRegressionParameters {
         .with_solver(LibLinearRegressionSolverName::SVD),
     };
   }
+
+  pub fn owned_inner(&self) -> LibLinearRegressionParameters {
+    self.inner.to_owned()
+  }
 }
 
-impl Deref for LinearRegressionParameters {
-  type Target = LibLinearRegressionParameters;
-
-  fn deref(&self) -> &Self::Target {
+impl AsRef<LibLinearRegressionParameters> for LinearRegressionParameters {
+  fn as_ref(&self) -> &LibLinearRegressionParameters {
     &self.inner
   }
 }

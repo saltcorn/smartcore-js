@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 use napi_derive::napi;
 use smartcore::linear::lasso::LassoParameters as LibLassoParameters;
 
@@ -37,12 +35,14 @@ impl LassoParameters {
   pub fn with_max_iter(&mut self, max_iter: u32) {
     self.inner = self.inner.to_owned().with_max_iter(max_iter as usize);
   }
+
+  pub fn owned_inner(&self) -> LibLassoParameters {
+    self.inner.to_owned()
+  }
 }
 
-impl Deref for LassoParameters {
-  type Target = LibLassoParameters;
-
-  fn deref(&self) -> &Self::Target {
+impl AsRef<LibLassoParameters> for LassoParameters {
+  fn as_ref(&self) -> &LibLassoParameters {
     &self.inner
   }
 }

@@ -1,7 +1,5 @@
 mod parameters;
 
-use std::ops::Deref;
-
 use bincode::{
   config::standard,
   serde::{decode_from_slice, encode_to_vec},
@@ -10,16 +8,12 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 use smartcore::{
-  api::SupervisedEstimator,
-  linalg::basic::matrix::DenseMatrix,
-  linear::linear_regression::{
-    LinearRegression as LibLinearRegression,
-    LinearRegressionParameters as LibLinearRegressionParameters,
-  },
+  api::SupervisedEstimator, linalg::basic::matrix::DenseMatrix,
+  linear::linear_regression::LinearRegression as LibLinearRegression,
 };
 
 use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-use parameters::LinearRegressionParameters;
+pub use parameters::LinearRegressionParameters;
 
 macro_rules! linear_regression_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -45,13 +39,17 @@ macro_rules! linear_regression_struct {
                 Self::default()
             }
 
+            pub fn new_inner() -> LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>> {
+                LibLinearRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new()
+            }
+
             #[napi(factory)]
             pub fn fit(x: &$xs, y: $ys, parameters: &LinearRegressionParameters) -> Result<Self> {
                 let y = y.to_vec();
                 let inner = LibLinearRegression::fit(
                     x as &DenseMatrix<$x>,
                     &y,
-                    (parameters as &LibLinearRegressionParameters).to_owned(),
+                    parameters.as_ref().to_owned(),
                 )
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok(Self { inner })
@@ -81,10 +79,8 @@ macro_rules! linear_regression_struct {
             }
         }
 
-        impl Deref for [<LinearRegression $x:upper $y:upper>] {
-            type Target = LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>;
-
-            fn deref(&self) -> &Self::Target {
+        impl AsRef<LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<LinearRegression $x:upper $y:upper>] {
+            fn as_ref(&self) -> &LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>> {
                 &self.inner
             }
         }

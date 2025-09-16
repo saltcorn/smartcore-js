@@ -1,7 +1,5 @@
 mod parameters;
 
-use std::ops::Deref;
-
 use bincode::{
   config::standard,
   serde::{decode_from_slice, encode_to_vec},
@@ -10,16 +8,12 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 use smartcore::{
-  api::SupervisedEstimator,
-  linalg::basic::matrix::DenseMatrix,
-  linear::logistic_regression::{
-    LogisticRegression as LibLogisticRegression,
-    LogisticRegressionParameters as LibLogisticRegressionParameters,
-  },
+  api::SupervisedEstimator, linalg::basic::matrix::DenseMatrix,
+  linear::logistic_regression::LogisticRegression as LibLogisticRegression,
 };
 
 use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-use parameters::{LogisticRegressionParametersF32, LogisticRegressionParametersF64};
+pub use parameters::{LogisticRegressionParametersF32, LogisticRegressionParametersF64};
 
 macro_rules! logistic_regression_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -45,13 +39,17 @@ macro_rules! logistic_regression_struct {
                 Self::default()
             }
 
+            pub fn new_inner() -> LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>> {
+                LibLogisticRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new()
+            }
+
             #[napi(factory)]
             pub fn fit(x: &$xs, y: $ys, parameters: &[<LogisticRegressionParameters $x:upper>]) -> Result<Self> {
                 let y = y.to_vec();
                 let inner = LibLogisticRegression::fit(
                     x as &DenseMatrix<$x>,
                     &y,
-                    (parameters as &LibLogisticRegressionParameters<$x>).to_owned(),
+                    parameters.as_ref().to_owned(),
                 )
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok(Self { inner })
@@ -81,10 +79,8 @@ macro_rules! logistic_regression_struct {
             }
         }
 
-        impl Deref for [<LogisticRegression $x:upper $y:upper>] {
-            type Target = LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>;
-
-            fn deref(&self) -> &Self::Target {
+        impl AsRef<LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<LogisticRegression $x:upper $y:upper>] {
+            fn as_ref(&self) -> &LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>> {
                 &self.inner
             }
         }
