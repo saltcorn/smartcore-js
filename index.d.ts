@@ -184,8 +184,47 @@ export declare class DenseMatrixF32 {
   serialize(): Buffer
   static deserialize(data: Buffer): DenseMatrixF32
   static fill(nrows: number, ncols: number, value: number): DenseMatrixF32
-  matmul(other: DenseMatrixF32): DenseMatrixF32
+  slice(): DenseMatrixF32
+  sliceMut(): DenseMatrixF32
+  fromIterator(): DenseMatrixF32
+  getRow(row: number): JsBoxedArrayF32Ref
+  getCol(col: number): JsBoxedArrayF32Ref
+  static zeros(nrows: number, ncols: number): DenseMatrixF32
+  static ones(nrows: number, ncols: number): DenseMatrixF32
+  static eye(size: number): DenseMatrixF32
+  static rand(nrows: number, ncols: number): DenseMatrixF32
+  static fromSlice(slice: DenseMatrixF32): DenseMatrixF32
+  static fromRow(slice: Float32Array): DenseMatrixF32
+  static fromColumn(slice: Float32Array): DenseMatrixF32
   transpose(): DenseMatrixF32
+  reshape(nrows: number, ncols: number, axis: number): DenseMatrixF32
+  matmul(other: DenseMatrixF32): DenseMatrixF32
+  ab(aTranspose: boolean, b: DenseMatrixF32, bTranspose: boolean): DenseMatrixF32
+  ax(aTranspose: boolean, b: Float32Array): DenseMatrixF32
+  static concatenate1D(): DenseMatrixF32
+  static concatenate2D(): DenseMatrixF32
+  merge1D(): DenseMatrixF32
+  vStack(other: DenseMatrixF32): DenseMatrixF32
+  hStack(other: DenseMatrixF32): DenseMatrixF32
+  map(): DenseMatrixF32
+  rowIter(): DenseMatrixF32
+  colIter(): DenseMatrixF32
+  take(index: BigInt64Array, axis: number): DenseMatrixF32
+  takeColumn(columnIndex: number): DenseMatrixF32
+  addScalar(x: number): DenseMatrixF32
+  subScalar(x: number): DenseMatrixF32
+  divScalar(x: number): DenseMatrixF32
+  mulScalar(x: number): DenseMatrixF32
+  add(other: DenseMatrixF32): DenseMatrixF32
+  sub(other: DenseMatrixF32): DenseMatrixF32
+  mul(other: DenseMatrixF32): DenseMatrixF32
+  div(other: DenseMatrixF32): DenseMatrixF32
+  abs(): DenseMatrixF32
+  neg(): DenseMatrixF32
+  pow(p: number): DenseMatrixF32
+  columnMean(): Float64Array
+  copyColAsVec(): DenseMatrixF32
+  approximateEq(other: DenseMatrixF32, error: number): boolean
   svdSolve(b: DenseMatrixF32): DenseMatrixF32
   svd(): SVDF32DenseMatrixF32
 }
@@ -195,8 +234,47 @@ export declare class DenseMatrixF64 {
   serialize(): Buffer
   static deserialize(data: Buffer): DenseMatrixF64
   static fill(nrows: number, ncols: number, value: number): DenseMatrixF64
-  matmul(other: DenseMatrixF64): DenseMatrixF64
+  slice(): DenseMatrixF64
+  sliceMut(): DenseMatrixF64
+  fromIterator(): DenseMatrixF64
+  getRow(row: number): JsBoxedArrayF64Ref
+  getCol(col: number): JsBoxedArrayF64Ref
+  static zeros(nrows: number, ncols: number): DenseMatrixF64
+  static ones(nrows: number, ncols: number): DenseMatrixF64
+  static eye(size: number): DenseMatrixF64
+  static rand(nrows: number, ncols: number): DenseMatrixF64
+  static fromSlice(slice: DenseMatrixF64): DenseMatrixF64
+  static fromRow(slice: Float64Array): DenseMatrixF64
+  static fromColumn(slice: Float64Array): DenseMatrixF64
   transpose(): DenseMatrixF64
+  reshape(nrows: number, ncols: number, axis: number): DenseMatrixF64
+  matmul(other: DenseMatrixF64): DenseMatrixF64
+  ab(aTranspose: boolean, b: DenseMatrixF64, bTranspose: boolean): DenseMatrixF64
+  ax(aTranspose: boolean, b: Float64Array): DenseMatrixF64
+  static concatenate1D(): DenseMatrixF64
+  static concatenate2D(): DenseMatrixF64
+  merge1D(): DenseMatrixF64
+  vStack(other: DenseMatrixF64): DenseMatrixF64
+  hStack(other: DenseMatrixF64): DenseMatrixF64
+  map(): DenseMatrixF64
+  rowIter(): DenseMatrixF64
+  colIter(): DenseMatrixF64
+  take(index: BigInt64Array, axis: number): DenseMatrixF64
+  takeColumn(columnIndex: number): DenseMatrixF64
+  addScalar(x: number): DenseMatrixF64
+  subScalar(x: number): DenseMatrixF64
+  divScalar(x: number): DenseMatrixF64
+  mulScalar(x: number): DenseMatrixF64
+  add(other: DenseMatrixF64): DenseMatrixF64
+  sub(other: DenseMatrixF64): DenseMatrixF64
+  mul(other: DenseMatrixF64): DenseMatrixF64
+  div(other: DenseMatrixF64): DenseMatrixF64
+  abs(): DenseMatrixF64
+  neg(): DenseMatrixF64
+  pow(p: number): DenseMatrixF64
+  columnMean(): Float64Array
+  copyColAsVec(): DenseMatrixF64
+  approximateEq(other: DenseMatrixF64, error: number): boolean
   svdSolve(b: DenseMatrixF64): DenseMatrixF64
   svd(): SVDF64DenseMatrixF64
 }
@@ -438,6 +516,14 @@ export type HCVScoreu64 = HCVScoreU64
 
 export declare class Iris {
   loadDataset(): DatasetF32U32
+}
+
+export declare class JsBoxedArrayF32Ref {
+
+}
+
+export declare class JsBoxedArrayF64Ref {
+
 }
 
 export declare class JsDenseMatrixF32Ref {
