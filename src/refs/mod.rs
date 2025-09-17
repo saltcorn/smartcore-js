@@ -5,7 +5,7 @@ use paste::paste;
 use crate::dataset::{DatasetF32F32, DatasetF32U32, DatasetF64F64, DatasetF64U64};
 
 macro_rules! js_vec_ref {
-  ( $provider:ty, $t:ty ) => {
+  ( $provider:ty, $t:ty, $ts_js:ty ) => {
     paste! {
         pub struct [<$provider VecRef>]<'a> {
             inner: &'a Vec<$t>
@@ -28,6 +28,14 @@ macro_rules! js_vec_ref {
             inner: SharedReference<$provider, [<$provider VecRef>]<'static>>
         }
 
+        #[napi]
+        impl [<$provider JsVecRef>] {
+            #[napi]
+            pub fn as_array(&self) -> $ts_js {
+                $ts_js::with_data_copied(self.inner.inner)
+            }
+        }
+
         impl AsRef<Vec<$t>> for [<$provider JsVecRef>] {
             fn as_ref(&self) -> &Vec<$t> {
                 self.inner.inner()
@@ -43,7 +51,21 @@ macro_rules! js_vec_ref {
   };
 }
 
-js_vec_ref! {DatasetF32F32, f32}
-js_vec_ref! {DatasetF32U32, u32}
-js_vec_ref! {DatasetF64F64, f64}
-js_vec_ref! {DatasetF64U64, u64}
+js_vec_ref! {DatasetF32F32, f32, Float32Array}
+js_vec_ref! {DatasetF32U32, u32, Uint32Array}
+js_vec_ref! {DatasetF64F64, f64, Float64Array}
+js_vec_ref! {DatasetF64U64, u64, BigUint64Array}
+
+// #[napi]
+// struct VecU32 {
+//     inner: Vec<u32>
+// }
+
+// impl VecU32 {
+//     #[napi(constructor)]
+//     pub fn new(values: Ui) -> Self {}
+// }
+
+// struct VecRefU32 {
+//     inner: &'a Vec<$t>
+// }

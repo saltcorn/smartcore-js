@@ -65,7 +65,7 @@ macro_rules! cross_validate_struct {
             ys: &$ys,
             parameters: &$e_params,
             cv: &KFold,
-            score: Function<($ys_js, $ys_js), f64>
+            score: Function<FnArgs<($ys_js, $ys_js)>, f64>
         ) -> Result<CrossValidationResult> {
             let score = |y1: &Vec<$y>, y2: &Vec<$y>| -> f64 {
                 let y1 = $ys_js::with_data_copied(y1);

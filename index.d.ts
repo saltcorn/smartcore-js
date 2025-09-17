@@ -2,19 +2,19 @@
 /* eslint-disable */
 export declare class AccuracyF32 {
   constructor()
-  getScore(yTrue: DatasetF32F32JsVecRef, yPred: Float32Array): number
+  getScore(yTrue: Float32Array, yPred: Float32Array): number
 }
 export type Accuracyf32 = AccuracyF32
 
 export declare class AccuracyF64 {
   constructor()
-  getScore(yTrue: DatasetF64F64JsVecRef, yPred: Float64Array): number
+  getScore(yTrue: Float64Array, yPred: Float64Array): number
 }
 export type Accuracyf64 = AccuracyF64
 
 export declare class AccuracyU32 {
   constructor()
-  getScore(yTrue: DatasetF32U32JsVecRef, yPred: Uint32Array): number
+  getScore(yTrue: Uint32Array, yPred: Uint32Array): number
 }
 export type Accuracyu32 = AccuracyU32
 
@@ -100,7 +100,7 @@ export declare class DatasetF32F32 {
 }
 
 export declare class DatasetF32F32JsVecRef {
-
+  asArray(): Float32Array
 }
 
 export declare class DatasetF32U32 {
@@ -115,7 +115,7 @@ export declare class DatasetF32U32 {
 }
 
 export declare class DatasetF32U32JsVecRef {
-
+  asArray(): Uint32Array
 }
 
 export declare class DatasetF64F64 {
@@ -130,7 +130,7 @@ export declare class DatasetF64F64 {
 }
 
 export declare class DatasetF64F64JsVecRef {
-
+  asArray(): Float64Array
 }
 
 export declare class DatasetF64U64 {
@@ -145,7 +145,7 @@ export declare class DatasetF64U64 {
 }
 
 export declare class DatasetF64U64JsVecRef {
-
+  asArray(): BigUint64Array
 }
 
 export declare class DBSCANF32F32 {
