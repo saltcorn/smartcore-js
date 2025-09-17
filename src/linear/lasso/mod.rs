@@ -11,11 +11,14 @@ use smartcore::{
   api::SupervisedEstimator, linalg::basic::matrix::DenseMatrix, linear::lasso::Lasso as LibLasso,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::{
+  linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64},
+  refs::{DatasetF32F32JsVecRef, DatasetF32U32JsVecRef, DatasetF64F64JsVecRef},
+};
 pub use parameters::LassoParameters;
 
 macro_rules! lasso_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $xs:ty, $ys:ty, $ys_js:ty ) => {
     paste! {
         #[napi(js_name=""[<Lasso $x:upper $y:upper>]"")]
         #[derive(Debug)]
@@ -43,11 +46,10 @@ macro_rules! lasso_struct {
             }
 
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &LassoParameters) -> Result<Self> {
-                let y = y.to_vec();
+            pub fn fit(x: &$xs, y: &$ys, parameters: &LassoParameters) -> Result<Self> {
                 let inner = LibLasso::fit(
                     x as &DenseMatrix<$x>,
-                    &y,
+                    y.as_ref(),
                     parameters.as_ref().to_owned(),
                 )
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
@@ -55,12 +57,12 @@ macro_rules! lasso_struct {
             }
 
             #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
+            pub fn predict(&self, x: &$xs) -> Result<$ys_js> {
                 let prediction_result = self
                 .inner
                 .predict(x as &DenseMatrix<$x>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
+                Ok($ys_js::new(prediction_result))
             }
 
             #[napi]
@@ -87,6 +89,6 @@ macro_rules! lasso_struct {
   };
 }
 
-lasso_struct! {f32, f32, DenseMatrixF32, Float32Array}
-lasso_struct! {f64, f64, DenseMatrixF64, Float64Array}
-lasso_struct! {f32, u32, DenseMatrixF32, Uint32Array}
+lasso_struct! {f32, f32, DenseMatrixF32, DatasetF32F32JsVecRef, Float32Array}
+lasso_struct! {f64, f64, DenseMatrixF64, DatasetF64F64JsVecRef, Float64Array}
+lasso_struct! {f32, u32, DenseMatrixF32, DatasetF32U32JsVecRef, Uint32Array}

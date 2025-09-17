@@ -14,11 +14,14 @@ use smartcore::{
   tree::decision_tree_regressor::DecisionTreeRegressor as LibDecisionTreeRegressor,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixU32, DenseMatrixU64};
+use crate::{
+  linalg::basic::matrix::{DenseMatrixU32, DenseMatrixU64},
+  refs::{DatasetF32U32JsVecRef, DatasetF64U64JsVecRef},
+};
 use parameters::DecisionTreeRegressorParameters;
 
 macro_rules! decision_tree_regressor_nb_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $xs:ty, $ys:ty, $ys_js:ty ) => {
     paste! {
         #[napi(js_name=""[<DecisionTreeRegressor $x:upper $y:upper>]"")]
         #[derive(Debug)]
@@ -29,11 +32,10 @@ macro_rules! decision_tree_regressor_nb_struct {
         #[napi]
         impl [<DecisionTreeRegressor $x:upper $y:upper>] {
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &DecisionTreeRegressorParameters) -> Result<Self> {
-                let y = y.to_vec();
+            pub fn fit(x: &$xs, y: &$ys, parameters: &DecisionTreeRegressorParameters) -> Result<Self> {
                 let inner = LibDecisionTreeRegressor::fit(
                     x as &DenseMatrix<$x>,
-                    &y,
+                    y.as_ref(),
                     parameters.owned_inner(),
                 )
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
@@ -41,12 +43,12 @@ macro_rules! decision_tree_regressor_nb_struct {
             }
 
             #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
+            pub fn predict(&self, x: &$xs) -> Result<$ys_js> {
                 let prediction_result = self
                 .inner
                 .predict(x as &DenseMatrix<$x>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
+                Ok($ys_js::new(prediction_result))
             }
 
             #[napi]
@@ -75,7 +77,7 @@ macro_rules! decision_tree_regressor_nb_struct {
   };
 }
 
-decision_tree_regressor_nb_struct! {u32, u32, DenseMatrixU32, Uint32Array}
-decision_tree_regressor_nb_struct! {u32, u64, DenseMatrixU32, BigUint64Array}
-decision_tree_regressor_nb_struct! {u64, u64, DenseMatrixU64, BigUint64Array}
-decision_tree_regressor_nb_struct! {u64, u32, DenseMatrixU64, Uint32Array}
+decision_tree_regressor_nb_struct! {u32, u32, DenseMatrixU32, DatasetF32U32JsVecRef, Uint32Array}
+decision_tree_regressor_nb_struct! {u32, u64, DenseMatrixU32, DatasetF64U64JsVecRef, BigUint64Array}
+decision_tree_regressor_nb_struct! {u64, u64, DenseMatrixU64, DatasetF64U64JsVecRef, BigUint64Array}
+decision_tree_regressor_nb_struct! {u64, u32, DenseMatrixU64, DatasetF32U32JsVecRef, Uint32Array}

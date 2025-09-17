@@ -162,28 +162,28 @@ export declare class DecisionTreeClassifierParameters {
 }
 
 export declare class DecisionTreeClassifierU32U32 {
-  static fit(x: DenseMatrixU32, y: Uint32Array, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierU32U32
+  static fit(x: DenseMatrixU32, y: DatasetF32U32JsVecRef, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierU32U32
   predict(x: DenseMatrixU32): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): DecisionTreeClassifierU32U32
 }
 
 export declare class DecisionTreeClassifierU32U64 {
-  static fit(x: DenseMatrixU32, y: BigUint64Array, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierU32U64
+  static fit(x: DenseMatrixU32, y: DatasetF64U64JsVecRef, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierU32U64
   predict(x: DenseMatrixU32): BigUint64Array
   serialize(): Buffer
   static deserialize(data: Buffer): DecisionTreeClassifierU32U64
 }
 
 export declare class DecisionTreeClassifierU64U32 {
-  static fit(x: DenseMatrixU64, y: Uint32Array, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierU64U32
+  static fit(x: DenseMatrixU64, y: DatasetF32U32JsVecRef, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierU64U32
   predict(x: DenseMatrixU64): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): DecisionTreeClassifierU64U32
 }
 
 export declare class DecisionTreeClassifierU64U64 {
-  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierU64U64
+  static fit(x: DenseMatrixU64, y: DatasetF64U64JsVecRef, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierU64U64
   predict(x: DenseMatrixU64): BigUint64Array
   serialize(): Buffer
   static deserialize(data: Buffer): DecisionTreeClassifierU64U64
@@ -197,28 +197,28 @@ export declare class DecisionTreeRegressorParameters {
 }
 
 export declare class DecisionTreeRegressorU32U32 {
-  static fit(x: DenseMatrixU32, y: Uint32Array, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorU32U32
+  static fit(x: DenseMatrixU32, y: DatasetF32U32JsVecRef, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorU32U32
   predict(x: DenseMatrixU32): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): DecisionTreeRegressorU32U32
 }
 
 export declare class DecisionTreeRegressorU32U64 {
-  static fit(x: DenseMatrixU32, y: BigUint64Array, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorU32U64
+  static fit(x: DenseMatrixU32, y: DatasetF64U64JsVecRef, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorU32U64
   predict(x: DenseMatrixU32): BigUint64Array
   serialize(): Buffer
   static deserialize(data: Buffer): DecisionTreeRegressorU32U64
 }
 
 export declare class DecisionTreeRegressorU64U32 {
-  static fit(x: DenseMatrixU64, y: Uint32Array, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorU64U32
+  static fit(x: DenseMatrixU64, y: DatasetF32U32JsVecRef, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorU64U32
   predict(x: DenseMatrixU64): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): DecisionTreeRegressorU64U32
 }
 
 export declare class DecisionTreeRegressorU64U64 {
-  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorU64U64
+  static fit(x: DenseMatrixU64, y: DatasetF64U64JsVecRef, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorU64U64
   predict(x: DenseMatrixU64): BigUint64Array
   serialize(): Buffer
   static deserialize(data: Buffer): DecisionTreeRegressorU64U64
@@ -346,7 +346,7 @@ export declare class Digits {
 
 export declare class ElasticNetF32F32 {
   constructor()
-  static fit(x: DenseMatrixF32, y: Float32Array, parameters: ElasticNetParameters): ElasticNetF32F32
+  static fit(x: DenseMatrixF32, y: DatasetF32F32JsVecRef, parameters: ElasticNetParameters): ElasticNetF32F32
   predict(x: DenseMatrixF32): Float32Array
   serialize(): Buffer
   static deserialize(data: Buffer): ElasticNetF32F32
@@ -354,7 +354,7 @@ export declare class ElasticNetF32F32 {
 
 export declare class ElasticNetF32U32 {
   constructor()
-  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: ElasticNetParameters): ElasticNetF32U32
+  static fit(x: DenseMatrixF32, y: DatasetF32U32JsVecRef, parameters: ElasticNetParameters): ElasticNetF32U32
   predict(x: DenseMatrixF32): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): ElasticNetF32U32
@@ -362,7 +362,7 @@ export declare class ElasticNetF32U32 {
 
 export declare class ElasticNetF64F64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: Float64Array, parameters: ElasticNetParameters): ElasticNetF64F64
+  static fit(x: DenseMatrixF64, y: DatasetF64F64JsVecRef, parameters: ElasticNetParameters): ElasticNetF64F64
   predict(x: DenseMatrixF64): Float64Array
   serialize(): Buffer
   static deserialize(data: Buffer): ElasticNetF64F64
@@ -422,28 +422,28 @@ export declare class Euclidianu64 {
 export type EuclidianU64 = Euclidianu64
 
 export declare class ExtraTreesRegressorF32F32 {
-  static fit(x: DenseMatrixF32, y: Float32Array, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF32F32
+  static fit(x: DenseMatrixF32, y: DatasetF32F32JsVecRef, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF32F32
   predict(x: DenseMatrixF32): Float32Array
   serialize(): Buffer
   static deserialize(data: Buffer): ExtraTreesRegressorF32F32
 }
 
 export declare class ExtraTreesRegressorF32U32 {
-  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF32U32
+  static fit(x: DenseMatrixF32, y: DatasetF32U32JsVecRef, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF32U32
   predict(x: DenseMatrixF32): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): ExtraTreesRegressorF32U32
 }
 
 export declare class ExtraTreesRegressorF64F64 {
-  static fit(x: DenseMatrixF64, y: Float64Array, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF64F64
+  static fit(x: DenseMatrixF64, y: DatasetF64F64JsVecRef, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF64F64
   predict(x: DenseMatrixF64): Float64Array
   serialize(): Buffer
   static deserialize(data: Buffer): ExtraTreesRegressorF64F64
 }
 
 export declare class ExtraTreesRegressorF64U64 {
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF64U64
+  static fit(x: DenseMatrixF64, y: DatasetF64U64JsVecRef, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF64U64
   predict(x: DenseMatrixF64): BigUint64Array
   serialize(): Buffer
   static deserialize(data: Buffer): ExtraTreesRegressorF64U64
@@ -633,12 +633,12 @@ export declare class KNNClassifierF32U32 {
 }
 
 export declare class KNNRegressorF32F32 {
-  static fit(x: DenseMatrixF32, y: Float32Array): KNNRegressorF32F32
+  static fit(x: DenseMatrixF32, y: DatasetF32F32JsVecRef): KNNRegressorF32F32
   predict(x: DenseMatrixF32): Float32Array
 }
 
 export declare class KNNRegressorF32U32 {
-  static fit(x: DenseMatrixF32, y: Uint32Array): KNNRegressorF32U32
+  static fit(x: DenseMatrixF32, y: DatasetF32U32JsVecRef): KNNRegressorF32U32
   predict(x: DenseMatrixF32): Uint32Array
 }
 
@@ -660,7 +660,7 @@ export type HammingF32KNNRegressorParametersF32 = KNNRegressorParametersF32Hammi
 
 export declare class LassoF32F32 {
   constructor()
-  static fit(x: DenseMatrixF32, y: Float32Array, parameters: LassoParameters): LassoF32F32
+  static fit(x: DenseMatrixF32, y: DatasetF32F32JsVecRef, parameters: LassoParameters): LassoF32F32
   predict(x: DenseMatrixF32): Float32Array
   serialize(): Buffer
   static deserialize(data: Buffer): LassoF32F32
@@ -668,7 +668,7 @@ export declare class LassoF32F32 {
 
 export declare class LassoF32U32 {
   constructor()
-  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LassoParameters): LassoF32U32
+  static fit(x: DenseMatrixF32, y: DatasetF32U32JsVecRef, parameters: LassoParameters): LassoF32U32
   predict(x: DenseMatrixF32): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): LassoF32U32
@@ -676,7 +676,7 @@ export declare class LassoF32U32 {
 
 export declare class LassoF64F64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: Float64Array, parameters: LassoParameters): LassoF64F64
+  static fit(x: DenseMatrixF64, y: DatasetF64F64JsVecRef, parameters: LassoParameters): LassoF64F64
   predict(x: DenseMatrixF64): Float64Array
   serialize(): Buffer
   static deserialize(data: Buffer): LassoF64F64
@@ -692,7 +692,7 @@ export declare class LassoParameters {
 
 export declare class LinearRegressionF32F32 {
   constructor()
-  static fit(x: DenseMatrixF32, y: Float32Array, parameters: LinearRegressionParameters): LinearRegressionF32F32
+  static fit(x: DenseMatrixF32, y: DatasetF32F32JsVecRef, parameters: LinearRegressionParameters): LinearRegressionF32F32
   predict(x: DenseMatrixF32): Float32Array
   serialize(): Buffer
   static deserialize(data: Buffer): LinearRegressionF32F32
@@ -700,7 +700,7 @@ export declare class LinearRegressionF32F32 {
 
 export declare class LinearRegressionF32U32 {
   constructor()
-  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LinearRegressionParameters): LinearRegressionF32U32
+  static fit(x: DenseMatrixF32, y: DatasetF32U32JsVecRef, parameters: LinearRegressionParameters): LinearRegressionF32U32
   predict(x: DenseMatrixF32): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): LinearRegressionF32U32
@@ -708,7 +708,7 @@ export declare class LinearRegressionF32U32 {
 
 export declare class LinearRegressionF64F64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: Float64Array, parameters: LinearRegressionParameters): LinearRegressionF64F64
+  static fit(x: DenseMatrixF64, y: DatasetF64F64JsVecRef, parameters: LinearRegressionParameters): LinearRegressionF64F64
   predict(x: DenseMatrixF64): Float64Array
   serialize(): Buffer
   static deserialize(data: Buffer): LinearRegressionF64F64
@@ -721,7 +721,7 @@ export declare class LinearRegressionParameters {
 
 export declare class LogisticRegressionF32U32 {
   constructor()
-  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: LogisticRegressionParametersF32): LogisticRegressionF32U32
+  static fit(x: DenseMatrixF32, y: DatasetF32U32JsVecRef, parameters: LogisticRegressionParametersF32): LogisticRegressionF32U32
   predict(x: DenseMatrixF32): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): LogisticRegressionF32U32
@@ -729,7 +729,7 @@ export declare class LogisticRegressionF32U32 {
 
 export declare class LogisticRegressionF64U64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: LogisticRegressionParametersF64): LogisticRegressionF64U64
+  static fit(x: DenseMatrixF64, y: DatasetF64U64JsVecRef, parameters: LogisticRegressionParametersF64): LogisticRegressionF64U64
   predict(x: DenseMatrixF64): BigUint64Array
   serialize(): Buffer
   static deserialize(data: Buffer): LogisticRegressionF64U64
@@ -921,14 +921,14 @@ export declare class R2U64 {
 export type R2u64 = R2U64
 
 export declare class RandomForestClassifierF32U32 {
-  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: RandomForestClassifierParameters): RandomForestClassifierF32U32
+  static fit(x: DenseMatrixF32, y: DatasetF32U32JsVecRef, parameters: RandomForestClassifierParameters): RandomForestClassifierF32U32
   predict(x: DenseMatrixF32): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): RandomForestClassifierF32U32
 }
 
 export declare class RandomForestClassifierF64U64 {
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: RandomForestClassifierParameters): RandomForestClassifierF64U64
+  static fit(x: DenseMatrixF64, y: DatasetF64U64JsVecRef, parameters: RandomForestClassifierParameters): RandomForestClassifierF64U64
   predict(x: DenseMatrixF64): BigUint64Array
   serialize(): Buffer
   static deserialize(data: Buffer): RandomForestClassifierF64U64
@@ -947,28 +947,28 @@ export declare class RandomForestClassifierParameters {
 }
 
 export declare class RandomForestRegressorF32F32 {
-  static fit(x: DenseMatrixF32, y: Float32Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32F32
+  static fit(x: DenseMatrixF32, y: DatasetF32F32JsVecRef, parameters: RandomForestRegressorParameters): RandomForestRegressorF32F32
   predict(x: DenseMatrixF32): Float32Array
   serialize(): Buffer
   static deserialize(data: Buffer): RandomForestRegressorF32F32
 }
 
 export declare class RandomForestRegressorF32U32 {
-  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32U32
+  static fit(x: DenseMatrixF32, y: DatasetF32U32JsVecRef, parameters: RandomForestRegressorParameters): RandomForestRegressorF32U32
   predict(x: DenseMatrixF32): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): RandomForestRegressorF32U32
 }
 
 export declare class RandomForestRegressorF64F64 {
-  static fit(x: DenseMatrixF64, y: Float64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64F64
+  static fit(x: DenseMatrixF64, y: DatasetF64F64JsVecRef, parameters: RandomForestRegressorParameters): RandomForestRegressorF64F64
   predict(x: DenseMatrixF64): Float64Array
   serialize(): Buffer
   static deserialize(data: Buffer): RandomForestRegressorF64F64
 }
 
 export declare class RandomForestRegressorF64U64 {
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64U64
+  static fit(x: DenseMatrixF64, y: DatasetF64U64JsVecRef, parameters: RandomForestRegressorParameters): RandomForestRegressorF64U64
   predict(x: DenseMatrixF64): BigUint64Array
   serialize(): Buffer
   static deserialize(data: Buffer): RandomForestRegressorF64U64
@@ -999,7 +999,7 @@ export type Recallf64 = RecallF64
 
 export declare class RidgeRegressionF32F32 {
   constructor()
-  static fit(x: DenseMatrixF32, y: Float32Array, parameters: RidgeRegressionParametersF32): RidgeRegressionF32F32
+  static fit(x: DenseMatrixF32, y: DatasetF32F32JsVecRef, parameters: RidgeRegressionParametersF32): RidgeRegressionF32F32
   predict(x: DenseMatrixF32): Float32Array
   serialize(): Buffer
   static deserialize(data: Buffer): RidgeRegressionF32F32
@@ -1007,7 +1007,7 @@ export declare class RidgeRegressionF32F32 {
 
 export declare class RidgeRegressionF32U32 {
   constructor()
-  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: RidgeRegressionParametersF32): RidgeRegressionF32U32
+  static fit(x: DenseMatrixF32, y: DatasetF32U32JsVecRef, parameters: RidgeRegressionParametersF32): RidgeRegressionF32U32
   predict(x: DenseMatrixF32): Uint32Array
   serialize(): Buffer
   static deserialize(data: Buffer): RidgeRegressionF32U32
@@ -1015,7 +1015,7 @@ export declare class RidgeRegressionF32U32 {
 
 export declare class RidgeRegressionF64F64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: Float64Array, parameters: RidgeRegressionParametersF64): RidgeRegressionF64F64
+  static fit(x: DenseMatrixF64, y: DatasetF64F64JsVecRef, parameters: RidgeRegressionParametersF64): RidgeRegressionF64F64
   predict(x: DenseMatrixF64): Float64Array
   serialize(): Buffer
   static deserialize(data: Buffer): RidgeRegressionF64F64
@@ -1122,21 +1122,21 @@ export declare class SVRParametersF64 {
   withKernel(kernel: Kernels): void
 }
 
-export declare function crossValidateElasticNetF32F32(xs: DenseMatrixF32, ys: Float32Array, parameters: ElasticNetParameters, cv: KFold, score: (arg0: Float32Array, arg1: Float32Array) => number): CrossValidationResult
+export declare function crossValidateElasticNetF32F32(xs: DenseMatrixF32, ys: DatasetF32F32JsVecRef, parameters: ElasticNetParameters, cv: KFold, score: (arg0: Float32Array, arg1: Float32Array) => number): CrossValidationResult
 
-export declare function crossValidateElasticNetF32U32(xs: DenseMatrixF32, ys: Uint32Array, parameters: ElasticNetParameters, cv: KFold, score: (arg0: Uint32Array, arg1: Uint32Array) => number): CrossValidationResult
+export declare function crossValidateElasticNetF32U32(xs: DenseMatrixF32, ys: DatasetF32U32JsVecRef, parameters: ElasticNetParameters, cv: KFold, score: (arg0: Uint32Array, arg1: Uint32Array) => number): CrossValidationResult
 
-export declare function crossValidateElasticNetF64F64(xs: DenseMatrixF64, ys: Float64Array, parameters: ElasticNetParameters, cv: KFold, score: (arg0: Float64Array, arg1: Float64Array) => number): CrossValidationResult
+export declare function crossValidateElasticNetF64F64(xs: DenseMatrixF64, ys: DatasetF64F64JsVecRef, parameters: ElasticNetParameters, cv: KFold, score: (arg0: Float64Array, arg1: Float64Array) => number): CrossValidationResult
 
-export declare function crossValidateLassoF32F32(xs: DenseMatrixF32, ys: Float32Array, parameters: LassoParameters, cv: KFold, score: (arg0: Float32Array, arg1: Float32Array) => number): CrossValidationResult
+export declare function crossValidateLassoF32F32(xs: DenseMatrixF32, ys: DatasetF32F32JsVecRef, parameters: LassoParameters, cv: KFold, score: (arg0: Float32Array, arg1: Float32Array) => number): CrossValidationResult
 
-export declare function crossValidateLassoF32U32(xs: DenseMatrixF32, ys: Uint32Array, parameters: LassoParameters, cv: KFold, score: (arg0: Uint32Array, arg1: Uint32Array) => number): CrossValidationResult
+export declare function crossValidateLassoF32U32(xs: DenseMatrixF32, ys: DatasetF32U32JsVecRef, parameters: LassoParameters, cv: KFold, score: (arg0: Uint32Array, arg1: Uint32Array) => number): CrossValidationResult
 
-export declare function crossValidateLassoF64F64(xs: DenseMatrixF64, ys: Float64Array, parameters: LassoParameters, cv: KFold, score: (arg0: Float64Array, arg1: Float64Array) => number): CrossValidationResult
+export declare function crossValidateLassoF64F64(xs: DenseMatrixF64, ys: DatasetF64F64JsVecRef, parameters: LassoParameters, cv: KFold, score: (arg0: Float64Array, arg1: Float64Array) => number): CrossValidationResult
 
-export declare function crossValidateLogisticRegressionF32U32(xs: DenseMatrixF32, ys: Uint32Array, parameters: LogisticRegressionParametersF32, cv: KFold, score: (arg0: Uint32Array, arg1: Uint32Array) => number): CrossValidationResult
+export declare function crossValidateLogisticRegressionF32U32(xs: DenseMatrixF32, ys: DatasetF32U32JsVecRef, parameters: LogisticRegressionParametersF32, cv: KFold, score: (arg0: Uint32Array, arg1: Uint32Array) => number): CrossValidationResult
 
-export declare function crossValidateLogisticRegressionF64U64(xs: DenseMatrixF64, ys: BigUint64Array, parameters: LogisticRegressionParametersF64, cv: KFold, score: (arg0: BigUint64Array, arg1: BigUint64Array) => number): CrossValidationResult
+export declare function crossValidateLogisticRegressionF64U64(xs: DenseMatrixF64, ys: DatasetF64U64JsVecRef, parameters: LogisticRegressionParametersF64, cv: KFold, score: (arg0: BigUint64Array, arg1: BigUint64Array) => number): CrossValidationResult
 
 export declare const enum KNNAlgorithmName {
   LinearSearch = 0,
@@ -1168,8 +1168,8 @@ export declare const enum SplitCriterion {
   ClassificationError = 2
 }
 
-export declare function trainTestSplitF32F32(x: DenseMatrixF32, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF32, DenseMatrixF32, Float32Array, Float32Array]
+export declare function trainTestSplitF32F32(x: DenseMatrixF32, y: DatasetF32F32JsVecRef, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF32, DenseMatrixF32, Float32Array, Float32Array]
 
-export declare function trainTestSplitF32U32(x: DenseMatrixF32, y: Uint32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF32, DenseMatrixF32, Uint32Array, Uint32Array]
+export declare function trainTestSplitF32U32(x: DenseMatrixF32, y: DatasetF32U32JsVecRef, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF32, DenseMatrixF32, Uint32Array, Uint32Array]
 
-export declare function trainTestSplitF64F64(x: DenseMatrixF64, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, Float64Array, Float64Array]
+export declare function trainTestSplitF64F64(x: DenseMatrixF64, y: DatasetF64F64JsVecRef, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, Float64Array, Float64Array]

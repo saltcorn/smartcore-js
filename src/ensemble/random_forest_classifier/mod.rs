@@ -14,11 +14,14 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::{
+  linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64},
+  refs::{DatasetF32U32JsVecRef, DatasetF64U64JsVecRef},
+};
 use parameters::RandomForestClassifierParameters;
 
 macro_rules! random_forest_classifier_nb_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $xs:ty, $ys:ty, $ys_js:ty ) => {
     paste! {
         #[napi(js_name=""[<RandomForestClassifier $x:upper $y:upper>]"")]
         #[derive(Debug)]
@@ -29,11 +32,10 @@ macro_rules! random_forest_classifier_nb_struct {
         #[napi]
         impl [<RandomForestClassifier $x:upper $y:upper>] {
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &RandomForestClassifierParameters) -> Result<Self> {
-                let y = y.to_vec();
+            pub fn fit(x: &$xs, y: &$ys, parameters: &RandomForestClassifierParameters) -> Result<Self> {
                 let inner = LibRandomForestClassifier::fit(
                     x as &DenseMatrix<$x>,
-                    &y,
+                    y.as_ref(),
                     parameters.owned_inner(),
                 )
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
@@ -41,12 +43,12 @@ macro_rules! random_forest_classifier_nb_struct {
             }
 
             #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
+            pub fn predict(&self, x: &$xs) -> Result<$ys_js> {
                 let prediction_result = self
                 .inner
                 .predict(x as &DenseMatrix<$x>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
+                Ok($ys_js::new(prediction_result))
             }
 
             #[napi]
@@ -75,5 +77,5 @@ macro_rules! random_forest_classifier_nb_struct {
   };
 }
 
-random_forest_classifier_nb_struct! {f32, u32, DenseMatrixF32, Uint32Array}
-random_forest_classifier_nb_struct! {f64, u64, DenseMatrixF64, BigUint64Array}
+random_forest_classifier_nb_struct! {f32, u32, DenseMatrixF32, DatasetF32U32JsVecRef, Uint32Array}
+random_forest_classifier_nb_struct! {f64, u64, DenseMatrixF64, DatasetF64U64JsVecRef, BigUint64Array}
