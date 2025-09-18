@@ -10,13 +10,7 @@ use napi_derive::napi;
 use paste::paste;
 use smartcore::dataset::Dataset as LibDataset;
 
-use crate::{
-  linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64},
-  refs::{
-    DatasetF32F32JsVecRef, DatasetF32F32VecRef, DatasetF32U32JsVecRef, DatasetF32U32VecRef,
-    DatasetF64F64JsVecRef, DatasetF64F64VecRef, DatasetF64U64JsVecRef, DatasetF64U64VecRef,
-  },
-};
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 
 macro_rules! dataset_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -34,11 +28,8 @@ macro_rules! dataset_struct {
             }
 
             #[napi(getter)]
-            pub fn target(&self, reference: Reference<[<Dataset $x:upper $y:upper>]>, env: Env) -> Result<[<Dataset $x:upper $y:upper JsVecRef>]> {
-                let inner = reference.share_with(env, |dataset| {
-                    Ok([<Dataset $x:upper $y:upper VecRef>]::from(&dataset.inner.target))
-                })?;
-                Ok([<Dataset $x:upper $y:upper JsVecRef>]::from(inner))
+            pub fn target(&self) -> Result<$ys> {
+                Ok($ys::with_data_copied(&self.inner.target))
             }
 
             #[napi(getter)]
@@ -95,7 +86,7 @@ macro_rules! dataset_struct {
 dataset_struct! {f32, f32, Float32Array, Float32Array}
 dataset_struct! {f32, u32, Float32Array, Uint32Array}
 dataset_struct! {f64, f64, Float64Array, Float64Array}
-dataset_struct! {f64, u64, Float64Array, Uint64Array}
+dataset_struct! {f64, u64, Float64Array, BigUint64Array}
 
 #[napi(js_name = "dataset")]
 pub struct Dataset {}

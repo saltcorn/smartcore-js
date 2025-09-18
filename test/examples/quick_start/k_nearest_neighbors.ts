@@ -7,7 +7,7 @@ export default () => {
     let x = loadedData.denseMatrix()
     let y = loadedData.target
     let yHat = KNNClassifierF32U32.fit(x, y).predict(x)
-    let accuracy = new AccuracyU32().getScore(y.asArray(), yHat)
+    let accuracy = new AccuracyU32().getScore(y, yHat)
     assert(accuracy)
   })
 }

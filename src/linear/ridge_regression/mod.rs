@@ -12,14 +12,11 @@ use smartcore::{
   linear::ridge_regression::RidgeRegression as LibRidgeRegression,
 };
 
-use crate::{
-  linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64},
-  refs::{DatasetF32F32JsVecRef, DatasetF32U32JsVecRef, DatasetF64F64JsVecRef},
-};
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 pub use parameters::{RidgeRegressionParametersF32, RidgeRegressionParametersF64};
 
 macro_rules! ridge_regression_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty, $ys_js:ty ) => {
+  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
         #[napi(js_name=""[<RidgeRegression $x:upper $y:upper>]"")]
         #[derive(Debug)]
@@ -47,10 +44,10 @@ macro_rules! ridge_regression_struct {
             }
 
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: &$ys, parameters: &[<RidgeRegressionParameters $x:upper>]) -> Result<Self> {
+            pub fn fit(x: &$xs, y: $ys, parameters: &[<RidgeRegressionParameters $x:upper>]) -> Result<Self> {
                 let inner = LibRidgeRegression::fit(
                     x as &DenseMatrix<$x>,
-                    y.as_ref(),
+                    &y.to_vec(),
                     parameters.as_ref().to_owned(),
                 )
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
@@ -58,12 +55,12 @@ macro_rules! ridge_regression_struct {
             }
 
             #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys_js> {
+            pub fn predict(&self, x: &$xs) -> Result<$ys> {
                 let prediction_result = self
                 .inner
                 .predict(x as &DenseMatrix<$x>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys_js::new(prediction_result))
+                Ok($ys::new(prediction_result))
             }
 
             #[napi]
@@ -90,6 +87,6 @@ macro_rules! ridge_regression_struct {
   };
 }
 
-ridge_regression_struct! {f32, f32, DenseMatrixF32, DatasetF32F32JsVecRef, Float32Array}
-ridge_regression_struct! {f64, f64, DenseMatrixF64, DatasetF64F64JsVecRef, Float64Array}
-ridge_regression_struct! {f32, u32, DenseMatrixF32, DatasetF32U32JsVecRef, Uint32Array}
+ridge_regression_struct! {f32, f32, DenseMatrixF32, Float32Array}
+ridge_regression_struct! {f64, f64, DenseMatrixF64, Float64Array}
+ridge_regression_struct! {f32, u32, DenseMatrixF32, Uint32Array}

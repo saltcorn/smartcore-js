@@ -16,9 +16,6 @@ use crate::{
     },
   },
   model_selection::kfold::KFold,
-  refs::{
-    DatasetF32F32JsVecRef, DatasetF32U32JsVecRef, DatasetF64F64JsVecRef, DatasetF64U64JsVecRef,
-  },
 };
 
 #[napi]
@@ -56,23 +53,23 @@ impl From<LibCrossValidationResult> for CrossValidationResult {
 }
 
 macro_rules! cross_validate_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty, $ys_js:ty, $e:ty, $e_params:ty ) => {
+  ( $x:ty, $y:ty, $xs:ty, $ys:ty, $e:ty, $e_params:ty ) => {
     paste! {
         #[napi(js_name=""[<crossValidate $e>]"")]
         #[allow(non_snake_case)]
         pub fn [<cross_validate_ $e>](
             xs: &$xs,
-            ys: &$ys,
+            ys: $ys,
             parameters: &$e_params,
             cv: &KFold,
-            score: Function<FnArgs<($ys_js, $ys_js)>, f64>
+            score: Function<FnArgs<($ys, $ys)>, f64>
         ) -> Result<CrossValidationResult> {
             let score = |y1: &Vec<$y>, y2: &Vec<$y>| -> f64 {
-                let y1 = $ys_js::with_data_copied(y1);
-                let y2 = $ys_js::with_data_copied(y2);
+                let y1 = $ys::with_data_copied(y1);
+                let y2 = $ys::with_data_copied(y2);
                 score.call((y1, y2).into()).unwrap()
             };
-            let inner = lib_cross_validate($e::new_inner(), xs.inner(), ys.as_ref(), parameters.owned_inner(), cv.inner(), &score)
+            let inner = lib_cross_validate($e::new_inner(), xs.inner(), &ys.to_vec(), parameters.owned_inner(), cv.inner(), &score)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
             Ok(inner.into())
         }
@@ -80,13 +77,13 @@ macro_rules! cross_validate_struct {
   };
 }
 
-cross_validate_struct! {f32, f32, DenseMatrixF32, DatasetF32F32JsVecRef, Float32Array, ElasticNetF32F32, ElasticNetParameters}
-cross_validate_struct! {f64, f64, DenseMatrixF64, DatasetF64F64JsVecRef, Float64Array, ElasticNetF64F64, ElasticNetParameters}
-cross_validate_struct! {f32, u32, DenseMatrixF32, DatasetF32U32JsVecRef, Uint32Array, ElasticNetF32U32, ElasticNetParameters}
+cross_validate_struct! {f32, f32, DenseMatrixF32, Float32Array, ElasticNetF32F32, ElasticNetParameters}
+cross_validate_struct! {f64, f64, DenseMatrixF64, Float64Array, ElasticNetF64F64, ElasticNetParameters}
+cross_validate_struct! {f32, u32, DenseMatrixF32, Uint32Array, ElasticNetF32U32, ElasticNetParameters}
 
-cross_validate_struct! {f32, f32, DenseMatrixF32, DatasetF32F32JsVecRef, Float32Array, LassoF32F32, LassoParameters}
-cross_validate_struct! {f64, f64, DenseMatrixF64, DatasetF64F64JsVecRef, Float64Array, LassoF64F64, LassoParameters}
-cross_validate_struct! {f32, u32, DenseMatrixF32, DatasetF32U32JsVecRef, Uint32Array, LassoF32U32, LassoParameters}
+cross_validate_struct! {f32, f32, DenseMatrixF32, Float32Array, LassoF32F32, LassoParameters}
+cross_validate_struct! {f64, f64, DenseMatrixF64, Float64Array, LassoF64F64, LassoParameters}
+cross_validate_struct! {f32, u32, DenseMatrixF32, Uint32Array, LassoF32U32, LassoParameters}
 
-cross_validate_struct! {f32, u32, DenseMatrixF32, DatasetF32U32JsVecRef, Uint32Array, LogisticRegressionF32U32, LogisticRegressionParametersF32}
-cross_validate_struct! {f64, u64, DenseMatrixF64, DatasetF64U64JsVecRef, BigUint64Array, LogisticRegressionF64U64, LogisticRegressionParametersF64}
+cross_validate_struct! {f32, u32, DenseMatrixF32, Uint32Array, LogisticRegressionF32U32, LogisticRegressionParametersF32}
+cross_validate_struct! {f64, u64, DenseMatrixF64, BigUint64Array, LogisticRegressionF64U64, LogisticRegressionParametersF64}

@@ -12,14 +12,11 @@ use smartcore::{
   linear::logistic_regression::LogisticRegression as LibLogisticRegression,
 };
 
-use crate::{
-  linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64},
-  refs::{DatasetF32U32JsVecRef, DatasetF64U64JsVecRef},
-};
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 pub use parameters::{LogisticRegressionParametersF32, LogisticRegressionParametersF64};
 
 macro_rules! logistic_regression_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty, $ys_js:ty ) => {
+  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
         #[napi(js_name=""[<LogisticRegression $x:upper $y:upper>]"")]
         #[derive(Debug)]
@@ -47,10 +44,10 @@ macro_rules! logistic_regression_struct {
             }
 
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: &$ys, parameters: &[<LogisticRegressionParameters $x:upper>]) -> Result<Self> {
+            pub fn fit(x: &$xs, y: $ys, parameters: &[<LogisticRegressionParameters $x:upper>]) -> Result<Self> {
                 let inner = LibLogisticRegression::fit(
                     x as &DenseMatrix<$x>,
-                    y.as_ref(),
+                    &y.to_vec(),
                     parameters.as_ref().to_owned(),
                 )
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
@@ -58,12 +55,12 @@ macro_rules! logistic_regression_struct {
             }
 
             #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys_js> {
+            pub fn predict(&self, x: &$xs) -> Result<$ys> {
                 let prediction_result = self
                 .inner
                 .predict(x as &DenseMatrix<$x>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys_js::new(prediction_result))
+                Ok($ys::new(prediction_result))
             }
 
             #[napi]
@@ -90,5 +87,5 @@ macro_rules! logistic_regression_struct {
   };
 }
 
-logistic_regression_struct! {f32, u32, DenseMatrixF32, DatasetF32U32JsVecRef, Uint32Array}
-logistic_regression_struct! {f64, u64, DenseMatrixF64, DatasetF64U64JsVecRef, BigUint64Array}
+logistic_regression_struct! {f32, u32, DenseMatrixF32, Uint32Array}
+logistic_regression_struct! {f64, u64, DenseMatrixF64, BigUint64Array}

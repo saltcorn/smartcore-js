@@ -8,7 +8,7 @@ export default () => {
     let y = loadedData.target
     let params = new LogisticRegressionParametersF32()
     let yHat = LogisticRegressionF32U32.fit(x, y, params).predict(x)
-    let accuracy = new AccuracyU32().getScore(y.asArray(), yHat)
+    let accuracy = new AccuracyU32().getScore(y, yHat)
     assert(accuracy)
   })
 }
