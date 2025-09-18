@@ -1,5 +1,9 @@
 pub mod parameters;
 
+use bincode::{
+  config::standard,
+  serde::{decode_from_slice, encode_to_vec},
+};
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
@@ -32,6 +36,20 @@ macro_rules! knn_classifier_struct {
             pub fn predict(&self, x: &$xs) -> Result<$ys> {
                 let predict_result = self.inner.predict(x).map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok($ys::new(predict_result))
+            }
+
+            #[napi]
+            pub fn serialize(&self) -> Result<Buffer> {
+                let encoded = encode_to_vec(&self.inner, standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                Ok(Buffer::from(encoded))
+            }
+
+            #[napi(factory)]
+            pub fn deserialize(data: Buffer) -> Result<Self> {
+                let inner = decode_from_slice::<LibKNNRegressor<$x, $y, DenseMatrix<$x>, Vec<$y>, $d>, _>(data.as_ref(), standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
+                Ok(Self { inner })
             }
         }
     }

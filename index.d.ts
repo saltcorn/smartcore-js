@@ -630,16 +630,22 @@ export declare class KMeansParameters {
 export declare class KNNClassifierF32U32 {
   static fit(x: DenseMatrixF32, y: Uint32Array): KNNClassifierF32U32
   predict(x: DenseMatrixF32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF32U32
 }
 
 export declare class KNNRegressorF32F32 {
   static fit(x: DenseMatrixF32, y: Float32Array): KNNRegressorF32F32
   predict(x: DenseMatrixF32): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNRegressorF32F32
 }
 
 export declare class KNNRegressorF32U32 {
   static fit(x: DenseMatrixF32, y: Uint32Array): KNNRegressorF32U32
   predict(x: DenseMatrixF32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNRegressorF32U32
 }
 
 export declare class KNNRegressorParametersF32EuclidianF32 {
@@ -1039,12 +1045,16 @@ export declare class SVCF32U32 {
   static setFitData(xRef: DenseMatrixF32, yRef: Uint32Array, parametersRef: SVCParametersF32U32): SVCF32U32
   fit(): void
   predict(xRef: DenseMatrixF32): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): SVCF32U32
 }
 
 export declare class SVCF64U64 {
   static setFitData(xRef: DenseMatrixF64, yRef: BigUint64Array, parametersRef: SVCParametersF64U64): SVCF64U64
   fit(): void
   predict(xRef: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): SVCF64U64
 }
 
 export declare class SVCParametersF32U32 {
@@ -1098,12 +1108,16 @@ export declare class SVRF32 {
   static setFitData(xRef: DenseMatrixF32, yRef: Float32Array, parametersRef: SVRParametersF32): SVRF32
   fit(): void
   predict(xRef: DenseMatrixF32): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): SVRF32
 }
 
 export declare class SVRF64 {
   static setFitData(xRef: DenseMatrixF64, yRef: Float64Array, parametersRef: SVRParametersF64): SVRF64
   fit(): void
   predict(xRef: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): SVRF64
 }
 
 export declare class SVRParametersF32 {

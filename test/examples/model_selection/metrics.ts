@@ -1,4 +1,4 @@
-import { assert } from 'console'
+import assert from 'assert'
 import { AccuracyF32 } from '../../../index'
 
 export default () => {
