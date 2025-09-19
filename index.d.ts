@@ -581,6 +581,22 @@ export declare class JsDenseMatrixF64Ref {
   transpose(): DenseMatrixF64
 }
 
+export declare class JsVecF32Ref {
+
+}
+
+export declare class JsVecF64Ref {
+
+}
+
+export declare class JsVecU32Ref {
+
+}
+
+export declare class JsVecU64Ref {
+
+}
+
 export declare class Kernels {
   static linear(): Kernels
   static rbf(gamma: number): Kernels
@@ -1134,6 +1150,22 @@ export declare class SVRParametersF64 {
   withC(c: number): void
   withTol(tol: number): void
   withKernel(kernel: Kernels): void
+}
+
+export declare class VecF32 {
+  constructor(values: Float32Array)
+}
+
+export declare class VecF64 {
+  constructor(values: Float64Array)
+}
+
+export declare class VecU32 {
+  constructor(values: Uint32Array)
+}
+
+export declare class VecU64 {
+  constructor(values: BigUint64Array)
 }
 
 export declare function crossValidateElasticNetF32F32(xs: DenseMatrixF32, ys: Float32Array, parameters: ElasticNetParameters, cv: KFold, score: (arg0: Float32Array, arg1: Float32Array) => number): CrossValidationResult
