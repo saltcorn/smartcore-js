@@ -56,16 +56,49 @@ js_vec_ref! {DatasetF32U32, u32, Uint32Array}
 js_vec_ref! {DatasetF64F64, f64, Float64Array}
 js_vec_ref! {DatasetF64U64, u64, BigUint64Array}
 
-// #[napi]
-// struct VecU32 {
-//     inner: Vec<u32>
-// }
+macro_rules! vec_ref {
+  ( $t:ty, $ts_js:ty ) => {
+    paste! {
+        #[napi]
+        pub struct [<Vec $t:upper>] {
+            inner: Vec<$t>,
+        }
 
-// impl VecU32 {
-//     #[napi(constructor)]
-//     pub fn new(values: Ui) -> Self {}
-// }
+        #[napi]
+        impl [<Vec $t:upper>] {
+            #[napi(constructor)]
+            pub fn new(values: $ts_js) -> Self {
+                Self {
+                    inner: values.to_vec(),
+                }
+            }
+        }
 
-// struct VecRefU32 {
-//     inner: &'a Vec<$t>
-// }
+        pub struct [<Vec $t:upper Ref>]<'a> {
+            inner: &'a Vec<$t>,
+        }
+
+        impl<'a> [<Vec $t:upper Ref>]<'a> {
+            pub fn inner(&self) -> &Vec<$t> {
+                self.inner
+            }
+        }
+
+        #[napi]
+        pub struct [<JsVec $t:upper Ref>] {
+            inner: SharedReference<[<Vec $t:upper>], [<Vec $t:upper Ref>]<'static>>,
+        }
+
+        impl [<JsVec $t:upper Ref>] {
+            pub fn inner(&self) -> &Vec<$t> {
+                self.inner.inner()
+            }
+        }
+    }
+  };
+}
+
+vec_ref! {f32, Float32Array}
+vec_ref! {u32, Uint32Array}
+vec_ref! {f64, Float64Array}
+vec_ref! {u64, BigUint64Array}
