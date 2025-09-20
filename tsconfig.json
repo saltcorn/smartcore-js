@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "es2020",
     "strict": true,
     "moduleResolution": "nodenext",
-    "module": "nodenext",
+    "module": "node18",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "esModuleInterop": true,
