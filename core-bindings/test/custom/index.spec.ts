@@ -1,4 +1,4 @@
-import { DenseMatrixF32, trainTestSplitF32F32 } from '../../index'
+import { DenseMatrixF64, trainTestSplitF64F64 } from '../../index.js'
 
 describe('Custom', () => {
   it('Simple Array', () => {
@@ -13,9 +13,9 @@ describe('Custom', () => {
       [4, 5, 6],
       [7, 8, 9],
     ]
-    const jsmFlat = new Float32Array(arrays.flat())
-    const x = new DenseMatrixF32(arrays.length, arrays[0].length, jsmFlat)
-    const y = new Float32Array([7, 8, 9, 7, 8, 9, 7, 8, 9])
-    let [, , ,] = trainTestSplitF32F32(x, y, 0.2, true)
+    const jsmFlat = new Float64Array(arrays.flat())
+    const x = new DenseMatrixF64(arrays.length, arrays[0].length, jsmFlat)
+    const y = new Float64Array([7, 8, 9, 7, 8, 9, 7, 8, 9])
+    let [, , ,] = trainTestSplitF64F64(x, y, 0.2, true)
   })
 })

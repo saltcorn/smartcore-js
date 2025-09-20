@@ -11,7 +11,7 @@ use smartcore::{
   api::SupervisedEstimator, linalg::basic::matrix::DenseMatrix, linear::lasso::Lasso as LibLasso,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
 pub use parameters::LassoParameters;
 
 macro_rules! lasso_struct {
@@ -86,6 +86,5 @@ macro_rules! lasso_struct {
   };
 }
 
-lasso_struct! {f32, f32, DenseMatrixF32, Float32Array}
 lasso_struct! {f64, f64, DenseMatrixF64, Float64Array}
-lasso_struct! {f32, u32, DenseMatrixF32, Uint32Array}
+lasso_struct! {f64, i64, DenseMatrixF64, BigInt64Array}

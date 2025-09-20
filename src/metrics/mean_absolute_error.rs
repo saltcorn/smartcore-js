@@ -37,5 +37,4 @@ macro_rules! mean_absolute_error_struct {
   };
 }
 
-mean_absolute_error_struct! {f32, Float32Array}
 mean_absolute_error_struct! {f64, Float64Array}

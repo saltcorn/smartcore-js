@@ -10,7 +10,7 @@ use smartcore::{
   neighbors::knn_classifier::KNNClassifier as LibKNNClassifier,
 };
 
-use crate::linalg::basic::matrix::DenseMatrixF32;
+use crate::linalg::basic::matrix::DenseMatrixF64;
 
 macro_rules! knn_classifier_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty, $d:ty ) => {
@@ -54,4 +54,4 @@ macro_rules! knn_classifier_struct {
   };
 }
 
-knn_classifier_struct! {f32, u32, DenseMatrixF32, Uint32Array, Euclidian<f32>}
+knn_classifier_struct! {f64, i64, DenseMatrixF64, BigInt64Array, Euclidian<f64>}

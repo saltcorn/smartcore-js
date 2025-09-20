@@ -10,27 +10,27 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 use smartcore::{
-  linalg::basic::matrix::DenseMatrix, naive_bayes::bernoulli::BernoulliNB as LibGausianNB,
+  linalg::basic::matrix::DenseMatrix, naive_bayes::bernoulli::BernoulliNB as LibBernoulliNB,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-use parameters::{BernoulliNBParametersF32, BernoulliNBParametersF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
+use parameters::BernoulliNBParametersF64;
 
 macro_rules! bernoulli_nb_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<GausianNB $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<BernoulliNB $x:upper $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<GausianNB $x:upper $y:upper>] {
-            inner: LibGausianNB<$x, $y, DenseMatrix<$x>, Vec<$y>>,
+        pub struct [<BernoulliNB $x:upper $y:upper>] {
+            inner: LibBernoulliNB<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
         #[napi]
-        impl [<GausianNB $x:upper $y:upper>] {
+        impl [<BernoulliNB $x:upper $y:upper>] {
             #[napi(factory)]
             pub fn fit(x: &$xs, y: $ys, parameters: &[<BernoulliNBParameters $x:upper>]) -> Result<Self> {
                 let y = y.to_vec();
-                let inner = LibGausianNB::fit(
+                let inner = LibBernoulliNB::fit(
                     x as &DenseMatrix<$x>,
                     &y,
                     parameters.owned_inner(),
@@ -57,14 +57,14 @@ macro_rules! bernoulli_nb_struct {
 
             #[napi(factory)]
             pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibGausianNB<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
+                let inner = decode_from_slice::<LibBernoulliNB<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
                 Ok(Self { inner })
             }
         }
 
-        impl Deref for [<GausianNB $x:upper $y:upper>] {
-            type Target = LibGausianNB<$x, $y, DenseMatrix<$x>, Vec<$y>>;
+        impl Deref for [<BernoulliNB $x:upper $y:upper>] {
+            type Target = LibBernoulliNB<$x, $y, DenseMatrix<$x>, Vec<$y>>;
 
             fn deref(&self) -> &Self::Target {
                 &self.inner
@@ -74,5 +74,4 @@ macro_rules! bernoulli_nb_struct {
   };
 }
 
-bernoulli_nb_struct! {f32, u32, DenseMatrixF32, Uint32Array}
 bernoulli_nb_struct! {f64, u64, DenseMatrixF64, BigUint64Array}

@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { dataset, SVDParameters, SVDF32 } from '../../../../index'
+import { dataset, SVDParameters, SVDF64 } from '../../../../index.js'
 
 export default () => {
   it('Singlular Value Decomposition  (SVD)', () => {
@@ -7,7 +7,7 @@ export default () => {
     let x = digitsData.denseMatrix()
     let parameters = new SVDParameters()
     parameters.withNComponents(2)
-    let svd = new SVDF32(x, parameters)
+    let svd = new SVDF64(x, parameters)
     let xTranformed = svd.transform(x)
     assert(xTranformed)
   })

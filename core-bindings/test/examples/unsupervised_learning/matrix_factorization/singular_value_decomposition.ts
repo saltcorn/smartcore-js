@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { dataset } from '../../../../index'
+import { dataset } from '../../../../index.js'
 
 export default () => {
   it.skip('Singlular Value Decomposition  (SVD)', () => {

@@ -7,11 +7,13 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": true,
+    "declaration": true
   },
   "ts-node": {
     "transpileOnly": true // Speeds up compilation
   },
   "include": ["."],
-  "exclude": ["node_modules", "bench", "__test__"]
+  "exclude": ["node_modules", "bench", "core-bindings/test/**/*"]
 }

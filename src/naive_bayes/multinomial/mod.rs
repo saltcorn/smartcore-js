@@ -13,7 +13,7 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix, naive_bayes::multinomial::MultinomialNB as LibMultinomialNB,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixU32, DenseMatrixU64};
+use crate::linalg::basic::matrix::DenseMatrixU64;
 use parameters::MultinomialNBParameters;
 
 macro_rules! multinomial_nb_struct {
@@ -74,7 +74,4 @@ macro_rules! multinomial_nb_struct {
   };
 }
 
-multinomial_nb_struct! {u32, u32, DenseMatrixU32, Uint32Array}
-multinomial_nb_struct! {u32, u64, DenseMatrixU32, BigUint64Array}
 multinomial_nb_struct! {u64, u64, DenseMatrixU64, BigUint64Array}
-multinomial_nb_struct! {u64, u32, DenseMatrixU64, Uint32Array}

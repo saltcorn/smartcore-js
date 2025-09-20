@@ -1,13 +1,13 @@
 import assert from 'assert'
-import { dataset, KNNClassifierF32U32, AccuracyU32 } from '../../../index'
+import { dataset, KNNClassifierF64I64, AccuracyI64 } from '../../../index.js'
 
 export default () => {
   it('K-Nearest Neigbors', () => {
     let loadedData = dataset.iris().loadDataset()
     let x = loadedData.denseMatrix()
     let y = loadedData.target
-    let yHat = KNNClassifierF32U32.fit(x, y).predict(x)
-    let accuracy = new AccuracyU32().getScore(y, yHat)
+    let yHat = KNNClassifierF64I64.fit(x, y).predict(x)
+    let accuracy = new AccuracyI64().getScore(y, yHat)
     assert(accuracy)
   })
 }

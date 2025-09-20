@@ -1,10 +1,10 @@
 import {
   dataset,
-  trainTestSplitF32U32,
-  R2U32,
-  LogisticRegressionF32U32,
-  LogisticRegressionParametersF32,
-} from '../../../index'
+  trainTestSplitF64I64,
+  R2I64,
+  LogisticRegressionF64I64,
+  LogisticRegressionParametersF64,
+} from '../../../index.js'
 import assert from 'assert'
 
 export default () => {
@@ -12,10 +12,10 @@ export default () => {
     let loadedDataset = dataset.breastCancer().loadDataset()
     let matrix = loadedDataset.denseMatrix()
     let y = loadedDataset.target
-    let [, xTest, , yTest] = trainTestSplitF32U32(matrix, y, 0.2, true)
-    let parameters = new LogisticRegressionParametersF32()
-    let yHatLr = LogisticRegressionF32U32.fit(matrix, loadedDataset.target, parameters).predict(xTest)
-    let r2 = new R2U32()
+    let [, xTest, , yTest] = trainTestSplitF64I64(matrix, y, 0.2, true)
+    let parameters = new LogisticRegressionParametersF64()
+    let yHatLr = LogisticRegressionF64I64.fit(matrix, loadedDataset.target, parameters).predict(xTest)
+    let r2 = new R2I64()
     let score = r2.getScore(yTest, yHatLr)
     assert(score)
   })

@@ -6,7 +6,7 @@ use smartcore::{
 };
 
 use crate::{
-  algorithm::neighbor::KNNAlgorithmName, metrics::distance::hamming::HammingF32,
+  algorithm::neighbor::KNNAlgorithmName, metrics::distance::hamming::HammingF64,
   neighbors::KNNWeightFunction,
 };
 
@@ -63,16 +63,16 @@ macro_rules! knn_regressor_parameters_struct_distance_impl {
   };
 }
 
-knn_regressor_parameters_struct! {f32, Euclidian<f32>, EuclidianF32 }
+knn_regressor_parameters_struct! {f64, Euclidian<f64>, EuclidianF64 }
 
-impl Default for EuclidianF32KNNRegressorParametersF32 {
+impl Default for EuclidianF64KNNRegressorParametersF64 {
   fn default() -> Self {
     Self::new()
   }
 }
 
 #[napi]
-impl EuclidianF32KNNRegressorParametersF32 {
+impl EuclidianF64KNNRegressorParametersF64 {
   #[napi(constructor)]
   pub fn new() -> Self {
     Self {
@@ -81,5 +81,5 @@ impl EuclidianF32KNNRegressorParametersF32 {
   }
 }
 
-knn_regressor_parameters_struct! {f32, Hamming<f32>, HammingF32 }
-knn_regressor_parameters_struct_distance_impl! {EuclidianF32KNNRegressorParametersF32, HammingF32KNNRegressorParametersF32, HammingF32}
+knn_regressor_parameters_struct! {f64, Hamming<f64>, HammingF64 }
+knn_regressor_parameters_struct_distance_impl! {EuclidianF64KNNRegressorParametersF64, HammingF64KNNRegressorParametersF64, HammingF64}

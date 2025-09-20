@@ -14,7 +14,7 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
 use parameters::RandomForestRegressorParameters;
 
 macro_rules! random_forest_regressor_nb_struct {
@@ -74,7 +74,5 @@ macro_rules! random_forest_regressor_nb_struct {
   };
 }
 
-random_forest_regressor_nb_struct! {f32, u32, DenseMatrixF32, Uint32Array}
-random_forest_regressor_nb_struct! {f32, f32, DenseMatrixF32, Float32Array}
-random_forest_regressor_nb_struct! {f64, u64, DenseMatrixF64, BigUint64Array}
+random_forest_regressor_nb_struct! {f64, i64, DenseMatrixF64, BigInt64Array}
 random_forest_regressor_nb_struct! {f64, f64, DenseMatrixF64, Float64Array}

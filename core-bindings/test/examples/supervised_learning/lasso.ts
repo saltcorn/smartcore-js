@@ -1,4 +1,4 @@
-import { dataset, trainTestSplitF32F32, MeanSquareErrorF32, LassoF32F32, LassoParameters } from '../../../index'
+import { dataset, trainTestSplitF64F64, MeanSquareErrorF64, LassoF64F64, LassoParameters } from '../../../index.js'
 import assert from 'assert'
 
 export default () => {
@@ -6,11 +6,11 @@ export default () => {
     let bostonData = dataset.boston().loadDataset()
     let x = bostonData.denseMatrix()
     let y = bostonData.target
-    let [, xTest, , yTest] = trainTestSplitF32F32(x, y, 0.2, true)
+    let [, xTest, , yTest] = trainTestSplitF64F64(x, y, 0.2, true)
     let parameters = new LassoParameters()
     parameters.withAlpha(0.5)
-    let yHat_lasso = LassoF32F32.fit(x, bostonData.target, parameters).predict(xTest)
-    let meanSquareError = new MeanSquareErrorF32()
+    let yHat_lasso = LassoF64F64.fit(x, bostonData.target, parameters).predict(xTest)
+    let meanSquareError = new MeanSquareErrorF64()
     let score = meanSquareError.getScore(yTest, yHat_lasso)
     assert(score)
   })

@@ -1,5 +1,5 @@
-import k_means from './k_means'
-import dbscan from './dbscan'
+import k_means from './k_means.ts'
+import dbscan from './dbscan.ts'
 
 export default () => {
   describe('Clustering', () => {

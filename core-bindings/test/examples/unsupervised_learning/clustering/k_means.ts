@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { dataset, KMeansParameters, KMeansF32F32 } from '../../../../index'
+import { dataset, KMeansParameters, KMeansF64F64 } from '../../../../index.js'
 
 export default () => {
   let digitsData = dataset.digits().loadDataset()
@@ -7,7 +7,7 @@ export default () => {
   let trueLabels = digitsData.target
   let parameters = new KMeansParameters()
   parameters.withK(10)
-  let labels = KMeansF32F32.fit(x, parameters).predict(x)
+  let labels = KMeansF64F64.fit(x, parameters).predict(x)
   // Missing metrics
   // - homogeneity_score
   // - completeness_score

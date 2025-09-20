@@ -37,5 +37,4 @@ macro_rules! precision_struct {
   };
 }
 
-precision_struct! {f32, Float32Array}
 precision_struct! {f64, Float64Array}

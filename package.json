@@ -3,6 +3,7 @@
   "version": "0.1.4",
   "description": "Template project for writing node package with napi-rs",
   "main": "index.js",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+ssh://git@github.com:saltcorn/smartcore-js.git"
@@ -51,8 +52,8 @@
   "scripts": {
     "artifacts": "napi artifacts",
     "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
-    "build": "napi build --platform --release --esm --output-dir ./core-bindings",
-    "build:debug": "napi build --platform --esm  --output-dir ./core-bindings",
+    "build": "napi build --platform --release --esm --output-dir ./core-bindings && tsc --declaration index.ts",
+    "build:debug": "napi build --platform --esm  --output-dir ./core-bindings && tsc --declaration index.ts",
     "format": "run-p format:prettier format:rs format:toml",
     "format:prettier": "prettier . -w",
     "format:toml": "taplo format",
@@ -82,7 +83,8 @@
     "prettier": "^3.6.2",
     "tinybench": "^5.0.0",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
   },
   "lint-staged": {
     "*.@(js|ts|tsx)": [

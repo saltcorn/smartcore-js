@@ -2,7 +2,7 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 
-use crate::dataset::{DatasetF32F32, DatasetF32U32, DatasetF64F64, DatasetF64U64};
+use crate::dataset::{DatasetF64F64, DatasetF64I64};
 
 macro_rules! js_vec_ref {
   ( $provider:ty, $t:ty, $ts_js:ty ) => {
@@ -51,10 +51,8 @@ macro_rules! js_vec_ref {
   };
 }
 
-js_vec_ref! {DatasetF32F32, f32, Float32Array}
-js_vec_ref! {DatasetF32U32, u32, Uint32Array}
 js_vec_ref! {DatasetF64F64, f64, Float64Array}
-js_vec_ref! {DatasetF64U64, u64, BigUint64Array}
+js_vec_ref! {DatasetF64I64, i64, BigInt64Array}
 
 macro_rules! vec_ref {
   ( $t:ty, $ts_js:ty ) => {
@@ -98,7 +96,5 @@ macro_rules! vec_ref {
   };
 }
 
-vec_ref! {f32, Float32Array}
-vec_ref! {u32, Uint32Array}
 vec_ref! {f64, Float64Array}
-vec_ref! {u64, BigUint64Array}
+vec_ref! {i64, BigInt64Array}

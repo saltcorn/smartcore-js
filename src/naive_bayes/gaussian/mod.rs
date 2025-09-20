@@ -13,7 +13,7 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix, naive_bayes::gaussian::GaussianNB as LibGaussianNB,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
 use parameters::GaussianNBParameters;
 
 macro_rules! gaussian_nb_struct {
@@ -74,5 +74,4 @@ macro_rules! gaussian_nb_struct {
   };
 }
 
-gaussian_nb_struct! {f32, u32, DenseMatrixF32, Uint32Array}
 gaussian_nb_struct! {f64, u64, DenseMatrixF64, BigUint64Array}

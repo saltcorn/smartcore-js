@@ -5,7 +5,7 @@ use smartcore::{
   metrics::distance::{euclidian::Euclidian, hamming::Hamming},
 };
 
-use crate::{algorithm::neighbor::KNNAlgorithmName, metrics::distance::hamming::HammingF32};
+use crate::{algorithm::neighbor::KNNAlgorithmName, metrics::distance::hamming::HammingF64};
 
 macro_rules! dbscan_parameters_struct {
   ( $y:ty, $d:ty, $d_name:ty ) => {
@@ -62,16 +62,16 @@ macro_rules! dbscan_parameters_struct_distance_impl {
   };
 }
 
-dbscan_parameters_struct! {f32, Euclidian<f32>, EuclidianF32 }
+dbscan_parameters_struct! {f64, Euclidian<f64>, EuclidianF64 }
 
-impl Default for EuclidianF32DBSCANF32Parameters {
+impl Default for EuclidianF64DBSCANF64Parameters {
   fn default() -> Self {
     Self::new()
   }
 }
 
 #[napi]
-impl EuclidianF32DBSCANF32Parameters {
+impl EuclidianF64DBSCANF64Parameters {
   #[napi(constructor)]
   pub fn new() -> Self {
     Self {
@@ -80,5 +80,5 @@ impl EuclidianF32DBSCANF32Parameters {
   }
 }
 
-dbscan_parameters_struct! {f32, Hamming<f32>, HammingF32 }
-dbscan_parameters_struct_distance_impl! {EuclidianF32DBSCANF32Parameters, HammingF32DBSCANF32Parameters, HammingF32}
+dbscan_parameters_struct! {f64, Hamming<f64>, HammingF64 }
+dbscan_parameters_struct_distance_impl! {EuclidianF64DBSCANF64Parameters, HammingF64DBSCANF64Parameters, HammingF64}

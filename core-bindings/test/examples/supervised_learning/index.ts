@@ -1,14 +1,15 @@
-import ridge_regression from './ridge_regression'
-import nearest_neighbor_classification from './nearest_neighbor_classification'
-import nearest_neighbor_regression from './nearest_neighbor_regression'
-import linear_regression from './linear_regression'
-import lasso from './lasso'
-import elastic_net from './elastic_net'
-import logistic_regression from './logistic_regression'
-import support_vector_classifier from './support_vector_classifier'
-import support_vector_regressor from './support_vector_regressor'
-import decision_tree_classifier from './decision_tree_classifier'
-import random_forest_regressor from './random_forest_regressor'
+import ridge_regression from './ridge_regression.ts'
+import nearest_neighbor_classification from './nearest_neighbor_classification.ts'
+import nearest_neighbor_regression from './nearest_neighbor_regression.ts'
+import linear_regression from './linear_regression.ts'
+import lasso from './lasso.ts'
+import elastic_net from './elastic_net.ts'
+import logistic_regression from './logistic_regression.ts'
+import support_vector_classifier from './support_vector_classifier.ts'
+import support_vector_regressor from './support_vector_regressor.ts'
+import decision_tree_classifier from './decision_tree_classifier.ts'
+import random_forest_regressor from './random_forest_regressor.ts'
+import naive_bayes from './naive_bayes.ts'
 
 export default () => {
   describe('Supervised Learning', () => {
@@ -23,5 +24,6 @@ export default () => {
     support_vector_regressor()
     decision_tree_classifier()
     random_forest_regressor()
+    naive_bayes()
   })
 }

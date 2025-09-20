@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "types": ["mocha", "node"]
+  },
+  "include": ["**/*.test.ts", "**/*.spec.ts"]
+}

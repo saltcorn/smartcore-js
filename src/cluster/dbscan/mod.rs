@@ -9,8 +9,8 @@ use smartcore::{
 };
 
 use crate::{
-  cluster::dbscan::parameters::EuclidianF32DBSCANF32Parameters,
-  linalg::basic::matrix::DenseMatrixF32,
+  cluster::dbscan::parameters::EuclidianF64DBSCANF64Parameters,
+  linalg::basic::matrix::DenseMatrixF64,
 };
 
 macro_rules! knn_classifier_struct {
@@ -41,4 +41,4 @@ macro_rules! knn_classifier_struct {
   };
 }
 
-knn_classifier_struct! {f32, f32, DenseMatrixF32, Float32Array, Euclidian<f32>, EuclidianF32DBSCANF32Parameters}
+knn_classifier_struct! {f64, f64, DenseMatrixF64, Float64Array, Euclidian<f64>, EuclidianF64DBSCANF64Parameters}

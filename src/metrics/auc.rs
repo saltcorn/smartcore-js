@@ -37,5 +37,4 @@ macro_rules! auc_struct {
   };
 }
 
-auc_struct! {f32, Float32Array}
 auc_struct! {f64, Float64Array}

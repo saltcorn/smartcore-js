@@ -12,7 +12,7 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
 use parameters::SVDParameters;
 
 macro_rules! svd_struct {
@@ -63,5 +63,4 @@ macro_rules! svd_struct {
   };
 }
 
-svd_struct! {f32}
 svd_struct! {f64}

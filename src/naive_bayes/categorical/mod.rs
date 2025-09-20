@@ -13,7 +13,7 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix, naive_bayes::categorical::CategoricalNB as LibCategoricalNB,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixU32, DenseMatrixU64};
+use crate::linalg::basic::matrix::DenseMatrixU64;
 use parameters::CategoricalNBParameters;
 
 macro_rules! categorical_nb_struct {
@@ -74,5 +74,4 @@ macro_rules! categorical_nb_struct {
   };
 }
 
-categorical_nb_struct! {u32, DenseMatrixU32, Uint32Array}
 categorical_nb_struct! {u64, DenseMatrixU64, BigUint64Array}

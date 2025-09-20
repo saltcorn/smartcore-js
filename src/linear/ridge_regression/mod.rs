@@ -12,8 +12,8 @@ use smartcore::{
   linear::ridge_regression::RidgeRegression as LibRidgeRegression,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-pub use parameters::{RidgeRegressionParametersF32, RidgeRegressionParametersF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
+pub use parameters::RidgeRegressionParametersF64;
 
 macro_rules! ridge_regression_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -87,6 +87,4 @@ macro_rules! ridge_regression_struct {
   };
 }
 
-ridge_regression_struct! {f32, f32, DenseMatrixF32, Float32Array}
 ridge_regression_struct! {f64, f64, DenseMatrixF64, Float64Array}
-ridge_regression_struct! {f32, u32, DenseMatrixF32, Uint32Array}

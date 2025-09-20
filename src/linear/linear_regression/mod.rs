@@ -12,7 +12,7 @@ use smartcore::{
   linear::linear_regression::LinearRegression as LibLinearRegression,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
 pub use parameters::LinearRegressionParameters;
 
 macro_rules! linear_regression_struct {
@@ -87,6 +87,5 @@ macro_rules! linear_regression_struct {
   };
 }
 
-linear_regression_struct! {f32, f32, DenseMatrixF32, Float32Array}
 linear_regression_struct! {f64, f64, DenseMatrixF64, Float64Array}
-linear_regression_struct! {f32, u32, DenseMatrixF32, Uint32Array}
+linear_regression_struct! {f64, i64, DenseMatrixF64, BigInt64Array}

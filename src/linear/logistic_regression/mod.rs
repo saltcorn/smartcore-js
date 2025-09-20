@@ -12,8 +12,8 @@ use smartcore::{
   linear::logistic_regression::LogisticRegression as LibLogisticRegression,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-pub use parameters::{LogisticRegressionParametersF32, LogisticRegressionParametersF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
+pub use parameters::LogisticRegressionParametersF64;
 
 macro_rules! logistic_regression_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -87,5 +87,4 @@ macro_rules! logistic_regression_struct {
   };
 }
 
-logistic_regression_struct! {f32, u32, DenseMatrixF32, Uint32Array}
-logistic_regression_struct! {f64, u64, DenseMatrixF64, BigUint64Array}
+logistic_regression_struct! {f64, i64, DenseMatrixF64, BigInt64Array}
