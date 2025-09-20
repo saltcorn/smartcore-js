@@ -55,15 +55,6 @@ macro_rules! linear_regression_struct {
             }
 
             #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
-                let prediction_result = self
-                .inner
-                .predict(x as &DenseMatrix<$x>)
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
-            }
-
-            #[napi]
             pub fn serialize(&self) -> Result<Buffer> {
                 let encoded = encode_to_vec(&self.inner, standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
@@ -87,5 +78,36 @@ macro_rules! linear_regression_struct {
   };
 }
 
+macro_rules! linear_regression_struct_predict_impl {
+  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+    paste! {
+        #[napi]
+        impl [<LinearRegression $x:upper $y:upper>] {
+            #[napi]
+            pub fn predict(&self, x: &$xs) -> Result<$ys> {
+                let prediction_result = self
+                .inner
+                .predict(x as &DenseMatrix<$x>)
+                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                Ok($ys::new(prediction_result))
+            }
+        }
+    }
+  };
+}
+
 linear_regression_struct! {f64, f64, DenseMatrixF64, Float64Array}
-linear_regression_struct! {f64, i64, DenseMatrixF64, BigInt64Array}
+linear_regression_struct_predict_impl! {f64, f64, DenseMatrixF64, Float64Array}
+linear_regression_struct! {f64, i64, DenseMatrixF64, Vec<i64>}
+
+#[napi]
+impl LinearRegressionF64I64 {
+  #[napi]
+  pub fn predict(&self, x: &DenseMatrixF64) -> Result<Vec<i64>> {
+    let prediction_result = self
+      .inner
+      .predict(x as &DenseMatrix<f64>)
+      .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+    Ok(prediction_result)
+  }
+}

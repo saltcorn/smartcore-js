@@ -1,53 +1,89 @@
-// import {
-//   LinearRegressionF32F32,
-//   LinearRegressionF32U32,
-//   LinearRegressionParameters,
-//   LinearRegressionF64F64,
-// } from './core-bindings/index.js'
+import {
+  LinearRegressionF64I64,
+  LinearRegressionParameters,
+  LinearRegressionF64F64,
+  DenseMatrixF64,
+  DenseMatrixI64,
+  DenseMatrixU64,
+} from './core-bindings/index.js'
 
-// type LinearRegressionRs = LinearRegressionF32F32 | LinearRegressionF64F64 | LinearRegressionF32U32
+type LinearRegressionRs = LinearRegressionF64I64 | LinearRegressionF64F64
 
-// class LinearRegression {
-//   inner: LinearRegressionRs
+class DenseMatrix {
+  inner: DenseMatrixF64 | DenseMatrixI64 | DenseMatrixU64
 
-//   constructor(inner: LinearRegressionRs) {
-//     this.inner = inner
-//   }
+  constructor(data: number[][], columnMajor?: boolean | undefined | null) {
+    if (!(data instanceof Array)) {
+      throw new Error('Expected data to be an array.')
+    }
+    let nrows = data.length
+    let ncols = data[0] instanceof Array ? data[0].length : 0
+    let valuesFlat = data.flat()
 
-//   static fit(x: number[][], y: number[] | bigint[]): LinearRegression {
-//     if (!x || !y || x.length === 0 || y.length === 0) {
-//       throw new Error('Input arrays cannot be empty.')
-//     }
+    if (valuesFlat.every((val) => Number.isInteger(val))) {
+      this.inner = new DenseMatrixI64(nrows, ncols, valuesFlat, columnMajor)
+    } else {
+      this.inner = new DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor)
+    }
+  }
+}
 
-//     const xFlat = x.flat()
-//     let inner: unknown
+class LinearRegression {
+  inner: LinearRegressionRs
 
-//     if (typeof xFlat[0] === 'bigint') {
-//       if (y.every((val) => typeof val === 'bigint')) {
-//         const xArray = new BigInt64Array(xFlat as bigint[])
-//         const yArray = new BigInt64Array(y as bigint[])
-//         inner = LinearRegressionU64U64.fit(xArray, yArray)
-//       } else {
-//         throw new Error("Mismatch: 'x' is BigInt, but 'y' is not fully BigInt.")
-//       }
-//     } else if (typeof xFlat[0] === 'number') {
-//       // All elements must be numbers for Float64Array
-//       if (y.every((val) => typeof val === 'number')) {
-//         const xArray = new Float64Array(xFlat as number[])
-//         const yArray = new Float64Array(y as number[])
-//         // inner = new LinearRegressionF32F32(xArray, yArray); // Assuming this external class exists
-//         console.log('Constructing Number-based regression model...')
-//         inner = { x: xArray, y: yArray } // Placeholder for external constructor
-//       } else {
-//         throw new Error("Mismatch: 'x' is Number, but 'y' is not fully Number.")
-//       }
-//     } else {
-//       throw new Error('Unsupported data type for input arrays.')
-//     }
+  constructor(inner: LinearRegressionRs) {
+    this.inner = inner
+  }
 
-//     // Return a new instance of the class with the initialized `inner` object
-//     return new LinearRegression(inner)
-//   }
-// }
+  fit(x: DenseMatrix | number[][], y: number[], parameters: LinearRegressionParameters): LinearRegression {
+    let matrix = x instanceof DenseMatrix ? x : new DenseMatrix(x)
 
-// export { LinearRegression }
+    if (!y || y.length === 0) {
+      throw new Error('Input arrays cannot be empty.')
+    }
+
+    if (matrix.inner instanceof DenseMatrixF64) {
+      if (y.every((val) => Number.isInteger(val))) {
+        this.inner = LinearRegressionF64I64.fit(matrix.inner, y, parameters)
+      } else {
+        this.inner = LinearRegressionF64F64.fit(matrix.inner, new Float64Array(y), parameters)
+      }
+    } else {
+      throw new Error('Unsupported data type for input arrays.')
+    }
+
+    return this
+  }
+
+  predict(x: DenseMatrix | number[][]): LinearRegression {
+    let matrix = x instanceof DenseMatrix ? x : new DenseMatrix(x)
+
+    if (matrix.inner instanceof DenseMatrixF64) {
+      this.inner.predict(matrix.inner)
+    } else {
+      throw new Error('Unsupported data type for input arrays.')
+    }
+
+    return this
+  }
+
+  serialize() {
+    return this.inner?.serialize()
+  }
+
+  static deserialize(data: Buffer): LinearRegression {
+    try {
+      let inner = LinearRegressionF64I64.deserialize(data)
+      return new LinearRegression(inner)
+    } catch (e) {
+      try {
+        let inner = LinearRegressionF64F64.deserialize(data)
+        return new LinearRegression(inner)
+      } catch (e) {
+        throw e
+      }
+    }
+  }
+}
+
+export { LinearRegression }

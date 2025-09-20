@@ -61,7 +61,6 @@
     "lint": "oxlint .",
     "prepublishOnly": "napi prepublish -t npm",
     "test": "mocha",
-    "ts-test": "ts-node test/main.ts",
     "version": "napi version",
     "prepare": "husky"
   },

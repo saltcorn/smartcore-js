@@ -91,7 +91,7 @@ macro_rules! dense_matrix_struct {
 }
 
 dense_matrix_struct! {f64, Float64Array}
-dense_matrix_struct! {i64, BigInt64Array}
+dense_matrix_struct! {i64, Vec<i64>}
 dense_matrix_struct! {u64, BigUint64Array}
 
 mod array_2;

@@ -1,45 +1,60 @@
-// import {
-//   LinearRegressionF32F32,
-//   LinearRegressionF32U32,
-//   LinearRegressionParameters,
-//   LinearRegressionF64F64,
-// } from './core-bindings/index.js'
-// type LinearRegressionRs = LinearRegressionF32F32 | LinearRegressionF64F64 | LinearRegressionF32U32
-// class LinearRegression {
-//   inner: LinearRegressionRs
-//   constructor(inner: LinearRegressionRs) {
-//     this.inner = inner
-//   }
-//   static fit(x: number[][], y: number[] | bigint[]): LinearRegression {
-//     if (!x || !y || x.length === 0 || y.length === 0) {
-//       throw new Error('Input arrays cannot be empty.')
-//     }
-//     const xFlat = x.flat()
-//     let inner: unknown
-//     if (typeof xFlat[0] === 'bigint') {
-//       if (y.every((val) => typeof val === 'bigint')) {
-//         const xArray = new BigInt64Array(xFlat as bigint[])
-//         const yArray = new BigInt64Array(y as bigint[])
-//         inner = LinearRegressionU64U64.fit(xArray, yArray)
-//       } else {
-//         throw new Error("Mismatch: 'x' is BigInt, but 'y' is not fully BigInt.")
-//       }
-//     } else if (typeof xFlat[0] === 'number') {
-//       // All elements must be numbers for Float64Array
-//       if (y.every((val) => typeof val === 'number')) {
-//         const xArray = new Float64Array(xFlat as number[])
-//         const yArray = new Float64Array(y as number[])
-//         // inner = new LinearRegressionF32F32(xArray, yArray); // Assuming this external class exists
-//         console.log('Constructing Number-based regression model...')
-//         inner = { x: xArray, y: yArray } // Placeholder for external constructor
-//       } else {
-//         throw new Error("Mismatch: 'x' is Number, but 'y' is not fully Number.")
-//       }
-//     } else {
-//       throw new Error('Unsupported data type for input arrays.')
-//     }
-//     // Return a new instance of the class with the initialized `inner` object
-//     return new LinearRegression(inner)
-//   }
-// }
-// export { LinearRegression }
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LinearRegression = void 0;
+var index_js_1 = require("./core-bindings/index.js");
+var DenseMatrix = /** @class */ (function () {
+    function DenseMatrix(data, columnMajor) {
+        if (!(data instanceof Array)) {
+            throw new Error('Expected data to be an array.');
+        }
+        var nrows = data.length;
+        var ncols = data[0] instanceof Array ? data[0].length : 0;
+        var valuesFlat = data.flat();
+        if (valuesFlat.every(function (val) { return Number.isInteger(val); })) {
+            this.inner = new index_js_1.DenseMatrixI64(nrows, ncols, valuesFlat, columnMajor);
+        }
+        else {
+            this.inner = new index_js_1.DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor);
+        }
+    }
+    return DenseMatrix;
+}());
+var LinearRegression = /** @class */ (function () {
+    function LinearRegression() {
+        this.inner = null;
+    }
+    LinearRegression.prototype.fit = function (x, y, parameters) {
+        var matrix = x instanceof DenseMatrix ? x : new DenseMatrix(x);
+        if (!y || y.length === 0) {
+            throw new Error('Input arrays cannot be empty.');
+        }
+        if (matrix.inner instanceof index_js_1.DenseMatrixF64) {
+            if (y.every(function (val) { return Number.isInteger(val); })) {
+                this.inner = index_js_1.LinearRegressionF64I64.fit(matrix.inner, y, parameters);
+            }
+            else {
+                throw new Error("Mismatch: 'x' is BigInt, but 'y' is not fully BigInt.");
+            }
+        }
+        else if (typeof xFlat[0] === 'number') {
+            // All elements must be numbers for Float64Array
+            if (y.every(function (val) { return typeof val === 'number'; })) {
+                var xArray = new Float64Array(xFlat);
+                var yArray = new Float64Array(y);
+                // inner = new LinearRegressionF32F32(xArray, yArray); // Assuming this external class exists
+                console.log('Constructing Number-based regression model...');
+                inner = { x: xArray, y: yArray }; // Placeholder for external constructor
+            }
+            else {
+                throw new Error("Mismatch: 'x' is Number, but 'y' is not fully Number.");
+            }
+        }
+        else {
+            throw new Error('Unsupported data type for input arrays.');
+        }
+        // Return a new instance of the class with the initialized `inner` object
+        return new LinearRegression(inner);
+    };
+    return LinearRegression;
+}());
+exports.LinearRegression = LinearRegression;

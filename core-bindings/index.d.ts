@@ -184,7 +184,7 @@ export declare class DenseMatrixF64 {
 }
 
 export declare class DenseMatrixI64 {
-  constructor(nrows: number, ncols: number, values: BigInt64Array, columnMajor?: boolean | undefined | null)
+  constructor(nrows: number, ncols: number, values: Array<number>, columnMajor?: boolean | undefined | null)
   serialize(): Buffer
   static deserialize(data: Buffer): DenseMatrixI64
 }
@@ -440,17 +440,17 @@ export declare class LassoParameters {
 export declare class LinearRegressionF64F64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: LinearRegressionParameters): LinearRegressionF64F64
-  predict(x: DenseMatrixF64): Float64Array
   serialize(): Buffer
   static deserialize(data: Buffer): LinearRegressionF64F64
+  predict(x: DenseMatrixF64): Float64Array
 }
 
 export declare class LinearRegressionF64I64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: LinearRegressionParameters): LinearRegressionF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: LinearRegressionParameters): LinearRegressionF64I64
   serialize(): Buffer
   static deserialize(data: Buffer): LinearRegressionF64I64
+  predict(x: DenseMatrixF64): Array<number>
 }
 
 export declare class LinearRegressionParameters {
