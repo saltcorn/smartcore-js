@@ -1,6 +1,7 @@
 import assert from 'assert'
 import path from 'path'
 import fs from 'fs'
+import os from 'os'
 import { dataset, AccuracyU32, KNNClassifierF32U32 } from '../../../index'
 
 export default () => {
@@ -9,7 +10,7 @@ export default () => {
     let x = irisData.denseMatrix()
     let y = irisData.target
     let knn = KNNClassifierF32U32.fit(x, y)
-    let filename = path.join(__dirname, '../../../target/iris_knn.model')
+    let filename = path.join(os.tmpdir(), 'iris_knn.model')
     // save the model
     let knnBytes = knn.serialize()
     fs.writeFileSync(filename, knnBytes)
