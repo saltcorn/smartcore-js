@@ -1,3 +1,6 @@
+pub mod cross_validate;
+pub mod kfold;
+
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
@@ -18,10 +21,9 @@ macro_rules! train_test_split_struct {
             shuffle: bool,
             seed: Option<BigInt>,
         ) -> ($xs, $xs, $ys, $ys) {
-            let y = y.to_vec();
             let seed = seed.map(|s| s.get_u64().1);
             let (x_train, x_test, y_train, y_test) =
-                lib_train_test_split(x as &DenseMatrix<$x>, &y, test_size as f32, shuffle, seed);
+                lib_train_test_split(x as &DenseMatrix<$x>, &y.to_vec(), test_size as f32, shuffle, seed);
             (
                 $xs::from_inner(x_train),
                 $xs::from_inner(x_test),

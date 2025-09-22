@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 use napi_derive::napi;
 use paste::paste;
 use smartcore::linear::ridge_regression::{
@@ -54,12 +52,14 @@ macro_rules! ridge_regression_parameters_struct {
                     .with_solver(LibRidgeRegressionSolverName::SVD),
                 };
             }
+
+            pub fn owned_inner(&self) -> LibRidgeRegressionParameters<$ty> {
+                self.inner.to_owned()
+            }
         }
 
-        impl Deref for [<RidgeRegressionParameters $ty:upper>] {
-            type Target = LibRidgeRegressionParameters<$ty>;
-
-            fn deref(&self) -> &Self::Target {
+        impl AsRef<LibRidgeRegressionParameters<$ty>> for [<RidgeRegressionParameters $ty:upper>] {
+            fn as_ref(&self) -> &LibRidgeRegressionParameters<$ty> {
                 &self.inner
             }
         }

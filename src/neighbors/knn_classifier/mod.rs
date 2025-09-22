@@ -1,3 +1,7 @@
+use bincode::{
+  config::standard,
+  serde::{decode_from_slice, encode_to_vec},
+};
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
@@ -21,8 +25,7 @@ macro_rules! knn_classifier_struct {
         impl [<KNNClassifier $x:upper $y:upper>] {
             #[napi(factory)]
             pub fn fit(x: &$xs, y: $ys) -> Result<Self> {
-                let y = y.to_vec();
-                let inner = LibKNNClassifier::<$x, $y, DenseMatrix<$x>, Vec<$y>, $d>::fit(x, &y, Default::default())
+                let inner = LibKNNClassifier::<$x, $y, DenseMatrix<$x>, Vec<$y>, $d>::fit(x, &y.to_vec(), Default::default())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok(Self { inner })
             }
@@ -31,6 +34,20 @@ macro_rules! knn_classifier_struct {
             pub fn predict(&self, x: &$xs) -> Result<$ys> {
                 let predict_result = self.inner.predict(x).map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok($ys::new(predict_result))
+            }
+
+            #[napi]
+            pub fn serialize(&self) -> Result<Buffer> {
+                let encoded = encode_to_vec(&self.inner, standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                Ok(Buffer::from(encoded))
+            }
+
+            #[napi(factory)]
+            pub fn deserialize(data: Buffer) -> Result<Self> {
+                let inner = decode_from_slice::<LibKNNClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>, $d>, _>(data.as_ref(), standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
+                Ok(Self { inner })
             }
         }
     }

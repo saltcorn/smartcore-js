@@ -5,14 +5,12 @@ pub mod digits;
 pub mod generator;
 pub mod iris;
 
-use std::ops::Deref;
-
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 use smartcore::dataset::Dataset as LibDataset;
 
-use crate::linalg::basic::matrix::DenseMatrixF32;
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 
 macro_rules! dataset_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -24,18 +22,14 @@ macro_rules! dataset_struct {
 
         #[napi]
         impl [<Dataset $x:upper $y:upper>] {
-            fn new(inner: LibDataset<$x, $y>) -> Self {
-                Self { inner }
-            }
-
             #[napi(getter)]
             pub fn data(&self) -> $xs {
                 $xs::with_data_copied(&self.inner.data)
             }
 
             #[napi(getter)]
-            pub fn target(&self) -> $ys {
-                $ys::with_data_copied(&self.inner.target)
+            pub fn target(&self) -> Result<$ys> {
+                Ok($ys::with_data_copied(&self.inner.target))
             }
 
             #[napi(getter)]
@@ -74,11 +68,15 @@ macro_rules! dataset_struct {
             }
         }
 
-        impl Deref for [<Dataset $x:upper $y:upper>] {
-            type Target = LibDataset<$x, $y>;
-
-            fn deref(&self) -> &Self::Target {
+        impl AsRef<LibDataset<$x, $y>> for [<Dataset $x:upper $y:upper>] {
+            fn as_ref(&self) -> &LibDataset<$x, $y> {
                 &self.inner
+            }
+        }
+
+        impl From<LibDataset<$x, $y>> for [<Dataset $x:upper $y:upper>] {
+            fn from(inner: LibDataset<$x, $y>) -> Self {
+                Self { inner }
             }
         }
     }
@@ -87,6 +85,8 @@ macro_rules! dataset_struct {
 
 dataset_struct! {f32, f32, Float32Array, Float32Array}
 dataset_struct! {f32, u32, Float32Array, Uint32Array}
+dataset_struct! {f64, f64, Float64Array, Float64Array}
+dataset_struct! {f64, u64, Float64Array, BigUint64Array}
 
 #[napi(js_name = "dataset")]
 pub struct Dataset {}

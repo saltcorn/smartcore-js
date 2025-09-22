@@ -1,9 +1,14 @@
 pub mod algorithm;
+pub mod cluster;
 pub mod dataset;
 pub mod decomposition;
+pub mod ensemble;
 pub mod linalg;
 pub mod linear;
 pub mod metrics;
 pub mod model_selection;
+pub mod naive_bayes;
 pub mod neighbors;
+pub mod refs;
 pub mod svm;
+pub mod tree;

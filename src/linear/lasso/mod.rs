@@ -1,7 +1,5 @@
 mod parameters;
 
-use std::ops::Deref;
-
 use bincode::{
   config::standard,
   serde::{decode_from_slice, encode_to_vec},
@@ -10,13 +8,11 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 use smartcore::{
-  api::SupervisedEstimator,
-  linalg::basic::matrix::DenseMatrix,
-  linear::lasso::{Lasso as LibLasso, LassoParameters as LibLassoParameters},
+  api::SupervisedEstimator, linalg::basic::matrix::DenseMatrix, linear::lasso::Lasso as LibLasso,
 };
 
 use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-use parameters::LassoParameters;
+pub use parameters::LassoParameters;
 
 macro_rules! lasso_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -42,13 +38,16 @@ macro_rules! lasso_struct {
                 Self::default()
             }
 
+            pub fn new_inner() -> LibLasso<$x, $y, DenseMatrix<$x>, Vec<$y>> {
+                LibLasso::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new()
+            }
+
             #[napi(factory)]
             pub fn fit(x: &$xs, y: $ys, parameters: &LassoParameters) -> Result<Self> {
-                let y = y.to_vec();
                 let inner = LibLasso::fit(
                     x as &DenseMatrix<$x>,
-                    &y,
-                    (parameters as &LibLassoParameters).to_owned(),
+                    &y.to_vec(),
+                    parameters.as_ref().to_owned(),
                 )
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok(Self { inner })
@@ -78,10 +77,8 @@ macro_rules! lasso_struct {
             }
         }
 
-        impl Deref for [<Lasso $x:upper $y:upper>] {
-            type Target = LibLasso<$x, $y, DenseMatrix<$x>, Vec<$y>>;
-
-            fn deref(&self) -> &Self::Target {
+        impl AsRef<LibLasso<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<Lasso $x:upper $y:upper>] {
+            fn as_ref(&self) -> &LibLasso<$x, $y, DenseMatrix<$x>, Vec<$y>> {
                 &self.inner
             }
         }

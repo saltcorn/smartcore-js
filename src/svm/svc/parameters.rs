@@ -7,18 +7,24 @@ macro_rules! svc_parameters_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
         #[napi(js_name=""[<SVCParameters $x:upper $y:upper>]"")]
-        #[derive(Debug, Default)]
+        #[derive(Debug)]
         pub struct [<SVCParameters $x:upper $y:upper>] {
             inner: Option<LibSVCParameters<$x, $y, DenseMatrix<$x>, Vec<$y>>>,
+        }
+
+        impl Default for [<SVCParameters $x:upper $y:upper>] {
+            fn default() -> Self {
+                Self {
+                    inner: Some(LibSVCParameters::<$x, $y, DenseMatrix<$x>, Vec<$y>>::default()),
+                }
+            }
         }
 
         #[napi]
         impl [<SVCParameters $x:upper $y:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
-                Self {
-                    inner: Some(LibSVCParameters::<$x, $y, DenseMatrix<$x>, Vec<$y>>::default()),
-                }
+                Self::default()
             }
 
             #[napi]

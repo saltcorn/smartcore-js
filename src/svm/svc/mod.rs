@@ -1,5 +1,9 @@
 mod parameters;
 
+use bincode::{
+  config::standard,
+  serde::{decode_from_slice, encode_to_vec},
+};
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
@@ -88,6 +92,24 @@ macro_rules! svm_struct {
                     .map_err(|e| Error::new(Status::GenericFailure, format!("SVM predict failed: {}", e)))?;
 
                 Ok($inner_xs::new(prediction))
+            }
+
+            #[napi]
+            pub fn serialize(&self) -> Result<Buffer> {
+                let inner = self.inner.as_ref()
+                    .ok_or_else(|| Error::new(Status::GenericFailure, "Model not fitted"))?;
+
+                let encoded = encode_to_vec(&**inner, standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                Ok(Buffer::from(encoded))
+            }
+
+            #[napi(factory)]
+            pub fn deserialize(data: Buffer) -> Result<Self> {
+                todo!()
+                // let inner = decode_from_slice::<LibSVC<'static, $x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
+                //     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
+                // Ok(Self { inner })
             }
         }
     }
