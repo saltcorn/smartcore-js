@@ -17,7 +17,7 @@ class RandomForestClassifier {
     y: number[],
     parameters: RandomForestClassifierParameters | null,
   ): RandomForestClassifier {
-    let matrix = x instanceof DenseMatrix ? x : new DenseMatrix(x)
+    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
 
     if (!y || y.length === 0) {
       throw new Error('Input arrays cannot be empty.')
@@ -35,16 +35,14 @@ class RandomForestClassifier {
     throw new Error('Unsupported data type for input arrays.')
   }
 
-  predict(x: DenseMatrix | number[][]): RandomForestClassifier {
-    let matrix = x instanceof DenseMatrix ? x : new DenseMatrix(x)
+  predict(x: DenseMatrix | number[][]): number[] {
+    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
 
     if (matrix.inner instanceof DenseMatrixF64) {
-      this.inner.predict(matrix.inner)
+      return this.inner.predict(matrix.inner)
     } else {
       throw new Error('Unsupported data type for input arrays.')
     }
-
-    return this
   }
 
   serialize() {

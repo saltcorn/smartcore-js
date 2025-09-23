@@ -4,7 +4,7 @@ declare class RandomForestClassifier {
     inner: RandomForestClassifierF64I64;
     constructor(inner: RandomForestClassifierF64I64);
     static fit(x: DenseMatrix | number[][], y: number[], parameters: RandomForestClassifierParameters | null): RandomForestClassifier;
-    predict(x: DenseMatrix | number[][]): RandomForestClassifier;
+    predict(x: DenseMatrix | number[][]): number[];
     serialize(): Buffer<ArrayBufferLike>;
     static deserialize(data: Buffer): RandomForestClassifier;
 }
