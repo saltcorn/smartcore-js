@@ -1,3 +1,3 @@
-import LinearRegression from './linear-regression/index.ts'
+import LinearRegression from './linear-regression/index.js'
 
 export { LinearRegression }

@@ -1,1 +1,1 @@
-export { RandomForestClassifier, RandomForestClassifierParameters } from './random_forest_classifier.ts'
+export { RandomForestClassifier, RandomForestClassifierParameters } from './random_forest_classifier.js'

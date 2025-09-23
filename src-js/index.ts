@@ -1,3 +1,3 @@
-export * from './linalg/index.ts'
-export * as linear_model from './linear_model/index.ts'
-export * as ensemble from './ensemble/index.ts'
+export * from './linalg/index.js'
+export * as linear_model from './linear_model/index.js'
+export * as ensemble from './ensemble/index.js'

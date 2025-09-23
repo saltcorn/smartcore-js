@@ -3,7 +3,7 @@ import {
   RandomForestClassifierParameters,
   DenseMatrixF64,
 } from '../../core-bindings/index.js'
-import { DenseMatrix } from '../linalg/index.ts'
+import { DenseMatrix } from '../linalg/index.js'
 
 class RandomForestClassifier {
   inner: RandomForestClassifierF64I64

@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { ensemble } from '../src-js/index.ts'
+import { ensemble } from '../dist/index.js'
 
 describe('Random Forest Classifier', () => {
   it('should fit', () => {

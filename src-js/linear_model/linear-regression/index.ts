@@ -4,7 +4,7 @@ import {
   LinearRegressionF64F64,
   DenseMatrixF64,
 } from '../../../core-bindings/index.js'
-import { DenseMatrix } from '../../linalg/index.ts'
+import { DenseMatrix } from '../../linalg/index.js'
 
 type LinearRegressionRs = LinearRegressionF64I64 | LinearRegressionF64F64
 
