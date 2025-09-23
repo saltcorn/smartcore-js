@@ -1,8 +1,4 @@
-import {
-  RandomForestClassifierF64I64,
-  RandomForestClassifierParameters,
-  DenseMatrixF64,
-} from '../../core-bindings/index.js'
+import { RandomForestClassifierF64I64, RandomForestClassifierParameters } from '../../core-bindings/index.js'
 import { DenseMatrix } from '../linalg/index.js'
 
 class RandomForestClassifier {
@@ -23,26 +19,17 @@ class RandomForestClassifier {
       throw new Error('Input arrays cannot be empty.')
     }
 
-    if (matrix.inner instanceof DenseMatrixF64) {
-      if (y.every((val) => Number.isInteger(val))) {
-        parameters = parameters ? parameters : new RandomForestClassifierParameters()
-        return new RandomForestClassifier(RandomForestClassifierF64I64.fit(matrix.inner, y, parameters))
-      } else {
-        throw new Error('Unsupported data type for input arrays.')
-      }
+    if (y.every((val) => Number.isInteger(val))) {
+      parameters = parameters ? parameters : new RandomForestClassifierParameters()
+      return new RandomForestClassifier(RandomForestClassifierF64I64.fit(matrix.asF64(), y, parameters))
+    } else {
+      throw new Error('Unsupported data type for input arrays.')
     }
-
-    throw new Error('Unsupported data type for input arrays.')
   }
 
   predict(x: DenseMatrix | number[][]): number[] {
     let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    if (matrix.inner instanceof DenseMatrixF64) {
-      return this.inner.predict(matrix.inner)
-    } else {
-      throw new Error('Unsupported data type for input arrays.')
-    }
+    return this.inner.predict(matrix.asF64())
   }
 
   serialize() {

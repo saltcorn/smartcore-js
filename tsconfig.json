@@ -9,6 +9,7 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "verbatimModuleSyntax": true,
+    "preserveConstEnums": true,
     "declaration": true,
     "outDir": "./dist"
   },

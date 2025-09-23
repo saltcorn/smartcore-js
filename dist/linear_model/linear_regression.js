@@ -1,21 +1,21 @@
-import { RandomForestClassifierF64I64, RandomForestClassifierParameters } from '../../core-bindings/index.js';
+import { LinearRegressionF64I64, LinearRegressionParameters, LinearRegressionF64F64, } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
-class RandomForestClassifier {
+class LinearRegression {
     constructor(inner) {
         this.inner = inner;
     }
-    static fit(x, y, parameters) {
+    fit(x, y, parameters) {
         let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
         if (!y || y.length === 0) {
             throw new Error('Input arrays cannot be empty.');
         }
         if (y.every((val) => Number.isInteger(val))) {
-            parameters = parameters ? parameters : new RandomForestClassifierParameters();
-            return new RandomForestClassifier(RandomForestClassifierF64I64.fit(matrix.asF64(), y, parameters));
+            this.inner = LinearRegressionF64I64.fit(matrix.asF64(), y, parameters);
         }
         else {
-            throw new Error('Unsupported data type for input arrays.');
+            this.inner = LinearRegressionF64F64.fit(matrix.asF64(), new Float64Array(y), parameters);
         }
+        return this;
     }
     predict(x) {
         let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
@@ -26,13 +26,13 @@ class RandomForestClassifier {
     }
     static deserialize(data) {
         try {
-            let inner = RandomForestClassifierF64I64.deserialize(data);
-            return new RandomForestClassifier(inner);
+            let inner = LinearRegressionF64I64.deserialize(data);
+            return new LinearRegression(inner);
         }
         catch (e) {
             try {
-                let inner = RandomForestClassifierF64I64.deserialize(data);
-                return new RandomForestClassifier(inner);
+                let inner = LinearRegressionF64F64.deserialize(data);
+                return new LinearRegression(inner);
             }
             catch (e) {
                 throw e;
@@ -40,4 +40,4 @@ class RandomForestClassifier {
         }
     }
 }
-export { RandomForestClassifier, RandomForestClassifierParameters };
+export default LinearRegression;

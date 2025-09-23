@@ -23,10 +23,19 @@ class DenseMatrix {
         let valuesFlat = data.flat();
         return [nrows, ncols, valuesFlat];
     }
+    get matrix() {
+        return this.inner;
+    }
     static f64(data, columnMajor) {
         let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data);
         let matrix = new DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor);
         return new DenseMatrix(matrix, columnMajor);
+    }
+    asF64() {
+        if (!(this.inner instanceof DenseMatrixF64)) {
+            throw new Error('Inner type not an f64 DenseMatrix');
+        }
+        return this.inner;
     }
 }
 export default DenseMatrix;

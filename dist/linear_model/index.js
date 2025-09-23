@@ -1,2 +1,3 @@
-import LinearRegression from './linear-regression/index.js';
-export { LinearRegression };
+import LinearRegression from './linear_regression.js';
+import LogisticRegression from './logistic_regression.js';
+export { LinearRegression, LogisticRegression };

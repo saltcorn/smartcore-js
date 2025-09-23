@@ -460,10 +460,10 @@ export declare class LinearRegressionParameters {
 
 export declare class LogisticRegressionF64I64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: LogisticRegressionParametersF64): LogisticRegressionF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: LogisticRegressionParametersF64): LogisticRegressionF64I64
   serialize(): Buffer
   static deserialize(data: Buffer): LogisticRegressionF64I64
+  predict(x: DenseMatrixF64): Array<number>
 }
 
 export declare class LogisticRegressionParametersF64 {
@@ -520,6 +520,15 @@ export declare class MultinomialNBU64U64 {
   predict(x: DenseMatrixU64): BigUint64Array
   serialize(): Buffer
   static deserialize(data: Buffer): MultinomialNBU64U64
+}
+
+export declare class OneHotEncoderF64 {
+  constructor(data: DenseMatrixF64, parameters: OneHotEncoderParameters)
+  transform(x: DenseMatrixF64): DenseMatrixF64
+}
+
+export declare class OneHotEncoderParameters {
+  constructor(categoricalParams: BigUint64Array)
 }
 
 export declare class PCAF64 {
@@ -618,6 +627,17 @@ export declare class RidgeRegressionParametersF64 {
   withSolver(solver: RidgeRegressionSolverName): void
 }
 
+export declare class StandardScalerF64 {
+  constructor(data: DenseMatrixF64, parameters: StandardScalerParameters)
+  transform(x: DenseMatrixF64): DenseMatrixF64
+  serialize(): Buffer
+  static deserialize(data: Buffer): StandardScalerF64
+}
+
+export declare class StandardScalerParameters {
+  constructor()
+}
+
 export declare class SVCF64I64 {
   static setFitData(xRef: DenseMatrixF64, yRef: BigInt64Array, parametersRef: SVCParametersF64I64): SVCF64I64
   fit(): void
@@ -698,7 +718,7 @@ export declare const enum LinearRegressionSolverName {
 }
 
 export declare const enum LogisticRegressionSolverName {
-  LBFGS = 0
+  LBFGS = 'LBFGS'
 }
 
 export declare const enum RidgeRegressionSolverName {

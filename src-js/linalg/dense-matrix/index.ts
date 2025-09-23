@@ -3,7 +3,7 @@ import { DenseMatrixF64, DenseMatrixI64, DenseMatrixU64 } from '../../../core-bi
 type DenseMatrixRs = DenseMatrixF64 | DenseMatrixI64 | DenseMatrixU64
 
 class DenseMatrix {
-  inner: DenseMatrixRs
+  private inner: DenseMatrixRs
 
   constructor(data: number[][] | DenseMatrixRs, columnMajor?: boolean | undefined) {
     if (data instanceof Array) {
@@ -28,10 +28,21 @@ class DenseMatrix {
     return [nrows, ncols, valuesFlat]
   }
 
+  get matrix(): DenseMatrixRs {
+    return this.inner
+  }
+
   static f64(data: number[][], columnMajor?: boolean | undefined): DenseMatrix {
     let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data)
     let matrix = new DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor)
     return new DenseMatrix(matrix, columnMajor)
+  }
+
+  asF64(): DenseMatrixF64 {
+    if (!(this.inner instanceof DenseMatrixF64)) {
+      throw new Error('Inner type not an f64 DenseMatrix')
+    }
+    return this.inner
   }
 }
 
