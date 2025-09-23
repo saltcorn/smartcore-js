@@ -554,10 +554,10 @@ export declare class R2I64 {
 export type R2i64 = R2I64
 
 export declare class RandomForestClassifierF64I64 {
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: RandomForestClassifierParameters): RandomForestClassifierF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: RandomForestClassifierParameters): RandomForestClassifierF64I64
   serialize(): Buffer
   static deserialize(data: Buffer): RandomForestClassifierF64I64
+  predict(x: DenseMatrixF64): Array<number>
 }
 
 export declare class RandomForestClassifierParameters {

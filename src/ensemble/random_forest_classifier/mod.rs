@@ -40,15 +40,6 @@ macro_rules! random_forest_classifier_nb_struct {
             }
 
             #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
-                let prediction_result = self
-                .inner
-                .predict(x as &DenseMatrix<$x>)
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
-            }
-
-            #[napi]
             pub fn serialize(&self) -> Result<Buffer> {
                 let encoded = encode_to_vec(&self.inner, standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
@@ -74,4 +65,16 @@ macro_rules! random_forest_classifier_nb_struct {
   };
 }
 
-random_forest_classifier_nb_struct! {f64, i64, DenseMatrixF64, BigInt64Array}
+random_forest_classifier_nb_struct! {f64, i64, DenseMatrixF64, Vec<i64>}
+
+#[napi]
+impl RandomForestClassifierF64I64 {
+  #[napi]
+  pub fn predict(&self, x: &DenseMatrixF64) -> Result<Vec<i64>> {
+    let prediction_result = self
+      .inner
+      .predict(x as &DenseMatrix<f64>)
+      .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+    Ok(prediction_result)
+  }
+}
