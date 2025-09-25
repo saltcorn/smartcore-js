@@ -5,8 +5,4 @@ export * as preprocessing from './preprocessing/index.js';
 export * as dataset from './dataset/index.js';
 export * as model_selection from './model_selection/index.js';
 export * as metrics from './metrics/index.js';
-class SerDe {
-}
-class BaseEstimator {
-}
-export { SerDe, BaseEstimator };
+export * as pipeline from './pipeline/index.js';

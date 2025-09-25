@@ -1,9 +1,7 @@
 import { PCAParameters, PCAF64 } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
-import { SerDe } from '../index.js';
-class PCATransformer extends SerDe {
+class PCATransformer {
     constructor(inner) {
-        super();
         this.inner = inner;
     }
     transform(x) {

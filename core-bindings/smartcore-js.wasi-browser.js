@@ -64,6 +64,7 @@ export const AUCF64 = __napiModule.exports.AUCF64
 export const AUCf64 = __napiModule.exports.AUCf64
 export const BernoulliNBF64U64 = __napiModule.exports.BernoulliNBF64U64
 export const BernoulliNBParametersF64 = __napiModule.exports.BernoulliNBParametersF64
+export const BigLogisticRegressionF64I64 = __napiModule.exports.BigLogisticRegressionF64I64
 export const Boston = __napiModule.exports.Boston
 export const BreastCancer = __napiModule.exports.BreastCancer
 export const CategoricalNBParameters = __napiModule.exports.CategoricalNBParameters

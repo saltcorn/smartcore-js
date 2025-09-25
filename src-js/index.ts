@@ -7,15 +7,9 @@ export * as preprocessing from './preprocessing/index.js'
 export * as dataset from './dataset/index.js'
 export * as model_selection from './model_selection/index.js'
 export * as metrics from './metrics/index.js'
+export * as pipeline from './pipeline/index.js'
 
-abstract class SerDe<T> {
-  abstract serialize(): Buffer
+type XType = DenseMatrix | number[][]
+type YType = number[] | Float64Array | BigInt64Array
 
-  abstract deserialize(data: Buffer): T
-}
-
-abstract class BaseEstimator<T> {
-  abstract fit(x: DenseMatrix | number[][], y: number[]): T
-}
-
-export { SerDe, BaseEstimator }
+export type { YType, XType }

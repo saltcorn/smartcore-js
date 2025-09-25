@@ -6,11 +6,7 @@ export * as preprocessing from './preprocessing/index.js';
 export * as dataset from './dataset/index.js';
 export * as model_selection from './model_selection/index.js';
 export * as metrics from './metrics/index.js';
-declare abstract class SerDe<T> {
-    abstract serialize(): Buffer;
-    abstract deserialize(data: Buffer): T;
-}
-declare abstract class BaseEstimator<T> {
-    abstract fit(x: DenseMatrix | number[][], y: number[]): T;
-}
-export { SerDe, BaseEstimator };
+export * as pipeline from './pipeline/index.js';
+type XType = DenseMatrix | number[][];
+type YType = number[] | Float64Array | BigInt64Array;
+export type { YType, XType };

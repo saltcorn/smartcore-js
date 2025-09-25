@@ -1,22 +1,17 @@
-import { LogisticRegressionF64I64, LogisticRegressionParametersF64 } from '../../core-bindings/index.js';
-import { DenseMatrix } from '../linalg/index.js';
 import type { LogisticRegressionSolverName } from '../../core-bindings/index.js';
-type LogisticRegressionRs = LogisticRegressionF64I64;
-declare class LogisticRegressionPredictor {
-    inner: LogisticRegressionRs;
-    constructor(inner: LogisticRegressionRs);
-    predict(x: DenseMatrix | number[][]): number[] | Float64Array;
-    serialize(): Buffer<ArrayBufferLike>;
-    static deserialize(data: Buffer): LogisticRegressionPredictor;
-}
-type LogisticRegressionParameters = LogisticRegressionParametersF64;
+import type { Estimator, Predictor, SerDe } from '../pipeline/index.js';
+import type { YType, XType } from '../index.js';
 interface LogisticRegressionParametersValues {
     alpha?: number;
     solver?: LogisticRegressionSolverName.LBFGS;
 }
-declare class LogisticRegression {
-    parameters: LogisticRegressionParameters;
+declare class LogisticRegression implements Estimator<XType, YType, LogisticRegression>, Predictor<XType, YType>, SerDe<LogisticRegression> {
+    private estimator;
+    private parameters;
     constructor(params?: LogisticRegressionParametersValues);
-    fit(x: DenseMatrix | number[][], y: number[], parameters: LogisticRegressionParametersF64): LogisticRegressionPredictor;
+    predict(x: XType): YType;
+    fit(x: XType, y: YType): LogisticRegression;
+    serialize(): Buffer;
+    deserialize(data: Buffer): LogisticRegression;
 }
 export default LogisticRegression;

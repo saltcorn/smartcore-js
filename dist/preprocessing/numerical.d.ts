@@ -1,17 +1,15 @@
 import { StandardScalerF64, StandardScalerParameters } from '../../core-bindings/index.js';
-import { DenseMatrix } from '../linalg/index.js';
+import type { Estimator, Transformer } from '../pipeline/index.js';
+import type { YType, XType } from '../index.js';
 type StandardScalerRs = StandardScalerF64;
 type StandardScalerParametersRs = StandardScalerParameters;
 interface StandardScalerParametersValues {
 }
-declare class StandardScaler {
+declare class StandardScaler implements Estimator<XType, YType, StandardScaler>, Transformer<XType> {
     parameters: StandardScalerParametersRs;
+    estimator: null | StandardScalerRs;
     constructor(_params?: StandardScalerParametersValues);
-    fit(x: DenseMatrix | number[][]): StandardScalerTransformer;
-}
-declare class StandardScalerTransformer {
-    inner: StandardScalerRs;
-    constructor(inner: StandardScalerRs);
-    transform(x: DenseMatrix | number[][]): import("../../core-bindings/index.js").DenseMatrixF64;
+    fit(x: XType, _y: YType): StandardScaler;
+    transform(x: XType): XType;
 }
 export default StandardScaler;

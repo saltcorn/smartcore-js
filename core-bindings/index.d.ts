@@ -32,6 +32,14 @@ export declare class BernoulliNBParametersF64 {
   withBinarize(binarize: number): void
 }
 
+export declare class BigLogisticRegressionF64I64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: LogisticRegressionParametersF64): BigLogisticRegressionF64I64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): BigLogisticRegressionF64I64
+}
+
 export declare class Boston {
   loadDataset(): DatasetF64F64
 }
@@ -461,9 +469,9 @@ export declare class LinearRegressionParameters {
 export declare class LogisticRegressionF64I64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Array<number>, parameters: LogisticRegressionParametersF64): LogisticRegressionF64I64
+  predict(x: DenseMatrixF64): Array<number>
   serialize(): Buffer
   static deserialize(data: Buffer): LogisticRegressionF64I64
-  predict(x: DenseMatrixF64): Array<number>
 }
 
 export declare class LogisticRegressionParametersF64 {

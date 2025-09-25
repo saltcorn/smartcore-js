@@ -7,22 +7,29 @@ interface TrainTestSplitParams {
   seed?: bigint
 }
 
-function trainTestSplit(x: DenseMatrix | number[][], y: number[] | BigInt64Array, params: TrainTestSplitParams) {
+function trainTestSplit(
+  x: DenseMatrix | number[][],
+  y: number[] | BigInt64Array,
+  params: TrainTestSplitParams,
+): [DenseMatrix, DenseMatrix, BigInt64Array | Float64Array, BigInt64Array | Float64Array] {
   x = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
   let shuffle = params?.shuffle === undefined ? true : params?.shuffle
   if (y instanceof BigInt64Array) {
-    return trainTestSplitF64I64(x.asF64(), y, params.testSize, shuffle, params.seed)
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplitF64I64(x.asF64(), y, params.testSize, shuffle, params.seed)
+    return [new DenseMatrix(xTrain), new DenseMatrix(xTest), yTrain, yTest]
   }
   if (!y.every((val) => Number.isInteger(val))) {
     let ys = new Float64Array(y)
-    return trainTestSplitF64F64(x.asF64(), ys, params.testSize, shuffle, params.seed)
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplitF64F64(x.asF64(), ys, params.testSize, shuffle, params.seed)
+    return [new DenseMatrix(xTrain), new DenseMatrix(xTest), yTrain, yTest]
   }
   let ys = new BigInt64Array(
     y.map((n) => {
       return BigInt(n)
     }),
   )
-  return trainTestSplitF64I64(x.asF64(), ys, params?.testSize, shuffle, params?.seed)
+  let [xTrain, xTest, yTrain, yTest] = trainTestSplitF64I64(x.asF64(), ys, params?.testSize, shuffle, params?.seed)
+  return [new DenseMatrix(xTrain), new DenseMatrix(xTest), yTrain, yTest]
 }
 
 export { trainTestSplit }

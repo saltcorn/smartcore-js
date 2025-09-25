@@ -1,15 +1,19 @@
 import assert from 'assert'
-import { linear_model, preprocessing, dataset, model_selection, metrics } from '../dist'
+import { linear_model, preprocessing, dataset, model_selection, metrics, pipeline } from '../dist/index.js'
 
 let { LogisticRegression } = linear_model
 let { StandardScaler } = preprocessing
 let { loadIris } = dataset
 let { trainTestSplit } = model_selection
 let { accuracyScore } = metrics
+let { makePipeline } = pipeline
 
 describe('Pipelines', () => {
   it('should compose estimators', () => {
-    let pipe = makePipeline(new StandardScaler(), new LogisticRegression())
+    let pipe = makePipeline([
+      ['standardscaler', new StandardScaler()],
+      ['logisticregression', new LogisticRegression()],
+    ])
     let irisData = loadIris({ returnXY: true })
     let [x, y] = irisData instanceof Array ? irisData : []
     if (!(x && y)) {
@@ -17,6 +21,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert(score)
   })
 })

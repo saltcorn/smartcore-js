@@ -116,6 +116,7 @@ module.exports.AUCF64 = __napiModule.exports.AUCF64
 module.exports.AUCf64 = __napiModule.exports.AUCf64
 module.exports.BernoulliNBF64U64 = __napiModule.exports.BernoulliNBF64U64
 module.exports.BernoulliNBParametersF64 = __napiModule.exports.BernoulliNBParametersF64
+module.exports.BigLogisticRegressionF64I64 = __napiModule.exports.BigLogisticRegressionF64I64
 module.exports.Boston = __napiModule.exports.Boston
 module.exports.BreastCancer = __napiModule.exports.BreastCancer
 module.exports.CategoricalNBParameters = __napiModule.exports.CategoricalNBParameters

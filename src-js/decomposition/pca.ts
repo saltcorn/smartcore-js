@@ -1,6 +1,6 @@
 import { PCAParameters, PCAF64 } from '../../core-bindings/index.js'
 import { DenseMatrix } from '../linalg/index.js'
-import { SerDe } from '../index.js'
+import type { SerDe } from '../pipeline/index.js'
 
 interface PCAParametersVals {
   nComponents?: number
@@ -9,11 +9,10 @@ interface PCAParametersVals {
 
 type PCARs = PCAF64
 
-class PCATransformer extends SerDe<PCATransformer> {
+class PCATransformer implements SerDe<PCATransformer> {
   private inner: PCARs
 
   constructor(inner: PCARs) {
-    super()
     this.inner = inner
   }
 

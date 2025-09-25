@@ -16,15 +16,15 @@ use crate::linalg::basic::matrix::DenseMatrixF64;
 pub use parameters::LogisticRegressionParametersF64;
 
 macro_rules! logistic_regression_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $s:literal, $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<LogisticRegression $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<$s LogisticRegression $x:upper $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<LogisticRegression $x:upper $y:upper>] {
+        pub struct [<$s LogisticRegression $x:upper $y:upper>] {
             inner: LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
-        impl Default for [<LogisticRegression $x:upper $y:upper>] {
+        impl Default for [<$s LogisticRegression $x:upper $y:upper>] {
             fn default() -> Self {
                 Self {
                     inner: LibLogisticRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
@@ -33,7 +33,7 @@ macro_rules! logistic_regression_struct {
         }
 
         #[napi]
-        impl [<LogisticRegression $x:upper $y:upper>] {
+        impl [<$s LogisticRegression $x:upper $y:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self::default()
@@ -55,6 +55,15 @@ macro_rules! logistic_regression_struct {
             }
 
             #[napi]
+            pub fn predict(&self, x: &$xs) -> Result<$ys> {
+                let prediction = self.inner.predict(
+                    x as &DenseMatrix<$x>
+                )
+                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                Ok(prediction.into())
+            }
+
+            #[napi]
             pub fn serialize(&self) -> Result<Buffer> {
                 let encoded = encode_to_vec(&self.inner, standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
@@ -69,7 +78,7 @@ macro_rules! logistic_regression_struct {
             }
         }
 
-        impl AsRef<LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<LogisticRegression $x:upper $y:upper>] {
+        impl AsRef<LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<$s LogisticRegression $x:upper $y:upper>] {
             fn as_ref(&self) -> &LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>> {
                 &self.inner
             }
@@ -78,16 +87,5 @@ macro_rules! logistic_regression_struct {
   };
 }
 
-logistic_regression_struct! {f64, i64, DenseMatrixF64, Vec<i64>}
-
-#[napi]
-impl LogisticRegressionF64I64 {
-  #[napi]
-  pub fn predict(&self, x: &DenseMatrixF64) -> Result<Vec<i64>> {
-    let prediction_result = self
-      .inner
-      .predict(x as &DenseMatrix<f64>)
-      .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-    Ok(prediction_result)
-  }
-}
+logistic_regression_struct! {"", f64, i64, DenseMatrixF64, Vec<i64>}
+logistic_regression_struct! {"Big", f64, i64, DenseMatrixF64, BigInt64Array}
