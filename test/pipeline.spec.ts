@@ -12,7 +12,7 @@ describe('Pipelines', () => {
   it('should compose estimators', () => {
     let pipe = makePipeline([
       ['standardscaler', new StandardScaler()],
-      ['logisticregression', new LogisticRegression()],
+      ['logisticregression', new LogisticRegression({ alpha: 0.2 })],
     ])
     let irisData = loadIris({ returnXY: true })
     let [x, y] = irisData instanceof Array ? irisData : []
