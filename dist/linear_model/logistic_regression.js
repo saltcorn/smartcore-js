@@ -1,4 +1,4 @@
-import { LogisticRegressionF64I64, LogisticRegressionParametersF64, BigLogisticRegressionF64I64, } from '../../core-bindings/index.js';
+import { LogisticRegressionF64I64, LogisticRegressionParametersF64, LogisticRegressionF64BigI64, } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class LogisticRegression {
     constructor(params) {
@@ -30,7 +30,7 @@ class LogisticRegression {
             throw new Error('Unsupported data type for input arrays.');
         }
         if (y instanceof BigInt64Array) {
-            this.estimator = BigLogisticRegressionF64I64.fit(matrix.asF64(), y, this.parameters);
+            this.estimator = LogisticRegressionF64BigI64.fit(matrix.asF64(), y, this.parameters);
         }
         else if (y.every((val) => Number.isInteger(val))) {
             this.estimator = LogisticRegressionF64I64.fit(matrix.asF64(), y, this.parameters);

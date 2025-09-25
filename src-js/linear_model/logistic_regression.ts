@@ -1,14 +1,14 @@
 import {
   LogisticRegressionF64I64,
   LogisticRegressionParametersF64,
-  BigLogisticRegressionF64I64,
+  LogisticRegressionF64BigI64,
 } from '../../core-bindings/index.js'
 import { DenseMatrix } from '../linalg/index.js'
 import type { LogisticRegressionSolverName } from '../../core-bindings/index.js'
 import type { Estimator, Predictor, SerDe } from '../pipeline/index.js'
 import type { YType, XType } from '../index.js'
 
-type LogisticRegressionRs = LogisticRegressionF64I64 | BigLogisticRegressionF64I64
+type LogisticRegressionRs = LogisticRegressionF64I64 | LogisticRegressionF64BigI64
 
 type LogisticRegressionParameters = LogisticRegressionParametersF64
 
@@ -58,7 +58,7 @@ class LogisticRegression
     }
 
     if (y instanceof BigInt64Array) {
-      this.estimator = BigLogisticRegressionF64I64.fit(matrix.asF64(), y, this.parameters)
+      this.estimator = LogisticRegressionF64BigI64.fit(matrix.asF64(), y, this.parameters)
     } else if (y.every((val) => Number.isInteger(val))) {
       this.estimator = LogisticRegressionF64I64.fit(matrix.asF64(), y, this.parameters)
     } else {

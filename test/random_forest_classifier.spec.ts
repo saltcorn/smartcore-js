@@ -10,7 +10,7 @@ describe('Random Forest Classifier', () => {
       [11, 12, 13],
     ]
     let y = [0, 1]
-    let clf = RandomForestClassifier.fit(x, y, null)
+    let clf = new RandomForestClassifier().fit(x, y)
     let prediction = clf.predict(x)
     assert.deepEqual(prediction, [0, 0])
     prediction = clf.predict([
