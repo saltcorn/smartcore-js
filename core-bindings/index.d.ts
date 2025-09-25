@@ -596,6 +596,13 @@ export declare class RandomForestClassifierParameters {
   withSeed(seed: number): void
 }
 
+export declare class RandomForestRegressorF64BigI64 {
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64BigI64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestRegressorF64BigI64
+}
+
 export declare class RandomForestRegressorF64F64 {
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64F64
   predict(x: DenseMatrixF64): Float64Array
@@ -604,8 +611,8 @@ export declare class RandomForestRegressorF64F64 {
 }
 
 export declare class RandomForestRegressorF64I64 {
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: RandomForestRegressorParameters): RandomForestRegressorF64I64
+  predict(x: DenseMatrixF64): Array<number>
   serialize(): Buffer
   static deserialize(data: Buffer): RandomForestRegressorF64I64
 }

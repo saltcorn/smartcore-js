@@ -16,7 +16,7 @@ declare enum EstimatorType {
     F64BigI64 = 1
 }
 declare class RandomForestClassifier implements Estimator<XType, YType, RandomForestClassifier>, Predictor<XType, YType> {
-    parameters: RandomForestClassifierParameters;
+    private parameters;
     private estimator;
     constructor(params?: RandomForestClassifierParams);
     fit(x: XType, y: YType): RandomForestClassifier;

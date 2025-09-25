@@ -1,6 +1,10 @@
 import type { LogisticRegressionSolverName } from '../../core-bindings/index.js';
 import type { Estimator, Predictor, SerDe } from '../pipeline/index.js';
 import type { YType, XType } from '../index.js';
+declare enum EstimatorType {
+    F64BigI64 = 0,
+    F64I64 = 1
+}
 interface LogisticRegressionParametersValues {
     alpha?: number;
     solver?: LogisticRegressionSolverName.LBFGS;
@@ -13,5 +17,6 @@ declare class LogisticRegression implements Estimator<XType, YType, LogisticRegr
     fit(x: XType, y: YType): LogisticRegression;
     serialize(): Buffer;
     deserialize(data: Buffer): LogisticRegression;
+    static deserialize(data: Buffer, estimatorType: EstimatorType): LogisticRegression;
 }
 export default LogisticRegression;

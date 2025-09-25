@@ -157,6 +157,7 @@ export const R2i64 = __napiModule.exports.R2i64
 export const RandomForestClassifierF64BigI64 = __napiModule.exports.RandomForestClassifierF64BigI64
 export const RandomForestClassifierF64I64 = __napiModule.exports.RandomForestClassifierF64I64
 export const RandomForestClassifierParameters = __napiModule.exports.RandomForestClassifierParameters
+export const RandomForestRegressorF64BigI64 = __napiModule.exports.RandomForestRegressorF64BigI64
 export const RandomForestRegressorF64F64 = __napiModule.exports.RandomForestRegressorF64F64
 export const RandomForestRegressorF64I64 = __napiModule.exports.RandomForestRegressorF64I64
 export const RandomForestRegressorParameters = __napiModule.exports.RandomForestRegressorParameters

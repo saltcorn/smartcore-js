@@ -1,5 +1,10 @@
 import { LogisticRegressionF64I64, LogisticRegressionParametersF64, LogisticRegressionF64BigI64, } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
+var EstimatorType;
+(function (EstimatorType) {
+    EstimatorType[EstimatorType["F64BigI64"] = 0] = "F64BigI64";
+    EstimatorType[EstimatorType["F64I64"] = 1] = "F64I64";
+})(EstimatorType || (EstimatorType = {}));
 class LogisticRegression {
     constructor(params) {
         this.estimator = null;
@@ -56,6 +61,21 @@ class LogisticRegression {
         catch (e) {
             throw e;
         }
+    }
+    static deserialize(data, estimatorType) {
+        let estimator;
+        if (estimatorType === EstimatorType.F64BigI64) {
+            estimator = LogisticRegressionF64BigI64.deserialize(data);
+        }
+        else if (estimatorType === EstimatorType.F64I64) {
+            estimator = LogisticRegressionF64I64.deserialize(data);
+        }
+        else {
+            throw new Error('Unsupported estimator type');
+        }
+        let instance = new LogisticRegression();
+        instance.estimator = estimator;
+        return instance;
     }
 }
 export default LogisticRegression;

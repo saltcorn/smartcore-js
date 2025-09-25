@@ -209,6 +209,7 @@ module.exports.R2i64 = __napiModule.exports.R2i64
 module.exports.RandomForestClassifierF64BigI64 = __napiModule.exports.RandomForestClassifierF64BigI64
 module.exports.RandomForestClassifierF64I64 = __napiModule.exports.RandomForestClassifierF64I64
 module.exports.RandomForestClassifierParameters = __napiModule.exports.RandomForestClassifierParameters
+module.exports.RandomForestRegressorF64BigI64 = __napiModule.exports.RandomForestRegressorF64BigI64
 module.exports.RandomForestRegressorF64F64 = __napiModule.exports.RandomForestRegressorF64F64
 module.exports.RandomForestRegressorF64I64 = __napiModule.exports.RandomForestRegressorF64I64
 module.exports.RandomForestRegressorParameters = __napiModule.exports.RandomForestRegressorParameters
