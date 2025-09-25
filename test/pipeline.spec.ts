@@ -16,7 +16,7 @@ let { LogisticRegression } = linear_model
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
 let { StandardScaler } = preprocessing
 let { KMeans, DBSCAN } = cluster
-let { PCA } = decomposition
+let { PCA, SVD } = decomposition
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
 let { trainTestSplit } = model_selection
 let { accuracyScore } = metrics
@@ -122,6 +122,22 @@ describe('Pipelines', () => {
   it.skip('PCA + DBSCAN', () => {
     let pipe = makePipeline([
       ['pca', new PCA()],
+      ['kmeans', new DBSCAN({ distance: new ManhattanF64() })],
+    ])
+    let irisData = loadBoston({ returnXY: true })
+    let [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert.equal(score, 0)
+  })
+
+  it.skip('SVD + DBSCAN', () => {
+    let pipe = makePipeline([
+      ['pca', new SVD()],
       ['kmeans', new DBSCAN({ distance: new ManhattanF64() })],
     ])
     let irisData = loadBoston({ returnXY: true })

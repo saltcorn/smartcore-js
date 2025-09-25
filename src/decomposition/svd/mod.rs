@@ -26,7 +26,7 @@ macro_rules! svd_struct {
 
         #[napi]
         impl [<SVD $ty:upper>] {
-            #[napi(constructor)]
+            #[napi]
             pub fn fit(data: &[<DenseMatrix $ty:upper>], parameters: &SVDParameters) -> Result<Self> {
                 let svd = LibSVD::fit(
                     data as &DenseMatrix<$ty>,

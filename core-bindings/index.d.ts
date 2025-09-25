@@ -740,7 +740,7 @@ export declare class SVCParametersF64I64 {
 }
 
 export declare class SVDF64 {
-  constructor(data: DenseMatrixF64, parameters: SVDParameters)
+  static fit(data: DenseMatrixF64, parameters: SVDParameters): SVDF64
   transform(x: DenseMatrixF64): DenseMatrixF64
   serialize(): Buffer
   static deserialize(data: Buffer): SVDF64

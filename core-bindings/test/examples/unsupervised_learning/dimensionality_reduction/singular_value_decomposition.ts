@@ -7,7 +7,7 @@ export default () => {
     let x = digitsData.denseMatrix()
     let parameters = new SVDParameters()
     parameters.withNComponents(2)
-    let svd = new SVDF64(x, parameters)
+    let svd = SVDF64.fit(x, parameters)
     let xTranformed = svd.transform(x)
     assert(xTranformed)
   })
