@@ -7,7 +7,7 @@ export default () => {
     let x = loadedDataset.denseMatrix()
     let parameters = new PCAParameters()
     parameters.withNComponents(2)
-    let pca = new PCAF64(x, parameters)
+    let pca = PCAF64.fit(x, parameters)
     let xTranformed = pca.transform(x)
     assert(xTranformed)
   })

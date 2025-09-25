@@ -9,6 +9,7 @@ export * as model_selection from './model_selection/index.js'
 export * as metrics from './metrics/index.js'
 export * as pipeline from './pipeline/index.js'
 export * as cluster from './cluster/index.js'
+export * as decomposition from './decomposition/index.js'
 
 type XType = DenseMatrix | number[][]
 type YType = number[] | Float64Array | BigInt64Array

@@ -26,7 +26,7 @@ macro_rules! pca_struct {
 
         #[napi]
         impl [<PCA $ty:upper>] {
-            #[napi(constructor)]
+            #[napi]
             pub fn fit(data: &[<DenseMatrix $ty:upper>], parameters: &PCAParameters) -> Result<Self> {
                 let pca = LibPCA::fit(
                     data as &DenseMatrix<$ty>,

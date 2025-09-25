@@ -1,53 +1,67 @@
-import { PCAParameters, PCAF64 } from '../../core-bindings/index.js'
+import { PCAF64, PCAParameters } from '../../core-bindings/index.js'
+import type { XType, YType } from '../index.js'
 import { DenseMatrix } from '../linalg/index.js'
-import type { SerDe } from '../pipeline/index.js'
+import type { Estimator, Transformer } from '../pipeline/index.js'
 
-interface PCAParametersVals {
+interface PCAParams {
   nComponents?: number
-  useCorrelationMatrix?: boolean
+  correlationMatrix?: boolean
 }
 
 type PCARs = PCAF64
+type PCAParametersRs = PCAParameters
 
-class PCATransformer implements SerDe<PCATransformer> {
-  private inner: PCARs
+class PCA implements Estimator<XType, YType, PCA>, Transformer<XType> {
+  private parameters: PCAParametersRs
+  private estimator: PCARs | null = null
 
-  constructor(inner: PCARs) {
-    this.inner = inner
+  constructor(params?: PCAParams) {
+    this.parameters = new PCAParameters()
+    if (params) {
+      if (params.nComponents !== undefined) {
+        this.parameters.withNComponents(params.nComponents)
+      }
+      if (params.correlationMatrix !== undefined) {
+        this.parameters.useCorrelationMatrix(params.correlationMatrix)
+      }
+    }
   }
 
-  transform(x: DenseMatrix | number[][]): DenseMatrix {
-    x = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-    return new DenseMatrix(this.inner.transform(x.asF64()))
+  fit(x: XType, y: YType): PCA {
+    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
+
+    if (!y || y.length === 0) {
+      throw new Error('Input arrays cannot be empty.')
+    }
+
+    if (y instanceof Float64Array) {
+      this.estimator = PCAF64.fit(matrix.asF64(), this.parameters)
+    } else {
+      throw new Error('Unsupported data type for input arrays.')
+    }
+
+    return this
   }
 
-  serialize(): Buffer {
-    return this.inner.serialize()
+  transform(x: XType): XType {
+    if (this.estimator === null) {
+      throw new Error("The 'fit' method should called before the 'predict' method is called.")
+    }
+
+    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
+    return new DenseMatrix(this.estimator.transform(matrix.asF64()))
   }
 
-  deserialize(data: Buffer): PCATransformer {
-    return new PCATransformer(PCAF64.deserialize(data))
+  serialize() {
+    return this.estimator?.serialize()
+  }
+
+  static deserialize(data: Buffer): PCA {
+    let estimator = PCAF64.deserialize(data)
+    let instance = new PCA()
+    instance.estimator = estimator
+    return instance
   }
 }
 
-class PCA {
-  private parameters: PCAParameters
-
-  constructor(params: PCAParametersVals) {
-    let parameters = new PCAParameters()
-    if (params.nComponents !== undefined) {
-      parameters.withNComponents(params.nComponents)
-    }
-    if (params.useCorrelationMatrix !== undefined) {
-      parameters.useCorrelationMatrix = params.useCorrelationMatrix
-    }
-    this.parameters = parameters
-  }
-
-  fit(x: DenseMatrix | number[][], _y: number[]): PCATransformer {
-    x = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-    return new PCATransformer(new PCAF64(x.asF64(), this.parameters))
-  }
-}
-
-export default PCA
+export { PCA }

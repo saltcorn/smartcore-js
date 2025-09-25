@@ -1,21 +1,16 @@
-import { PCAF64 } from '../../core-bindings/index.js';
-import { DenseMatrix } from '../linalg/index.js';
-import type { SerDe } from '../pipeline/index.js';
-interface PCAParametersVals {
+import type { XType, YType } from '../index.js';
+import type { Estimator, Transformer } from '../pipeline/index.js';
+interface PCAParams {
     nComponents?: number;
-    useCorrelationMatrix?: boolean;
+    correlationMatrix?: boolean;
 }
-type PCARs = PCAF64;
-declare class PCATransformer implements SerDe<PCATransformer> {
-    private inner;
-    constructor(inner: PCARs);
-    transform(x: DenseMatrix | number[][]): DenseMatrix;
-    serialize(): Buffer;
-    deserialize(data: Buffer): PCATransformer;
-}
-declare class PCA {
+declare class PCA implements Estimator<XType, YType, PCA>, Transformer<XType> {
     private parameters;
-    constructor(params: PCAParametersVals);
-    fit(x: DenseMatrix | number[][], _y: number[]): PCATransformer;
+    private estimator;
+    constructor(params?: PCAParams);
+    fit(x: XType, y: YType): PCA;
+    transform(x: XType): XType;
+    serialize(): Buffer<ArrayBufferLike> | undefined;
+    static deserialize(data: Buffer): PCA;
 }
-export default PCA;
+export { PCA };

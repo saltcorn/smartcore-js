@@ -1,2 +1,1 @@
-import PCA from './pca.js';
-export { PCA };
+export { PCA } from './pca.js';

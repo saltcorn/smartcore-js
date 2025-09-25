@@ -393,7 +393,7 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { AccuracyF64, Accuracyf64, AccuracyI64, Accuracyi64, AUCF64, AUCf64, BernoulliNBF64U64, BernoulliNBParametersF64, Boston, BreastCancer, CategoricalNBParameters, CategoricalNBU64, CrossValidationResult, dataset, Dataset, DatasetF64F64, DatasetF64F64JsVecRef, DatasetF64I64, DatasetF64I64JsVecRef, DBSCANF64F64, DecisionTreeClassifierI64I64, DecisionTreeClassifierParameters, DecisionTreeRegressorI64I64, DecisionTreeRegressorParameters, DenseMatrixF64, DenseMatrixI64, DenseMatrixU64, Diabetes, Digits, ElasticNetF64F64, ElasticNetF64I64, ElasticNetParameters, EuclidianF64, EuclidianF64DBSCANF64Parameters, EuclidianI64, ExtraTreesRegressorF64BigI64, ExtraTreesRegressorF64F64, ExtraTreesRegressorF64I64, ExtraTreesRegressorParameters, F1F64, F1f64, GaussianNBF64U64, GaussianNBParameters, Generator, HammingF64, HammingF64DBSCANF64Parameters, HammingI64, HCVScoreI64, HCVScorei64, Iris, JsBoxedArrayF32Ref, JsBoxedArrayF64Ref, JsDenseMatrixF64Ref, JsVecF64Ref, JsVecI64Ref, Kernels, KFold, KMeansF64BigI64, KMeansF64F64, KMeansF64I64, KMeansParameters, KNNClassifierF64I64, KNNRegressorF64F64, KNNRegressorF64I64, KNNRegressorParametersF64EuclidianF64, EuclidianF64KNNRegressorParametersF64, KNNRegressorParametersF64HammingF64, HammingF64KNNRegressorParametersF64, LassoF64F64, LassoF64I64, LassoParameters, LinearRegressionF64F64, LinearRegressionF64I64, LinearRegressionParameters, LogisticRegressionF64BigI64, LogisticRegressionF64I64, LogisticRegressionParametersF64, MahalanobisF64, MahalanobisF64DBSCANF64Parameters, ManhattanF64, ManhattanF64DBSCANF64Parameters, ManhattanI64, MeanAbsoluteErrorF64, MeanAbsoluteErrorf64, MeanSquareErrorF64, MeanSquareErrorf64, MinkowskiF64, MinkowskiF64DBSCANF64Parameters, MinkowskiI64, MultinomialNBParameters, MultinomialNBU64U64, OneHotEncoderF64, OneHotEncoderParameters, PCAF64, PCAParameters, PrecisionF64, Precisionf64, R2F64, R2f64, R2I64, R2i64, RandomForestClassifierF64BigI64, RandomForestClassifierF64I64, RandomForestClassifierParameters, RandomForestRegressorF64BigI64, RandomForestRegressorF64F64, RandomForestRegressorF64I64, RandomForestRegressorParameters, RecallF64, Recallf64, RidgeRegressionF64F64, RidgeRegressionParametersF64, StandardScalerF64, StandardScalerParameters, SVCF64I64, SVCParametersF64I64, SVDF64, SVDF64DenseMatrixF64, SVDParameters, SVRF64, SVRParametersF64, VecF64, VecI64, crossValidateElasticNetF64F64, crossValidateElasticNetF64I64, crossValidateLogisticRegressionF64I64, KNNAlgorithmName, KNNWeightFunction, LinearRegressionSolverName, LogisticRegressionSolverName, RidgeRegressionSolverName, SplitCriterion, trainTestSplitF64BigI64, trainTestSplitF64F64, trainTestSplitF64I64 } = nativeBinding
+const { AccuracyF64, Accuracyf64, AccuracyI64, Accuracyi64, AUCF64, AUCf64, BernoulliNBF64U64, BernoulliNBParametersF64, Boston, BreastCancer, CategoricalNBParameters, CategoricalNBU64, CrossValidationResult, dataset, Dataset, DatasetF64F64, DatasetF64F64JsVecRef, DatasetF64I64, DatasetF64I64JsVecRef, DBSCANF64EuclidianF64Parameters, DBSCANF64F64EuclidianF64, DBSCANF64F64HammingF64, DBSCANF64F64MahalanobisF64, DBSCANF64F64ManhattanF64, DBSCANF64F64MinkowskiF64, DBSCANF64HammingF64Parameters, DBSCANF64MahalanobisF64Parameters, DBSCANF64ManhattanF64Parameters, DBSCANF64MinkowskiF64Parameters, DecisionTreeClassifierI64I64, DecisionTreeClassifierParameters, DecisionTreeRegressorI64I64, DecisionTreeRegressorParameters, DenseMatrixF64, DenseMatrixI64, DenseMatrixU64, Diabetes, Digits, ElasticNetF64F64, ElasticNetF64I64, ElasticNetParameters, EuclidianF64, EuclidianI64, ExtraTreesRegressorF64BigI64, ExtraTreesRegressorF64F64, ExtraTreesRegressorF64I64, ExtraTreesRegressorParameters, F1F64, F1f64, GaussianNBF64U64, GaussianNBParameters, Generator, HammingF64, HammingI64, HCVScoreI64, HCVScorei64, Iris, JsBoxedArrayF32Ref, JsBoxedArrayF64Ref, JsDenseMatrixF64Ref, JsVecF64Ref, JsVecI64Ref, Kernels, KFold, KMeansF64BigI64, KMeansF64F64, KMeansF64I64, KMeansParameters, KNNClassifierF64I64, KNNRegressorF64F64, KNNRegressorF64I64, KNNRegressorParametersF64EuclidianF64, EuclidianF64KNNRegressorParametersF64, KNNRegressorParametersF64HammingF64, HammingF64KNNRegressorParametersF64, LassoF64F64, LassoF64I64, LassoParameters, LinearRegressionF64F64, LinearRegressionF64I64, LinearRegressionParameters, LogisticRegressionF64BigI64, LogisticRegressionF64I64, LogisticRegressionParametersF64, MahalanobisF64, ManhattanF64, ManhattanI64, MeanAbsoluteErrorF64, MeanAbsoluteErrorf64, MeanSquareErrorF64, MeanSquareErrorf64, MinkowskiF64, MinkowskiI64, MultinomialNBParameters, MultinomialNBU64U64, OneHotEncoderF64, OneHotEncoderParameters, PCAF64, PCAParameters, PrecisionF64, Precisionf64, R2F64, R2f64, R2I64, R2i64, RandomForestClassifierF64BigI64, RandomForestClassifierF64I64, RandomForestClassifierParameters, RandomForestRegressorF64BigI64, RandomForestRegressorF64F64, RandomForestRegressorF64I64, RandomForestRegressorParameters, RecallF64, Recallf64, RidgeRegressionF64F64, RidgeRegressionParametersF64, StandardScalerF64, StandardScalerParameters, SVCF64I64, SVCParametersF64I64, SVDF64, SVDF64DenseMatrixF64, SVDParameters, SVRF64, SVRParametersF64, VecF64, VecI64, crossValidateElasticNetF64F64, crossValidateElasticNetF64I64, crossValidateLogisticRegressionF64I64, KNNAlgorithmName, KNNWeightFunction, LinearRegressionSolverName, LogisticRegressionSolverName, RidgeRegressionSolverName, SplitCriterion, trainTestSplitF64BigI64, trainTestSplitF64F64, trainTestSplitF64I64 } = nativeBinding
 export { AccuracyF64 }
 export { Accuracyf64 }
 export { AccuracyI64 }
@@ -413,7 +413,16 @@ export { DatasetF64F64 }
 export { DatasetF64F64JsVecRef }
 export { DatasetF64I64 }
 export { DatasetF64I64JsVecRef }
-export { DBSCANF64F64 }
+export { DBSCANF64EuclidianF64Parameters }
+export { DBSCANF64F64EuclidianF64 }
+export { DBSCANF64F64HammingF64 }
+export { DBSCANF64F64MahalanobisF64 }
+export { DBSCANF64F64ManhattanF64 }
+export { DBSCANF64F64MinkowskiF64 }
+export { DBSCANF64HammingF64Parameters }
+export { DBSCANF64MahalanobisF64Parameters }
+export { DBSCANF64ManhattanF64Parameters }
+export { DBSCANF64MinkowskiF64Parameters }
 export { DecisionTreeClassifierI64I64 }
 export { DecisionTreeClassifierParameters }
 export { DecisionTreeRegressorI64I64 }
@@ -427,7 +436,6 @@ export { ElasticNetF64F64 }
 export { ElasticNetF64I64 }
 export { ElasticNetParameters }
 export { EuclidianF64 }
-export { EuclidianF64DBSCANF64Parameters }
 export { EuclidianI64 }
 export { ExtraTreesRegressorF64BigI64 }
 export { ExtraTreesRegressorF64F64 }
@@ -439,7 +447,6 @@ export { GaussianNBF64U64 }
 export { GaussianNBParameters }
 export { Generator }
 export { HammingF64 }
-export { HammingF64DBSCANF64Parameters }
 export { HammingI64 }
 export { HCVScoreI64 }
 export { HCVScorei64 }
@@ -472,16 +479,13 @@ export { LogisticRegressionF64BigI64 }
 export { LogisticRegressionF64I64 }
 export { LogisticRegressionParametersF64 }
 export { MahalanobisF64 }
-export { MahalanobisF64DBSCANF64Parameters }
 export { ManhattanF64 }
-export { ManhattanF64DBSCANF64Parameters }
 export { ManhattanI64 }
 export { MeanAbsoluteErrorF64 }
 export { MeanAbsoluteErrorf64 }
 export { MeanSquareErrorF64 }
 export { MeanSquareErrorf64 }
 export { MinkowskiF64 }
-export { MinkowskiF64DBSCANF64Parameters }
 export { MinkowskiI64 }
 export { MultinomialNBParameters }
 export { MultinomialNBU64U64 }

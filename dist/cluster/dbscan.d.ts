@@ -1,5 +1,5 @@
 import { EuclidianF64, HammingF64, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../../core-bindings/index.js';
-import type { KNNAlgorithmName } from '../../core-bindings/index.js';
+import { type KNNAlgorithmName } from '../../core-bindings/index.js';
 import type { XType, YType } from '../index.js';
 import type { Estimator, Predictor } from '../pipeline/index.js';
 type DistanceRs = EuclidianF64 | HammingF64 | MahalanobisF64 | ManhattanF64 | MinkowskiF64;

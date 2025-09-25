@@ -99,11 +99,74 @@ export declare class DatasetF64I64JsVecRef {
   asArray(): BigInt64Array
 }
 
-export declare class DBSCANF64F64 {
-  static fit(x: DenseMatrixF64, parameters: EuclidianF64DBSCANF64Parameters): DBSCANF64F64
+export declare class DBSCANF64EuclidianF64Parameters {
+  withMinSamples(minSamples: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withEps(eps: number): void
+  constructor()
+  withDistanceHammingF64(distance: HammingF64): DBSCANF64HammingF64Parameters
+  withDistanceMahalanobisF64(distance: MahalanobisF64): DBSCANF64MahalanobisF64Parameters
+  withDistanceManhattanF64(distance: ManhattanF64): DBSCANF64ManhattanF64Parameters
+  withDistanceMinkowskiF64(distance: MinkowskiF64): DBSCANF64MinkowskiF64Parameters
+}
+
+export declare class DBSCANF64F64EuclidianF64 {
+  static fit(x: DenseMatrixF64, parameters: DBSCANF64EuclidianF64Parameters): DBSCANF64F64EuclidianF64
   predict(x: DenseMatrixF64): Float64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): DBSCANF64F64
+  static deserialize(data: Buffer): DBSCANF64F64EuclidianF64
+}
+
+export declare class DBSCANF64F64HammingF64 {
+  static fit(x: DenseMatrixF64, parameters: DBSCANF64HammingF64Parameters): DBSCANF64F64HammingF64
+  predict(x: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DBSCANF64F64HammingF64
+}
+
+export declare class DBSCANF64F64MahalanobisF64 {
+  static fit(x: DenseMatrixF64, parameters: DBSCANF64MahalanobisF64Parameters): DBSCANF64F64MahalanobisF64
+  predict(x: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DBSCANF64F64MahalanobisF64
+}
+
+export declare class DBSCANF64F64ManhattanF64 {
+  static fit(x: DenseMatrixF64, parameters: DBSCANF64ManhattanF64Parameters): DBSCANF64F64ManhattanF64
+  predict(x: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DBSCANF64F64ManhattanF64
+}
+
+export declare class DBSCANF64F64MinkowskiF64 {
+  static fit(x: DenseMatrixF64, parameters: DBSCANF64MinkowskiF64Parameters): DBSCANF64F64MinkowskiF64
+  predict(x: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DBSCANF64F64MinkowskiF64
+}
+
+export declare class DBSCANF64HammingF64Parameters {
+  withMinSamples(minSamples: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withEps(eps: number): void
+}
+
+export declare class DBSCANF64MahalanobisF64Parameters {
+  withMinSamples(minSamples: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withEps(eps: number): void
+}
+
+export declare class DBSCANF64ManhattanF64Parameters {
+  withMinSamples(minSamples: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withEps(eps: number): void
+}
+
+export declare class DBSCANF64MinkowskiF64Parameters {
+  withMinSamples(minSamples: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withEps(eps: number): void
 }
 
 export declare class DecisionTreeClassifierI64I64 {
@@ -235,17 +298,6 @@ export declare class EuclidianF64 {
   distance(x: Float64Array, y: Float64Array): number
 }
 
-export declare class EuclidianF64DBSCANF64Parameters {
-  withMinSamples(minSamples: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withEps(eps: number): void
-  constructor()
-  withDistanceHammingF64(distance: HammingF64): HammingF64DBSCANF64Parameters
-  withDistanceMahalanobisF64(distance: MahalanobisF64): MahalanobisF64DBSCANF64Parameters
-  withDistanceManhattanF64(distance: ManhattanF64): ManhattanF64DBSCANF64Parameters
-  withDistanceMinkowskiF64(distance: MinkowskiF64): MinkowskiF64DBSCANF64Parameters
-}
-
 export declare class EuclidianI64 {
   constructor()
   distance(x: BigInt64Array, y: BigInt64Array): number
@@ -310,12 +362,6 @@ export declare class Generator {
 export declare class HammingF64 {
   constructor()
   distance(x: Float64Array, y: Float64Array): number
-}
-
-export declare class HammingF64DBSCANF64Parameters {
-  withMinSamples(minSamples: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withEps(eps: number): void
 }
 
 export declare class HammingI64 {
@@ -502,21 +548,9 @@ export declare class MahalanobisF64 {
   distance(x: Float64Array, y: Float64Array): number
 }
 
-export declare class MahalanobisF64DBSCANF64Parameters {
-  withMinSamples(minSamples: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withEps(eps: number): void
-}
-
 export declare class ManhattanF64 {
   constructor()
   distance(x: Float64Array, y: Float64Array): number
-}
-
-export declare class ManhattanF64DBSCANF64Parameters {
-  withMinSamples(minSamples: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withEps(eps: number): void
 }
 
 export declare class ManhattanI64 {
@@ -539,12 +573,6 @@ export type MeanSquareErrorf64 = MeanSquareErrorF64
 export declare class MinkowskiF64 {
   constructor(p: number)
   distance(x: Float64Array, y: Float64Array): number
-}
-
-export declare class MinkowskiF64DBSCANF64Parameters {
-  withMinSamples(minSamples: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withEps(eps: number): void
 }
 
 export declare class MinkowskiI64 {
@@ -575,7 +603,7 @@ export declare class OneHotEncoderParameters {
 }
 
 export declare class PCAF64 {
-  constructor(data: DenseMatrixF64, parameters: PCAParameters)
+  static fit(data: DenseMatrixF64, parameters: PCAParameters): PCAF64
   transform(x: DenseMatrixF64): DenseMatrixF64
   serialize(): Buffer
   static deserialize(data: Buffer): PCAF64
@@ -584,7 +612,7 @@ export declare class PCAF64 {
 export declare class PCAParameters {
   constructor()
   withNComponents(nComponents: number): void
-  set useCorrelationMatrix(useCorrelationMatrix: boolean)
+  useCorrelationMatrix(useCorrelationMatrix: boolean): void
 }
 
 export declare class PrecisionF64 {
