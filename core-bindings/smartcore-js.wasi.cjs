@@ -145,6 +145,7 @@ module.exports.EuclidianF64 = __napiModule.exports.EuclidianF64
 module.exports.EuclidianF64DBSCANF64Parameters = __napiModule.exports.EuclidianF64DBSCANF64Parameters
 module.exports.Euclidiani64 = __napiModule.exports.Euclidiani64
 module.exports.EuclidianI64 = __napiModule.exports.EuclidianI64
+module.exports.ExtraTreesRegressorF64BigI64 = __napiModule.exports.ExtraTreesRegressorF64BigI64
 module.exports.ExtraTreesRegressorF64F64 = __napiModule.exports.ExtraTreesRegressorF64F64
 module.exports.ExtraTreesRegressorF64I64 = __napiModule.exports.ExtraTreesRegressorF64I64
 module.exports.ExtraTreesRegressorParameters = __napiModule.exports.ExtraTreesRegressorParameters

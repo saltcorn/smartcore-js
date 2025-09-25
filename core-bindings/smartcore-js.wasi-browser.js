@@ -93,6 +93,7 @@ export const EuclidianF64 = __napiModule.exports.EuclidianF64
 export const EuclidianF64DBSCANF64Parameters = __napiModule.exports.EuclidianF64DBSCANF64Parameters
 export const Euclidiani64 = __napiModule.exports.Euclidiani64
 export const EuclidianI64 = __napiModule.exports.EuclidianI64
+export const ExtraTreesRegressorF64BigI64 = __napiModule.exports.ExtraTreesRegressorF64BigI64
 export const ExtraTreesRegressorF64F64 = __napiModule.exports.ExtraTreesRegressorF64F64
 export const ExtraTreesRegressorF64I64 = __napiModule.exports.ExtraTreesRegressorF64I64
 export const ExtraTreesRegressorParameters = __napiModule.exports.ExtraTreesRegressorParameters

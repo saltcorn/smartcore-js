@@ -248,6 +248,13 @@ export declare class Euclidiani64 {
 }
 export type EuclidianI64 = Euclidiani64
 
+export declare class ExtraTreesRegressorF64BigI64 {
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF64BigI64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ExtraTreesRegressorF64BigI64
+}
+
 export declare class ExtraTreesRegressorF64F64 {
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF64F64
   predict(x: DenseMatrixF64): Float64Array
@@ -256,8 +263,8 @@ export declare class ExtraTreesRegressorF64F64 {
 }
 
 export declare class ExtraTreesRegressorF64I64 {
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF64I64
+  predict(x: DenseMatrixF64): Array<number>
   serialize(): Buffer
   static deserialize(data: Buffer): ExtraTreesRegressorF64I64
 }
