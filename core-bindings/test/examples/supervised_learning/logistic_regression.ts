@@ -1,6 +1,6 @@
 import {
   dataset,
-  trainTestSplitF64I64,
+  trainTestSplitF64BigI64,
   R2I64,
   LogisticRegressionF64BigI64,
   LogisticRegressionParametersF64,
@@ -12,7 +12,7 @@ export default () => {
     let loadedDataset = dataset.breastCancer().loadDataset()
     let matrix = loadedDataset.denseMatrix()
     let y = loadedDataset.target
-    let [, xTest, , yTest] = trainTestSplitF64I64(matrix, y, 0.2, true)
+    let [, xTest, , yTest] = trainTestSplitF64BigI64(matrix, y, 0.2, true)
     let parameters = new LogisticRegressionParametersF64()
     let yHatLr = LogisticRegressionF64BigI64.fit(matrix, loadedDataset.target, parameters).predict(xTest)
     let r2 = new R2I64()

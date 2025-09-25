@@ -1,6 +1,6 @@
 import {
   dataset,
-  trainTestSplitF64I64,
+  trainTestSplitF64BigI64,
   DecisionTreeClassifierI64I64,
   DecisionTreeClassifierParameters,
   R2I64,
@@ -12,7 +12,7 @@ export default () => {
     let breastCancerData = dataset.breastCancer().loadDataset()
     let x = breastCancerData.denseMatrix()
     let y = breastCancerData.target
-    let [, xTest, , yTest] = trainTestSplitF64I64(x, y, 0.2, true)
+    let [, xTest, , yTest] = trainTestSplitF64BigI64(x, y, 0.2, true)
     let yHatTree = DecisionTreeClassifierI64I64.fit(
       x,
       breastCancerData.target,

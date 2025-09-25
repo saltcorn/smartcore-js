@@ -78,4 +78,4 @@ class RandomForestRegressor {
         return instance;
     }
 }
-export { RandomForestRegressor, RandomForestRegressorParameters };
+export { RandomForestRegressor };

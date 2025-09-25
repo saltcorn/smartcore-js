@@ -1,9 +1,10 @@
-import { ExtraTreesRegressorF64BigI64, ExtraTreesRegressorF64I64, ExtraTreesRegressorParameters, } from '../../core-bindings/index.js';
+import { ExtraTreesRegressorF64BigI64, ExtraTreesRegressorF64I64, ExtraTreesRegressorParameters, ExtraTreesRegressorF64F64, } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 var EstimatorType;
 (function (EstimatorType) {
     EstimatorType[EstimatorType["F64I64"] = 0] = "F64I64";
     EstimatorType[EstimatorType["F64BigI64"] = 1] = "F64BigI64";
+    EstimatorType[EstimatorType["F64F64"] = 2] = "F64F64";
 })(EstimatorType || (EstimatorType = {}));
 class ExtraTreesRegressor {
     constructor(params) {
@@ -39,7 +40,7 @@ class ExtraTreesRegressor {
             throw new Error('Input arrays cannot be empty.');
         }
         if (y instanceof Float64Array) {
-            throw new Error('Unsupported data type for input arrays.');
+            this.estimator = ExtraTreesRegressorF64F64.fit(matrix.asF64(), y, this.parameters);
         }
         else if (y instanceof BigInt64Array) {
             this.estimator = ExtraTreesRegressorF64BigI64.fit(matrix.asF64(), y, this.parameters);
@@ -70,6 +71,9 @@ class ExtraTreesRegressor {
         else if (estimatorType === EstimatorType.F64I64) {
             estimator = ExtraTreesRegressorF64I64.deserialize(data);
         }
+        else if (estimatorType === EstimatorType.F64F64) {
+            estimator = ExtraTreesRegressorF64F64.deserialize(data);
+        }
         else {
             throw new Error('Unsupported estimator type');
         }
@@ -78,4 +82,4 @@ class ExtraTreesRegressor {
         return instance;
     }
 }
-export { ExtraTreesRegressor, ExtraTreesRegressorParameters };
+export { ExtraTreesRegressor };

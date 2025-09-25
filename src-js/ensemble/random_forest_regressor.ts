@@ -102,4 +102,4 @@ class RandomForestRegressor implements Estimator<XType, YType, RandomForestRegre
   }
 }
 
-export { RandomForestRegressor, RandomForestRegressorParameters }
+export { RandomForestRegressor }

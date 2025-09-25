@@ -1,4 +1,3 @@
-import { RandomForestClassifierParameters } from '../../core-bindings/index.js';
 import type { SplitCriterion } from '../../core-bindings/index.js';
 import type { XType, YType } from '../index.js';
 import type { Estimator, Predictor } from '../pipeline/index.js';
@@ -24,4 +23,4 @@ declare class RandomForestClassifier implements Estimator<XType, YType, RandomFo
     serialize(): Buffer<ArrayBufferLike> | undefined;
     static deserialize(data: Buffer, estimatorType: EstimatorType): RandomForestClassifier;
 }
-export { RandomForestClassifier, RandomForestClassifierParameters };
+export { RandomForestClassifier };

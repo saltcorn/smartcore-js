@@ -2,10 +2,20 @@ use napi_derive::napi;
 use paste::paste;
 use smartcore::{
   cluster::dbscan::DBSCANParameters as LibDBSCANParameters,
-  metrics::distance::{euclidian::Euclidian, hamming::Hamming},
+  linalg::basic::matrix::DenseMatrix,
+  metrics::distance::{
+    euclidian::Euclidian, hamming::Hamming, mahalanobis::Mahalanobis, manhattan::Manhattan,
+    minkowski::Minkowski,
+  },
 };
 
-use crate::{algorithm::neighbor::KNNAlgorithmName, metrics::distance::hamming::HammingF64};
+use crate::{
+  algorithm::neighbor::KNNAlgorithmName,
+  metrics::distance::{
+    hamming::HammingF64, mahalanobis::MahalanobisF64, manhattan::ManhattanF64,
+    minkowski::MinkowskiF64,
+  },
+};
 
 macro_rules! dbscan_parameters_struct {
   ( $y:ty, $d:ty, $d_name:ty ) => {
@@ -46,7 +56,7 @@ macro_rules! dbscan_parameters_struct_distance_impl {
     paste! {
         #[napi]
         impl $ty1 {
-            #[napi(factory)]
+            #[napi]
             #[allow(non_snake_case)]
             pub fn [<with_distance_ $ty2_d>](
                 &self,
@@ -82,3 +92,12 @@ impl EuclidianF64DBSCANF64Parameters {
 
 dbscan_parameters_struct! {f64, Hamming<f64>, HammingF64 }
 dbscan_parameters_struct_distance_impl! {EuclidianF64DBSCANF64Parameters, HammingF64DBSCANF64Parameters, HammingF64}
+
+dbscan_parameters_struct! {f64, Mahalanobis<f64, DenseMatrix<f64>>, MahalanobisF64 }
+dbscan_parameters_struct_distance_impl! {EuclidianF64DBSCANF64Parameters, MahalanobisF64DBSCANF64Parameters, MahalanobisF64}
+
+dbscan_parameters_struct! {f64, Manhattan<f64>, ManhattanF64 }
+dbscan_parameters_struct_distance_impl! {EuclidianF64DBSCANF64Parameters, ManhattanF64DBSCANF64Parameters, ManhattanF64}
+
+dbscan_parameters_struct! {f64, Minkowski<f64>, MinkowskiF64 }
+dbscan_parameters_struct_distance_impl! {EuclidianF64DBSCANF64Parameters, MinkowskiF64DBSCANF64Parameters, MinkowskiF64}

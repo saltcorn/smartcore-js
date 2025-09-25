@@ -12,4 +12,32 @@ function loadIris(params) {
     }
     return new Dataset(irisData);
 }
-export { loadIris };
+function loadBoston(params) {
+    let bostonData = dataset.boston().loadDataset();
+    if (params?.returnXY) {
+        return [new DenseMatrix(bostonData.denseMatrix()), bostonData.target];
+    }
+    return new Dataset(bostonData);
+}
+function loadBreastCancer(params) {
+    let breastCancerData = dataset.breastCancer().loadDataset();
+    if (params?.returnXY) {
+        return [new DenseMatrix(breastCancerData.denseMatrix()), breastCancerData.target];
+    }
+    return new Dataset(breastCancerData);
+}
+function loadDiabetes(params) {
+    let diabetesData = dataset.diabetes().loadDataset();
+    if (params?.returnXY) {
+        return [new DenseMatrix(diabetesData.denseMatrix()), diabetesData.target];
+    }
+    return new Dataset(diabetesData);
+}
+function loadDigits(params) {
+    let digitsData = dataset.diabetes().loadDataset();
+    if (params?.returnXY) {
+        return [new DenseMatrix(digitsData.denseMatrix()), digitsData.target];
+    }
+    return new Dataset(digitsData);
+}
+export { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits };

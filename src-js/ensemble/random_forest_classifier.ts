@@ -103,4 +103,4 @@ class RandomForestClassifier implements Estimator<XType, YType, RandomForestClas
   }
 }
 
-export { RandomForestClassifier, RandomForestClassifierParameters }
+export { RandomForestClassifier }

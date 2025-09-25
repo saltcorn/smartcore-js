@@ -11,10 +11,11 @@ use smartcore::{
 use crate::linalg::basic::matrix::DenseMatrixF64;
 
 macro_rules! train_test_split_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<trainTestSplit $x:upper $y:upper>]"")]
-        pub fn [<train_test_split_ $x _ $y>](
+        #[napi(js_name=""[<trainTestSplit $x:upper $y_mod $y:upper>]"")]
+        #[allow(non_snake_case)]
+        pub fn [<train_test_split_ $x _ $y_mod _ $y>](
             x: &$xs,
             y: $ys,
             test_size: f64,
@@ -27,13 +28,14 @@ macro_rules! train_test_split_struct {
             (
                 $xs::from_inner(x_train),
                 $xs::from_inner(x_test),
-                $ys::new(y_train),
-                $ys::new(y_test),
+                y_train.into(),
+                y_test.into(),
             )
         }
     }
   };
 }
 
-train_test_split_struct! {f64, f64, DenseMatrixF64, Float64Array}
-train_test_split_struct! {f64, i64, DenseMatrixF64, BigInt64Array}
+train_test_split_struct! {f64, f64, "", DenseMatrixF64, Float64Array}
+train_test_split_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
+train_test_split_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}

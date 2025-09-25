@@ -102,6 +102,8 @@ export declare class DatasetF64I64JsVecRef {
 export declare class DBSCANF64F64 {
   static fit(x: DenseMatrixF64, parameters: EuclidianF64DBSCANF64Parameters): DBSCANF64F64
   predict(x: DenseMatrixF64): Float64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DBSCANF64F64
 }
 
 export declare class DecisionTreeClassifierI64I64 {
@@ -228,25 +230,26 @@ export declare class ElasticNetParameters {
   withMaxIter(maxIter: number): void
 }
 
-export declare class Euclidianf64 {
+export declare class EuclidianF64 {
   constructor()
   distance(x: Float64Array, y: Float64Array): number
 }
-export type EuclidianF64 = Euclidianf64
 
 export declare class EuclidianF64DBSCANF64Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
   withEps(eps: number): void
   constructor()
-  static withDistanceHammingF64(distance: HammingF64): EuclidianF64DBSCANF64Parameters
+  withDistanceHammingF64(distance: HammingF64): HammingF64DBSCANF64Parameters
+  withDistanceMahalanobisF64(distance: MahalanobisF64): MahalanobisF64DBSCANF64Parameters
+  withDistanceManhattanF64(distance: ManhattanF64): ManhattanF64DBSCANF64Parameters
+  withDistanceMinkowskiF64(distance: MinkowskiF64): MinkowskiF64DBSCANF64Parameters
 }
 
-export declare class Euclidiani64 {
+export declare class EuclidianI64 {
   constructor()
   distance(x: BigInt64Array, y: BigInt64Array): number
 }
-export type EuclidianI64 = Euclidiani64
 
 export declare class ExtraTreesRegressorF64BigI64 {
   static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF64BigI64
@@ -499,9 +502,21 @@ export declare class MahalanobisF64 {
   distance(x: Float64Array, y: Float64Array): number
 }
 
+export declare class MahalanobisF64DBSCANF64Parameters {
+  withMinSamples(minSamples: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withEps(eps: number): void
+}
+
 export declare class ManhattanF64 {
   constructor()
   distance(x: Float64Array, y: Float64Array): number
+}
+
+export declare class ManhattanF64DBSCANF64Parameters {
+  withMinSamples(minSamples: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withEps(eps: number): void
 }
 
 export declare class ManhattanI64 {
@@ -524,6 +539,12 @@ export type MeanSquareErrorf64 = MeanSquareErrorF64
 export declare class MinkowskiF64 {
   constructor(p: number)
   distance(x: Float64Array, y: Float64Array): number
+}
+
+export declare class MinkowskiF64DBSCANF64Parameters {
+  withMinSamples(minSamples: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withEps(eps: number): void
 }
 
 export declare class MinkowskiI64 {
@@ -768,6 +789,8 @@ export declare const enum SplitCriterion {
   ClassificationError = 2
 }
 
+export declare function trainTestSplitF64BigI64(x: DenseMatrixF64, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, BigInt64Array, BigInt64Array]
+
 export declare function trainTestSplitF64F64(x: DenseMatrixF64, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, Float64Array, Float64Array]
 
-export declare function trainTestSplitF64I64(x: DenseMatrixF64, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, BigInt64Array, BigInt64Array]
+export declare function trainTestSplitF64I64(x: DenseMatrixF64, y: Array<number>, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, Array<number>, Array<number>]

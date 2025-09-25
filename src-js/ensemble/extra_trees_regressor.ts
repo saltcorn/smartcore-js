@@ -2,6 +2,7 @@ import {
   ExtraTreesRegressorF64BigI64,
   ExtraTreesRegressorF64I64,
   ExtraTreesRegressorParameters,
+  ExtraTreesRegressorF64F64,
 } from '../../core-bindings/index.js'
 import type { XType, YType } from '../index.js'
 import { DenseMatrix } from '../linalg/index.js'
@@ -17,10 +18,11 @@ interface ExtraTreesRegressorParams {
   seed?: number
 }
 
-type ExtraTreesRegressorRs = ExtraTreesRegressorF64I64 | ExtraTreesRegressorF64BigI64
+type ExtraTreesRegressorRs = ExtraTreesRegressorF64I64 | ExtraTreesRegressorF64BigI64 | ExtraTreesRegressorF64F64
 enum EstimatorType {
   F64I64,
   F64BigI64,
+  F64F64,
 }
 
 class ExtraTreesRegressor implements Estimator<XType, YType, ExtraTreesRegressor>, Predictor<XType, YType> {
@@ -62,7 +64,7 @@ class ExtraTreesRegressor implements Estimator<XType, YType, ExtraTreesRegressor
     }
 
     if (y instanceof Float64Array) {
-      throw new Error('Unsupported data type for input arrays.')
+      this.estimator = ExtraTreesRegressorF64F64.fit(matrix.asF64(), y, this.parameters)
     } else if (y instanceof BigInt64Array) {
       this.estimator = ExtraTreesRegressorF64BigI64.fit(matrix.asF64(), y, this.parameters)
     } else if (y.every((val) => Number.isInteger(val))) {
@@ -93,6 +95,8 @@ class ExtraTreesRegressor implements Estimator<XType, YType, ExtraTreesRegressor
       estimator = ExtraTreesRegressorF64BigI64.deserialize(data)
     } else if (estimatorType === EstimatorType.F64I64) {
       estimator = ExtraTreesRegressorF64I64.deserialize(data)
+    } else if (estimatorType === EstimatorType.F64F64) {
+      estimator = ExtraTreesRegressorF64F64.deserialize(data)
     } else {
       throw new Error('Unsupported estimator type')
     }
@@ -102,4 +106,4 @@ class ExtraTreesRegressor implements Estimator<XType, YType, ExtraTreesRegressor
   }
 }
 
-export { ExtraTreesRegressor, ExtraTreesRegressorParameters }
+export { ExtraTreesRegressor }

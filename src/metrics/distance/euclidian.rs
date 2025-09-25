@@ -6,7 +6,7 @@ use smartcore::metrics::distance::{euclidian::Euclidian as LibEuclidian, Distanc
 macro_rules! euclidian_struct {
   ( $ty:ty ) => {
     paste! {
-        #[napi(js_name=""[<Euclidian $ty>]"")]
+        #[napi(js_name=""[<Euclidian $ty:upper>]"")]
         #[derive(Debug, Clone, Default)]
         pub struct [<Euclidian $ty:upper>] {
             inner: LibEuclidian<$ty>,

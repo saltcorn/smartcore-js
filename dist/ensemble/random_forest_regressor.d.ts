@@ -1,4 +1,3 @@
-import { RandomForestRegressorParameters } from '../../core-bindings/index.js';
 import type { XType, YType } from '../index.js';
 import type { Estimator, Predictor } from '../pipeline/index.js';
 interface RandomForestRegressorParams {
@@ -23,4 +22,4 @@ declare class RandomForestRegressor implements Estimator<XType, YType, RandomFor
     serialize(): Buffer<ArrayBufferLike> | undefined;
     static deserialize(data: Buffer, estimatorType: EstimatorType): RandomForestRegressor;
 }
-export { RandomForestRegressor, RandomForestRegressorParameters };
+export { RandomForestRegressor };

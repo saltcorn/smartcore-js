@@ -78,4 +78,4 @@ class RandomForestClassifier {
         return instance;
     }
 }
-export { RandomForestClassifier, RandomForestClassifierParameters };
+export { RandomForestClassifier };

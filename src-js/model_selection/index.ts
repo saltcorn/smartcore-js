@@ -1,4 +1,5 @@
-import { trainTestSplitF64F64, trainTestSplitF64I64 } from '../../core-bindings/index.js'
+import { trainTestSplitF64F64, trainTestSplitF64I64, trainTestSplitF64BigI64 } from '../../core-bindings/index.js'
+import type { XType, YType } from '../index.js'
 import { DenseMatrix } from '../linalg/index.js'
 
 interface TrainTestSplitParams {
@@ -7,28 +8,19 @@ interface TrainTestSplitParams {
   seed?: bigint
 }
 
-function trainTestSplit(
-  x: DenseMatrix | number[][],
-  y: number[] | BigInt64Array,
-  params: TrainTestSplitParams,
-): [DenseMatrix, DenseMatrix, BigInt64Array | Float64Array, BigInt64Array | Float64Array] {
+function trainTestSplit(x: XType, y: YType, params: TrainTestSplitParams): [XType, XType, YType, YType] {
   x = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
   let shuffle = params?.shuffle === undefined ? true : params?.shuffle
   if (y instanceof BigInt64Array) {
-    let [xTrain, xTest, yTrain, yTest] = trainTestSplitF64I64(x.asF64(), y, params.testSize, shuffle, params.seed)
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplitF64BigI64(x.asF64(), y, params.testSize, shuffle, params.seed)
     return [new DenseMatrix(xTrain), new DenseMatrix(xTest), yTrain, yTest]
   }
-  if (!y.every((val) => Number.isInteger(val))) {
+  if (y instanceof Float64Array || !y.every((val) => Number.isInteger(val))) {
     let ys = new Float64Array(y)
     let [xTrain, xTest, yTrain, yTest] = trainTestSplitF64F64(x.asF64(), ys, params.testSize, shuffle, params.seed)
     return [new DenseMatrix(xTrain), new DenseMatrix(xTest), yTrain, yTest]
   }
-  let ys = new BigInt64Array(
-    y.map((n) => {
-      return BigInt(n)
-    }),
-  )
-  let [xTrain, xTest, yTrain, yTest] = trainTestSplitF64I64(x.asF64(), ys, params?.testSize, shuffle, params?.seed)
+  let [xTrain, xTest, yTrain, yTest] = trainTestSplitF64I64(x.asF64(), y, params?.testSize, shuffle, params?.seed)
   return [new DenseMatrix(xTrain), new DenseMatrix(xTest), yTrain, yTest]
 }
 
