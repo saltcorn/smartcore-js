@@ -115,6 +115,7 @@ export const JsVecF64Ref = __napiModule.exports.JsVecF64Ref
 export const JsVecI64Ref = __napiModule.exports.JsVecI64Ref
 export const Kernels = __napiModule.exports.Kernels
 export const KFold = __napiModule.exports.KFold
+export const KMeansF64BigI64 = __napiModule.exports.KMeansF64BigI64
 export const KMeansF64F64 = __napiModule.exports.KMeansF64F64
 export const KMeansF64I64 = __napiModule.exports.KMeansF64I64
 export const KMeansParameters = __napiModule.exports.KMeansParameters

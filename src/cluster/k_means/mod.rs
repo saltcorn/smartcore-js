@@ -15,16 +15,16 @@ use crate::linalg::basic::matrix::DenseMatrixF64;
 use parameters::KMeansParameters;
 
 macro_rules! k_means_nb_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $y_mod: literal, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<KMeans $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<KMeans $x:upper $y_mod $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<KMeans $x:upper $y:upper>] {
+        pub struct [<KMeans $x:upper $y_mod $y:upper>] {
             inner: LibKMeans<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
         #[napi]
-        impl [<KMeans $x:upper $y:upper>] {
+        impl [<KMeans $x:upper $y_mod $y:upper>] {
             #[napi(factory)]
             pub fn fit(x: &$xs, parameters: &KMeansParameters) -> Result<Self> {
                 let inner = LibKMeans::fit(
@@ -41,7 +41,7 @@ macro_rules! k_means_nb_struct {
                 .inner
                 .predict(x as &DenseMatrix<$x>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
+                Ok(prediction_result.into())
             }
 
             #[napi]
@@ -59,7 +59,7 @@ macro_rules! k_means_nb_struct {
             }
         }
 
-        impl Deref for [<KMeans $x:upper $y:upper>] {
+        impl Deref for [<KMeans $x:upper $y_mod $y:upper>] {
             type Target = LibKMeans<$x, $y, DenseMatrix<$x>, Vec<$y>>;
 
             fn deref(&self) -> &Self::Target {
@@ -70,5 +70,6 @@ macro_rules! k_means_nb_struct {
   };
 }
 
-k_means_nb_struct! {f64, f64, DenseMatrixF64, Float64Array}
-k_means_nb_struct! {f64, i64, DenseMatrixF64, BigInt64Array}
+k_means_nb_struct! {f64, f64, "", DenseMatrixF64, Float64Array}
+k_means_nb_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
+k_means_nb_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}

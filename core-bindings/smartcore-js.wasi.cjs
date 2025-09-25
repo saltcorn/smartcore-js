@@ -167,6 +167,7 @@ module.exports.JsVecF64Ref = __napiModule.exports.JsVecF64Ref
 module.exports.JsVecI64Ref = __napiModule.exports.JsVecI64Ref
 module.exports.Kernels = __napiModule.exports.Kernels
 module.exports.KFold = __napiModule.exports.KFold
+module.exports.KMeansF64BigI64 = __napiModule.exports.KMeansF64BigI64
 module.exports.KMeansF64F64 = __napiModule.exports.KMeansF64F64
 module.exports.KMeansF64I64 = __napiModule.exports.KMeansF64I64
 module.exports.KMeansParameters = __napiModule.exports.KMeansParameters

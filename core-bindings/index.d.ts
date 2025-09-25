@@ -363,6 +363,13 @@ export declare class KFold {
   withNSplits(nSplits: number): void
 }
 
+export declare class KMeansF64BigI64 {
+  static fit(x: DenseMatrixF64, parameters: KMeansParameters): KMeansF64BigI64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KMeansF64BigI64
+}
+
 export declare class KMeansF64F64 {
   static fit(x: DenseMatrixF64, parameters: KMeansParameters): KMeansF64F64
   predict(x: DenseMatrixF64): Float64Array
@@ -372,7 +379,7 @@ export declare class KMeansF64F64 {
 
 export declare class KMeansF64I64 {
   static fit(x: DenseMatrixF64, parameters: KMeansParameters): KMeansF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
+  predict(x: DenseMatrixF64): Array<number>
   serialize(): Buffer
   static deserialize(data: Buffer): KMeansF64I64
 }

@@ -6,3 +6,4 @@ export * as dataset from './dataset/index.js';
 export * as model_selection from './model_selection/index.js';
 export * as metrics from './metrics/index.js';
 export * as pipeline from './pipeline/index.js';
+export * as cluster from './cluster/index.js';
