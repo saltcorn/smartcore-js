@@ -25,7 +25,7 @@ enum EstimatorType {
 }
 
 class RandomForestClassifier implements Estimator<XType, YType, RandomForestClassifier>, Predictor<XType, YType> {
-  parameters: RandomForestClassifierParameters
+  private parameters: RandomForestClassifierParameters
   private estimator: RandomForestClassifierRs | null = null
 
   constructor(params?: RandomForestClassifierParams) {

@@ -10,6 +10,11 @@ import type { YType, XType } from '../index.js'
 
 type LogisticRegressionRs = LogisticRegressionF64I64 | LogisticRegressionF64BigI64
 
+enum EstimatorType {
+  F64BigI64,
+  F64I64,
+}
+
 type LogisticRegressionParameters = LogisticRegressionParametersF64
 
 interface LogisticRegressionParametersValues {
@@ -85,6 +90,20 @@ class LogisticRegression
     } catch (e) {
       throw e
     }
+  }
+
+  static deserialize(data: Buffer, estimatorType: EstimatorType): LogisticRegression {
+    let estimator
+    if (estimatorType === EstimatorType.F64BigI64) {
+      estimator = LogisticRegressionF64BigI64.deserialize(data)
+    } else if (estimatorType === EstimatorType.F64I64) {
+      estimator = LogisticRegressionF64I64.deserialize(data)
+    } else {
+      throw new Error('Unsupported estimator type')
+    }
+    let instance = new LogisticRegression()
+    instance.estimator = estimator
+    return instance
   }
 }
 
