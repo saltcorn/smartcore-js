@@ -1,13 +1,7 @@
 import { type KNNAlgorithmName, type KNNWeightFunction } from '../../../core-bindings/index.js';
 import type { XType, YType } from '../../index.js';
+import { DistanceType } from '../../metrics/index.js';
 import type { Estimator, Predictor } from '../../pipeline/index.js';
-declare enum DistanceType {
-    EUCLIDIAN = 0,
-    HAMMING = 1,
-    MANHATTAN = 2,
-    MAHALANOBIS = 3,
-    MINKOWSKI = 4
-}
 interface IKNNClassifierParameters {
     k?: number;
     algorithm?: KNNAlgorithmName;

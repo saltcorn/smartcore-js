@@ -1,17 +1,10 @@
 import {} from '../../../core-bindings/index.js';
+import { DistanceType } from '../../metrics/index.js';
 import { KNNRegressorEuclidian } from './euclidian.js';
 import { KNNRegressorHamming } from './hamming.js';
 import { KNNRegressorMahalanobis } from './mahalanobis.js';
 import { KNNRegressorManhattan } from './manhattan.js';
 import { KNNRegressorMinkowski } from './minkowski.js';
-var DistanceType;
-(function (DistanceType) {
-    DistanceType[DistanceType["EUCLIDIAN"] = 0] = "EUCLIDIAN";
-    DistanceType[DistanceType["HAMMING"] = 1] = "HAMMING";
-    DistanceType[DistanceType["MANHATTAN"] = 2] = "MANHATTAN";
-    DistanceType[DistanceType["MAHALANOBIS"] = 3] = "MAHALANOBIS";
-    DistanceType[DistanceType["MINKOWSKI"] = 4] = "MINKOWSKI";
-})(DistanceType || (DistanceType = {}));
 var EstimatorType;
 (function (EstimatorType) {
     EstimatorType[EstimatorType["F64F64"] = 0] = "F64F64";

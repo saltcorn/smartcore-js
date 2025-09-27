@@ -22,4 +22,12 @@ function accuracyScore(yTrue: YType, yPred: YType) {
   throw new Error('Unsupported data type for input arrays.')
 }
 
-export { accuracyScore }
+enum DistanceType {
+  EUCLIDIAN,
+  HAMMING,
+  MANHATTAN,
+  MAHALANOBIS,
+  MINKOWSKI,
+}
+
+export { accuracyScore, DistanceType }

@@ -23,7 +23,7 @@ let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
 let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
 let { trainTestSplit } = modelSelection
-let { accuracyScore } = metrics
+let { accuracyScore, DistanceType } = metrics
 let { makePipeline } = pipeline
 
 describe('Pipelines', () => {
@@ -302,7 +302,7 @@ describe('Pipelines', () => {
   it('OneHotEncoder + KNNClassifier', () => {
     let pipe = makePipeline([
       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
-      ['knnclassifier', new KNNClassifier()],
+      ['knnclassifier', new KNNClassifier({ distance: DistanceType.HAMMING })],
     ])
     let irisData = loadIris({ returnXY: true, unsigned: true })
     let [x, y] = irisData instanceof Array ? irisData : []
@@ -318,7 +318,7 @@ describe('Pipelines', () => {
   it('OneHotEncoder + KNNRegressor', () => {
     let pipe = makePipeline([
       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
-      ['knnclassifier', new KNNRegressor()],
+      ['knnclassifier', new KNNRegressor({ distance: DistanceType.MINKOWSKI, p: 10 })],
     ])
     let bostonData = loadBoston({ returnXY: true, unsigned: true })
     let [x, y] = bostonData instanceof Array ? bostonData : []

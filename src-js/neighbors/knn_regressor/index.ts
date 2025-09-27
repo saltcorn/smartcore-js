@@ -1,19 +1,12 @@
 import { type KNNAlgorithmName, type KNNWeightFunction } from '../../../core-bindings/index.js'
 import type { XType, YType } from '../../index.js'
+import { DistanceType } from '../../metrics/index.js'
 import type { Estimator, Predictor } from '../../pipeline/index.js'
 import { KNNRegressorEuclidian } from './euclidian.js'
 import { KNNRegressorHamming } from './hamming.js'
 import { KNNRegressorMahalanobis } from './mahalanobis.js'
 import { KNNRegressorManhattan } from './manhattan.js'
 import { KNNRegressorMinkowski } from './minkowski.js'
-
-enum DistanceType {
-  EUCLIDIAN,
-  HAMMING,
-  MANHATTAN,
-  MAHALANOBIS,
-  MINKOWSKI,
-}
 
 interface IKNNRegressorParameters {
   k?: number

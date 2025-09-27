@@ -22,4 +22,12 @@ function accuracyScore(yTrue, yPred) {
     }
     throw new Error('Unsupported data type for input arrays.');
 }
-export { accuracyScore };
+var DistanceType;
+(function (DistanceType) {
+    DistanceType[DistanceType["EUCLIDIAN"] = 0] = "EUCLIDIAN";
+    DistanceType[DistanceType["HAMMING"] = 1] = "HAMMING";
+    DistanceType[DistanceType["MANHATTAN"] = 2] = "MANHATTAN";
+    DistanceType[DistanceType["MAHALANOBIS"] = 3] = "MAHALANOBIS";
+    DistanceType[DistanceType["MINKOWSKI"] = 4] = "MINKOWSKI";
+})(DistanceType || (DistanceType = {}));
+export { accuracyScore, DistanceType };
