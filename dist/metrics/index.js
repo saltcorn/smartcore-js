@@ -1,4 +1,5 @@
-import { AccuracyF64, AccuracyI64 } from '../../core-bindings/index.js';
+import { AccuracyF64, AccuracyI64, AccuracyU64 } from '../../core-bindings/index.js';
+import {} from '../index.js';
 function toBigInt64Array(values) {
     if (!values.every((n) => Number.isInteger(n))) {
         throw new Error("Can't convert an Array containing non-integers to a BigInt64Array.");
@@ -12,6 +13,9 @@ function accuracyScore(yTrue, yPred) {
     }
     else if (yTrue instanceof BigInt64Array && yPred instanceof BigInt64Array) {
         return new AccuracyI64().getScore(yTrue, yPred);
+    }
+    else if (yTrue instanceof BigUint64Array && yPred instanceof BigUint64Array) {
+        return new AccuracyU64().getScore(yTrue, yPred);
     }
     else if (yTrue instanceof Array && yPred instanceof Array) {
         return new AccuracyI64().getScore(toBigInt64Array(yTrue), toBigInt64Array(yPred));

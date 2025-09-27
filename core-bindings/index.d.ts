@@ -12,20 +12,26 @@ export declare class AccuracyI64 {
 }
 export type Accuracyi64 = AccuracyI64
 
+export declare class AccuracyU64 {
+  constructor()
+  getScore(yTrue: BigUint64Array, yPred: BigUint64Array): number
+}
+export type Accuracyu64 = AccuracyU64
+
 export declare class AUCF64 {
   constructor()
   getScore(yTrue: Float64Array, yPred: Float64Array): number
 }
 export type AUCf64 = AUCF64
 
-export declare class BernoulliNBF64U64 {
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: BernoulliNBParametersF64): BernoulliNBF64U64
+export declare class BernoulliNBF64BigU64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: BernoulliNBF64Parameters): BernoulliNBF64BigU64
   predict(x: DenseMatrixF64): BigUint64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBF64U64
+  static deserialize(data: Buffer): BernoulliNBF64BigU64
 }
 
-export declare class BernoulliNBParametersF64 {
+export declare class BernoulliNBF64Parameters {
   constructor()
   withPriors(priors: Float64Array): void
   withAlpha(alpha: number): void
@@ -40,16 +46,16 @@ export declare class BreastCancer {
   loadDataset(): DatasetF64I64
 }
 
+export declare class CategoricalNBBigU64 {
+  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: CategoricalNBParameters): CategoricalNBBigU64
+  predict(x: DenseMatrixU64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): CategoricalNBBigU64
+}
+
 export declare class CategoricalNBParameters {
   constructor()
   withAlpha(alpha: number): void
-}
-
-export declare class CategoricalNBU64 {
-  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: CategoricalNBParameters): CategoricalNBU64
-  predict(x: DenseMatrixU64): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): CategoricalNBU64
 }
 
 export declare class CrossValidationResult {
@@ -93,10 +99,22 @@ export declare class DatasetF64I64 {
   get targetNames(): Array<string>
   get description(): string
   denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF64
+  withTargetUnsigned(): DatasetF64U64
 }
 
 export declare class DatasetF64I64JsVecRef {
   asArray(): BigInt64Array
+}
+
+export declare class DatasetF64U64 {
+  get data(): Float64Array
+  get target(): BigUint64Array
+  get numSamples(): number
+  get numFeatures(): number
+  get featureNames(): Array<string>
+  get targetNames(): Array<string>
+  get description(): string
+  denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF64
 }
 
 export declare class DBSCANF64EuclidianF64Parameters {
@@ -268,6 +286,22 @@ export declare class Digits {
   loadDataset(): DatasetF64F64
 }
 
+export declare class ElasticNetF64BigI64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: ElasticNetParameters): ElasticNetF64BigI64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ElasticNetF64BigI64
+}
+
+export declare class ElasticNetF64BigU64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: ElasticNetParameters): ElasticNetF64BigU64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ElasticNetF64BigU64
+}
+
 export declare class ElasticNetF64F64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: ElasticNetParameters): ElasticNetF64F64
@@ -278,8 +312,8 @@ export declare class ElasticNetF64F64 {
 
 export declare class ElasticNetF64I64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: ElasticNetParameters): ElasticNetF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: ElasticNetParameters): ElasticNetF64I64
+  predict(x: DenseMatrixF64): Array<number>
   serialize(): Buffer
   static deserialize(data: Buffer): ElasticNetF64I64
 }
@@ -303,11 +337,23 @@ export declare class EuclidianI64 {
   distance(x: BigInt64Array, y: BigInt64Array): number
 }
 
+export declare class EuclidianU64 {
+  constructor()
+  distance(x: BigUint64Array, y: BigUint64Array): number
+}
+
 export declare class ExtraTreesRegressorF64BigI64 {
   static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF64BigI64
   predict(x: DenseMatrixF64): BigInt64Array
   serialize(): Buffer
   static deserialize(data: Buffer): ExtraTreesRegressorF64BigI64
+}
+
+export declare class ExtraTreesRegressorF64BigU64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: ExtraTreesRegressorParameters): ExtraTreesRegressorF64BigU64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ExtraTreesRegressorF64BigU64
 }
 
 export declare class ExtraTreesRegressorF64F64 {
@@ -341,11 +387,11 @@ export declare class F1F64 {
 }
 export type F1f64 = F1F64
 
-export declare class GaussianNBF64U64 {
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: GaussianNBParameters): GaussianNBF64U64
+export declare class GaussianNBF64BigU64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: GaussianNBParameters): GaussianNBF64BigU64
   predict(x: DenseMatrixF64): BigUint64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): GaussianNBF64U64
+  static deserialize(data: Buffer): GaussianNBF64BigU64
 }
 
 export declare class GaussianNBParameters {
@@ -369,11 +415,22 @@ export declare class HammingI64 {
   distance(x: BigInt64Array, y: BigInt64Array): number
 }
 
+export declare class HammingU64 {
+  constructor()
+  distance(x: BigUint64Array, y: BigUint64Array): number
+}
+
 export declare class HCVScoreI64 {
   constructor()
   getScore(yTrue: BigInt64Array, yPred: BigInt64Array): number
 }
 export type HCVScorei64 = HCVScoreI64
+
+export declare class HCVScoreU64 {
+  constructor()
+  getScore(yTrue: BigUint64Array, yPred: BigUint64Array): number
+}
+export type HCVScoreu64 = HCVScoreU64
 
 export declare class Iris {
   loadDataset(): DatasetF64I64
@@ -439,11 +496,174 @@ export declare class KMeansParameters {
   withK(k: number): void
 }
 
-export declare class KNNClassifierF64I64 {
-  static fit(x: DenseMatrixF64, y: BigInt64Array): KNNClassifierF64I64
+export declare class KNNClassifierF64BigI64EuclidianF64 {
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: KNNClassifierF64EuclidianF64Parameters): KNNClassifierF64BigI64EuclidianF64
   predict(x: DenseMatrixF64): BigInt64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierF64I64
+  static deserialize(data: Buffer): KNNClassifierF64BigI64EuclidianF64
+}
+
+export declare class KNNClassifierF64BigI64HammingF64 {
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: KNNClassifierF64HammingF64Parameters): KNNClassifierF64BigI64HammingF64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64BigI64HammingF64
+}
+
+export declare class KNNClassifierF64BigI64MahalanobisF64 {
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: KNNClassifierF64MahalanobisF64Parameters): KNNClassifierF64BigI64MahalanobisF64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64BigI64MahalanobisF64
+}
+
+export declare class KNNClassifierF64BigI64ManhattanF64 {
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: KNNClassifierF64ManhattanF64Parameters): KNNClassifierF64BigI64ManhattanF64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64BigI64ManhattanF64
+}
+
+export declare class KNNClassifierF64BigI64MinkowskiF64 {
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: KNNClassifierF64MinkowskiF64Parameters): KNNClassifierF64BigI64MinkowskiF64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64BigI64MinkowskiF64
+}
+
+export declare class KNNClassifierF64BigU64EuclidianF64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: KNNClassifierF64EuclidianF64Parameters): KNNClassifierF64BigU64EuclidianF64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64BigU64EuclidianF64
+}
+
+export declare class KNNClassifierF64BigU64HammingF64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: KNNClassifierF64HammingF64Parameters): KNNClassifierF64BigU64HammingF64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64BigU64HammingF64
+}
+
+export declare class KNNClassifierF64BigU64MahalanobisF64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: KNNClassifierF64MahalanobisF64Parameters): KNNClassifierF64BigU64MahalanobisF64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64BigU64MahalanobisF64
+}
+
+export declare class KNNClassifierF64BigU64ManhattanF64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: KNNClassifierF64ManhattanF64Parameters): KNNClassifierF64BigU64ManhattanF64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64BigU64ManhattanF64
+}
+
+export declare class KNNClassifierF64BigU64MinkowskiF64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: KNNClassifierF64MinkowskiF64Parameters): KNNClassifierF64BigU64MinkowskiF64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64BigU64MinkowskiF64
+}
+
+export declare class KNNClassifierF64EuclidianF64Parameters {
+  withK(k: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withWeight(weight: KNNWeightFunction): void
+  constructor()
+  withDistanceHammingF64(distance: HammingF64): KNNClassifierF64HammingF64Parameters
+  withDistanceMahalanobisF64(distance: MahalanobisF64): KNNClassifierF64MahalanobisF64Parameters
+  withDistanceManhattanF64(distance: ManhattanF64): KNNClassifierF64ManhattanF64Parameters
+  withDistanceMinkowskiF64(distance: MinkowskiF64): KNNClassifierF64MinkowskiF64Parameters
+}
+
+export declare class KNNClassifierF64HammingF64Parameters {
+  withK(k: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withWeight(weight: KNNWeightFunction): void
+  withDistanceEuclidianF64(distance: EuclidianF64): KNNClassifierF64EuclidianF64Parameters
+  withDistanceMahalanobisF64(distance: MahalanobisF64): KNNClassifierF64MahalanobisF64Parameters
+  withDistanceManhattanF64(distance: ManhattanF64): KNNClassifierF64ManhattanF64Parameters
+  withDistanceMinkowskiF64(distance: MinkowskiF64): KNNClassifierF64MinkowskiF64Parameters
+}
+
+export declare class KNNClassifierF64I64EuclidianF64 {
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: KNNClassifierF64EuclidianF64Parameters): KNNClassifierF64I64EuclidianF64
+  predict(x: DenseMatrixF64): Array<number>
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64I64EuclidianF64
+}
+
+export declare class KNNClassifierF64I64HammingF64 {
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: KNNClassifierF64HammingF64Parameters): KNNClassifierF64I64HammingF64
+  predict(x: DenseMatrixF64): Array<number>
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64I64HammingF64
+}
+
+export declare class KNNClassifierF64I64MahalanobisF64 {
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: KNNClassifierF64MahalanobisF64Parameters): KNNClassifierF64I64MahalanobisF64
+  predict(x: DenseMatrixF64): Array<number>
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64I64MahalanobisF64
+}
+
+export declare class KNNClassifierF64I64ManhattanF64 {
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: KNNClassifierF64ManhattanF64Parameters): KNNClassifierF64I64ManhattanF64
+  predict(x: DenseMatrixF64): Array<number>
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64I64ManhattanF64
+}
+
+export declare class KNNClassifierF64I64MinkowskiF64 {
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: KNNClassifierF64MinkowskiF64Parameters): KNNClassifierF64I64MinkowskiF64
+  predict(x: DenseMatrixF64): Array<number>
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNClassifierF64I64MinkowskiF64
+}
+
+export declare class KNNClassifierF64MahalanobisF64Parameters {
+  withK(k: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withWeight(weight: KNNWeightFunction): void
+  withDistanceEuclidianF64(distance: EuclidianF64): KNNClassifierF64EuclidianF64Parameters
+  withDistanceHammingF64(distance: HammingF64): KNNClassifierF64HammingF64Parameters
+  withDistanceManhattanF64(distance: ManhattanF64): KNNClassifierF64ManhattanF64Parameters
+  withDistanceMinkowskiF64(distance: MinkowskiF64): KNNClassifierF64MinkowskiF64Parameters
+}
+
+export declare class KNNClassifierF64ManhattanF64Parameters {
+  withK(k: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withWeight(weight: KNNWeightFunction): void
+  withDistanceEuclidianF64(distance: EuclidianF64): KNNClassifierF64EuclidianF64Parameters
+  withDistanceHammingF64(distance: HammingF64): KNNClassifierF64HammingF64Parameters
+  withDistanceMahalanobisF64(distance: MahalanobisF64): KNNClassifierF64MahalanobisF64Parameters
+  withDistanceMinkowskiF64(distance: MinkowskiF64): KNNClassifierF64MinkowskiF64Parameters
+}
+
+export declare class KNNClassifierF64MinkowskiF64Parameters {
+  withK(k: number): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withWeight(weight: KNNWeightFunction): void
+  withDistanceEuclidianF64(distance: EuclidianF64): KNNClassifierF64EuclidianF64Parameters
+  withDistanceHammingF64(distance: HammingF64): KNNClassifierF64HammingF64Parameters
+  withDistanceMahalanobisF64(distance: MahalanobisF64): KNNClassifierF64MahalanobisF64Parameters
+  withDistanceManhattanF64(distance: ManhattanF64): KNNClassifierF64ManhattanF64Parameters
+}
+
+export declare class KNNRegressorF64BigI64 {
+  static fit(x: DenseMatrixF64, y: BigInt64Array): KNNRegressorF64BigI64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNRegressorF64BigI64
+}
+
+export declare class KNNRegressorF64BigU64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array): KNNRegressorF64BigU64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): KNNRegressorF64BigU64
 }
 
 export declare class KNNRegressorF64F64 {
@@ -454,8 +674,8 @@ export declare class KNNRegressorF64F64 {
 }
 
 export declare class KNNRegressorF64I64 {
-  static fit(x: DenseMatrixF64, y: BigInt64Array): KNNRegressorF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
+  static fit(x: DenseMatrixF64, y: Array<number>): KNNRegressorF64I64
+  predict(x: DenseMatrixF64): Array<number>
   serialize(): Buffer
   static deserialize(data: Buffer): KNNRegressorF64I64
 }
@@ -476,6 +696,22 @@ export declare class KNNRegressorParametersF64HammingF64 {
 }
 export type HammingF64KNNRegressorParametersF64 = KNNRegressorParametersF64HammingF64
 
+export declare class LassoF64BigI64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: LassoParameters): LassoF64BigI64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LassoF64BigI64
+}
+
+export declare class LassoF64BigU64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: LassoParameters): LassoF64BigU64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LassoF64BigU64
+}
+
 export declare class LassoF64F64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: LassoParameters): LassoF64F64
@@ -486,8 +722,8 @@ export declare class LassoF64F64 {
 
 export declare class LassoF64I64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: LassoParameters): LassoF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: LassoParameters): LassoF64I64
+  predict(x: DenseMatrixF64): Array<number>
   serialize(): Buffer
   static deserialize(data: Buffer): LassoF64I64
 }
@@ -500,20 +736,36 @@ export declare class LassoParameters {
   withMaxIter(maxIter: number): void
 }
 
+export declare class LinearRegressionF64BigI64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: LinearRegressionParameters): LinearRegressionF64BigI64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LinearRegressionF64BigI64
+}
+
+export declare class LinearRegressionF64BigU64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: LinearRegressionParameters): LinearRegressionF64BigU64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LinearRegressionF64BigU64
+}
+
 export declare class LinearRegressionF64F64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Float64Array, parameters: LinearRegressionParameters): LinearRegressionF64F64
+  predict(x: DenseMatrixF64): Float64Array
   serialize(): Buffer
   static deserialize(data: Buffer): LinearRegressionF64F64
-  predict(x: DenseMatrixF64): Float64Array
 }
 
 export declare class LinearRegressionF64I64 {
   constructor()
   static fit(x: DenseMatrixF64, y: Array<number>, parameters: LinearRegressionParameters): LinearRegressionF64I64
+  predict(x: DenseMatrixF64): Array<number>
   serialize(): Buffer
   static deserialize(data: Buffer): LinearRegressionF64I64
-  predict(x: DenseMatrixF64): Array<number>
 }
 
 export declare class LinearRegressionParameters {
@@ -527,6 +779,14 @@ export declare class LogisticRegressionF64BigI64 {
   predict(x: DenseMatrixF64): BigInt64Array
   serialize(): Buffer
   static deserialize(data: Buffer): LogisticRegressionF64BigI64
+}
+
+export declare class LogisticRegressionF64BigU64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: LogisticRegressionParametersF64): LogisticRegressionF64BigU64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LogisticRegressionF64BigU64
 }
 
 export declare class LogisticRegressionF64I64 {
@@ -558,6 +818,11 @@ export declare class ManhattanI64 {
   distance(x: BigInt64Array, y: BigInt64Array): number
 }
 
+export declare class ManhattanU64 {
+  constructor()
+  distance(x: BigUint64Array, y: BigUint64Array): number
+}
+
 export declare class MeanAbsoluteErrorF64 {
   constructor()
   getScore(yTrue: Float64Array, yPred: Float64Array): number
@@ -580,17 +845,22 @@ export declare class MinkowskiI64 {
   distance(x: BigInt64Array, y: BigInt64Array): number
 }
 
+export declare class MinkowskiU64 {
+  constructor(p: number)
+  distance(x: BigUint64Array, y: BigUint64Array): number
+}
+
 export declare class MultinomialNBParameters {
   constructor()
   withAlpha(alpha: number): void
   withPriors(priors: Float64Array): void
 }
 
-export declare class MultinomialNBU64U64 {
-  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: MultinomialNBParameters): MultinomialNBU64U64
+export declare class MultinomialNBU64BigU64 {
+  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: MultinomialNBParameters): MultinomialNBU64BigU64
   predict(x: DenseMatrixU64): BigUint64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): MultinomialNBU64U64
+  static deserialize(data: Buffer): MultinomialNBU64BigU64
 }
 
 export declare class OneHotEncoderF64 {
@@ -633,11 +903,24 @@ export declare class R2I64 {
 }
 export type R2i64 = R2I64
 
+export declare class R2U64 {
+  constructor()
+  getScore(yTrue: BigUint64Array, yPred: BigUint64Array): number
+}
+export type R2u64 = R2U64
+
 export declare class RandomForestClassifierF64BigI64 {
   static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: RandomForestClassifierParameters): RandomForestClassifierF64BigI64
   predict(x: DenseMatrixF64): BigInt64Array
   serialize(): Buffer
   static deserialize(data: Buffer): RandomForestClassifierF64BigI64
+}
+
+export declare class RandomForestClassifierF64BigU64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: RandomForestClassifierParameters): RandomForestClassifierF64BigU64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestClassifierF64BigU64
 }
 
 export declare class RandomForestClassifierF64I64 {
@@ -664,6 +947,13 @@ export declare class RandomForestRegressorF64BigI64 {
   predict(x: DenseMatrixF64): BigInt64Array
   serialize(): Buffer
   static deserialize(data: Buffer): RandomForestRegressorF64BigI64
+}
+
+export declare class RandomForestRegressorF64BigU64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64BigU64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestRegressorF64BigU64
 }
 
 export declare class RandomForestRegressorF64F64 {
@@ -697,15 +987,39 @@ export declare class RecallF64 {
 }
 export type Recallf64 = RecallF64
 
+export declare class RidgeRegressionF64BigI64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: RidgeRegressionF64Parameters): RidgeRegressionF64BigI64
+  predict(x: DenseMatrixF64): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RidgeRegressionF64BigI64
+}
+
+export declare class RidgeRegressionF64BigU64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: RidgeRegressionF64Parameters): RidgeRegressionF64BigU64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RidgeRegressionF64BigU64
+}
+
 export declare class RidgeRegressionF64F64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: Float64Array, parameters: RidgeRegressionParametersF64): RidgeRegressionF64F64
+  static fit(x: DenseMatrixF64, y: Float64Array, parameters: RidgeRegressionF64Parameters): RidgeRegressionF64F64
   predict(x: DenseMatrixF64): Float64Array
   serialize(): Buffer
   static deserialize(data: Buffer): RidgeRegressionF64F64
 }
 
-export declare class RidgeRegressionParametersF64 {
+export declare class RidgeRegressionF64I64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: Array<number>, parameters: RidgeRegressionF64Parameters): RidgeRegressionF64I64
+  predict(x: DenseMatrixF64): Array<number>
+  serialize(): Buffer
+  static deserialize(data: Buffer): RidgeRegressionF64I64
+}
+
+export declare class RidgeRegressionF64Parameters {
   constructor()
   withAlpha(alpha: number): void
   withNormalize(normalize: boolean): void
@@ -818,6 +1132,8 @@ export declare const enum SplitCriterion {
 }
 
 export declare function trainTestSplitF64BigI64(x: DenseMatrixF64, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, BigInt64Array, BigInt64Array]
+
+export declare function trainTestSplitF64BigU64(x: DenseMatrixF64, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, BigUint64Array, BigUint64Array]
 
 export declare function trainTestSplitF64F64(x: DenseMatrixF64, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, Float64Array, Float64Array]
 

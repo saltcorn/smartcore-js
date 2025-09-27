@@ -38,3 +38,4 @@ macro_rules! cluster_hcv_struct {
 }
 
 cluster_hcv_struct! {i64, BigInt64Array}
+cluster_hcv_struct! {u64, BigUint64Array}

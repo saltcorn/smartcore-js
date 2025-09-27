@@ -1,5 +1,6 @@
 import {
   RandomForestClassifierF64BigI64,
+  RandomForestClassifierF64BigU64,
   RandomForestClassifierF64I64,
   RandomForestClassifierParameters,
 } from '../../core-bindings/index.js'
@@ -18,10 +19,15 @@ interface RandomForestClassifierParams {
   keepSamples?: boolean
 }
 
-type RandomForestClassifierRs = RandomForestClassifierF64I64 | RandomForestClassifierF64BigI64
+type RandomForestClassifierRs =
+  | RandomForestClassifierF64I64
+  | RandomForestClassifierF64BigI64
+  | RandomForestClassifierF64BigU64
+
 enum EstimatorType {
   F64I64,
   F64BigI64,
+  F64BigU64,
 }
 
 class RandomForestClassifier implements Estimator<XType, YType, RandomForestClassifier>, Predictor<XType, YType> {
@@ -66,6 +72,8 @@ class RandomForestClassifier implements Estimator<XType, YType, RandomForestClas
       throw new Error('Unsupported data type for input arrays.')
     } else if (y instanceof BigInt64Array) {
       this.estimator = RandomForestClassifierF64BigI64.fit(matrix.asF64(), y, this.parameters)
+    } else if (y instanceof BigUint64Array) {
+      this.estimator = RandomForestClassifierF64BigU64.fit(matrix.asF64(), y, this.parameters)
     } else if (y.every((val) => Number.isInteger(val))) {
       this.estimator = RandomForestClassifierF64I64.fit(matrix.asF64(), y, this.parameters)
     } else {
@@ -89,16 +97,20 @@ class RandomForestClassifier implements Estimator<XType, YType, RandomForestClas
   }
 
   static deserialize(data: Buffer, estimatorType: EstimatorType): RandomForestClassifier {
-    let estimator
-    if (estimatorType === EstimatorType.F64BigI64) {
-      estimator = RandomForestClassifierF64BigI64.deserialize(data)
-    } else if (estimatorType === EstimatorType.F64I64) {
-      estimator = RandomForestClassifierF64I64.deserialize(data)
-    } else {
-      throw new Error('Unsupported estimator type')
-    }
     let instance = new RandomForestClassifier()
-    instance.estimator = estimator
+    switch (estimatorType) {
+      case EstimatorType.F64BigI64:
+        instance.estimator = RandomForestClassifierF64BigI64.deserialize(data)
+        break
+      case EstimatorType.F64BigU64:
+        instance.estimator = RandomForestClassifierF64BigU64.deserialize(data)
+        break
+      case EstimatorType.F64I64:
+        instance.estimator = RandomForestClassifierF64I64.deserialize(data)
+        break
+      default:
+        throw new Error(`Unrecognized estimator type: '${estimatorType}'`)
+    }
     return instance
   }
 }

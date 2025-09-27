@@ -16,15 +16,15 @@ use crate::linalg::basic::matrix::DenseMatrixF64;
 pub use parameters::LinearRegressionParameters;
 
 macro_rules! linear_regression_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<LinearRegression $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<LinearRegression $x:upper $y_mod $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<LinearRegression $x:upper $y:upper>] {
+        pub struct [<LinearRegression $x:upper $y_mod $y:upper>] {
             inner: LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
-        impl Default for [<LinearRegression $x:upper $y:upper>] {
+        impl Default for [<LinearRegression $x:upper $y_mod $y:upper>] {
             fn default() -> Self {
                 Self {
                     inner: LibLinearRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
@@ -33,7 +33,7 @@ macro_rules! linear_regression_struct {
         }
 
         #[napi]
-        impl [<LinearRegression $x:upper $y:upper>] {
+        impl [<LinearRegression $x:upper $y_mod $y:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self::default()
@@ -55,6 +55,15 @@ macro_rules! linear_regression_struct {
             }
 
             #[napi]
+            pub fn predict(&self, x: &$xs) -> Result<$ys> {
+                let prediction_result = self
+                .inner
+                .predict(x as &DenseMatrix<$x>)
+                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                Ok(prediction_result.into())
+            }
+
+            #[napi]
             pub fn serialize(&self) -> Result<Buffer> {
                 let encoded = encode_to_vec(&self.inner, standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
@@ -69,7 +78,7 @@ macro_rules! linear_regression_struct {
             }
         }
 
-        impl AsRef<LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<LinearRegression $x:upper $y:upper>] {
+        impl AsRef<LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<LinearRegression $x:upper $y_mod $y:upper>] {
             fn as_ref(&self) -> &LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>> {
                 &self.inner
             }
@@ -78,36 +87,7 @@ macro_rules! linear_regression_struct {
   };
 }
 
-macro_rules! linear_regression_struct_predict_impl {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
-    paste! {
-        #[napi]
-        impl [<LinearRegression $x:upper $y:upper>] {
-            #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
-                let prediction_result = self
-                .inner
-                .predict(x as &DenseMatrix<$x>)
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
-            }
-        }
-    }
-  };
-}
-
-linear_regression_struct! {f64, f64, DenseMatrixF64, Float64Array}
-linear_regression_struct_predict_impl! {f64, f64, DenseMatrixF64, Float64Array}
-linear_regression_struct! {f64, i64, DenseMatrixF64, Vec<i64>}
-
-#[napi]
-impl LinearRegressionF64I64 {
-  #[napi]
-  pub fn predict(&self, x: &DenseMatrixF64) -> Result<Vec<i64>> {
-    let prediction_result = self
-      .inner
-      .predict(x as &DenseMatrix<f64>)
-      .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-    Ok(prediction_result)
-  }
-}
+linear_regression_struct! {f64, f64, "", DenseMatrixF64, Float64Array}
+linear_regression_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
+linear_regression_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}
+linear_regression_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}

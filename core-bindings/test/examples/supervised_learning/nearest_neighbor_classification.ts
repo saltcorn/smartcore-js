@@ -1,4 +1,10 @@
-import { dataset, trainTestSplitF64BigI64, R2I64, KNNClassifierF64I64 } from '../../../index.js'
+import {
+  dataset,
+  trainTestSplitF64BigI64,
+  R2I64,
+  KNNClassifierF64BigI64EuclidianF64,
+  KNNClassifierF64EuclidianF64Parameters,
+} from '../../../index.js'
 import assert from 'assert'
 
 export default () => {
@@ -7,7 +13,8 @@ export default () => {
     let x = breastCancerData.denseMatrix()
     let y = breastCancerData.target
     let [, xTest, , yTest] = trainTestSplitF64BigI64(x, y, 0.2, true)
-    let yHatKnn = KNNClassifierF64I64.fit(x, breastCancerData.target).predict(xTest)
+    let parameters = new KNNClassifierF64EuclidianF64Parameters()
+    let yHatKnn = KNNClassifierF64BigI64EuclidianF64.fit(x, breastCancerData.target, parameters).predict(xTest)
     let r2 = new R2I64()
     let score = r2.getScore(yTest, yHatKnn)
     assert(score)

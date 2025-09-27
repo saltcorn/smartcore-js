@@ -12,7 +12,8 @@ interface ExtraTreesRegressorParams {
 declare enum EstimatorType {
     F64I64 = 0,
     F64BigI64 = 1,
-    F64F64 = 2
+    F64BigU64 = 2,
+    F64F64 = 3
 }
 declare class ExtraTreesRegressor implements Estimator<XType, YType, ExtraTreesRegressor>, Predictor<XType, YType> {
     private parameters;

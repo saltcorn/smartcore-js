@@ -65,18 +65,20 @@ class KMeans implements Estimator<XType, YType, KMeans>, Predictor<XType, YType>
   }
 
   static deserialize(data: Buffer, estimatorType: EstimatorType): KMeans {
-    let estimator
-    if (estimatorType === EstimatorType.F64BigI64) {
-      estimator = KMeansF64BigI64.deserialize(data)
-    } else if (estimatorType === EstimatorType.F64I64) {
-      estimator = KMeansF64I64.deserialize(data)
-    } else if (estimatorType === EstimatorType.F64F64) {
-      estimator = KMeansF64F64.deserialize(data)
-    } else {
-      throw new Error('Unsupported estimator type')
-    }
     let instance = new KMeans()
-    instance.estimator = estimator
+    switch (estimatorType) {
+      case EstimatorType.F64BigI64:
+        instance.estimator = KMeansF64BigI64.deserialize(data)
+        break
+      case EstimatorType.F64I64:
+        instance.estimator = KMeansF64I64.deserialize(data)
+        break
+      case EstimatorType.F64F64:
+        instance.estimator = KMeansF64F64.deserialize(data)
+        break
+      default:
+        throw new Error(`Unrecognized estimator type: '${estimatorType}'`)
+    }
     return instance
   }
 }

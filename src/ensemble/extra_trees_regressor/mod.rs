@@ -77,3 +77,4 @@ macro_rules! extra_trees_regressor_nb_struct {
 extra_trees_regressor_nb_struct! {f64, f64, "", DenseMatrixF64, Float64Array}
 extra_trees_regressor_nb_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
 extra_trees_regressor_nb_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}
+extra_trees_regressor_nb_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}

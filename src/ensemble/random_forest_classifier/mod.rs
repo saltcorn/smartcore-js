@@ -76,3 +76,4 @@ macro_rules! random_forest_classifier_nb_struct {
 
 random_forest_classifier_nb_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
 random_forest_classifier_nb_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}
+random_forest_classifier_nb_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}

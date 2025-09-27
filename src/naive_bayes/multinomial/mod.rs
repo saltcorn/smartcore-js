@@ -17,16 +17,16 @@ use crate::linalg::basic::matrix::DenseMatrixU64;
 use parameters::MultinomialNBParameters;
 
 macro_rules! multinomial_nb_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<MultinomialNB $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<MultinomialNB $x:upper $y_mod $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<MultinomialNB $x:upper $y:upper>] {
+        pub struct [<MultinomialNB $x:upper $y_mod $y:upper>] {
             inner: LibMultinomialNB<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
         #[napi]
-        impl [<MultinomialNB $x:upper $y:upper>] {
+        impl [<MultinomialNB $x:upper $y_mod $y:upper>] {
             #[napi(factory)]
             pub fn fit(x: &$xs, y: $ys, parameters: &MultinomialNBParameters) -> Result<Self> {
                 let y = y.to_vec();
@@ -63,7 +63,7 @@ macro_rules! multinomial_nb_struct {
             }
         }
 
-        impl Deref for [<MultinomialNB $x:upper $y:upper>] {
+        impl Deref for [<MultinomialNB $x:upper $y_mod $y:upper>] {
             type Target = LibMultinomialNB<$x, $y, DenseMatrix<$x>, Vec<$y>>;
 
             fn deref(&self) -> &Self::Target {
@@ -74,4 +74,4 @@ macro_rules! multinomial_nb_struct {
   };
 }
 
-multinomial_nb_struct! {u64, u64, DenseMatrixU64, BigUint64Array}
+multinomial_nb_struct! {u64, u64, "Big", DenseMatrixU64, BigUint64Array}

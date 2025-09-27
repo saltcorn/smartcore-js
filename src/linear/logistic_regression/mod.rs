@@ -89,3 +89,4 @@ macro_rules! logistic_regression_struct {
 
 logistic_regression_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
 logistic_regression_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}
+logistic_regression_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}

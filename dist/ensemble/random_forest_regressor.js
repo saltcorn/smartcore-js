@@ -1,9 +1,10 @@
-import { RandomForestRegressorF64BigI64, RandomForestRegressorF64I64, RandomForestRegressorParameters, } from '../../core-bindings/index.js';
+import { RandomForestRegressorF64BigI64, RandomForestRegressorF64BigU64, RandomForestRegressorF64I64, RandomForestRegressorParameters, } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 var EstimatorType;
 (function (EstimatorType) {
     EstimatorType[EstimatorType["F64I64"] = 0] = "F64I64";
     EstimatorType[EstimatorType["F64BigI64"] = 1] = "F64BigI64";
+    EstimatorType[EstimatorType["F64BigU64"] = 2] = "F64BigU64";
 })(EstimatorType || (EstimatorType = {}));
 class RandomForestRegressor {
     constructor(params) {
@@ -44,6 +45,9 @@ class RandomForestRegressor {
         else if (y instanceof BigInt64Array) {
             this.estimator = RandomForestRegressorF64BigI64.fit(matrix.asF64(), y, this.parameters);
         }
+        else if (y instanceof BigUint64Array) {
+            this.estimator = RandomForestRegressorF64BigU64.fit(matrix.asF64(), y, this.parameters);
+        }
         else if (y.every((val) => Number.isInteger(val))) {
             this.estimator = RandomForestRegressorF64I64.fit(matrix.asF64(), y, this.parameters);
         }
@@ -63,18 +67,20 @@ class RandomForestRegressor {
         return this.estimator?.serialize();
     }
     static deserialize(data, estimatorType) {
-        let estimator;
-        if (estimatorType === EstimatorType.F64BigI64) {
-            estimator = RandomForestRegressorF64BigI64.deserialize(data);
-        }
-        else if (estimatorType === EstimatorType.F64I64) {
-            estimator = RandomForestRegressorF64I64.deserialize(data);
-        }
-        else {
-            throw new Error('Unsupported estimator type');
-        }
         let instance = new RandomForestRegressor();
-        instance.estimator = estimator;
+        switch (estimatorType) {
+            case EstimatorType.F64BigI64:
+                instance.estimator = RandomForestRegressorF64BigI64.deserialize(data);
+                break;
+            case EstimatorType.F64BigU64:
+                instance.estimator = RandomForestRegressorF64BigU64.deserialize(data);
+                break;
+            case EstimatorType.F64I64:
+                instance.estimator = RandomForestRegressorF64I64.deserialize(data);
+                break;
+            default:
+                throw new Error(`Unrecognized estimator type: '${estimatorType}'`);
+        }
         return instance;
     }
 }

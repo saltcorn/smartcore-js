@@ -3,7 +3,8 @@ import type { Estimator, Predictor, SerDe } from '../pipeline/index.js';
 import type { YType, XType } from '../index.js';
 declare enum EstimatorType {
     F64BigI64 = 0,
-    F64I64 = 1
+    F64BigU64 = 1,
+    F64I64 = 2
 }
 interface LogisticRegressionParametersValues {
     alpha?: number;

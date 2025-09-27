@@ -11,7 +11,8 @@ interface RandomForestRegressorParams {
 }
 declare enum EstimatorType {
     F64I64 = 0,
-    F64BigI64 = 1
+    F64BigI64 = 1,
+    F64BigU64 = 2
 }
 declare class RandomForestRegressor implements Estimator<XType, YType, RandomForestRegressor>, Predictor<XType, YType> {
     private parameters;

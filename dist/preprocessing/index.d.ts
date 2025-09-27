@@ -1,2 +1,3 @@
 import StandardScaler from './numerical.js';
-export { StandardScaler };
+import OneHotEncoder from './categorical.js';
+export { StandardScaler, OneHotEncoder };

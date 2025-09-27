@@ -14,21 +14,21 @@ use smartcore::{
 };
 
 use crate::linalg::basic::matrix::DenseMatrixF64;
-use parameters::BernoulliNBParametersF64;
+use parameters::BernoulliNBF64Parameters;
 
 macro_rules! bernoulli_nb_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<BernoulliNB $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<BernoulliNB $x:upper $y_mod $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<BernoulliNB $x:upper $y:upper>] {
+        pub struct [<BernoulliNB $x:upper $y_mod $y:upper>] {
             inner: LibBernoulliNB<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
         #[napi]
-        impl [<BernoulliNB $x:upper $y:upper>] {
+        impl [<BernoulliNB $x:upper $y_mod $y:upper>] {
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &[<BernoulliNBParameters $x:upper>]) -> Result<Self> {
+            pub fn fit(x: &$xs, y: $ys, parameters: &[<BernoulliNB $x:upper Parameters>]) -> Result<Self> {
                 let y = y.to_vec();
                 let inner = LibBernoulliNB::fit(
                     x as &DenseMatrix<$x>,
@@ -45,7 +45,7 @@ macro_rules! bernoulli_nb_struct {
                 .inner
                 .predict(x as &DenseMatrix<$x>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
+                Ok(prediction_result.into())
             }
 
             #[napi]
@@ -63,7 +63,7 @@ macro_rules! bernoulli_nb_struct {
             }
         }
 
-        impl Deref for [<BernoulliNB $x:upper $y:upper>] {
+        impl Deref for [<BernoulliNB $x:upper $y_mod $y:upper>] {
             type Target = LibBernoulliNB<$x, $y, DenseMatrix<$x>, Vec<$y>>;
 
             fn deref(&self) -> &Self::Target {
@@ -74,4 +74,4 @@ macro_rules! bernoulli_nb_struct {
   };
 }
 
-bernoulli_nb_struct! {f64, u64, DenseMatrixF64, BigUint64Array}
+bernoulli_nb_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}

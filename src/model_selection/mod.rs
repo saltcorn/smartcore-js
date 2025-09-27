@@ -39,3 +39,4 @@ macro_rules! train_test_split_struct {
 train_test_split_struct! {f64, f64, "", DenseMatrixF64, Float64Array}
 train_test_split_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
 train_test_split_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}
+train_test_split_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}

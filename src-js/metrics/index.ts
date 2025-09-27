@@ -1,6 +1,5 @@
-import { AccuracyF64, AccuracyI64 } from '../../core-bindings/index.js'
-
-type YType = number[] | Float64Array | BigInt64Array
+import { AccuracyF64, AccuracyI64, AccuracyU64 } from '../../core-bindings/index.js'
+import { type YType } from '../index.js'
 
 function toBigInt64Array(values: number[]): BigInt64Array {
   if (!values.every((n) => Number.isInteger(n))) {
@@ -15,6 +14,8 @@ function accuracyScore(yTrue: YType, yPred: YType) {
     return new AccuracyF64().getScore(yTrue, yPred)
   } else if (yTrue instanceof BigInt64Array && yPred instanceof BigInt64Array) {
     return new AccuracyI64().getScore(yTrue, yPred)
+  } else if (yTrue instanceof BigUint64Array && yPred instanceof BigUint64Array) {
+    return new AccuracyU64().getScore(yTrue, yPred)
   } else if (yTrue instanceof Array && yPred instanceof Array) {
     return new AccuracyI64().getScore(toBigInt64Array(yTrue), toBigInt64Array(yPred))
   }

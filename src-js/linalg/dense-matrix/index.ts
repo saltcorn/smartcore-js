@@ -38,9 +38,27 @@ class DenseMatrix {
     return new DenseMatrix(matrix, columnMajor)
   }
 
+  static u64(data: number[][], columnMajor?: boolean | undefined): DenseMatrix {
+    let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data)
+    let BigValuesFlat = valuesFlat.map((v) => BigInt(v))
+    let matrix = new DenseMatrixU64(nrows, ncols, new BigUint64Array(BigValuesFlat), columnMajor)
+    return new DenseMatrix(matrix, columnMajor)
+  }
+
   asF64(): DenseMatrixF64 {
     if (!(this.inner instanceof DenseMatrixF64)) {
       throw new Error('Inner type not an f64 DenseMatrix')
+    }
+    return this.inner
+  }
+
+  asU64(): DenseMatrixU64 {
+    if (this.inner instanceof DenseMatrixU64) {
+      return this.inner
+    } else if (this.inner instanceof DenseMatrixI64) {
+      //s
+    } else {
+      throw new Error(`Conversion from ${typeof this.inner} to DenseMatrixU64 not supported!`)
     }
     return this.inner
   }

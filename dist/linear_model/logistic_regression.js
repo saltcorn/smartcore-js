@@ -1,9 +1,10 @@
-import { LogisticRegressionF64I64, LogisticRegressionParametersF64, LogisticRegressionF64BigI64, } from '../../core-bindings/index.js';
+import { LogisticRegressionF64I64, LogisticRegressionParametersF64, LogisticRegressionF64BigI64, LogisticRegressionF64BigU64, } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 var EstimatorType;
 (function (EstimatorType) {
     EstimatorType[EstimatorType["F64BigI64"] = 0] = "F64BigI64";
-    EstimatorType[EstimatorType["F64I64"] = 1] = "F64I64";
+    EstimatorType[EstimatorType["F64BigU64"] = 1] = "F64BigU64";
+    EstimatorType[EstimatorType["F64I64"] = 2] = "F64I64";
 })(EstimatorType || (EstimatorType = {}));
 class LogisticRegression {
     constructor(params) {
@@ -37,6 +38,9 @@ class LogisticRegression {
         if (y instanceof BigInt64Array) {
             this.estimator = LogisticRegressionF64BigI64.fit(matrix.asF64(), y, this.parameters);
         }
+        else if (y instanceof BigUint64Array) {
+            this.estimator = LogisticRegressionF64BigU64.fit(matrix.asF64(), y, this.parameters);
+        }
         else if (y.every((val) => Number.isInteger(val))) {
             this.estimator = LogisticRegressionF64I64.fit(matrix.asF64(), y, this.parameters);
         }
@@ -63,18 +67,20 @@ class LogisticRegression {
         }
     }
     static deserialize(data, estimatorType) {
-        let estimator;
-        if (estimatorType === EstimatorType.F64BigI64) {
-            estimator = LogisticRegressionF64BigI64.deserialize(data);
-        }
-        else if (estimatorType === EstimatorType.F64I64) {
-            estimator = LogisticRegressionF64I64.deserialize(data);
-        }
-        else {
-            throw new Error('Unsupported estimator type');
-        }
         let instance = new LogisticRegression();
-        instance.estimator = estimator;
+        switch (estimatorType) {
+            case EstimatorType.F64BigI64:
+                instance.estimator = LogisticRegressionF64BigI64.deserialize(data);
+                break;
+            case EstimatorType.F64BigU64:
+                instance.estimator = LogisticRegressionF64BigU64.deserialize(data);
+                break;
+            case EstimatorType.F64I64:
+                instance.estimator = LogisticRegressionF64I64.deserialize(data);
+                break;
+            default:
+                throw new Error(`Unrecognized estimator type: '${estimatorType}'`);
+        }
         return instance;
     }
 }

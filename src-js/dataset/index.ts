@@ -1,8 +1,8 @@
-import { dataset, DatasetF64I64, type DatasetF64F64 } from '../../core-bindings/index.js'
+import { dataset, DatasetF64I64, DatasetF64F64, DatasetF64U64 } from '../../core-bindings/index.js'
 import type { YType } from '../index.js'
 import { DenseMatrix } from '../linalg/index.js'
 
-type DatasetRs = DatasetF64F64 | DatasetF64I64
+type DatasetRs = DatasetF64F64 | DatasetF64I64 | DatasetF64U64
 
 class Dataset {
   inner: DatasetRs
@@ -14,51 +14,68 @@ class Dataset {
 
 interface LoadParams {
   returnXY?: boolean
+  unsigned?: boolean
+}
+
+function prepResponse(data: DatasetRs, params?: LoadParams): Dataset | [DenseMatrix, YType] {
+  if (params?.returnXY) {
+    if (params.unsigned && 'withTargetUnsigned' in data && typeof data.withTargetUnsigned === 'function') {
+      let irisDataUnsigned = data.withTargetUnsigned()
+      return [new DenseMatrix(data.denseMatrix()), irisDataUnsigned.target]
+    }
+    return [new DenseMatrix(data.denseMatrix()), data.target]
+  }
+
+  return new Dataset(data)
 }
 
 function loadIris(params?: LoadParams): Dataset | [DenseMatrix, YType] {
-  let irisData = dataset.iris().loadDataset()
-  if (params?.returnXY) {
-    return [new DenseMatrix(irisData.denseMatrix()), irisData.target]
-  }
-
-  return new Dataset(irisData)
+  return prepResponse(dataset.iris().loadDataset(), params)
 }
 
 function loadBoston(params?: LoadParams): Dataset | [DenseMatrix, YType] {
-  let bostonData = dataset.boston().loadDataset()
-  if (params?.returnXY) {
-    return [new DenseMatrix(bostonData.denseMatrix()), bostonData.target]
-  }
-
-  return new Dataset(bostonData)
+  return prepResponse(dataset.boston().loadDataset(), params)
 }
 
 function loadBreastCancer(params?: LoadParams): Dataset | [DenseMatrix, YType] {
-  let breastCancerData = dataset.breastCancer().loadDataset()
-  if (params?.returnXY) {
-    return [new DenseMatrix(breastCancerData.denseMatrix()), breastCancerData.target]
-  }
-
-  return new Dataset(breastCancerData)
+  return prepResponse(dataset.breastCancer().loadDataset(), params)
 }
 
 function loadDiabetes(params?: LoadParams): Dataset | [DenseMatrix, YType] {
-  let diabetesData = dataset.diabetes().loadDataset()
-  if (params?.returnXY) {
-    return [new DenseMatrix(diabetesData.denseMatrix()), diabetesData.target]
-  }
-
-  return new Dataset(diabetesData)
+  return prepResponse(dataset.diabetes().loadDataset(), params)
 }
 
 function loadDigits(params?: LoadParams): Dataset | [DenseMatrix, YType] {
-  let digitsData = dataset.diabetes().loadDataset()
-  if (params?.returnXY) {
-    return [new DenseMatrix(digitsData.denseMatrix()), digitsData.target]
-  }
-
-  return new Dataset(digitsData)
+  return prepResponse(dataset.digits().loadDataset(), params)
 }
 
-export { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits }
+interface IMakeCircles extends LoadParams {
+  numSamples: number
+  factor: number
+  noise: number
+}
+
+function makeCircles(params: IMakeCircles): Dataset | [DenseMatrix, YType] {
+  return prepResponse(dataset.generator().makeCircles(params.numSamples, params.factor, params.noise), params)
+}
+
+interface IMakeBlobs extends LoadParams {
+  numSamples: number
+  numFeatures: number
+  numCenters: number
+}
+
+function makeBlobs(params: IMakeBlobs): Dataset | [DenseMatrix, YType] {
+  return prepResponse(dataset.generator().makeBlobs(params.numSamples, params.numFeatures, params.numCenters), params)
+}
+
+interface IMakeMoons extends LoadParams {
+  numSamples: number
+  noise: number
+}
+
+function makeMoons(params: IMakeMoons): Dataset | [DenseMatrix, YType] {
+  return prepResponse(dataset.generator().makeMoons(params.numSamples, params.noise), params)
+}
+
+export { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits, makeCircles, makeBlobs, makeMoons }

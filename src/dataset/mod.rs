@@ -85,6 +85,25 @@ macro_rules! dataset_struct {
 
 dataset_struct! {f64, f64, Float64Array, Float64Array}
 dataset_struct! {f64, i64, Float64Array, BigInt64Array}
+dataset_struct! {f64, u64, Float64Array, BigUint64Array}
+
+#[napi]
+impl DatasetF64I64 {
+  #[napi]
+  pub fn with_target_unsigned(&self) -> DatasetF64U64 {
+    DatasetF64U64 {
+      inner: LibDataset {
+        data: self.inner.data.to_owned(),
+        target: self.inner.target.iter().map(|y| *y as u64).collect(),
+        num_samples: self.inner.num_samples,
+        num_features: self.inner.num_features,
+        feature_names: self.inner.feature_names.to_owned(),
+        target_names: self.inner.target_names.to_owned(),
+        description: self.inner.description.to_owned(),
+      },
+    }
+  }
+}
 
 impl From<LibDataset<f32, f32>> for DatasetF64F64 {
   fn from(value: LibDataset<f32, f32>) -> Self {

@@ -15,15 +15,15 @@ use crate::linalg::basic::matrix::DenseMatrixF64;
 pub use parameters::LassoParameters;
 
 macro_rules! lasso_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<Lasso $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<Lasso $x:upper $y_mod $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<Lasso $x:upper $y:upper>] {
+        pub struct [<Lasso $x:upper $y_mod $y:upper>] {
             inner: LibLasso<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
-        impl Default for [<Lasso $x:upper $y:upper>] {
+        impl Default for [<Lasso $x:upper $y_mod $y:upper>] {
             fn default() -> Self {
                 Self {
                     inner: LibLasso::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
@@ -32,7 +32,7 @@ macro_rules! lasso_struct {
         }
 
         #[napi]
-        impl [<Lasso $x:upper $y:upper>] {
+        impl [<Lasso $x:upper $y_mod $y:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self::default()
@@ -59,7 +59,7 @@ macro_rules! lasso_struct {
                 .inner
                 .predict(x as &DenseMatrix<$x>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
+                Ok(prediction_result.into())
             }
 
             #[napi]
@@ -77,7 +77,7 @@ macro_rules! lasso_struct {
             }
         }
 
-        impl AsRef<LibLasso<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<Lasso $x:upper $y:upper>] {
+        impl AsRef<LibLasso<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<Lasso $x:upper $y_mod $y:upper>] {
             fn as_ref(&self) -> &LibLasso<$x, $y, DenseMatrix<$x>, Vec<$y>> {
                 &self.inner
             }
@@ -86,5 +86,7 @@ macro_rules! lasso_struct {
   };
 }
 
-lasso_struct! {f64, f64, DenseMatrixF64, Float64Array}
-lasso_struct! {f64, i64, DenseMatrixF64, BigInt64Array}
+lasso_struct! {f64, f64, "", DenseMatrixF64, Float64Array}
+lasso_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
+lasso_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}
+lasso_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}

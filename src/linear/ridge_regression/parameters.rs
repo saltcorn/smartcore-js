@@ -14,14 +14,14 @@ pub enum RidgeRegressionSolverName {
 macro_rules! ridge_regression_parameters_struct {
   ( $ty:ty ) => {
     paste! {
-        #[napi(js_name=""[<RidgeRegressionParameters $ty:upper>]"")]
+        #[napi(js_name=""[<RidgeRegression $ty:upper Parameters>]"")]
         #[derive(Debug, Clone, Default)]
-        pub struct [<RidgeRegressionParameters $ty:upper>] {
+        pub struct [<RidgeRegression $ty:upper Parameters>] {
             inner: LibRidgeRegressionParameters<$ty>,
         }
 
         #[napi]
-        impl [<RidgeRegressionParameters $ty:upper>] {
+        impl [<RidgeRegression $ty:upper Parameters>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self {
@@ -58,7 +58,7 @@ macro_rules! ridge_regression_parameters_struct {
             }
         }
 
-        impl AsRef<LibRidgeRegressionParameters<$ty>> for [<RidgeRegressionParameters $ty:upper>] {
+        impl AsRef<LibRidgeRegressionParameters<$ty>> for [<RidgeRegression $ty:upper Parameters>] {
             fn as_ref(&self) -> &LibRidgeRegressionParameters<$ty> {
                 &self.inner
             }

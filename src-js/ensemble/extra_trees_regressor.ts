@@ -1,4 +1,5 @@
 import {
+  ExtraTreesRegressorF64BigU64,
   ExtraTreesRegressorF64BigI64,
   ExtraTreesRegressorF64I64,
   ExtraTreesRegressorParameters,
@@ -18,10 +19,16 @@ interface ExtraTreesRegressorParams {
   seed?: number
 }
 
-type ExtraTreesRegressorRs = ExtraTreesRegressorF64I64 | ExtraTreesRegressorF64BigI64 | ExtraTreesRegressorF64F64
+type ExtraTreesRegressorRs =
+  | ExtraTreesRegressorF64I64
+  | ExtraTreesRegressorF64BigI64
+  | ExtraTreesRegressorF64F64
+  | ExtraTreesRegressorF64BigU64
+
 enum EstimatorType {
   F64I64,
   F64BigI64,
+  F64BigU64,
   F64F64,
 }
 
@@ -67,6 +74,8 @@ class ExtraTreesRegressor implements Estimator<XType, YType, ExtraTreesRegressor
       this.estimator = ExtraTreesRegressorF64F64.fit(matrix.asF64(), y, this.parameters)
     } else if (y instanceof BigInt64Array) {
       this.estimator = ExtraTreesRegressorF64BigI64.fit(matrix.asF64(), y, this.parameters)
+    } else if (y instanceof BigUint64Array) {
+      this.estimator = ExtraTreesRegressorF64BigU64.fit(matrix.asF64(), y, this.parameters)
     } else if (y.every((val) => Number.isInteger(val))) {
       this.estimator = ExtraTreesRegressorF64I64.fit(matrix.asF64(), y, this.parameters)
     } else {
@@ -90,18 +99,23 @@ class ExtraTreesRegressor implements Estimator<XType, YType, ExtraTreesRegressor
   }
 
   static deserialize(data: Buffer, estimatorType: EstimatorType): ExtraTreesRegressor {
-    let estimator
-    if (estimatorType === EstimatorType.F64BigI64) {
-      estimator = ExtraTreesRegressorF64BigI64.deserialize(data)
-    } else if (estimatorType === EstimatorType.F64I64) {
-      estimator = ExtraTreesRegressorF64I64.deserialize(data)
-    } else if (estimatorType === EstimatorType.F64F64) {
-      estimator = ExtraTreesRegressorF64F64.deserialize(data)
-    } else {
-      throw new Error('Unsupported estimator type')
-    }
     let instance = new ExtraTreesRegressor()
-    instance.estimator = estimator
+    switch (estimatorType) {
+      case EstimatorType.F64BigI64:
+        instance.estimator = ExtraTreesRegressorF64BigI64.deserialize(data)
+        break
+      case EstimatorType.F64BigU64:
+        instance.estimator = ExtraTreesRegressorF64BigU64.deserialize(data)
+        break
+      case EstimatorType.F64I64:
+        instance.estimator = ExtraTreesRegressorF64I64.deserialize(data)
+        break
+      case EstimatorType.F64F64:
+        instance.estimator = ExtraTreesRegressorF64F64.deserialize(data)
+        break
+      default:
+        throw new Error(`Unrecognized estimator type: '${estimatorType}'`)
+    }
     return instance
   }
 }

@@ -1,43 +1,42 @@
-import { dataset, DatasetF64I64 } from '../../core-bindings/index.js';
+import { dataset, DatasetF64I64, DatasetF64F64, DatasetF64U64 } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class Dataset {
     constructor(inner) {
         this.inner = inner;
     }
 }
-function loadIris(params) {
-    let irisData = dataset.iris().loadDataset();
+function prepResponse(data, params) {
     if (params?.returnXY) {
-        return [new DenseMatrix(irisData.denseMatrix()), irisData.target];
+        if (params.unsigned && 'withTargetUnsigned' in data && typeof data.withTargetUnsigned === 'function') {
+            let irisDataUnsigned = data.withTargetUnsigned();
+            return [new DenseMatrix(data.denseMatrix()), irisDataUnsigned.target];
+        }
+        return [new DenseMatrix(data.denseMatrix()), data.target];
     }
-    return new Dataset(irisData);
+    return new Dataset(data);
+}
+function loadIris(params) {
+    return prepResponse(dataset.iris().loadDataset(), params);
 }
 function loadBoston(params) {
-    let bostonData = dataset.boston().loadDataset();
-    if (params?.returnXY) {
-        return [new DenseMatrix(bostonData.denseMatrix()), bostonData.target];
-    }
-    return new Dataset(bostonData);
+    return prepResponse(dataset.boston().loadDataset(), params);
 }
 function loadBreastCancer(params) {
-    let breastCancerData = dataset.breastCancer().loadDataset();
-    if (params?.returnXY) {
-        return [new DenseMatrix(breastCancerData.denseMatrix()), breastCancerData.target];
-    }
-    return new Dataset(breastCancerData);
+    return prepResponse(dataset.breastCancer().loadDataset(), params);
 }
 function loadDiabetes(params) {
-    let diabetesData = dataset.diabetes().loadDataset();
-    if (params?.returnXY) {
-        return [new DenseMatrix(diabetesData.denseMatrix()), diabetesData.target];
-    }
-    return new Dataset(diabetesData);
+    return prepResponse(dataset.diabetes().loadDataset(), params);
 }
 function loadDigits(params) {
-    let digitsData = dataset.diabetes().loadDataset();
-    if (params?.returnXY) {
-        return [new DenseMatrix(digitsData.denseMatrix()), digitsData.target];
-    }
-    return new Dataset(digitsData);
+    return prepResponse(dataset.digits().loadDataset(), params);
 }
-export { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits };
+function makeCircles(params) {
+    return prepResponse(dataset.generator().makeCircles(params.numSamples, params.factor, params.noise), params);
+}
+function makeBlobs(params) {
+    return prepResponse(dataset.generator().makeBlobs(params.numSamples, params.numFeatures, params.numCenters), params);
+}
+function makeMoons(params) {
+    return prepResponse(dataset.generator().makeMoons(params.numSamples, params.noise), params);
+}
+export { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits, makeCircles, makeBlobs, makeMoons };

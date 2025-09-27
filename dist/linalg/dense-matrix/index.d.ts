@@ -6,6 +6,8 @@ declare class DenseMatrix {
     private static prepData;
     get matrix(): DenseMatrixRs;
     static f64(data: number[][], columnMajor?: boolean | undefined): DenseMatrix;
+    static u64(data: number[][], columnMajor?: boolean | undefined): DenseMatrix;
     asF64(): DenseMatrixF64;
+    asU64(): DenseMatrixU64;
 }
 export default DenseMatrix;

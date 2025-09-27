@@ -2,16 +2,18 @@ import {
   LogisticRegressionF64I64,
   LogisticRegressionParametersF64,
   LogisticRegressionF64BigI64,
+  LogisticRegressionF64BigU64,
 } from '../../core-bindings/index.js'
 import { DenseMatrix } from '../linalg/index.js'
 import type { LogisticRegressionSolverName } from '../../core-bindings/index.js'
 import type { Estimator, Predictor, SerDe } from '../pipeline/index.js'
 import type { YType, XType } from '../index.js'
 
-type LogisticRegressionRs = LogisticRegressionF64I64 | LogisticRegressionF64BigI64
+type LogisticRegressionRs = LogisticRegressionF64I64 | LogisticRegressionF64BigI64 | LogisticRegressionF64BigU64
 
 enum EstimatorType {
   F64BigI64,
+  F64BigU64,
   F64I64,
 }
 
@@ -64,6 +66,8 @@ class LogisticRegression
 
     if (y instanceof BigInt64Array) {
       this.estimator = LogisticRegressionF64BigI64.fit(matrix.asF64(), y, this.parameters)
+    } else if (y instanceof BigUint64Array) {
+      this.estimator = LogisticRegressionF64BigU64.fit(matrix.asF64(), y, this.parameters)
     } else if (y.every((val) => Number.isInteger(val))) {
       this.estimator = LogisticRegressionF64I64.fit(matrix.asF64(), y, this.parameters)
     } else {
@@ -93,16 +97,20 @@ class LogisticRegression
   }
 
   static deserialize(data: Buffer, estimatorType: EstimatorType): LogisticRegression {
-    let estimator
-    if (estimatorType === EstimatorType.F64BigI64) {
-      estimator = LogisticRegressionF64BigI64.deserialize(data)
-    } else if (estimatorType === EstimatorType.F64I64) {
-      estimator = LogisticRegressionF64I64.deserialize(data)
-    } else {
-      throw new Error('Unsupported estimator type')
-    }
     let instance = new LogisticRegression()
-    instance.estimator = estimator
+    switch (estimatorType) {
+      case EstimatorType.F64BigI64:
+        instance.estimator = LogisticRegressionF64BigI64.deserialize(data)
+        break
+      case EstimatorType.F64BigU64:
+        instance.estimator = LogisticRegressionF64BigU64.deserialize(data)
+        break
+      case EstimatorType.F64I64:
+        instance.estimator = LogisticRegressionF64I64.deserialize(data)
+        break
+      default:
+        throw new Error(`Unrecognized estimator type: '${estimatorType}'`)
+    }
     return instance
   }
 }

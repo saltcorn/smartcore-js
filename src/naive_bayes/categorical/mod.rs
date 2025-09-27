@@ -17,16 +17,16 @@ use crate::linalg::basic::matrix::DenseMatrixU64;
 use parameters::CategoricalNBParameters;
 
 macro_rules! categorical_nb_struct {
-  ( $t:ty, $ts1:ty, $ts2:ty ) => {
+  ( $t:ty, $y_mod:literal, $ts1:ty, $ts2:ty ) => {
     paste! {
-        #[napi(js_name=""[<CategoricalNB $t:upper>]"")]
+        #[napi(js_name=""[<CategoricalNB $y_mod $t:upper>]"")]
         #[derive(Debug)]
-        pub struct [<CategoricalNB $t:upper>] {
+        pub struct [<CategoricalNB $y_mod $t:upper>] {
             inner: LibCategoricalNB<$t, DenseMatrix<$t>, Vec<$t>>,
         }
 
         #[napi]
-        impl [<CategoricalNB $t:upper>] {
+        impl [<CategoricalNB $y_mod $t:upper>] {
             #[napi(factory)]
             pub fn fit(x: &$ts1, y: $ts2, parameters: &CategoricalNBParameters) -> Result<Self> {
                 let y = y.to_vec();
@@ -63,7 +63,7 @@ macro_rules! categorical_nb_struct {
             }
         }
 
-        impl Deref for [<CategoricalNB $t:upper>] {
+        impl Deref for [<CategoricalNB$y_mod $t:upper>] {
             type Target = LibCategoricalNB<$t, DenseMatrix<$t>, Vec<$t>>;
 
             fn deref(&self) -> &Self::Target {
@@ -74,4 +74,4 @@ macro_rules! categorical_nb_struct {
   };
 }
 
-categorical_nb_struct! {u64, DenseMatrixU64, BigUint64Array}
+categorical_nb_struct! {u64, "Big", DenseMatrixU64, BigUint64Array}
