@@ -6,9 +6,7 @@ use smartcore::linalg::{
   traits::svd::SVD as LibSVD,
 };
 
-use crate::linalg::basic::matrix::{
-  DenseMatrixF32, DenseMatrixF32Ref, DenseMatrixF64, DenseMatrixF64Ref,
-};
+use crate::linalg::basic::matrix::{DenseMatrixF64, DenseMatrixF64Ref};
 
 macro_rules! js_dense_matrix_struct {
   ( $ty:ty, $ts_name:ty, $p_ref_name:ty ) => {
@@ -40,7 +38,6 @@ macro_rules! js_dense_matrix_struct {
   };
 }
 
-js_dense_matrix_struct! { f32, DenseMatrixF32, SVDF32DenseMatrixF32 }
 js_dense_matrix_struct! { f64, DenseMatrixF64, SVDF64DenseMatrixF64 }
 
 macro_rules! svd_struct {
@@ -92,5 +89,4 @@ macro_rules! svd_struct {
   };
 }
 
-svd_struct! { f32, LibDenseMatrix<f32>, DenseMatrixF32 }
 svd_struct! { f64, LibDenseMatrix<f64>, DenseMatrixF64 }

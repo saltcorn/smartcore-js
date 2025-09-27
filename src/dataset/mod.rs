@@ -10,7 +10,7 @@ use napi_derive::napi;
 use paste::paste;
 use smartcore::dataset::Dataset as LibDataset;
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
 
 macro_rules! dataset_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -83,10 +83,59 @@ macro_rules! dataset_struct {
   };
 }
 
-dataset_struct! {f32, f32, Float32Array, Float32Array}
-dataset_struct! {f32, u32, Float32Array, Uint32Array}
 dataset_struct! {f64, f64, Float64Array, Float64Array}
+dataset_struct! {f64, i64, Float64Array, BigInt64Array}
 dataset_struct! {f64, u64, Float64Array, BigUint64Array}
+
+#[napi]
+impl DatasetF64I64 {
+  #[napi]
+  pub fn with_target_unsigned(&self) -> DatasetF64U64 {
+    DatasetF64U64 {
+      inner: LibDataset {
+        data: self.inner.data.to_owned(),
+        target: self.inner.target.iter().map(|y| *y as u64).collect(),
+        num_samples: self.inner.num_samples,
+        num_features: self.inner.num_features,
+        feature_names: self.inner.feature_names.to_owned(),
+        target_names: self.inner.target_names.to_owned(),
+        description: self.inner.description.to_owned(),
+      },
+    }
+  }
+}
+
+impl From<LibDataset<f32, f32>> for DatasetF64F64 {
+  fn from(value: LibDataset<f32, f32>) -> Self {
+    Self {
+      inner: LibDataset {
+        data: value.data.into_iter().map(|x| x as f64).collect(),
+        target: value.target.into_iter().map(|y| y as f64).collect(),
+        num_samples: value.num_samples,
+        num_features: value.num_features,
+        feature_names: value.feature_names,
+        target_names: value.target_names,
+        description: value.description,
+      },
+    }
+  }
+}
+
+impl From<LibDataset<f32, u32>> for DatasetF64I64 {
+  fn from(value: LibDataset<f32, u32>) -> Self {
+    Self {
+      inner: LibDataset {
+        data: value.data.into_iter().map(|x| x as f64).collect(),
+        target: value.target.into_iter().map(|y| y as i64).collect(),
+        num_samples: value.num_samples,
+        num_features: value.num_features,
+        feature_names: value.feature_names,
+        target_names: value.target_names,
+        description: value.description,
+      },
+    }
+  }
+}
 
 #[napi(js_name = "dataset")]
 pub struct Dataset {}

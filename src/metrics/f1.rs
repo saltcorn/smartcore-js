@@ -37,5 +37,4 @@ macro_rules! f1_struct {
   };
 }
 
-f1_struct! {f32, Float32Array}
 f1_struct! {f64, Float64Array}

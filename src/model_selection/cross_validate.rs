@@ -6,14 +6,10 @@ use smartcore::model_selection::{
 };
 
 use crate::{
-  linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64},
+  linalg::basic::matrix::DenseMatrixF64,
   linear::{
-    elastic_net::{ElasticNetF32F32, ElasticNetF32U32, ElasticNetF64F64, ElasticNetParameters},
-    lasso::{LassoF32F32, LassoF32U32, LassoF64F64, LassoParameters},
-    logistic_regression::{
-      LogisticRegressionF32U32, LogisticRegressionF64U64, LogisticRegressionParametersF32,
-      LogisticRegressionParametersF64,
-    },
+    elastic_net::{ElasticNetF64F64, ElasticNetF64I64, ElasticNetParameters},
+    logistic_regression::{LogisticRegressionF64I64, LogisticRegressionParametersF64},
   },
   model_selection::kfold::KFold,
 };
@@ -77,13 +73,6 @@ macro_rules! cross_validate_struct {
   };
 }
 
-cross_validate_struct! {f32, f32, DenseMatrixF32, Float32Array, ElasticNetF32F32, ElasticNetParameters}
 cross_validate_struct! {f64, f64, DenseMatrixF64, Float64Array, ElasticNetF64F64, ElasticNetParameters}
-cross_validate_struct! {f32, u32, DenseMatrixF32, Uint32Array, ElasticNetF32U32, ElasticNetParameters}
-
-cross_validate_struct! {f32, f32, DenseMatrixF32, Float32Array, LassoF32F32, LassoParameters}
-cross_validate_struct! {f64, f64, DenseMatrixF64, Float64Array, LassoF64F64, LassoParameters}
-cross_validate_struct! {f32, u32, DenseMatrixF32, Uint32Array, LassoF32U32, LassoParameters}
-
-cross_validate_struct! {f32, u32, DenseMatrixF32, Uint32Array, LogisticRegressionF32U32, LogisticRegressionParametersF32}
-cross_validate_struct! {f64, u64, DenseMatrixF64, BigUint64Array, LogisticRegressionF64U64, LogisticRegressionParametersF64}
+cross_validate_struct! {f64, i64, DenseMatrixF64, BigInt64Array, ElasticNetF64I64, ElasticNetParameters}
+cross_validate_struct! {f64, i64, DenseMatrixF64, BigInt64Array, LogisticRegressionF64I64, LogisticRegressionParametersF64}

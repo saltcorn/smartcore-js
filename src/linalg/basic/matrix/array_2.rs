@@ -6,7 +6,7 @@ use smartcore::linalg::basic::{
   matrix::DenseMatrix as LibDenseMatrix,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
 
 macro_rules! boxed_array_struct_impls {
   ( $ty:ty, $ty_matrix:ty ) => {
@@ -39,7 +39,7 @@ macro_rules! boxed_array_struct_impls {
   };
 }
 
-boxed_array_struct_impls! { f32, DenseMatrixF32 }
+boxed_array_struct_impls! { f32, DenseMatrixF64 }
 boxed_array_struct_impls! { f64, DenseMatrixF64 }
 
 macro_rules! dense_matrix_svd_impl {
@@ -277,5 +277,4 @@ macro_rules! dense_matrix_svd_impl {
   };
 }
 
-dense_matrix_svd_impl! { f64, f32, DenseMatrixF32, SVDF32DenseMatrixF32, Float32Array }
 dense_matrix_svd_impl! { f64, f64, DenseMatrixF64, SVDF64DenseMatrixF64, Float64Array }

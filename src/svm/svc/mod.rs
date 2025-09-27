@@ -12,8 +12,8 @@ use smartcore::{
   svm::svc::{SVCParameters as LibSVCParameters, SVC as LibSVC},
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-use parameters::{SVCParametersF32U32, SVCParametersF64U64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
+use parameters::SVCParametersF64I64;
 
 macro_rules! svm_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty, $inner_xs:ty ) => {
@@ -116,5 +116,4 @@ macro_rules! svm_struct {
   };
 }
 
-svm_struct! {f32, u32, DenseMatrixF32, Uint32Array, Float32Array}
-svm_struct! {f64, u64, DenseMatrixF64, BigUint64Array, Float64Array}
+svm_struct! {f64, i64, DenseMatrixF64, BigInt64Array, Float64Array}

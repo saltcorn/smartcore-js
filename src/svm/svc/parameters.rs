@@ -63,5 +63,4 @@ macro_rules! svc_parameters_struct {
   };
 }
 
-svc_parameters_struct! {f32, u32, DenseMatrixF32, Uint32Array}
-svc_parameters_struct! {f64, u64, DenseMatrixF64, BigUint64Array}
+svc_parameters_struct! {f64, i64, DenseMatrixF64, BigInt64Array}

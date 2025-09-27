@@ -12,19 +12,19 @@ use smartcore::{
   linear::linear_regression::LinearRegression as LibLinearRegression,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
 pub use parameters::LinearRegressionParameters;
 
 macro_rules! linear_regression_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<LinearRegression $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<LinearRegression $x:upper $y_mod $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<LinearRegression $x:upper $y:upper>] {
+        pub struct [<LinearRegression $x:upper $y_mod $y:upper>] {
             inner: LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
-        impl Default for [<LinearRegression $x:upper $y:upper>] {
+        impl Default for [<LinearRegression $x:upper $y_mod $y:upper>] {
             fn default() -> Self {
                 Self {
                     inner: LibLinearRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
@@ -33,7 +33,7 @@ macro_rules! linear_regression_struct {
         }
 
         #[napi]
-        impl [<LinearRegression $x:upper $y:upper>] {
+        impl [<LinearRegression $x:upper $y_mod $y:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self::default()
@@ -60,7 +60,7 @@ macro_rules! linear_regression_struct {
                 .inner
                 .predict(x as &DenseMatrix<$x>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
+                Ok(prediction_result.into())
             }
 
             #[napi]
@@ -78,7 +78,7 @@ macro_rules! linear_regression_struct {
             }
         }
 
-        impl AsRef<LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<LinearRegression $x:upper $y:upper>] {
+        impl AsRef<LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<LinearRegression $x:upper $y_mod $y:upper>] {
             fn as_ref(&self) -> &LibLinearRegression<$x, $y, DenseMatrix<$x>, Vec<$y>> {
                 &self.inner
             }
@@ -87,6 +87,7 @@ macro_rules! linear_regression_struct {
   };
 }
 
-linear_regression_struct! {f32, f32, DenseMatrixF32, Float32Array}
-linear_regression_struct! {f64, f64, DenseMatrixF64, Float64Array}
-linear_regression_struct! {f32, u32, DenseMatrixF32, Uint32Array}
+linear_regression_struct! {f64, f64, "", DenseMatrixF64, Float64Array}
+linear_regression_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
+linear_regression_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}
+linear_regression_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}

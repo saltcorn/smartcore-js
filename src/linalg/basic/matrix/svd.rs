@@ -3,10 +3,7 @@ use napi_derive::napi;
 use paste::paste;
 use smartcore::linalg::traits::svd::SVDDecomposable;
 
-use crate::linalg::{
-  basic::matrix::{DenseMatrixF32, DenseMatrixF64},
-  traits::svd::{SVDF32DenseMatrixF32, SVDF64DenseMatrixF64},
-};
+use crate::linalg::{basic::matrix::DenseMatrixF64, traits::svd::SVDF64DenseMatrixF64};
 
 macro_rules! dense_matrix_svd_impl {
   ( $struct_t:ty, $svd:ty ) => {
@@ -31,5 +28,4 @@ macro_rules! dense_matrix_svd_impl {
   };
 }
 
-dense_matrix_svd_impl! { DenseMatrixF32, SVDF32DenseMatrixF32 }
 dense_matrix_svd_impl! { DenseMatrixF64, SVDF64DenseMatrixF64 }

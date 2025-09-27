@@ -14,7 +14,7 @@ use smartcore::{
   tree::decision_tree_classifier::DecisionTreeClassifier as LibDecisionTreeClassifier,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixU32, DenseMatrixU64};
+use crate::linalg::basic::matrix::DenseMatrixI64;
 use parameters::DecisionTreeClassifierParameters;
 
 macro_rules! decision_tree_classifier_nb_struct {
@@ -74,7 +74,4 @@ macro_rules! decision_tree_classifier_nb_struct {
   };
 }
 
-decision_tree_classifier_nb_struct! {u32, u32, DenseMatrixU32, Uint32Array}
-decision_tree_classifier_nb_struct! {u32, u64, DenseMatrixU32, BigUint64Array}
-decision_tree_classifier_nb_struct! {u64, u64, DenseMatrixU64, BigUint64Array}
-decision_tree_classifier_nb_struct! {u64, u32, DenseMatrixU64, Uint32Array}
+decision_tree_classifier_nb_struct! {i64, i64, DenseMatrixI64, BigInt64Array}

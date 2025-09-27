@@ -22,7 +22,7 @@ impl PCAParameters {
     self.inner.n_components = n_components as usize;
   }
 
-  #[napi(setter)]
+  #[napi]
   pub fn use_correlation_matrix(&mut self, use_correlation_matrix: bool) {
     self.inner.use_correlation_matrix = use_correlation_matrix;
   }

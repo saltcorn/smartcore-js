@@ -14,20 +14,20 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
 use parameters::RandomForestRegressorParameters;
 
 macro_rules! random_forest_regressor_nb_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $y_mod: literal, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<RandomForestRegressor $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<RandomForestRegressor $x:upper $y_mod $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<RandomForestRegressor $x:upper $y:upper>] {
+        pub struct [<RandomForestRegressor $x:upper $y_mod $y:upper>] {
             inner: LibRandomForestRegressor<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
         #[napi]
-        impl [<RandomForestRegressor $x:upper $y:upper>] {
+        impl [<RandomForestRegressor $x:upper $y_mod $y:upper>] {
             #[napi(factory)]
             pub fn fit(x: &$xs, y: $ys, parameters: &RandomForestRegressorParameters) -> Result<Self> {
                 let inner = LibRandomForestRegressor::fit(
@@ -45,7 +45,7 @@ macro_rules! random_forest_regressor_nb_struct {
                 .inner
                 .predict(x as &DenseMatrix<$x>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
+                Ok(prediction_result.into())
             }
 
             #[napi]
@@ -63,7 +63,7 @@ macro_rules! random_forest_regressor_nb_struct {
             }
         }
 
-        impl Deref for [<RandomForestRegressor $x:upper $y:upper>] {
+        impl Deref for [<RandomForestRegressor $x:upper $y_mod $y:upper>] {
             type Target = LibRandomForestRegressor<$x, $y, DenseMatrix<$x>, Vec<$y>>;
 
             fn deref(&self) -> &Self::Target {
@@ -74,7 +74,7 @@ macro_rules! random_forest_regressor_nb_struct {
   };
 }
 
-random_forest_regressor_nb_struct! {f32, u32, DenseMatrixF32, Uint32Array}
-random_forest_regressor_nb_struct! {f32, f32, DenseMatrixF32, Float32Array}
-random_forest_regressor_nb_struct! {f64, u64, DenseMatrixF64, BigUint64Array}
-random_forest_regressor_nb_struct! {f64, f64, DenseMatrixF64, Float64Array}
+random_forest_regressor_nb_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
+random_forest_regressor_nb_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}
+random_forest_regressor_nb_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}
+random_forest_regressor_nb_struct! {f64, f64, "", DenseMatrixF64, Float64Array}

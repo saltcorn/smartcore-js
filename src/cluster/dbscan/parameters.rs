@@ -2,22 +2,32 @@ use napi_derive::napi;
 use paste::paste;
 use smartcore::{
   cluster::dbscan::DBSCANParameters as LibDBSCANParameters,
-  metrics::distance::{euclidian::Euclidian, hamming::Hamming},
+  linalg::basic::matrix::DenseMatrix,
+  metrics::distance::{
+    euclidian::Euclidian, hamming::Hamming, mahalanobis::Mahalanobis, manhattan::Manhattan,
+    minkowski::Minkowski,
+  },
 };
 
-use crate::{algorithm::neighbor::KNNAlgorithmName, metrics::distance::hamming::HammingF32};
+use crate::{
+  algorithm::neighbor::KNNAlgorithmName,
+  metrics::distance::{
+    hamming::HammingF64, mahalanobis::MahalanobisF64, manhattan::ManhattanF64,
+    minkowski::MinkowskiF64,
+  },
+};
 
 macro_rules! dbscan_parameters_struct {
   ( $y:ty, $d:ty, $d_name:ty ) => {
     paste! {
-        #[napi(js_name=""[<$d_name DBSCAN $y:upper Parameters>]"")]
+        #[napi(js_name=""[<DBSCAN $y:upper $d_name  Parameters>]"")]
         #[derive(Debug, Clone)]
-        pub struct [<$d_name DBSCAN $y:upper Parameters>] {
+        pub struct [<DBSCAN $y:upper $d_name  Parameters>] {
             inner: LibDBSCANParameters<$y, $d>,
         }
 
         #[napi]
-        impl [<$d_name DBSCAN $y:upper Parameters>] {
+        impl [<DBSCAN $y:upper $d_name  Parameters>] {
             #[napi]
             pub fn with_min_samples(&mut self, min_samples: i64) {
                 self.inner = self.inner.to_owned().with_min_samples(min_samples as usize)
@@ -46,7 +56,7 @@ macro_rules! dbscan_parameters_struct_distance_impl {
     paste! {
         #[napi]
         impl $ty1 {
-            #[napi(factory)]
+            #[napi]
             #[allow(non_snake_case)]
             pub fn [<with_distance_ $ty2_d>](
                 &self,
@@ -62,16 +72,16 @@ macro_rules! dbscan_parameters_struct_distance_impl {
   };
 }
 
-dbscan_parameters_struct! {f32, Euclidian<f32>, EuclidianF32 }
+dbscan_parameters_struct! {f64, Euclidian<f64>, EuclidianF64 }
 
-impl Default for EuclidianF32DBSCANF32Parameters {
+impl Default for DBSCANF64EuclidianF64Parameters {
   fn default() -> Self {
     Self::new()
   }
 }
 
 #[napi]
-impl EuclidianF32DBSCANF32Parameters {
+impl DBSCANF64EuclidianF64Parameters {
   #[napi(constructor)]
   pub fn new() -> Self {
     Self {
@@ -80,5 +90,14 @@ impl EuclidianF32DBSCANF32Parameters {
   }
 }
 
-dbscan_parameters_struct! {f32, Hamming<f32>, HammingF32 }
-dbscan_parameters_struct_distance_impl! {EuclidianF32DBSCANF32Parameters, HammingF32DBSCANF32Parameters, HammingF32}
+dbscan_parameters_struct! {f64, Hamming<f64>, HammingF64 }
+dbscan_parameters_struct_distance_impl! {DBSCANF64EuclidianF64Parameters, DBSCANF64HammingF64Parameters, HammingF64}
+
+dbscan_parameters_struct! {f64, Mahalanobis<f64, DenseMatrix<f64>>, MahalanobisF64 }
+dbscan_parameters_struct_distance_impl! {DBSCANF64EuclidianF64Parameters, DBSCANF64MahalanobisF64Parameters, MahalanobisF64}
+
+dbscan_parameters_struct! {f64, Manhattan<f64>, ManhattanF64 }
+dbscan_parameters_struct_distance_impl! {DBSCANF64EuclidianF64Parameters, DBSCANF64ManhattanF64Parameters, ManhattanF64}
+
+dbscan_parameters_struct! {f64, Minkowski<f64>, MinkowskiF64 }
+dbscan_parameters_struct_distance_impl! {DBSCANF64EuclidianF64Parameters, DBSCANF64MinkowskiF64Parameters, MinkowskiF64}

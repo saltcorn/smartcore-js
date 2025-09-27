@@ -13,20 +13,20 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix, naive_bayes::gaussian::GaussianNB as LibGaussianNB,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
 use parameters::GaussianNBParameters;
 
 macro_rules! gaussian_nb_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<GaussianNB $x:upper $y:upper>]"")]
+        #[napi(js_name=""[<GaussianNB $x:upper $y_mod $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<GaussianNB $x:upper $y:upper>] {
+        pub struct [<GaussianNB $x:upper $y_mod $y:upper>] {
             inner: LibGaussianNB<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
         #[napi]
-        impl [<GaussianNB $x:upper $y:upper>] {
+        impl [<GaussianNB $x:upper $y_mod $y:upper>] {
             #[napi(factory)]
             pub fn fit(x: &$xs, y: $ys, parameters: &GaussianNBParameters) -> Result<Self> {
                 let y = y.to_vec();
@@ -63,7 +63,7 @@ macro_rules! gaussian_nb_struct {
             }
         }
 
-        impl Deref for [<GaussianNB $x:upper $y:upper>] {
+        impl Deref for [<GaussianNB $x:upper $y_mod $y:upper>] {
             type Target = LibGaussianNB<$x, $y, DenseMatrix<$x>, Vec<$y>>;
 
             fn deref(&self) -> &Self::Target {
@@ -74,5 +74,4 @@ macro_rules! gaussian_nb_struct {
   };
 }
 
-gaussian_nb_struct! {f32, u32, DenseMatrixF32, Uint32Array}
-gaussian_nb_struct! {f64, u64, DenseMatrixF64, BigUint64Array}
+gaussian_nb_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}

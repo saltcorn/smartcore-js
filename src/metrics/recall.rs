@@ -37,5 +37,4 @@ macro_rules! recall_struct {
   };
 }
 
-recall_struct! {f32, Float32Array}
 recall_struct! {f64, Float64Array}

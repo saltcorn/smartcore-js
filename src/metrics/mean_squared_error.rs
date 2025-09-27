@@ -37,5 +37,4 @@ macro_rules! mean_squared_error_struct {
   };
 }
 
-mean_squared_error_struct! {f32, Float32Array}
 mean_squared_error_struct! {f64, Float64Array}
