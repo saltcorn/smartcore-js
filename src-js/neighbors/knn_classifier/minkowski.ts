@@ -9,18 +9,12 @@ import {
 import type { XType, YType } from '../../index.js'
 import { DenseMatrix } from '../../linalg/index.js'
 import type { Estimator, Predictor } from '../../pipeline/index.js'
-import { type IKNNClassifierParameters } from './index.js'
+import { type IKNNClassifierParameters, EstimatorType } from './index.js'
 
 type KNNClassifierRs =
   | KNNClassifierF64I64MinkowskiF64
   | KNNClassifierF64BigI64MinkowskiF64
   | KNNClassifierF64BigU64MinkowskiF64
-
-enum EstimatorType {
-  F64I64,
-  F64BigI64,
-  F64BigU64,
-}
 
 abstract class KNNClassifierStatics {
   private parameters: KNNClassifierF64MinkowskiF64Parameters

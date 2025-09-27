@@ -1,12 +1,6 @@
 import { KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64I64MinkowskiF64, KNNClassifierF64BigI64MinkowskiF64, KNNClassifierF64BigU64MinkowskiF64, KNNClassifierF64MinkowskiF64Parameters, MinkowskiF64, } from '../../../core-bindings/index.js';
 import { DenseMatrix } from '../../linalg/index.js';
-import {} from './index.js';
-var EstimatorType;
-(function (EstimatorType) {
-    EstimatorType[EstimatorType["F64I64"] = 0] = "F64I64";
-    EstimatorType[EstimatorType["F64BigI64"] = 1] = "F64BigI64";
-    EstimatorType[EstimatorType["F64BigU64"] = 2] = "F64BigU64";
-})(EstimatorType || (EstimatorType = {}));
+import { EstimatorType } from './index.js';
 class KNNClassifierStatics {
     constructor(parameters) {
         if (parameters?.p === undefined) {

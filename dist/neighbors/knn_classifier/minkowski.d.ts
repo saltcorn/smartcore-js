@@ -1,12 +1,7 @@
 import { KNNClassifierF64MinkowskiF64Parameters } from '../../../core-bindings/index.js';
 import type { XType, YType } from '../../index.js';
 import type { Estimator, Predictor } from '../../pipeline/index.js';
-import { type IKNNClassifierParameters } from './index.js';
-declare enum EstimatorType {
-    F64I64 = 0,
-    F64BigI64 = 1,
-    F64BigU64 = 2
-}
+import { type IKNNClassifierParameters, EstimatorType } from './index.js';
 declare abstract class KNNClassifierStatics {
     private parameters;
     constructor(parameters?: IKNNClassifierParameters);

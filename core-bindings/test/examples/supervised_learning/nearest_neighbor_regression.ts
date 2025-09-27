@@ -1,4 +1,10 @@
-import { dataset, trainTestSplitF64F64, KNNRegressorF64F64, MeanSquareErrorF64 } from '../../../index.js'
+import {
+  dataset,
+  trainTestSplitF64F64,
+  KNNRegressorF64F64EuclidianF64,
+  KNNRegressorF64EuclidianF64Parameters,
+  MeanSquareErrorF64,
+} from '../../../index.js'
 import assert from 'assert'
 
 export default () => {
@@ -7,7 +13,8 @@ export default () => {
     let x = bostonData.denseMatrix()
     let y = bostonData.target
     let [, xTest, , yTest] = trainTestSplitF64F64(x, y, 0.2, true)
-    let yHatKnn = KNNRegressorF64F64.fit(x, bostonData.target).predict(xTest)
+    let parameters = new KNNRegressorF64EuclidianF64Parameters()
+    let yHatKnn = KNNRegressorF64F64EuclidianF64.fit(x, bostonData.target, parameters).predict(xTest)
     let meanSquareError = new MeanSquareErrorF64()
     let score = meanSquareError.getScore(yTest, yHatKnn)
     assert(score)

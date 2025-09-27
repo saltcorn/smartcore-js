@@ -20,7 +20,7 @@ let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
 let { PCA, SVD } = decomposition
 let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
-let { KNNClassifier } = neighbors
+let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
 let { trainTestSplit } = modelSelection
 let { accuracyScore } = metrics
@@ -313,5 +313,21 @@ describe('Pipelines', () => {
     pipe.fit(xTrain, yTrain)
     let score = accuracyScore(pipe.predict(xTest), yTest)
     assert(score)
+  })
+
+  it('OneHotEncoder + KNNRegressor', () => {
+    let pipe = makePipeline([
+      ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
+      ['knnclassifier', new KNNRegressor()],
+    ])
+    let bostonData = loadBoston({ returnXY: true, unsigned: true })
+    let [x, y] = bostonData instanceof Array ? bostonData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert.equal(score, 0)
   })
 })
