@@ -1,5 +1,6 @@
 import { DenseMatrixF64, DenseMatrixI64, DenseMatrixU64 } from '../../../core-bindings/index.js';
 class DenseMatrix {
+    inner;
     constructor(data, columnMajor) {
         if (data instanceof Array) {
             let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data);

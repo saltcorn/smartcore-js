@@ -1,8 +1,9 @@
 import { BernoulliNBF64BigU64, BernoulliNBF64Parameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class BernoulliNB {
+    parameters;
+    estimator = null;
     constructor(params) {
-        this.estimator = null;
         this.parameters = new BernoulliNBF64Parameters();
         if (params?.alpha) {
             this.parameters.withAlpha(params.alpha);

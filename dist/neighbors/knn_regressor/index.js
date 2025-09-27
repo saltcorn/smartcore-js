@@ -13,6 +13,7 @@ var EstimatorType;
     EstimatorType[EstimatorType["F64BigU64"] = 3] = "F64BigU64";
 })(EstimatorType || (EstimatorType = {}));
 class KNNRegressor {
+    estimator;
     constructor(params) {
         switch (params?.distance) {
             case undefined:

@@ -7,8 +7,9 @@ var EstimatorType;
     EstimatorType[EstimatorType["F64BigU64"] = 2] = "F64BigU64";
 })(EstimatorType || (EstimatorType = {}));
 class RandomForestRegressor {
+    parameters;
+    estimator = null;
     constructor(params) {
-        this.estimator = null;
         this.parameters = new RandomForestRegressorParameters();
         if (params) {
             if (params.maxDepth !== undefined) {

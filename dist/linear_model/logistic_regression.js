@@ -7,8 +7,9 @@ var EstimatorType;
     EstimatorType[EstimatorType["F64I64"] = 2] = "F64I64";
 })(EstimatorType || (EstimatorType = {}));
 class LogisticRegression {
+    estimator = null;
+    parameters;
     constructor(params) {
-        this.estimator = null;
         let parameters = new LogisticRegressionParametersF64();
         if (params) {
             if (params.alpha !== undefined) {

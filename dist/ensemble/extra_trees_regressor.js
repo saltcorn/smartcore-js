@@ -8,8 +8,9 @@ var EstimatorType;
     EstimatorType[EstimatorType["F64F64"] = 3] = "F64F64";
 })(EstimatorType || (EstimatorType = {}));
 class ExtraTreesRegressor {
+    parameters;
+    estimator = null;
     constructor(params) {
-        this.estimator = null;
         this.parameters = new ExtraTreesRegressorParameters();
         if (params) {
             if (params.maxDepth !== undefined) {

@@ -12,6 +12,7 @@ var EstimatorType;
     EstimatorType[EstimatorType["F64BigU64"] = 2] = "F64BigU64";
 })(EstimatorType || (EstimatorType = {}));
 class KNNClassifier {
+    estimator;
     constructor(params) {
         switch (params?.distance) {
             case undefined:

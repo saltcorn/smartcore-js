@@ -2,9 +2,8 @@ import { KNNClassifierF64I64EuclidianF64, KNNClassifierF64BigI64EuclidianF64, KN
 import { DenseMatrix } from '../../linalg/index.js';
 import { EstimatorType } from './index.js';
 class KNNClassifierStatics {
-    constructor() {
-        this.parameters = new KNNClassifierF64EuclidianF64Parameters();
-    }
+    parameters = new KNNClassifierF64EuclidianF64Parameters();
+    constructor() { }
     get params() {
         return this.parameters;
     }
@@ -21,9 +20,9 @@ class KNNClassifierStatics {
     }
 }
 class KNNClassifierEuclidian extends KNNClassifierStatics {
+    estimator = null;
     constructor(params) {
         super();
-        this.estimator = null;
         this.initializeParameterValues(params);
     }
     fit(x, y) {

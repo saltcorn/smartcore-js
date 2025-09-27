@@ -2,9 +2,8 @@ import { KNNRegressorF64F64ManhattanF64, KNNRegressorF64EuclidianF64Parameters, 
 import { DenseMatrix } from '../../linalg/index.js';
 import { EstimatorType } from './index.js';
 class KNNRegressorStatics {
-    constructor() {
-        this.parameters = new KNNRegressorF64EuclidianF64Parameters().withDistanceManhattanF64(new ManhattanF64());
-    }
+    parameters = new KNNRegressorF64EuclidianF64Parameters().withDistanceManhattanF64(new ManhattanF64());
+    constructor() { }
     get params() {
         return this.parameters;
     }
@@ -21,9 +20,9 @@ class KNNRegressorStatics {
     }
 }
 class KNNRegressorManhattan extends KNNRegressorStatics {
+    estimator = null;
     constructor(params) {
         super();
-        this.estimator = null;
         this.initializeParameterValues(params);
     }
     fit(x, y) {

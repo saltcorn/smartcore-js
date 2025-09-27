@@ -1,8 +1,9 @@
 import { GaussianNBF64BigU64, GaussianNBParameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class GaussianNB {
+    parameters;
+    estimator = null;
     constructor(params) {
-        this.estimator = null;
         this.parameters = new GaussianNBParameters();
         if (params?.priors) {
             this.parameters.withPriors(params.priors);

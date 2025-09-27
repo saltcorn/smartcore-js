@@ -8,8 +8,9 @@ var EstimatorType;
     EstimatorType[EstimatorType["F64F64"] = 3] = "F64F64";
 })(EstimatorType || (EstimatorType = {}));
 class RidgeRegression {
+    parameters;
+    estimator = null;
     constructor(params) {
-        this.estimator = null;
         this.parameters = new RidgeRegressionF64Parameters();
         if (params?.solver) {
             this.parameters.withSolver(params.solver);

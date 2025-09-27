@@ -2,6 +2,7 @@ import { KNNRegressorF64F64MahalanobisF64, KNNRegressorF64EuclidianF64Parameters
 import { DenseMatrix } from '../../linalg/index.js';
 import { EstimatorType } from './index.js';
 class KNNRegressorStatics {
+    parameters;
     constructor(parameters) {
         if (parameters?.data === undefined) {
             throw new Error("Mahalanobis requires 'data' to be defined");
@@ -25,9 +26,9 @@ class KNNRegressorStatics {
     }
 }
 class KNNRegressorMahalanobis extends KNNRegressorStatics {
+    estimator = null;
     constructor(params) {
         super();
-        this.estimator = null;
         this.initializeParameterValues(params);
     }
     fit(x, y) {

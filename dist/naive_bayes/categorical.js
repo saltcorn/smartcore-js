@@ -1,8 +1,9 @@
 import { CategoricalNBBigU64, CategoricalNBParameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class CategoricalNB {
+    parameters;
+    estimator = null;
     constructor(params) {
-        this.estimator = null;
         this.parameters = new CategoricalNBParameters();
         if (params?.alpha) {
             this.parameters.withAlpha(params.alpha);

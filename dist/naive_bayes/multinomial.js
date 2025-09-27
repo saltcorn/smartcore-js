@@ -1,8 +1,9 @@
 import { MultinomialNBU64BigU64, MultinomialNBParameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class MultinomialNB {
+    parameters;
+    estimator = null;
     constructor(params) {
-        this.estimator = null;
         this.parameters = new MultinomialNBParameters();
         if (params?.priors) {
             this.parameters.withPriors(params.priors);

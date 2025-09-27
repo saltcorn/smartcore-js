@@ -8,8 +8,9 @@ var EstimatorType;
     EstimatorType[EstimatorType["F64F64"] = 3] = "F64F64";
 })(EstimatorType || (EstimatorType = {}));
 class Lasso {
+    parameters;
+    estimator = null;
     constructor(params) {
-        this.estimator = null;
         this.parameters = new LassoParameters();
         if (params?.alpha) {
             this.parameters.withAlpha(params.alpha);
