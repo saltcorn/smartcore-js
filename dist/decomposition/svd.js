@@ -1,9 +1,8 @@
 import { SVDF64, SVDParameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class SVD {
-    parameters;
-    estimator = null;
     constructor(params) {
+        this.estimator = null;
         this.parameters = new SVDParameters();
         if (params) {
             if (params.nComponents !== undefined) {

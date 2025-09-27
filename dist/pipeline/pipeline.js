@@ -1,7 +1,6 @@
 class Pipeline {
-    steps;
-    verbose = false;
     constructor(steps) {
+        this.verbose = false;
         this.steps = steps;
     }
     _validateNames(names) {

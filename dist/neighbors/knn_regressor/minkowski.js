@@ -2,7 +2,6 @@ import { KNNRegressorF64F64MinkowskiF64, KNNRegressorF64EuclidianF64Parameters, 
 import { DenseMatrix } from '../../linalg/index.js';
 import { EstimatorType } from './index.js';
 class KNNRegressorStatics {
-    parameters;
     constructor(parameters) {
         if (parameters?.p === undefined) {
             throw new Error("Minkowski requires 'p' to be defined");
@@ -25,9 +24,9 @@ class KNNRegressorStatics {
     }
 }
 class KNNRegressorMinkowski extends KNNRegressorStatics {
-    estimator = null;
     constructor(params) {
         super(params);
+        this.estimator = null;
         this.initializeParameterValues(params);
     }
     fit(x, y) {

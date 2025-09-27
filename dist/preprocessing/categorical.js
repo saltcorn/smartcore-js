@@ -1,9 +1,8 @@
 import { OneHotEncoderF64, OneHotEncoderParameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class OneHotEncoder {
-    parameters;
-    estimator = null;
     constructor(params) {
+        this.estimator = null;
         this.parameters = new OneHotEncoderParameters(params.categoricalParams);
     }
     fit(x, _y) {

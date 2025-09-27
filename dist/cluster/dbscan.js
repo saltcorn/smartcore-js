@@ -2,9 +2,8 @@ import { DBSCANF64EuclidianF64Parameters, DBSCANF64F64EuclidianF64, DBSCANF64F64
 import { DBSCANF64HammingF64Parameters, DBSCANF64MahalanobisF64Parameters, DBSCANF64ManhattanF64Parameters, DBSCANF64MinkowskiF64Parameters, } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class DBSCAN {
-    parameters;
-    estimator = null;
     constructor(params) {
+        this.estimator = null;
         this.parameters = new DBSCANF64EuclidianF64Parameters();
         if (params) {
             if (params.minSamples !== undefined) {

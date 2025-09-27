@@ -1,9 +1,8 @@
 import { PCAF64, PCAParameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class PCA {
-    parameters;
-    estimator = null;
     constructor(params) {
+        this.estimator = null;
         this.parameters = new PCAParameters();
         if (params) {
             if (params.nComponents !== undefined) {

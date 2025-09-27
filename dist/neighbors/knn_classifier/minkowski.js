@@ -2,7 +2,6 @@ import { KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64I64MinkowskiF64
 import { DenseMatrix } from '../../linalg/index.js';
 import { EstimatorType } from './index.js';
 class KNNClassifierStatics {
-    parameters;
     constructor(parameters) {
         if (parameters?.p === undefined) {
             throw new Error("Minkowski requires 'p' to be defined");
@@ -25,9 +24,9 @@ class KNNClassifierStatics {
     }
 }
 class KNNClassifierMinkowski extends KNNClassifierStatics {
-    estimator = null;
     constructor(params) {
         super(params);
+        this.estimator = null;
         this.initializeParameterValues(params);
     }
     fit(x, y) {

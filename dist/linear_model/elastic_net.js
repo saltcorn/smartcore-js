@@ -8,9 +8,8 @@ var EstimatorType;
     EstimatorType[EstimatorType["F64F64"] = 3] = "F64F64";
 })(EstimatorType || (EstimatorType = {}));
 class ElasticNet {
-    parameters;
-    estimator = null;
     constructor(params) {
+        this.estimator = null;
         this.parameters = new ElasticNetParameters();
         if (params?.alpha) {
             this.parameters.withAlpha(params.alpha);

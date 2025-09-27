@@ -7,9 +7,8 @@ var EstimatorType;
     EstimatorType[EstimatorType["F64F64"] = 2] = "F64F64";
 })(EstimatorType || (EstimatorType = {}));
 class KMeans {
-    parameters;
-    estimator = null;
     constructor(params) {
+        this.estimator = null;
         this.parameters = new KMeansParameters();
         if (params) {
             if (params.maxIter !== undefined) {

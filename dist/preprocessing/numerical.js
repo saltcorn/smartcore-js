@@ -1,9 +1,8 @@
 import { StandardScalerF64, StandardScalerParameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class StandardScaler {
-    parameters;
-    estimator = null;
     constructor(_params) {
+        this.estimator = null;
         this.parameters = new StandardScalerParameters();
     }
     fit(x, _y) {

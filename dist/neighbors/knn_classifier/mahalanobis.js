@@ -2,7 +2,6 @@ import { KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64I64MahalanobisF
 import { DenseMatrix } from '../../linalg/index.js';
 import { EstimatorType } from './index.js';
 class KNNClassifierStatics {
-    parameters;
     constructor(parameters) {
         if (parameters?.data === undefined) {
             throw new Error("Mahalanobis requires 'data' to be defined");
@@ -26,9 +25,9 @@ class KNNClassifierStatics {
     }
 }
 class KNNClassifierMahalanobis extends KNNClassifierStatics {
-    estimator = null;
     constructor(params) {
         super();
+        this.estimator = null;
         this.initializeParameterValues(params);
     }
     fit(x, y) {

@@ -1,7 +1,6 @@
 import { dataset, DatasetF64I64, DatasetF64F64, DatasetF64U64 } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class Dataset {
-    inner;
     constructor(inner) {
         this.inner = inner;
     }
