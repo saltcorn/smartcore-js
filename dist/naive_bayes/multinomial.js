@@ -1,9 +1,12 @@
-import { MultinomialNBU64BigU64, MultinomialNBParameters } from '../../core-bindings/index.js';
-import { DenseMatrix } from '../linalg/index.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const index_js_1 = require("../../core-bindings/index.js");
+const index_js_2 = require("../linalg/index.js");
 class MultinomialNB {
+    parameters;
+    estimator = null;
     constructor(params) {
-        this.estimator = null;
-        this.parameters = new MultinomialNBParameters();
+        this.parameters = new index_js_1.MultinomialNBParameters();
         if (params?.priors) {
             this.parameters.withPriors(params.priors);
         }
@@ -12,12 +15,12 @@ class MultinomialNB {
         }
     }
     fit(x, y) {
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
+        let matrix = x instanceof index_js_2.DenseMatrix ? x : index_js_2.DenseMatrix.f64(x);
         if (!y || y.length === 0) {
             throw new Error('Input arrays cannot be empty.');
         }
         if (y instanceof BigUint64Array) {
-            this.estimator = MultinomialNBU64BigU64.fit(matrix.asF64(), y, this.parameters);
+            this.estimator = index_js_1.MultinomialNBU64BigU64.fit(matrix.asF64(), y, this.parameters);
         }
         else {
             throw new Error('Unsupported data type!');
@@ -28,7 +31,7 @@ class MultinomialNB {
         if (this.estimator === null) {
             throw new Error("The 'fit' method should called before the 'predict' method is called.");
         }
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
+        let matrix = x instanceof index_js_2.DenseMatrix ? x : index_js_2.DenseMatrix.f64(x);
         return this.estimator.predict(matrix.asF64());
     }
     serialize() {
@@ -36,8 +39,8 @@ class MultinomialNB {
     }
     static deserialize(data) {
         let instance = new MultinomialNB();
-        instance.estimator = MultinomialNBU64BigU64.deserialize(data);
+        instance.estimator = index_js_1.MultinomialNBU64BigU64.deserialize(data);
         return instance;
     }
 }
-export default MultinomialNB;
+exports.default = MultinomialNB;

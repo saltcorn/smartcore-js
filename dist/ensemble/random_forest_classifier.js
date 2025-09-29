@@ -1,5 +1,8 @@
-import { RandomForestClassifierF64BigI64, RandomForestClassifierF64BigU64, RandomForestClassifierF64I64, RandomForestClassifierParameters, } from '../../core-bindings/index.js';
-import { DenseMatrix } from '../linalg/index.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RandomForestClassifier = void 0;
+const index_js_1 = require("../../core-bindings/index.js");
+const index_js_2 = require("../linalg/index.js");
 var EstimatorType;
 (function (EstimatorType) {
     EstimatorType[EstimatorType["F64I64"] = 0] = "F64I64";
@@ -7,9 +10,10 @@ var EstimatorType;
     EstimatorType[EstimatorType["F64BigU64"] = 2] = "F64BigU64";
 })(EstimatorType || (EstimatorType = {}));
 class RandomForestClassifier {
+    parameters;
+    estimator = null;
     constructor(params) {
-        this.estimator = null;
-        this.parameters = new RandomForestClassifierParameters();
+        this.parameters = new index_js_1.RandomForestClassifierParameters();
         if (params) {
             if (params.criterion !== undefined) {
                 this.parameters.withCriterion(params.criterion);
@@ -35,7 +39,7 @@ class RandomForestClassifier {
         }
     }
     fit(x, y) {
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
+        let matrix = x instanceof index_js_2.DenseMatrix ? x : index_js_2.DenseMatrix.f64(x);
         if (!y || y.length === 0) {
             throw new Error('Input arrays cannot be empty.');
         }
@@ -43,13 +47,13 @@ class RandomForestClassifier {
             throw new Error('Unsupported data type for input arrays.');
         }
         else if (y instanceof BigInt64Array) {
-            this.estimator = RandomForestClassifierF64BigI64.fit(matrix.asF64(), y, this.parameters);
+            this.estimator = index_js_1.RandomForestClassifierF64BigI64.fit(matrix.asF64(), y, this.parameters);
         }
         else if (y instanceof BigUint64Array) {
-            this.estimator = RandomForestClassifierF64BigU64.fit(matrix.asF64(), y, this.parameters);
+            this.estimator = index_js_1.RandomForestClassifierF64BigU64.fit(matrix.asF64(), y, this.parameters);
         }
         else if (y.every((val) => Number.isInteger(val))) {
-            this.estimator = RandomForestClassifierF64I64.fit(matrix.asF64(), y, this.parameters);
+            this.estimator = index_js_1.RandomForestClassifierF64I64.fit(matrix.asF64(), y, this.parameters);
         }
         else {
             throw new Error('Unsupported data type for input arrays.');
@@ -60,7 +64,7 @@ class RandomForestClassifier {
         if (this.estimator === null) {
             throw new Error("The 'fit' method should called before the 'predict' method is called.");
         }
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
+        let matrix = x instanceof index_js_2.DenseMatrix ? x : index_js_2.DenseMatrix.f64(x);
         return this.estimator.predict(matrix.asF64());
     }
     serialize() {
@@ -70,13 +74,13 @@ class RandomForestClassifier {
         let instance = new RandomForestClassifier();
         switch (estimatorType) {
             case EstimatorType.F64BigI64:
-                instance.estimator = RandomForestClassifierF64BigI64.deserialize(data);
+                instance.estimator = index_js_1.RandomForestClassifierF64BigI64.deserialize(data);
                 break;
             case EstimatorType.F64BigU64:
-                instance.estimator = RandomForestClassifierF64BigU64.deserialize(data);
+                instance.estimator = index_js_1.RandomForestClassifierF64BigU64.deserialize(data);
                 break;
             case EstimatorType.F64I64:
-                instance.estimator = RandomForestClassifierF64I64.deserialize(data);
+                instance.estimator = index_js_1.RandomForestClassifierF64I64.deserialize(data);
                 break;
             default:
                 throw new Error(`Unrecognized estimator type: '${estimatorType}'`);
@@ -84,4 +88,4 @@ class RandomForestClassifier {
         return instance;
     }
 }
-export { RandomForestClassifier };
+exports.RandomForestClassifier = RandomForestClassifier;

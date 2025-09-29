@@ -1,6 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Pipeline = void 0;
 class Pipeline {
+    steps;
+    verbose = false;
     constructor(steps) {
-        this.verbose = false;
         this.steps = steps;
     }
     _validateNames(names) {
@@ -116,7 +120,7 @@ or be the string 'passthrough'. '${t}' (type ${typeof t}) doesn't/isn't`;
         return predictor.predict(x);
     }
 }
-export { Pipeline };
+exports.Pipeline = Pipeline;
 // let pipeline = new Pipeline([
 //   ['bfr', new BaseForestRegressor()],
 //   ['bfc', new BaseForestClassifier()],
