@@ -1,12 +1,10 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.KNNRegressorHamming = void 0;
-const index_js_1 = require("../../../core-bindings/index.js");
-const index_js_2 = require("../../linalg/index.js");
-const index_js_3 = require("./index.js");
+import { KNNRegressorF64EuclidianF64Parameters, KNNRegressorF64F64HammingF64, KNNRegressorF64I64HammingF64, KNNRegressorF64BigI64HammingF64, KNNRegressorF64BigU64HammingF64, KNNRegressorF64HammingF64Parameters, HammingF64, } from '../../../core-bindings/index.js';
+import { DenseMatrix } from '../../linalg/index.js';
+import { EstimatorType } from './index.js';
 class KNNRegressorStatics {
-    parameters = new index_js_1.KNNRegressorF64EuclidianF64Parameters().withDistanceHammingF64(new index_js_1.HammingF64());
-    constructor() { }
+    constructor() {
+        this.parameters = new KNNRegressorF64EuclidianF64Parameters().withDistanceHammingF64(new HammingF64());
+    }
     get params() {
         return this.parameters;
     }
@@ -23,27 +21,27 @@ class KNNRegressorStatics {
     }
 }
 class KNNRegressorHamming extends KNNRegressorStatics {
-    estimator = null;
     constructor(params) {
         super();
+        this.estimator = null;
         this.initializeParameterValues(params);
     }
     fit(x, y) {
-        let matrix = x instanceof index_js_2.DenseMatrix ? x : index_js_2.DenseMatrix.f64(x);
+        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
         if (!y || y.length === 0) {
             throw new Error('Input arrays cannot be empty.');
         }
         if (y instanceof BigInt64Array) {
-            this.estimator = index_js_1.KNNRegressorF64BigI64HammingF64.fit(matrix.asF64(), y, this.params);
+            this.estimator = KNNRegressorF64BigI64HammingF64.fit(matrix.asF64(), y, this.params);
         }
         else if (y instanceof BigUint64Array) {
-            this.estimator = index_js_1.KNNRegressorF64BigU64HammingF64.fit(matrix.asF64(), y, this.params);
+            this.estimator = KNNRegressorF64BigU64HammingF64.fit(matrix.asF64(), y, this.params);
         }
         else if (y instanceof Float64Array) {
-            this.estimator = index_js_1.KNNRegressorF64F64HammingF64.fit(matrix.asF64(), y, this.params);
+            this.estimator = KNNRegressorF64F64HammingF64.fit(matrix.asF64(), y, this.params);
         }
         else if (y instanceof Array) {
-            this.estimator = index_js_1.KNNRegressorF64I64HammingF64.fit(matrix.asF64(), y, this.params);
+            this.estimator = KNNRegressorF64I64HammingF64.fit(matrix.asF64(), y, this.params);
         }
         else {
             throw new Error('Unsupported data type');
@@ -54,7 +52,7 @@ class KNNRegressorHamming extends KNNRegressorStatics {
         if (this.estimator === null) {
             throw new Error("The 'fit' method should called before the 'predict' method is called.");
         }
-        let matrix = x instanceof index_js_2.DenseMatrix ? x : index_js_2.DenseMatrix.f64(x);
+        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
         return this.estimator.predict(matrix.asF64());
     }
     serialize() {
@@ -63,17 +61,17 @@ class KNNRegressorHamming extends KNNRegressorStatics {
     static deserialize(data, estimatorType) {
         let instance = new KNNRegressorHamming();
         switch (estimatorType) {
-            case index_js_3.EstimatorType.F64F64:
-                instance.estimator = index_js_1.KNNRegressorF64F64HammingF64.deserialize(data);
+            case EstimatorType.F64F64:
+                instance.estimator = KNNRegressorF64F64HammingF64.deserialize(data);
                 break;
-            case index_js_3.EstimatorType.F64BigI64:
-                instance.estimator = index_js_1.KNNRegressorF64BigI64HammingF64.deserialize(data);
+            case EstimatorType.F64BigI64:
+                instance.estimator = KNNRegressorF64BigI64HammingF64.deserialize(data);
                 break;
-            case index_js_3.EstimatorType.F64BigU64:
-                instance.estimator = index_js_1.KNNRegressorF64BigU64HammingF64.deserialize(data);
+            case EstimatorType.F64BigU64:
+                instance.estimator = KNNRegressorF64BigU64HammingF64.deserialize(data);
                 break;
-            case index_js_3.EstimatorType.F64I64:
-                instance.estimator = index_js_1.KNNRegressorF64I64HammingF64.deserialize(data);
+            case EstimatorType.F64I64:
+                instance.estimator = KNNRegressorF64I64HammingF64.deserialize(data);
                 break;
             default:
                 throw new Error(`Unrecognized estimator type: '${estimatorType}'`);
@@ -81,4 +79,4 @@ class KNNRegressorHamming extends KNNRegressorStatics {
         return instance;
     }
 }
-exports.KNNRegressorHamming = KNNRegressorHamming;
+export { KNNRegressorHamming };

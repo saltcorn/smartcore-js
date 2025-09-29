@@ -1,16 +1,13 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const index_js_1 = require("../../../core-bindings/index.js");
+import { DenseMatrixF64, DenseMatrixI64, DenseMatrixU64 } from '../../../core-bindings/index.js';
 class DenseMatrix {
-    inner;
     constructor(data, columnMajor) {
         if (data instanceof Array) {
             let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data);
             if (valuesFlat.every((val) => Number.isInteger(val))) {
-                this.inner = new index_js_1.DenseMatrixI64(nrows, ncols, valuesFlat, columnMajor);
+                this.inner = new DenseMatrixI64(nrows, ncols, valuesFlat, columnMajor);
             }
             else {
-                this.inner = new index_js_1.DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor);
+                this.inner = new DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor);
             }
         }
         else {
@@ -31,26 +28,26 @@ class DenseMatrix {
     }
     static f64(data, columnMajor) {
         let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data);
-        let matrix = new index_js_1.DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor);
+        let matrix = new DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor);
         return new DenseMatrix(matrix, columnMajor);
     }
     static u64(data, columnMajor) {
         let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data);
         let BigValuesFlat = valuesFlat.map((v) => BigInt(v));
-        let matrix = new index_js_1.DenseMatrixU64(nrows, ncols, new BigUint64Array(BigValuesFlat), columnMajor);
+        let matrix = new DenseMatrixU64(nrows, ncols, new BigUint64Array(BigValuesFlat), columnMajor);
         return new DenseMatrix(matrix, columnMajor);
     }
     asF64() {
-        if (!(this.inner instanceof index_js_1.DenseMatrixF64)) {
+        if (!(this.inner instanceof DenseMatrixF64)) {
             throw new Error('Inner type not an f64 DenseMatrix');
         }
         return this.inner;
     }
     asU64() {
-        if (this.inner instanceof index_js_1.DenseMatrixU64) {
+        if (this.inner instanceof DenseMatrixU64) {
             return this.inner;
         }
-        else if (this.inner instanceof index_js_1.DenseMatrixI64) {
+        else if (this.inner instanceof DenseMatrixI64) {
             //s
         }
         else {
@@ -59,4 +56,4 @@ class DenseMatrix {
         return this.inner;
     }
 }
-exports.default = DenseMatrix;
+export default DenseMatrix;

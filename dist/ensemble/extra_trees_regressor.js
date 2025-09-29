@@ -1,8 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ExtraTreesRegressor = void 0;
-const index_js_1 = require("../../core-bindings/index.js");
-const index_js_2 = require("../linalg/index.js");
+import { ExtraTreesRegressorF64BigU64, ExtraTreesRegressorF64BigI64, ExtraTreesRegressorF64I64, ExtraTreesRegressorParameters, ExtraTreesRegressorF64F64, } from '../../core-bindings/index.js';
+import { DenseMatrix } from '../linalg/index.js';
 var EstimatorType;
 (function (EstimatorType) {
     EstimatorType[EstimatorType["F64I64"] = 0] = "F64I64";
@@ -11,10 +8,9 @@ var EstimatorType;
     EstimatorType[EstimatorType["F64F64"] = 3] = "F64F64";
 })(EstimatorType || (EstimatorType = {}));
 class ExtraTreesRegressor {
-    parameters;
-    estimator = null;
     constructor(params) {
-        this.parameters = new index_js_1.ExtraTreesRegressorParameters();
+        this.estimator = null;
+        this.parameters = new ExtraTreesRegressorParameters();
         if (params) {
             if (params.maxDepth !== undefined) {
                 this.parameters.withMaxDepth(params.maxDepth);
@@ -40,21 +36,21 @@ class ExtraTreesRegressor {
         }
     }
     fit(x, y) {
-        let matrix = x instanceof index_js_2.DenseMatrix ? x : index_js_2.DenseMatrix.f64(x);
+        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
         if (!y || y.length === 0) {
             throw new Error('Input arrays cannot be empty.');
         }
         if (y instanceof Float64Array) {
-            this.estimator = index_js_1.ExtraTreesRegressorF64F64.fit(matrix.asF64(), y, this.parameters);
+            this.estimator = ExtraTreesRegressorF64F64.fit(matrix.asF64(), y, this.parameters);
         }
         else if (y instanceof BigInt64Array) {
-            this.estimator = index_js_1.ExtraTreesRegressorF64BigI64.fit(matrix.asF64(), y, this.parameters);
+            this.estimator = ExtraTreesRegressorF64BigI64.fit(matrix.asF64(), y, this.parameters);
         }
         else if (y instanceof BigUint64Array) {
-            this.estimator = index_js_1.ExtraTreesRegressorF64BigU64.fit(matrix.asF64(), y, this.parameters);
+            this.estimator = ExtraTreesRegressorF64BigU64.fit(matrix.asF64(), y, this.parameters);
         }
         else if (y.every((val) => Number.isInteger(val))) {
-            this.estimator = index_js_1.ExtraTreesRegressorF64I64.fit(matrix.asF64(), y, this.parameters);
+            this.estimator = ExtraTreesRegressorF64I64.fit(matrix.asF64(), y, this.parameters);
         }
         else {
             throw new Error('Unsupported data type for input arrays.');
@@ -65,7 +61,7 @@ class ExtraTreesRegressor {
         if (this.estimator === null) {
             throw new Error("The 'fit' method should called before the 'predict' method is called.");
         }
-        let matrix = x instanceof index_js_2.DenseMatrix ? x : index_js_2.DenseMatrix.f64(x);
+        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
         return this.estimator.predict(matrix.asF64());
     }
     serialize() {
@@ -75,16 +71,16 @@ class ExtraTreesRegressor {
         let instance = new ExtraTreesRegressor();
         switch (estimatorType) {
             case EstimatorType.F64BigI64:
-                instance.estimator = index_js_1.ExtraTreesRegressorF64BigI64.deserialize(data);
+                instance.estimator = ExtraTreesRegressorF64BigI64.deserialize(data);
                 break;
             case EstimatorType.F64BigU64:
-                instance.estimator = index_js_1.ExtraTreesRegressorF64BigU64.deserialize(data);
+                instance.estimator = ExtraTreesRegressorF64BigU64.deserialize(data);
                 break;
             case EstimatorType.F64I64:
-                instance.estimator = index_js_1.ExtraTreesRegressorF64I64.deserialize(data);
+                instance.estimator = ExtraTreesRegressorF64I64.deserialize(data);
                 break;
             case EstimatorType.F64F64:
-                instance.estimator = index_js_1.ExtraTreesRegressorF64F64.deserialize(data);
+                instance.estimator = ExtraTreesRegressorF64F64.deserialize(data);
                 break;
             default:
                 throw new Error(`Unrecognized estimator type: '${estimatorType}'`);
@@ -92,4 +88,4 @@ class ExtraTreesRegressor {
         return instance;
     }
 }
-exports.ExtraTreesRegressor = ExtraTreesRegressor;
+export { ExtraTreesRegressor };

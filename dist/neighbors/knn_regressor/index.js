@@ -1,39 +1,35 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.EstimatorType = exports.KNNRegressor = void 0;
-const index_js_1 = require("../../../core-bindings/index.js");
-const index_js_2 = require("../../metrics/index.js");
-const euclidian_js_1 = require("./euclidian.js");
-const hamming_js_1 = require("./hamming.js");
-const mahalanobis_js_1 = require("./mahalanobis.js");
-const manhattan_js_1 = require("./manhattan.js");
-const minkowski_js_1 = require("./minkowski.js");
+import {} from '../../../core-bindings/index.js';
+import { DistanceType } from '../../metrics/index.js';
+import { KNNRegressorEuclidian } from './euclidian.js';
+import { KNNRegressorHamming } from './hamming.js';
+import { KNNRegressorMahalanobis } from './mahalanobis.js';
+import { KNNRegressorManhattan } from './manhattan.js';
+import { KNNRegressorMinkowski } from './minkowski.js';
 var EstimatorType;
 (function (EstimatorType) {
     EstimatorType[EstimatorType["F64F64"] = 0] = "F64F64";
     EstimatorType[EstimatorType["F64I64"] = 1] = "F64I64";
     EstimatorType[EstimatorType["F64BigI64"] = 2] = "F64BigI64";
     EstimatorType[EstimatorType["F64BigU64"] = 3] = "F64BigU64";
-})(EstimatorType || (exports.EstimatorType = EstimatorType = {}));
+})(EstimatorType || (EstimatorType = {}));
 class KNNRegressor {
-    estimator;
     constructor(params) {
         switch (params?.distance) {
             case undefined:
-            case index_js_2.DistanceType.EUCLIDIAN:
-                this.estimator = new euclidian_js_1.KNNRegressorEuclidian(params);
+            case DistanceType.EUCLIDIAN:
+                this.estimator = new KNNRegressorEuclidian(params);
                 break;
-            case index_js_2.DistanceType.HAMMING:
-                this.estimator = new hamming_js_1.KNNRegressorHamming(params);
+            case DistanceType.HAMMING:
+                this.estimator = new KNNRegressorHamming(params);
                 break;
-            case index_js_2.DistanceType.MAHALANOBIS:
-                this.estimator = new mahalanobis_js_1.KNNRegressorMahalanobis(params);
+            case DistanceType.MAHALANOBIS:
+                this.estimator = new KNNRegressorMahalanobis(params);
                 break;
-            case index_js_2.DistanceType.MANHATTAN:
-                this.estimator = new manhattan_js_1.KNNRegressorManhattan(params);
+            case DistanceType.MANHATTAN:
+                this.estimator = new KNNRegressorManhattan(params);
                 break;
-            case index_js_2.DistanceType.MINKOWSKI:
-                this.estimator = new minkowski_js_1.KNNRegressorMinkowski(params);
+            case DistanceType.MINKOWSKI:
+                this.estimator = new KNNRegressorMinkowski(params);
                 break;
             default:
                 throw new Error('Unrecognized distance type');
@@ -52,23 +48,23 @@ class KNNRegressor {
     static deserialize(data, estimatorType, distanceType) {
         let instance = new KNNRegressor();
         switch (distanceType) {
-            case index_js_2.DistanceType.EUCLIDIAN:
-                instance.estimator = euclidian_js_1.KNNRegressorEuclidian.deserialize(data, estimatorType);
+            case DistanceType.EUCLIDIAN:
+                instance.estimator = KNNRegressorEuclidian.deserialize(data, estimatorType);
                 break;
-            case index_js_2.DistanceType.HAMMING:
-                instance.estimator = hamming_js_1.KNNRegressorHamming.deserialize(data, estimatorType);
+            case DistanceType.HAMMING:
+                instance.estimator = KNNRegressorHamming.deserialize(data, estimatorType);
                 break;
-            case index_js_2.DistanceType.MAHALANOBIS:
-                instance.estimator = mahalanobis_js_1.KNNRegressorMahalanobis.deserialize(data, estimatorType);
+            case DistanceType.MAHALANOBIS:
+                instance.estimator = KNNRegressorMahalanobis.deserialize(data, estimatorType);
                 break;
-            case index_js_2.DistanceType.MANHATTAN:
-                instance.estimator = manhattan_js_1.KNNRegressorManhattan.deserialize(data, estimatorType);
+            case DistanceType.MANHATTAN:
+                instance.estimator = KNNRegressorManhattan.deserialize(data, estimatorType);
                 break;
-            case index_js_2.DistanceType.MINKOWSKI:
-                instance.estimator = minkowski_js_1.KNNRegressorMinkowski.deserialize(data, estimatorType);
+            case DistanceType.MINKOWSKI:
+                instance.estimator = KNNRegressorMinkowski.deserialize(data, estimatorType);
                 break;
         }
         return instance;
     }
 }
-exports.KNNRegressor = KNNRegressor;
+export { KNNRegressor, EstimatorType };
