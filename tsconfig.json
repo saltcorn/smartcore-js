@@ -1,21 +1,37 @@
+// {
+//   "compilerOptions": {
+//     "target": "esnext",
+//     "strict": true,
+//     "moduleResolution": "node",
+//     "module": "commonjs",
+//     "noUnusedLocals": true,
+//     "noUnusedParameters": true,
+//     "esModuleInterop": true,
+//     "allowSyntheticDefaultImports": true,
+//     "verbatimModuleSyntax": true,
+//     "preserveConstEnums": true,
+//     "declaration": true,
+//     "outDir": "./dist"
+//   },
+//   "ts-node": {
+//     "esm": true,
+//     "transpileOnly": true // Speeds up compilation
+//   },
+//   "include": ["."],
+//   "exclude": ["node_modules", "bench", "core-bindings/**/*", "test/**/*", "dist/**/*"]
+// }
+
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ESNext",
     "strict": true,
     "moduleResolution": "node",
-    "module": "commonjs",
+    "module": "CommonJS",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "verbatimModuleSyntax": true,
-    "preserveConstEnums": true,
-    "declaration": true,
     "outDir": "./dist"
-  },
-  "ts-node": {
-    "esm": true,
-    "transpileOnly": true // Speeds up compilation
   },
   "include": ["."],
   "exclude": ["node_modules", "bench", "core-bindings/**/*", "test/**/*", "dist/**/*"]
