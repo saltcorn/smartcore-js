@@ -288,8 +288,8 @@ describe('Pipelines', () => {
       ['standardscaler', new StandardScaler()],
       ['multinomialnb', new MultinomialNB()],
     ])
-    let irisData = loadIris({ returnXY: true, unsigned: true })
-    let [x, y] = irisData instanceof Array ? irisData : []
+    let breastCancerData = loadBreastCancer({ returnXY: true, unsigned: true })
+    let [x, y] = breastCancerData instanceof Array ? breastCancerData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
