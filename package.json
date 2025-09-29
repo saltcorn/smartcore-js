@@ -63,7 +63,7 @@
     "format:rs": "cargo fmt",
     "lint": "oxlint .",
     "prepublishOnly": "napi prepublish -t npm",
-    "test": "mocha",
+    "test": "tsx node_modules/.bin/mocha",
     "version": "napi version",
     "prepare": "husky"
   },
@@ -85,7 +85,7 @@
     "prettier": "^3.6.2",
     "tinybench": "^5.0.0",
     "ts-node": "^10.9.2",
-    "tsx": "^4.20.5",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.2"
   },
   "lint-staged": {
