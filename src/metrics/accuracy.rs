@@ -37,6 +37,6 @@ macro_rules! accuracy_struct {
   };
 }
 
-accuracy_struct! {f32, Float32Array}
 accuracy_struct! {f64, Float64Array}
-accuracy_struct! {u32, Uint32Array}
+accuracy_struct! {i64, BigInt64Array}
+accuracy_struct! {u64, BigUint64Array}

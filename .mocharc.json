@@ -1,5 +1,8 @@
 {
   "require": "ts-node/register",
   "extension": ["ts", "tsx"],
-  "spec": "test/**/*.spec.ts"
+  "spec": ["test/**/*.spec.ts", "core-bindings/test/**/*.spec.ts"],
+  "ts-node": {
+    "project": "tsconfig.test.json"
+  }
 }

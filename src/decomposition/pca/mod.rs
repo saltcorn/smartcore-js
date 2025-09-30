@@ -12,7 +12,7 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix,
 };
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+use crate::linalg::basic::matrix::DenseMatrixF64;
 use parameters::PCAParameters;
 
 macro_rules! pca_struct {
@@ -26,7 +26,7 @@ macro_rules! pca_struct {
 
         #[napi]
         impl [<PCA $ty:upper>] {
-            #[napi(constructor)]
+            #[napi]
             pub fn fit(data: &[<DenseMatrix $ty:upper>], parameters: &PCAParameters) -> Result<Self> {
                 let pca = LibPCA::fit(
                     data as &DenseMatrix<$ty>,
@@ -63,5 +63,4 @@ macro_rules! pca_struct {
   };
 }
 
-pca_struct! {f32}
 pca_struct! {f64}

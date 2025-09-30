@@ -6,14 +6,14 @@ use smartcore::naive_bayes::bernoulli::BernoulliNBParameters as LibBernoulliNBPa
 macro_rules! svr_parameters_struct {
   ( $y:ty, $y_to:ty ) => {
     paste! {
-        #[napi(js_name=""[<BernoulliNBParameters $y_to:upper>]"")]
+        #[napi(js_name=""[<BernoulliNB $y_to:upper Parameters>]"")]
         #[derive(Debug, Default)]
-        pub struct [<BernoulliNBParameters $y_to:upper>] {
+        pub struct [<BernoulliNB $y_to:upper Parameters>] {
             inner: Option<LibBernoulliNBParameters<$y_to>>,
         }
 
         #[napi]
-        impl [<BernoulliNBParameters $y_to:upper>] {
+        impl [<BernoulliNB $y_to:upper Parameters>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self {
@@ -50,5 +50,4 @@ macro_rules! svr_parameters_struct {
   };
 }
 
-svr_parameters_struct! {f64, f32}
 svr_parameters_struct! {f64, f64}

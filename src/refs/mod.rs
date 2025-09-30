@@ -2,7 +2,7 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 
-use crate::dataset::{DatasetF32F32, DatasetF32U32, DatasetF64F64, DatasetF64U64};
+use crate::dataset::{DatasetF64F64, DatasetF64I64};
 
 macro_rules! js_vec_ref {
   ( $provider:ty, $t:ty, $ts_js:ty ) => {
@@ -51,21 +51,50 @@ macro_rules! js_vec_ref {
   };
 }
 
-js_vec_ref! {DatasetF32F32, f32, Float32Array}
-js_vec_ref! {DatasetF32U32, u32, Uint32Array}
 js_vec_ref! {DatasetF64F64, f64, Float64Array}
-js_vec_ref! {DatasetF64U64, u64, BigUint64Array}
+js_vec_ref! {DatasetF64I64, i64, BigInt64Array}
 
-// #[napi]
-// struct VecU32 {
-//     inner: Vec<u32>
-// }
+macro_rules! vec_ref {
+  ( $t:ty, $ts_js:ty ) => {
+    paste! {
+        #[napi]
+        pub struct [<Vec $t:upper>] {
+            inner: Vec<$t>,
+        }
 
-// impl VecU32 {
-//     #[napi(constructor)]
-//     pub fn new(values: Ui) -> Self {}
-// }
+        #[napi]
+        impl [<Vec $t:upper>] {
+            #[napi(constructor)]
+            pub fn new(values: $ts_js) -> Self {
+                Self {
+                    inner: values.to_vec(),
+                }
+            }
+        }
 
-// struct VecRefU32 {
-//     inner: &'a Vec<$t>
-// }
+        pub struct [<Vec $t:upper Ref>]<'a> {
+            inner: &'a Vec<$t>,
+        }
+
+        impl<'a> [<Vec $t:upper Ref>]<'a> {
+            pub fn inner(&self) -> &Vec<$t> {
+                self.inner
+            }
+        }
+
+        #[napi]
+        pub struct [<JsVec $t:upper Ref>] {
+            inner: SharedReference<[<Vec $t:upper>], [<Vec $t:upper Ref>]<'static>>,
+        }
+
+        impl [<JsVec $t:upper Ref>] {
+            pub fn inner(&self) -> &Vec<$t> {
+                self.inner.inner()
+            }
+        }
+    }
+  };
+}
+
+vec_ref! {f64, Float64Array}
+vec_ref! {i64, BigInt64Array}

@@ -1,17 +1,18 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
+    "target": "es2020",
     "strict": true,
     "moduleResolution": "nodenext",
     "module": "nodenext",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
-  },
-  "ts-node": {
-    "transpileOnly": true // Speeds up compilation
+    "allowSyntheticDefaultImports": true,
+    "verbatimModuleSyntax": true,
+    "preserveConstEnums": true,
+    "declaration": true,
+    "outDir": "./dist"
   },
   "include": ["."],
-  "exclude": ["node_modules", "bench", "__test__"]
+  "exclude": ["node_modules", "bench", "core-bindings/**/*", "test/**/*", "dist/**/*"]
 }

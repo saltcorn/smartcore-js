@@ -5,7 +5,7 @@ use smartcore::linear::logistic_regression::{
   LogisticRegressionSolverName as LibLogisticRegressionSolverName,
 };
 
-#[napi]
+#[napi(string_enum)]
 pub enum LogisticRegressionSolverName {
   #[allow(clippy::upper_case_acronyms)]
   LBFGS,
@@ -58,5 +58,4 @@ macro_rules! logistic_regression_parameters_struct {
   };
 }
 
-logistic_regression_parameters_struct! {f32}
 logistic_regression_parameters_struct! {f64}

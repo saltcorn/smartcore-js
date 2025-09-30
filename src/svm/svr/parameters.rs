@@ -65,5 +65,4 @@ macro_rules! svr_parameters_struct {
   };
 }
 
-svr_parameters_struct! {f64, f32}
 svr_parameters_struct! {f64, f64}
