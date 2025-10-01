@@ -5,6 +5,12 @@ import { KNNClassifierHamming } from './hamming.js';
 import { KNNClassifierMahalanobis } from './mahalanobis.js';
 import { KNNClassifierManhattan } from './manhattan.js';
 import { KNNClassifierMinkowski } from './minkowski.js';
+var EstimatorType;
+(function (EstimatorType) {
+    EstimatorType[EstimatorType["F64I64"] = 0] = "F64I64";
+    EstimatorType[EstimatorType["F64BigI64"] = 1] = "F64BigI64";
+    EstimatorType[EstimatorType["F64BigU64"] = 2] = "F64BigU64";
+})(EstimatorType || (EstimatorType = {}));
 class KNNClassifier {
     constructor(params) {
         switch (params?.distance) {
@@ -38,9 +44,26 @@ class KNNClassifier {
     serialize() {
         return this.estimator?.serialize();
     }
-    deserialize(data, yType) {
-        this.estimator.deserialize(data, yType);
-        return this;
+    static deserialize(data, estimatorType, distanceType) {
+        let instance = new KNNClassifier();
+        switch (distanceType) {
+            case DistanceType.EUCLIDIAN:
+                instance.estimator = KNNClassifierEuclidian.deserialize(data, estimatorType);
+                break;
+            case DistanceType.HAMMING:
+                instance.estimator = KNNClassifierHamming.deserialize(data, estimatorType);
+                break;
+            case DistanceType.MAHALANOBIS:
+                instance.estimator = KNNClassifierMahalanobis.deserialize(data, estimatorType);
+                break;
+            case DistanceType.MANHATTAN:
+                instance.estimator = KNNClassifierManhattan.deserialize(data, estimatorType);
+                break;
+            case DistanceType.MINKOWSKI:
+                instance.estimator = KNNClassifierMinkowski.deserialize(data, estimatorType);
+                break;
+        }
+        return instance;
     }
 }
-export { KNNClassifier };
+export { KNNClassifier, EstimatorType };

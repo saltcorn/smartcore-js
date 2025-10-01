@@ -17,18 +17,14 @@ interface IKNNClassifierParameters {
   data?: XType
 }
 
+type YTypeKey = 'bigI64' | 'bigU64' | 'i64'
+
 type KNNClassifierDistance =
   | KNNClassifierEuclidian
   | KNNClassifierHamming
   | KNNClassifierMahalanobis
   | KNNClassifierManhattan
   | KNNClassifierMinkowski
-
-enum EstimatorType {
-  F64I64,
-  F64BigI64,
-  F64BigU64,
-}
 
 class KNNClassifier implements Estimator<XType, YType, KNNClassifier>, Predictor<XType, YType> {
   private estimator: KNNClassifierDistance
@@ -69,27 +65,10 @@ class KNNClassifier implements Estimator<XType, YType, KNNClassifier>, Predictor
     return this.estimator?.serialize()
   }
 
-  static deserialize(data: Buffer, estimatorType: EstimatorType, distanceType: DistanceType): KNNClassifier {
-    let instance = new KNNClassifier()
-    switch (distanceType) {
-      case DistanceType.EUCLIDIAN:
-        instance.estimator = KNNClassifierEuclidian.deserialize(data, estimatorType)
-        break
-      case DistanceType.HAMMING:
-        instance.estimator = KNNClassifierHamming.deserialize(data, estimatorType)
-        break
-      case DistanceType.MAHALANOBIS:
-        instance.estimator = KNNClassifierMahalanobis.deserialize(data, estimatorType)
-        break
-      case DistanceType.MANHATTAN:
-        instance.estimator = KNNClassifierManhattan.deserialize(data, estimatorType)
-        break
-      case DistanceType.MINKOWSKI:
-        instance.estimator = KNNClassifierMinkowski.deserialize(data, estimatorType)
-        break
-    }
-    return instance
+  deserialize(data: Buffer, yType: YTypeKey): KNNClassifier {
+    this.estimator.deserialize(data, yType)
+    return this
   }
 }
 
-export { KNNClassifier, type IKNNClassifierParameters, EstimatorType }
+export { KNNClassifier, type IKNNClassifierParameters, type YTypeKey }
