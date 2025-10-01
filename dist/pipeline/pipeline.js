@@ -1,7 +1,12 @@
 class Pipeline {
     constructor(steps) {
         this.verbose = false;
-        this.steps = steps;
+        let namedSteps = steps.map((step, idx) => {
+            if (step instanceof Array)
+                return step;
+            return [`${step.name}${idx}`, step];
+        });
+        this.steps = namedSteps;
     }
     _validateNames(names) {
         let namesSet = new Set(names);

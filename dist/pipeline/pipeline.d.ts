@@ -3,9 +3,11 @@ import type { Estimator, Predictor, Transformer } from './index.js';
 type TransformerType = Estimator<any, any, any> & Transformer<any>;
 type PredictorType = Estimator<any, any, any> & Predictor<any, any>;
 type StepItem = PredictorType | TransformerType | string | null;
-type Step = [string, StepItem];
+type NamedStep = [string, StepItem];
+type DefinedStepItem = PredictorType | TransformerType;
+type Step = NamedStep | DefinedStepItem;
 declare class Pipeline {
-    steps: Step[];
+    steps: NamedStep[];
     verbose: boolean;
     constructor(steps: Step[]);
     private _validateNames;

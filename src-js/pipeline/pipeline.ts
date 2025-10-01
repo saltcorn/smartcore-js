@@ -6,14 +6,20 @@ type PredictorType = Estimator<any, any, any> & Predictor<any, any>
 
 type StepItem = PredictorType | TransformerType | string | null
 
-type Step = [string, StepItem]
+type NamedStep = [string, StepItem]
+type DefinedStepItem = PredictorType | TransformerType
+type Step = NamedStep | DefinedStepItem
 
 class Pipeline {
-  steps: Step[]
+  steps: NamedStep[]
   verbose = false
 
   constructor(steps: Step[]) {
-    this.steps = steps
+    let namedSteps = steps.map((step, idx) => {
+      if (step instanceof Array) return step
+      return [`${step.name}${idx}`, step] as NamedStep
+    })
+    this.steps = namedSteps
   }
 
   private _validateNames(names: string[]) {
