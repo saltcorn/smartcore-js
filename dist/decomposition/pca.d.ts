@@ -7,6 +7,8 @@ interface PCAParams {
 declare class PCA implements Estimator<XType, YType, PCA>, Transformer<XType> {
     private parameters;
     private estimator;
+    static readonly className = "PCA";
+    readonly name: string;
     constructor(params?: PCAParams);
     fit(x: XType, y: YType): PCA;
     transform(x: XType): XType;

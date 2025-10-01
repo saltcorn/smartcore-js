@@ -12,6 +12,8 @@ interface DBSCANParams {
 declare class DBSCAN implements Estimator<XType, YType, DBSCAN>, Predictor<XType, YType> {
     private parameters;
     private estimator;
+    static readonly className = "DBSCAN";
+    readonly name: string;
     constructor(params?: DBSCANParams);
     fit(x: XType, y: YType): DBSCAN;
     predict(x: XType): YType;

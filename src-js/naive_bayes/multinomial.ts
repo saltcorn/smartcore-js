@@ -14,6 +14,8 @@ interface IMultinomialNBParameters {
 class MultinomialNB implements Estimator<XType, YType, MultinomialNB>, Predictor<XType, BigUint64Array> {
   parameters: MultinomialNBParametersRs
   estimator: MultinomialNBRs | null = null
+  public static readonly className = 'MultinomialNB'
+  public readonly name: string = MultinomialNB.className
 
   constructor(params?: IMultinomialNBParameters) {
     this.parameters = new MultinomialNBParameters()

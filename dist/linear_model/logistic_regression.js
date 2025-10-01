@@ -9,6 +9,7 @@ var EstimatorType;
 class LogisticRegression {
     constructor(params) {
         this.estimator = null;
+        this.name = LogisticRegression.className;
         let parameters = new LogisticRegressionParametersF64();
         if (params) {
             if (params.alpha !== undefined) {
@@ -84,4 +85,5 @@ class LogisticRegression {
         return instance;
     }
 }
+LogisticRegression.className = 'LogisticRegression';
 export default LogisticRegression;

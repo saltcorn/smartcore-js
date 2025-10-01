@@ -29,6 +29,8 @@ enum EstimatorType {
 class ElasticNet implements Estimator<XType, YType, ElasticNet>, Predictor<XType, YType> {
   parameters: ElasticNetParameters
   estimator: ElasticNetRs | null = null
+  public static readonly className = 'ElasticNet'
+  public readonly name: string = ElasticNet.className
 
   constructor(params?: IElasticNetParameters) {
     this.parameters = new ElasticNetParameters()

@@ -13,6 +13,8 @@ interface LogisticRegressionParametersValues {
 declare class LogisticRegression implements Estimator<XType, YType, LogisticRegression>, Predictor<XType, YType>, SerDe<LogisticRegression> {
     private estimator;
     private parameters;
+    static readonly className = "LogisticRegression";
+    readonly name: string;
     constructor(params?: LogisticRegressionParametersValues);
     predict(x: XType): YType;
     fit(x: XType, y: YType): LogisticRegression;

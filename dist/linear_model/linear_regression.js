@@ -10,6 +10,7 @@ var EstimatorType;
 class LinearRegression {
     constructor(params) {
         this.estimator = null;
+        this.name = LinearRegression.className;
         this.parameters = new LinearRegressionParameters();
         if (params?.solver) {
             this.parameters.withSolver(params.solver);
@@ -68,4 +69,5 @@ class LinearRegression {
         return instance;
     }
 }
+LinearRegression.className = 'LinearRegression';
 export default LinearRegression;

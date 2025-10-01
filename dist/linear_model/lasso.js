@@ -10,6 +10,7 @@ var EstimatorType;
 class Lasso {
     constructor(params) {
         this.estimator = null;
+        this.name = Lasso.className;
         this.parameters = new LassoParameters();
         if (params?.alpha) {
             this.parameters.withAlpha(params.alpha);
@@ -77,4 +78,5 @@ class Lasso {
         return instance;
     }
 }
+Lasso.className = 'Lasso';
 export default Lasso;

@@ -9,6 +9,8 @@ interface ICategoricalNBParameters {
 declare class CategoricalNB implements Estimator<XType, YType, CategoricalNB>, Predictor<XType, BigUint64Array> {
     parameters: CategoricalNBParametersRs;
     estimator: CategoricalNBRs | null;
+    static readonly className = "CategoricalNB";
+    readonly name: string;
     constructor(params?: ICategoricalNBParameters);
     fit(x: XType, y: YType): CategoricalNB;
     predict(x: XType): BigUint64Array;

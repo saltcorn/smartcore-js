@@ -9,6 +9,8 @@ interface IGaussianNBParameters {
 declare class GaussianNB implements Estimator<XType, YType, GaussianNB>, Predictor<XType, BigUint64Array> {
     parameters: GaussianNBParametersRs;
     estimator: GaussianNBRs | null;
+    static readonly className = "GaussianNB";
+    readonly name: string;
     constructor(params?: IGaussianNBParameters);
     fit(x: XType, y: YType): GaussianNB;
     predict(x: XType): BigUint64Array;

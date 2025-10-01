@@ -28,8 +28,11 @@ type KNNRegressorDistance =
 
 class KNNRegressor implements Estimator<XType, YType, KNNRegressor>, Predictor<XType, YType> {
   private estimator: KNNRegressorDistance
+  public static readonly className = 'KNNRegressor'
+  public readonly name: string
 
   constructor(params?: IKNNRegressorParameters) {
+    this.name = KNNRegressor.className
     switch (params?.distance) {
       case undefined:
       case DistanceType.EUCLIDIAN:

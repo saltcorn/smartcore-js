@@ -13,6 +13,8 @@ interface OneHotEncoderParametersValues {
 class OneHotEncoder implements Estimator<XType, YType, OneHotEncoder>, Transformer<XType> {
   parameters: OneHotEncoderParametersRs
   estimator: null | OneHotEncoderRs = null
+  public static readonly className = 'OneHotEncoder'
+  public readonly name: string = OneHotEncoder.className
 
   constructor(params: OneHotEncoderParametersValues) {
     this.parameters = new OneHotEncoderParameters(params.categoricalParams)

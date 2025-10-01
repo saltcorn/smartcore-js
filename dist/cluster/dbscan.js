@@ -4,6 +4,7 @@ import { DenseMatrix } from '../linalg/index.js';
 class DBSCAN {
     constructor(params) {
         this.estimator = null;
+        this.name = DBSCAN.className;
         this.parameters = new DBSCANF64EuclidianF64Parameters();
         if (params) {
             if (params.minSamples !== undefined) {
@@ -75,4 +76,5 @@ class DBSCAN {
         return instance;
     }
 }
+DBSCAN.className = 'DBSCAN';
 export { DBSCAN };

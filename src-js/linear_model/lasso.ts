@@ -22,6 +22,8 @@ enum EstimatorType {
 class Lasso implements Estimator<XType, YType, Lasso>, Predictor<XType, YType> {
   parameters: LassoParameters
   estimator: LassoRs | null = null
+  public static readonly className = 'Lasso'
+  public readonly name: string = Lasso.className
 
   constructor(params?: ILassoParameters) {
     this.parameters = new LassoParameters()

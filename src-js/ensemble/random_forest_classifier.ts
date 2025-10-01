@@ -33,6 +33,8 @@ enum EstimatorType {
 class RandomForestClassifier implements Estimator<XType, YType, RandomForestClassifier>, Predictor<XType, YType> {
   private parameters: RandomForestClassifierParameters
   private estimator: RandomForestClassifierRs | null = null
+  public static readonly className = 'RandomForestClassifier'
+  public readonly name: string = RandomForestClassifier.className
 
   constructor(params?: RandomForestClassifierParams) {
     this.parameters = new RandomForestClassifierParameters()

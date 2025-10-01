@@ -10,6 +10,7 @@ var EstimatorType;
 class RidgeRegression {
     constructor(params) {
         this.estimator = null;
+        this.name = RidgeRegression.className;
         this.parameters = new RidgeRegressionF64Parameters();
         if (params?.solver) {
             this.parameters.withSolver(params.solver);
@@ -68,4 +69,5 @@ class RidgeRegression {
         return instance;
     }
 }
+RidgeRegression.className = 'RidgeRegression';
 export default RidgeRegression;

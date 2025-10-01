@@ -13,6 +13,8 @@ interface IKNNRegressorParameters {
 type YTypeKey = 'bigI64' | 'bigU64' | 'i64' | 'f64';
 declare class KNNRegressor implements Estimator<XType, YType, KNNRegressor>, Predictor<XType, YType> {
     private estimator;
+    static readonly className = "KNNRegressor";
+    readonly name: string;
     constructor(params?: IKNNRegressorParameters);
     fit(x: XType, y: YType): KNNRegressor;
     predict(x: XType): YType;

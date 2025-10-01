@@ -29,6 +29,8 @@ class LogisticRegression
 {
   private estimator: LogisticRegressionRs | null = null
   private parameters: LogisticRegressionParameters
+  public static readonly className = 'LogisticRegression'
+  public readonly name: string = LogisticRegression.className
 
   constructor(params?: LogisticRegressionParametersValues) {
     let parameters = new LogisticRegressionParametersF64()

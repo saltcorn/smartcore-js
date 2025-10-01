@@ -3,6 +3,7 @@ import { DenseMatrix } from '../linalg/index.js';
 class BernoulliNB {
     constructor(params) {
         this.estimator = null;
+        this.name = BernoulliNB.className;
         this.parameters = new BernoulliNBF64Parameters();
         if (params?.alpha) {
             this.parameters.withAlpha(params.alpha);
@@ -43,4 +44,5 @@ class BernoulliNB {
         return instance;
     }
 }
+BernoulliNB.className = 'BernoulliNB';
 export default BernoulliNB;

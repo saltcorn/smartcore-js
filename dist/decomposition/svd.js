@@ -3,6 +3,7 @@ import { DenseMatrix } from '../linalg/index.js';
 class SVD {
     constructor(params) {
         this.estimator = null;
+        this.name = SVD.className;
         this.parameters = new SVDParameters();
         if (params) {
             if (params.nComponents !== undefined) {
@@ -40,4 +41,5 @@ class SVD {
         return instance;
     }
 }
+SVD.className = 'SVD';
 export { SVD };

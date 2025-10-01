@@ -15,6 +15,8 @@ declare enum EstimatorType {
 declare class RidgeRegression implements Estimator<XType, YType, RidgeRegression>, Predictor<XType, YType> {
     parameters: RidgeRegressionF64Parameters;
     estimator: RidgeRegressionRs | null;
+    static readonly className = "RidgeRegression";
+    readonly name: string;
     constructor(params?: IRidgeRegressionParameters);
     fit(x: XType, y: YType): RidgeRegression;
     predict(x: XType): YType;

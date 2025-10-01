@@ -3,6 +3,7 @@ import { DenseMatrix } from '../linalg/index.js';
 class StandardScaler {
     constructor(_params) {
         this.estimator = null;
+        this.name = StandardScaler.className;
         this.parameters = new StandardScalerParameters();
     }
     fit(x, _y) {
@@ -18,4 +19,5 @@ class StandardScaler {
         return new DenseMatrix(this.estimator.transform(x.asF64()));
     }
 }
+StandardScaler.className = 'StandardScaler';
 export default StandardScaler;

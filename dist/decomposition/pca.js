@@ -3,6 +3,7 @@ import { DenseMatrix } from '../linalg/index.js';
 class PCA {
     constructor(params) {
         this.estimator = null;
+        this.name = PCA.className;
         this.parameters = new PCAParameters();
         if (params) {
             if (params.nComponents !== undefined) {
@@ -43,4 +44,5 @@ class PCA {
         return instance;
     }
 }
+PCA.className = 'PCA';
 export { PCA };

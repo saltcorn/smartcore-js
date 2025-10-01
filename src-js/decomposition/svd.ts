@@ -13,6 +13,8 @@ type SVDParametersRs = SVDParameters
 class SVD implements Estimator<XType, YType, SVD>, Transformer<XType> {
   private parameters: SVDParametersRs
   private estimator: SVDRs | null = null
+  public static readonly className = 'SVD'
+  public readonly name: string = SVD.className
 
   constructor(params?: SVDParams) {
     this.parameters = new SVDParameters()

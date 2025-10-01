@@ -10,6 +10,7 @@ var EstimatorType;
 class ElasticNet {
     constructor(params) {
         this.estimator = null;
+        this.name = ElasticNet.className;
         this.parameters = new ElasticNetParameters();
         if (params?.alpha) {
             this.parameters.withAlpha(params.alpha);
@@ -80,4 +81,5 @@ class ElasticNet {
         return instance;
     }
 }
+ElasticNet.className = 'ElasticNet';
 export default ElasticNet;

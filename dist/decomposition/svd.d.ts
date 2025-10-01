@@ -6,6 +6,8 @@ interface SVDParams {
 declare class SVD implements Estimator<XType, YType, SVD>, Transformer<XType> {
     private parameters;
     private estimator;
+    static readonly className = "SVD";
+    readonly name: string;
     constructor(params?: SVDParams);
     fit(x: XType, y: YType): SVD;
     transform(x: XType): XType;

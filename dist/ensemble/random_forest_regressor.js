@@ -9,6 +9,7 @@ var EstimatorType;
 class RandomForestRegressor {
     constructor(params) {
         this.estimator = null;
+        this.name = RandomForestRegressor.className;
         this.parameters = new RandomForestRegressorParameters();
         if (params) {
             if (params.maxDepth !== undefined) {
@@ -84,4 +85,5 @@ class RandomForestRegressor {
         return instance;
     }
 }
+RandomForestRegressor.className = 'RandomForestRegressor';
 export { RandomForestRegressor };

@@ -3,6 +3,7 @@ import { DenseMatrix } from '../linalg/index.js';
 class MultinomialNB {
     constructor(params) {
         this.estimator = null;
+        this.name = MultinomialNB.className;
         this.parameters = new MultinomialNBParameters();
         if (params?.priors) {
             this.parameters.withPriors(params.priors);
@@ -40,4 +41,5 @@ class MultinomialNB {
         return instance;
     }
 }
+MultinomialNB.className = 'MultinomialNB';
 export default MultinomialNB;

@@ -13,6 +13,8 @@ interface IGaussianNBParameters {
 class GaussianNB implements Estimator<XType, YType, GaussianNB>, Predictor<XType, BigUint64Array> {
   parameters: GaussianNBParametersRs
   estimator: GaussianNBRs | null = null
+  public static readonly className = 'GaussianNB'
+  public readonly name: string = GaussianNB.className
 
   constructor(params?: IGaussianNBParameters) {
     this.parameters = new GaussianNBParameters()

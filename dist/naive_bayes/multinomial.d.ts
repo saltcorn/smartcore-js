@@ -10,6 +10,8 @@ interface IMultinomialNBParameters {
 declare class MultinomialNB implements Estimator<XType, YType, MultinomialNB>, Predictor<XType, BigUint64Array> {
     parameters: MultinomialNBParametersRs;
     estimator: MultinomialNBRs | null;
+    static readonly className = "MultinomialNB";
+    readonly name: string;
     constructor(params?: IMultinomialNBParameters);
     fit(x: XType, y: YType): MultinomialNB;
     predict(x: XType): BigUint64Array;

@@ -30,6 +30,8 @@ enum EstimatorType {
 class LinearRegression implements Estimator<XType, YType, LinearRegression>, Predictor<XType, YType> {
   parameters: LinearRegressionParameters
   estimator: LinearRegressionRs | null = null
+  public static readonly className = 'LinearRegression'
+  public readonly name: string = LinearRegression.className
 
   constructor(params?: ILinearRegressionParameters) {
     this.parameters = new LinearRegressionParameters()

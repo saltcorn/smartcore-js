@@ -18,6 +18,8 @@ enum EstimatorType {
 class KMeans implements Estimator<XType, YType, KMeans>, Predictor<XType, YType> {
   private parameters: KMeansParameters
   private estimator: KMeansRs | null = null
+  public static readonly className = 'KMeans'
+  public readonly name: string = KMeans.className
 
   constructor(params?: KMeansParams) {
     this.parameters = new KMeansParameters()

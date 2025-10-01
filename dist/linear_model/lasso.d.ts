@@ -17,6 +17,8 @@ declare enum EstimatorType {
 declare class Lasso implements Estimator<XType, YType, Lasso>, Predictor<XType, YType> {
     parameters: LassoParameters;
     estimator: LassoRs | null;
+    static readonly className = "Lasso";
+    readonly name: string;
     constructor(params?: ILassoParameters);
     fit(x: XType, y: YType): Lasso;
     predict(x: XType): YType;

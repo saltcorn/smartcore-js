@@ -13,6 +13,8 @@ interface ICategoricalNBParameters {
 class CategoricalNB implements Estimator<XType, YType, CategoricalNB>, Predictor<XType, BigUint64Array> {
   parameters: CategoricalNBParametersRs
   estimator: CategoricalNBRs | null = null
+  public static readonly className = 'CategoricalNB'
+  public readonly name: string = CategoricalNB.className
 
   constructor(params?: ICategoricalNBParameters) {
     this.parameters = new CategoricalNBParameters()

@@ -3,6 +3,7 @@ import { DenseMatrix } from '../linalg/index.js';
 class OneHotEncoder {
     constructor(params) {
         this.estimator = null;
+        this.name = OneHotEncoder.className;
         this.parameters = new OneHotEncoderParameters(params.categoricalParams);
     }
     fit(x, _y) {
@@ -18,4 +19,5 @@ class OneHotEncoder {
         return new DenseMatrix(this.estimator.transform(x.asF64()));
     }
 }
+OneHotEncoder.className = 'OneHotEncoder';
 export default OneHotEncoder;

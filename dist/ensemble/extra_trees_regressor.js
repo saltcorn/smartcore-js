@@ -10,6 +10,7 @@ var EstimatorType;
 class ExtraTreesRegressor {
     constructor(params) {
         this.estimator = null;
+        this.name = ExtraTreesRegressor.className;
         this.parameters = new ExtraTreesRegressorParameters();
         if (params) {
             if (params.maxDepth !== undefined) {
@@ -88,4 +89,5 @@ class ExtraTreesRegressor {
         return instance;
     }
 }
+ExtraTreesRegressor.className = 'ExtraTreesRegressor';
 export { ExtraTreesRegressor };

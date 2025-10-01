@@ -18,6 +18,8 @@ declare enum EstimatorType {
 declare class ElasticNet implements Estimator<XType, YType, ElasticNet>, Predictor<XType, YType> {
     parameters: ElasticNetParameters;
     estimator: ElasticNetRs | null;
+    static readonly className = "ElasticNet";
+    readonly name: string;
     constructor(params?: IElasticNetParameters);
     fit(x: XType, y: YType): ElasticNet;
     predict(x: XType): YType;

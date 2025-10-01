@@ -9,6 +9,7 @@ var EstimatorType;
 class RandomForestClassifier {
     constructor(params) {
         this.estimator = null;
+        this.name = RandomForestClassifier.className;
         this.parameters = new RandomForestClassifierParameters();
         if (params) {
             if (params.criterion !== undefined) {
@@ -84,4 +85,5 @@ class RandomForestClassifier {
         return instance;
     }
 }
+RandomForestClassifier.className = 'RandomForestClassifier';
 export { RandomForestClassifier };

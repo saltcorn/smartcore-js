@@ -9,6 +9,8 @@ interface OneHotEncoderParametersValues {
 declare class OneHotEncoder implements Estimator<XType, YType, OneHotEncoder>, Transformer<XType> {
     parameters: OneHotEncoderParametersRs;
     estimator: null | OneHotEncoderRs;
+    static readonly className = "OneHotEncoder";
+    readonly name: string;
     constructor(params: OneHotEncoderParametersValues);
     fit(x: XType, _y: YType): OneHotEncoder;
     transform(x: XType): XType;

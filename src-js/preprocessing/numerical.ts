@@ -11,6 +11,8 @@ interface StandardScalerParametersValues {}
 class StandardScaler implements Estimator<XType, YType, StandardScaler>, Transformer<XType> {
   parameters: StandardScalerParametersRs
   estimator: null | StandardScalerRs = null
+  public static readonly className = 'StandardScaler'
+  public readonly name: string = StandardScaler.className
 
   constructor(_params?: StandardScalerParametersValues) {
     this.parameters = new StandardScalerParameters()

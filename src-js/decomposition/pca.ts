@@ -14,6 +14,8 @@ type PCAParametersRs = PCAParameters
 class PCA implements Estimator<XType, YType, PCA>, Transformer<XType> {
   private parameters: PCAParametersRs
   private estimator: PCARs | null = null
+  public static readonly className = 'PCA'
+  public readonly name: string = PCA.className
 
   constructor(params?: PCAParams) {
     this.parameters = new PCAParameters()

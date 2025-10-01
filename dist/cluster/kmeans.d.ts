@@ -12,6 +12,8 @@ declare enum EstimatorType {
 declare class KMeans implements Estimator<XType, YType, KMeans>, Predictor<XType, YType> {
     private parameters;
     private estimator;
+    static readonly className = "KMeans";
+    readonly name: string;
     constructor(params?: KMeansParams);
     fit(x: XType, y: YType): KMeans;
     predict(x: XType): YType;

@@ -7,6 +7,7 @@ import { KNNRegressorManhattan } from './manhattan.js';
 import { KNNRegressorMinkowski } from './minkowski.js';
 class KNNRegressor {
     constructor(params) {
+        this.name = KNNRegressor.className;
         switch (params?.distance) {
             case undefined:
             case DistanceType.EUCLIDIAN:
@@ -43,4 +44,5 @@ class KNNRegressor {
         return this;
     }
 }
+KNNRegressor.className = 'KNNRegressor';
 export { KNNRegressor };

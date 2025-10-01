@@ -35,6 +35,8 @@ enum EstimatorType {
 class ExtraTreesRegressor implements Estimator<XType, YType, ExtraTreesRegressor>, Predictor<XType, YType> {
   private parameters: ExtraTreesRegressorParameters
   private estimator: ExtraTreesRegressorRs | null = null
+  public static readonly className = 'ExtraTreesRegressor'
+  public readonly name: string = ExtraTreesRegressor.className
 
   constructor(params?: ExtraTreesRegressorParams) {
     this.parameters = new ExtraTreesRegressorParameters()

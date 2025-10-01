@@ -3,6 +3,7 @@ import { DenseMatrix } from '../linalg/index.js';
 class GaussianNB {
     constructor(params) {
         this.estimator = null;
+        this.name = GaussianNB.className;
         this.parameters = new GaussianNBParameters();
         if (params?.priors) {
             this.parameters.withPriors(params.priors);
@@ -37,4 +38,5 @@ class GaussianNB {
         return instance;
     }
 }
+GaussianNB.className = 'GaussianNB';
 export default GaussianNB;

@@ -1,6 +1,7 @@
 import type { Step } from './pipeline.js';
 import { Pipeline } from './pipeline.js';
 interface Estimator<X, Y, S> {
+    name: string;
     fit(x: X, y: Y): S;
 }
 interface Predictor<X, Y> {

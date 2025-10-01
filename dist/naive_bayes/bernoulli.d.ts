@@ -11,6 +11,8 @@ interface IBernoulliNBParameters {
 declare class BernoulliNB implements Estimator<XType, YType, BernoulliNB>, Predictor<XType, BigUint64Array> {
     parameters: BernoulliNBParameters;
     estimator: BernoulliNBRs | null;
+    static readonly className = "BernoulliNB";
+    readonly name: string;
     constructor(params?: IBernoulliNBParameters);
     fit(x: XType, y: YType): BernoulliNB;
     predict(x: XType): BigUint64Array;

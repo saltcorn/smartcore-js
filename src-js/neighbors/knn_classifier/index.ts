@@ -28,8 +28,12 @@ type KNNClassifierDistance =
 
 class KNNClassifier implements Estimator<XType, YType, KNNClassifier>, Predictor<XType, YType> {
   private estimator: KNNClassifierDistance
+  public static readonly className = 'KNNClassifier'
+  public readonly name: string
 
   constructor(params?: IKNNClassifierParameters) {
+    this.name = KNNClassifier.className
+
     switch (params?.distance) {
       case undefined:
       case DistanceType.EUCLIDIAN:

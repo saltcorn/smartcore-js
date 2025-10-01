@@ -18,6 +18,8 @@ declare enum EstimatorType {
 declare class RandomForestClassifier implements Estimator<XType, YType, RandomForestClassifier>, Predictor<XType, YType> {
     private parameters;
     private estimator;
+    static readonly className = "RandomForestClassifier";
+    readonly name: string;
     constructor(params?: RandomForestClassifierParams);
     fit(x: XType, y: YType): RandomForestClassifier;
     predict(x: XType): YType;

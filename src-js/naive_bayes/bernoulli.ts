@@ -15,6 +15,8 @@ interface IBernoulliNBParameters {
 class BernoulliNB implements Estimator<XType, YType, BernoulliNB>, Predictor<XType, BigUint64Array> {
   parameters: BernoulliNBParameters
   estimator: BernoulliNBRs | null = null
+  public static readonly className = 'BernoulliNB'
+  public readonly name: string = BernoulliNB.className
 
   constructor(params?: IBernoulliNBParameters) {
     this.parameters = new BernoulliNBF64Parameters()

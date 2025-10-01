@@ -3,6 +3,7 @@ import { DenseMatrix } from '../linalg/index.js';
 class CategoricalNB {
     constructor(params) {
         this.estimator = null;
+        this.name = CategoricalNB.className;
         this.parameters = new CategoricalNBParameters();
         if (params?.alpha) {
             this.parameters.withAlpha(params.alpha);
@@ -37,4 +38,5 @@ class CategoricalNB {
         return instance;
     }
 }
+CategoricalNB.className = 'CategoricalNB';
 export default CategoricalNB;

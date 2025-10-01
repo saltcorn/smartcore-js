@@ -8,6 +8,8 @@ interface StandardScalerParametersValues {
 declare class StandardScaler implements Estimator<XType, YType, StandardScaler>, Transformer<XType> {
     parameters: StandardScalerParametersRs;
     estimator: null | StandardScalerRs;
+    static readonly className = "StandardScaler";
+    readonly name: string;
     constructor(_params?: StandardScalerParametersValues);
     fit(x: XType, _y: YType): StandardScaler;
     transform(x: XType): XType;

@@ -15,6 +15,8 @@ declare enum EstimatorType {
 declare class LinearRegression implements Estimator<XType, YType, LinearRegression>, Predictor<XType, YType> {
     parameters: LinearRegressionParameters;
     estimator: LinearRegressionRs | null;
+    static readonly className = "LinearRegression";
+    readonly name: string;
     constructor(params?: ILinearRegressionParameters);
     fit(x: XType, y: YType): LinearRegression;
     predict(x: XType): YType;

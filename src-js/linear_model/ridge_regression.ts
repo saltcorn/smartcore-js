@@ -30,6 +30,8 @@ enum EstimatorType {
 class RidgeRegression implements Estimator<XType, YType, RidgeRegression>, Predictor<XType, YType> {
   parameters: RidgeRegressionF64Parameters
   estimator: RidgeRegressionRs | null = null
+  public static readonly className = 'RidgeRegression'
+  public readonly name: string = RidgeRegression.className
 
   constructor(params?: IRidgeRegressionParameters) {
     this.parameters = new RidgeRegressionF64Parameters()

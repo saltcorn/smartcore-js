@@ -9,6 +9,7 @@ var EstimatorType;
 class KMeans {
     constructor(params) {
         this.estimator = null;
+        this.name = KMeans.className;
         this.parameters = new KMeansParameters();
         if (params) {
             if (params.maxIter !== undefined) {
@@ -66,4 +67,5 @@ class KMeans {
         return instance;
     }
 }
+KMeans.className = 'KMeans';
 export { KMeans };

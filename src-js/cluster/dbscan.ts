@@ -42,6 +42,8 @@ type DBSCANParametersRs =
 class DBSCAN implements Estimator<XType, YType, DBSCAN>, Predictor<XType, YType> {
   private parameters: DBSCANParametersRs
   private estimator: DBSCANRs | null = null
+  public static readonly className = 'DBSCAN'
+  public readonly name: string = DBSCAN.className
 
   constructor(params?: DBSCANParams) {
     this.parameters = new DBSCANF64EuclidianF64Parameters()

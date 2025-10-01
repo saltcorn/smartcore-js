@@ -18,6 +18,8 @@ declare enum EstimatorType {
 declare class ExtraTreesRegressor implements Estimator<XType, YType, ExtraTreesRegressor>, Predictor<XType, YType> {
     private parameters;
     private estimator;
+    static readonly className = "ExtraTreesRegressor";
+    readonly name: string;
     constructor(params?: ExtraTreesRegressorParams);
     fit(x: XType, y: YType): ExtraTreesRegressor;
     predict(x: XType): YType;

@@ -7,6 +7,7 @@ import { KNNClassifierManhattan } from './manhattan.js';
 import { KNNClassifierMinkowski } from './minkowski.js';
 class KNNClassifier {
     constructor(params) {
+        this.name = KNNClassifier.className;
         switch (params?.distance) {
             case undefined:
             case DistanceType.EUCLIDIAN:
@@ -43,4 +44,5 @@ class KNNClassifier {
         return this;
     }
 }
+KNNClassifier.className = 'KNNClassifier';
 export { KNNClassifier };
