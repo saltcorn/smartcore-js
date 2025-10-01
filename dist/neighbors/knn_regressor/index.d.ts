@@ -10,18 +10,33 @@ interface IKNNRegressorParameters {
     p?: number;
     data?: XType;
 }
-declare enum EstimatorType {
-    F64F64 = 0,
-    F64I64 = 1,
-    F64BigI64 = 2,
-    F64BigU64 = 3
-}
+type YTypeKey = 'bigI64' | 'bigU64' | 'i64' | 'f64';
 declare class KNNRegressor implements Estimator<XType, YType, KNNRegressor>, Predictor<XType, YType> {
     private estimator;
     constructor(params?: IKNNRegressorParameters);
     fit(x: XType, y: YType): KNNRegressor;
     predict(x: XType): YType;
-    serialize(): Buffer<ArrayBufferLike> | undefined;
-    static deserialize(data: Buffer, estimatorType: EstimatorType, distanceType: DistanceType): KNNRegressor;
+    serialize(): {
+        params: import("../../../core-bindings/index.js").KNNRegressorF64EuclidianF64Parameters;
+        estimatorKey: YTypeKey | null;
+        model: any;
+    } | {
+        params: import("../../../core-bindings/index.js").KNNRegressorF64HammingF64Parameters;
+        estimatorKey: YTypeKey | null;
+        model: any;
+    } | {
+        params: import("../../../core-bindings/index.js").KNNRegressorF64MahalanobisF64Parameters;
+        estimatorKey: YTypeKey | null;
+        model: any;
+    } | {
+        params: import("../../../core-bindings/index.js").KNNRegressorF64ManhattanF64Parameters;
+        estimatorKey: YTypeKey | null;
+        model: any;
+    } | {
+        params: import("../../../core-bindings/index.js").KNNRegressorF64MinkowskiF64Parameters;
+        estimatorKey: YTypeKey | null;
+        model: any;
+    };
+    deserialize(data: Buffer, yType: YTypeKey): KNNRegressor;
 }
-export { KNNRegressor, type IKNNRegressorParameters, EstimatorType };
+export { KNNRegressor, type IKNNRegressorParameters, type YTypeKey };

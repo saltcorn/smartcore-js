@@ -1,118 +1,51 @@
 import {
-  KNNRegressorF64F64MahalanobisF64,
   KNNRegressorF64EuclidianF64Parameters,
-  KNNRegressorF64I64MahalanobisF64,
+  KNNRegressorF64MahalanobisF64Parameters,
   KNNRegressorF64BigI64MahalanobisF64,
   KNNRegressorF64BigU64MahalanobisF64,
-  KNNRegressorF64MahalanobisF64Parameters,
+  KNNRegressorF64I64MahalanobisF64,
   MahalanobisF64,
+  KNNRegressorF64F64MahalanobisF64,
 } from '../../../core-bindings/index.js'
-import type { XType, YType } from '../../index.js'
-import { DenseMatrix } from '../../linalg/index.js'
-import type { Estimator, Predictor } from '../../pipeline/index.js'
-import { type IKNNRegressorParameters, EstimatorType } from './index.js'
+import { GenericKNNRegressor } from './generic.js'
+import { type IKNNRegressorParameters, type YTypeKey } from './index.js'
+import { DenseMatrix, type XType, type YType } from '../../index.js'
 
-type KNNRegressorRs =
-  | KNNRegressorF64I64MahalanobisF64
-  | KNNRegressorF64BigI64MahalanobisF64
-  | KNNRegressorF64BigU64MahalanobisF64
-  | KNNRegressorF64F64MahalanobisF64
-
-abstract class KNNRegressorStatics {
-  private parameters
-
-  constructor(parameters?: IKNNRegressorParameters) {
-    if (parameters?.data === undefined) {
-      throw new Error("Mahalanobis requires 'data' to be defined")
-    }
-    let matrix = parameters.data instanceof DenseMatrix ? parameters.data : DenseMatrix.f64(parameters.data)
-    this.parameters = new KNNRegressorF64EuclidianF64Parameters().withDistanceMahalanobisF64(
-      new MahalanobisF64(matrix.asF64()),
-    )
-  }
-
-  get params(): KNNRegressorF64MahalanobisF64Parameters {
-    return this.parameters
-  }
-
-  initializeParameterValues(parameters?: IKNNRegressorParameters) {
-    if (parameters?.k) {
-      this.parameters.withK(parameters.k)
-    }
-    if (parameters?.algorithm) {
-      this.parameters.withAlgorithm(parameters.algorithm)
-    }
-    if (parameters?.weight) {
-      this.parameters.withWeight(parameters.weight)
-    }
-  }
-}
-
-class KNNRegressorMahalanobis
-  extends KNNRegressorStatics
-  implements Estimator<XType, YType, KNNRegressorMahalanobis>, Predictor<XType, YType>
-{
-  private estimator: KNNRegressorRs | null = null
+class KNNRegressorMahalanobis {
+  private regressor: GenericKNNRegressor<KNNRegressorF64MahalanobisF64Parameters>
 
   constructor(params?: IKNNRegressorParameters) {
-    super()
-    this.initializeParameterValues(params)
+    if (!params?.data) {
+      throw new Error("Mahalanobis requires 'data' to be defined!")
+    }
+    let data = params.data instanceof DenseMatrix ? params.data : new DenseMatrix(params.data)
+    const p = new KNNRegressorF64EuclidianF64Parameters().withDistanceMahalanobisF64(new MahalanobisF64(data.asF64()))
+    if (params?.k) p.withK(params.k)
+    if (params?.algorithm) p.withAlgorithm(params.algorithm)
+    if (params?.weight) p.withWeight(params.weight)
+
+    this.regressor = new GenericKNNRegressor(p, {
+      bigI64: KNNRegressorF64BigI64MahalanobisF64,
+      bigU64: KNNRegressorF64BigU64MahalanobisF64,
+      i64: KNNRegressorF64I64MahalanobisF64,
+      f64: KNNRegressorF64F64MahalanobisF64,
+    })
   }
 
-  fit(x: XType, y: YType): KNNRegressorMahalanobis {
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    if (!y || y.length === 0) {
-      throw new Error('Input arrays cannot be empty.')
-    }
-
-    if (y instanceof BigInt64Array) {
-      this.estimator = KNNRegressorF64BigI64MahalanobisF64.fit(matrix.asF64(), y, this.params)
-    } else if (y instanceof BigUint64Array) {
-      this.estimator = KNNRegressorF64BigU64MahalanobisF64.fit(matrix.asF64(), y, this.params)
-    } else if (y instanceof Float64Array) {
-      this.estimator = KNNRegressorF64F64MahalanobisF64.fit(matrix.asF64(), y, this.params)
-    } else if (y instanceof Array) {
-      this.estimator = KNNRegressorF64I64MahalanobisF64.fit(matrix.asF64(), y, this.params)
-    } else {
-      throw new Error('Unsupported data type')
-    }
-
-    return this
+  fit(x: XType, y: YType) {
+    return (this.regressor.fit(x, y), this)
   }
 
   predict(x: XType): YType {
-    if (this.estimator === null) {
-      throw new Error("The 'fit' method should called before the 'predict' method is called.")
-    }
-
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-    return this.estimator.predict(matrix.asF64())
+    return this.regressor.predict(x)
   }
 
   serialize() {
-    return this.estimator?.serialize()
+    return this.regressor.serialize()
   }
 
-  static deserialize(data: Buffer, estimatorType: EstimatorType): KNNRegressorMahalanobis {
-    let instance = new KNNRegressorMahalanobis()
-    switch (estimatorType) {
-      case EstimatorType.F64F64:
-        instance.estimator = KNNRegressorF64F64MahalanobisF64.deserialize(data)
-        break
-      case EstimatorType.F64BigI64:
-        instance.estimator = KNNRegressorF64BigI64MahalanobisF64.deserialize(data)
-        break
-      case EstimatorType.F64BigU64:
-        instance.estimator = KNNRegressorF64BigU64MahalanobisF64.deserialize(data)
-        break
-      case EstimatorType.F64I64:
-        instance.estimator = KNNRegressorF64I64MahalanobisF64.deserialize(data)
-        break
-      default:
-        throw new Error(`Unrecognized estimator type: '${estimatorType}'`)
-    }
-    return instance
+  deserialize(data: Buffer, key: YTypeKey) {
+    this.deserialize(data, key)
   }
 }
 

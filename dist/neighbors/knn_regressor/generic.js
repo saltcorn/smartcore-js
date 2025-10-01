@@ -6,11 +6,13 @@ function getEstimatorKey(y) {
         return 'bigI64';
     if (y instanceof BigUint64Array)
         return 'bigU64';
-    if (Array.isArray(y) && !(y instanceof Float64Array))
+    if (y instanceof Float64Array)
+        return 'f64';
+    if (Array.isArray(y))
         return 'i64';
     throw new Error('Unsupported data type');
 }
-class GenericKNNClassifier {
+class GenericKNNRegressor {
     constructor(params, estimatorClasses) {
         this.params = params;
         this.estimator = null;
@@ -60,4 +62,4 @@ class GenericKNNClassifier {
         this.setEstimator(EstimatorClass.deserialize(data));
     }
 }
-export { GenericKNNClassifier };
+export { GenericKNNRegressor };

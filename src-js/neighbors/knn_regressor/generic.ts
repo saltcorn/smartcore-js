@@ -10,11 +10,12 @@ interface EstimatorClass {
 function getEstimatorKey(y: YType): YTypeKey {
   if (y instanceof BigInt64Array) return 'bigI64'
   if (y instanceof BigUint64Array) return 'bigU64'
-  if (Array.isArray(y) && !(y instanceof Float64Array)) return 'i64'
+  if (y instanceof Float64Array) return 'f64'
+  if (Array.isArray(y)) return 'i64'
   throw new Error('Unsupported data type')
 }
 
-class GenericKNNClassifier<TParams> {
+class GenericKNNRegressor<TParams> {
   private estimator: any = null
   private estimatorKey: YTypeKey | null = null
   private estimatorClasses: Record<YTypeKey, EstimatorClass>
@@ -79,4 +80,4 @@ class GenericKNNClassifier<TParams> {
   }
 }
 
-export { GenericKNNClassifier, type EstimatorClass }
+export { GenericKNNRegressor, type EstimatorClass }

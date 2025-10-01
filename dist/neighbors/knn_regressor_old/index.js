@@ -5,6 +5,13 @@ import { KNNRegressorHamming } from './hamming.js';
 import { KNNRegressorMahalanobis } from './mahalanobis.js';
 import { KNNRegressorManhattan } from './manhattan.js';
 import { KNNRegressorMinkowski } from './minkowski.js';
+var EstimatorType;
+(function (EstimatorType) {
+    EstimatorType[EstimatorType["F64F64"] = 0] = "F64F64";
+    EstimatorType[EstimatorType["F64I64"] = 1] = "F64I64";
+    EstimatorType[EstimatorType["F64BigI64"] = 2] = "F64BigI64";
+    EstimatorType[EstimatorType["F64BigU64"] = 3] = "F64BigU64";
+})(EstimatorType || (EstimatorType = {}));
 class KNNRegressor {
     constructor(params) {
         switch (params?.distance) {
@@ -38,9 +45,26 @@ class KNNRegressor {
     serialize() {
         return this.estimator?.serialize();
     }
-    deserialize(data, yType) {
-        this.estimator.deserialize(data, yType);
-        return this;
+    static deserialize(data, estimatorType, distanceType) {
+        let instance = new KNNRegressor();
+        switch (distanceType) {
+            case DistanceType.EUCLIDIAN:
+                instance.estimator = KNNRegressorEuclidian.deserialize(data, estimatorType);
+                break;
+            case DistanceType.HAMMING:
+                instance.estimator = KNNRegressorHamming.deserialize(data, estimatorType);
+                break;
+            case DistanceType.MAHALANOBIS:
+                instance.estimator = KNNRegressorMahalanobis.deserialize(data, estimatorType);
+                break;
+            case DistanceType.MANHATTAN:
+                instance.estimator = KNNRegressorManhattan.deserialize(data, estimatorType);
+                break;
+            case DistanceType.MINKOWSKI:
+                instance.estimator = KNNRegressorMinkowski.deserialize(data, estimatorType);
+                break;
+        }
+        return instance;
     }
 }
-export { KNNRegressor };
+export { KNNRegressor, EstimatorType };
