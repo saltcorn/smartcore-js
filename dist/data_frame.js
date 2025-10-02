@@ -1,12 +1,13 @@
 class DataFrame {
     constructor(data, options = {}) {
+        this._separator = '.';
         if (!Array.isArray(data) || data.length === 0) {
             throw new Error('Data must be a non-empty array.');
         }
-        // Deep freeze data to prevent external mutations
-        this._data = Object.freeze(data.map((record) => Object.freeze({ ...record })));
-        const firstRecord = this._data[0];
-        const allColumns = Object.keys(firstRecord);
+        // Flatten all records
+        const flattenedData = data.map((record) => this.flattenObject(record));
+        // Get all possible column names from flattened data
+        const allColumns = this.getAllColumns(flattenedData);
         // Apply exclude first, then include
         let columns = options.exclude ? allColumns.filter((col) => !options.exclude.includes(col)) : allColumns;
         if (options.include && options.include.length > 0) {
@@ -21,21 +22,78 @@ class DataFrame {
             throw new Error('No columns selected after applying include/exclude filters.');
         }
         this._columnNames = Object.freeze(columns);
-        // Validate data integrity
-        this.validateData();
+        this._data = Object.freeze(flattenedData.map((record) => {
+            const filtered = {};
+            for (const colName of this._columnNames) {
+                const value = record[colName];
+                if (value === undefined || value === null) {
+                    throw new Error(`Missing value for column '${colName}'.`);
+                }
+                filtered[colName] = this.toDataValue(value, colName);
+            }
+            return Object.freeze(filtered);
+        }));
     }
     /**
-     * Validates that all records have values for all selected columns
+     * Flattens a nested object into a single-level object with dot notation
+     * @param {NestedObject} obj - A nested object
+     * @returns {Record<string, PrimitiveValue>} - A flattened object
      */
-    validateData() {
-        this._data.forEach((record, idx) => {
-            this._columnNames.forEach((colName) => {
-                const value = record[colName];
-                if (value === undefined) {
-                    throw new Error(`Record at index ${idx} is missing value for column '${colName}'.`);
-                }
-            });
-        });
+    flattenObject(obj, prefix = '') {
+        const result = {};
+        for (const [key, value] of Object.entries(obj)) {
+            const newKey = prefix ? `${prefix}${this._separator}${key}` : key;
+            if (value === null || value === undefined) {
+                result[newKey] = value;
+            }
+            else if (Array.isArray(value)) {
+                // Flatten arrays by index
+                value.forEach((item, idx) => {
+                    if (item !== null && typeof item === 'object' && !Array.isArray(item)) {
+                        Object.assign(result, this.flattenObject(item, `${newKey}${this._separator}${idx}`));
+                    }
+                    else {
+                        result[`${newKey}${this._separator}${idx}`] = item;
+                    }
+                });
+            }
+            else if (typeof value === 'object') {
+                // Recursively flatten nested objects
+                Object.assign(result, this.flattenObject(value, newKey));
+            }
+            else {
+                // Primitive value
+                result[newKey] = value;
+            }
+        }
+        return result;
+    }
+    /**
+     * Gets all unique column names from flattened records
+     * @param records
+     */
+    getAllColumns(records) {
+        const columnSet = new Set();
+        for (const record of records) {
+            Object.keys(record).forEach((key) => columnSet.add(key));
+        }
+        return Array.from(columnSet).sort();
+    }
+    toDataValue(value, columnName) {
+        if (typeof value === 'number' || typeof value === 'bigint') {
+            return value;
+        }
+        if (typeof value === 'string') {
+            // Try to parse as number
+            const parsed = parseFloat(value);
+            if (!isNaN(parsed)) {
+                return parsed;
+            }
+        }
+        if (typeof value === 'boolean') {
+            return value ? 1 : 0;
+        }
+        throw new Error(`Cannot convert value '${value}' in column '${columnName}' to number`);
     }
     /**
      * Returns a copy of column names
@@ -78,9 +136,22 @@ class DataFrame {
      */
     getColumnByName(columnName) {
         if (!this._columnNames.includes(columnName)) {
-            throw new Error(`Unknown column name: '${columnName}'.`);
+            throw new Error(`Unknown column name: '${columnName}'. Available columns: ${this._columnNames.join(', ')}`);
         }
         return this._data.map((record) => record[columnName]);
+    }
+    /**
+     * Returns all columns matching a prefix
+     * @param {string} prefix - A string to use as the prefix
+     * @returns {Map<string, DataValue>} Values for all matching columns mapped to the column names
+     */
+    getColumnsByPrefix(prefix) {
+        const matchingColumns = this._columnNames.filter((name) => name === prefix || name.startsWith(prefix + this._separator));
+        const result = new Map();
+        for (const colName of matchingColumns) {
+            result.set(colName, this.getColumnByName(colName));
+        }
+        return result;
     }
     /**
      * Returns all columns as a 2D array (row-major order)
@@ -130,8 +201,7 @@ class DataFrame {
         if (idx < 0 || idx >= this._data.length) {
             throw new Error(`Row index ${idx} out of bounds [0, ${this._data.length - 1}]`);
         }
-        const record = this._data[idx];
-        return Object.fromEntries(this._columnNames.map((colName) => [colName, record[colName]]));
+        return { ...this._data[idx] };
     }
     /**
      * Selects columns by their indices
@@ -157,22 +227,35 @@ class DataFrame {
             throw new Error(`Invalid column names: ${invalidColumns.join(', ')}`);
         }
         // Create new data with only selected columns
-        const newData = this._data.map((record) => Object.fromEntries(names.map((name) => [name, record[name]])));
+        const newData = this._data.map((record) => {
+            const filtered = {};
+            for (const name of names) {
+                filtered[name] = record[name];
+            }
+            return filtered;
+        });
         return new DataFrame(newData, { include: names });
     }
     /**
+     * Selects all columns matching a prefix pattern
+     * @param {string} prefix - Prefix to be used in filter
+     */
+    selectColumnsByPrefix(prefix) {
+        const matchingColumns = this._columnNames.filter((name) => name === prefix || name.startsWith(prefix + this._separator));
+        if (matchingColumns.length === 0) {
+            throw new Error(`No columns found with prefix '${prefix}'.`);
+        }
+        return this.selectColumnsByName([...matchingColumns]);
+    }
+    /**
      * Filter rows based on a predicate function
-     * @param {function(record: DataRecord, index: number): boolean} predicate - Predicate function
+     * @param {function(record: FlatRecord, index: number): boolean} predicate - Predicate function
      */
     filter(predicate) {
         const filteredData = this._data
-            .map((record, idx) => {
-            // Create a filtered record with only selected columns
-            const filteredRecord = Object.fromEntries(this._columnNames.map((colName) => [colName, record[colName]]));
-            return { record: filteredRecord, idx };
-        })
-            .filter(({ record, idx }) => predicate(record, idx))
-            .map(({ record }) => record);
+            .map((record, idx) => ({ record, idx }))
+            .filter(({ record, idx }) => predicate({ ...record }, idx))
+            .map(({ record }) => ({ ...record }));
         if (filteredData.length === 0) {
             throw new Error('Filter resulted in empty DataFrame.');
         }
@@ -180,14 +263,11 @@ class DataFrame {
     }
     /**
      * Maps each row to a new value using a transform function
-     * @param {function(record: DataRecord, index: number): T} transform Transform function
+     * @param {function(record: FlatRecord, index: number): T} transform Transform function
      * @returns {T[]} Transformed data
      */
     map(transform) {
-        return this._data.map((record, idx) => {
-            const filteredRecord = Object.fromEntries(this._columnNames.map((colName) => [colName, record[colName]]));
-            return transform(filteredRecord, idx);
-        });
+        return this._data.map((record, idx) => transform({ ...record }, idx));
     }
     /**
      * Returns column statistics (min, max, mean, sum) for numeric columns
@@ -206,10 +286,25 @@ class DataFrame {
         const mean = sum / count;
         const min = Math.min(...numericColumn);
         const max = Math.max(...numericColumn);
-        return { min, max, mean, sum, count };
+        // Calculate standard deviation
+        const variance = numericColumn.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / count;
+        const std = Math.sqrt(variance);
+        return { min, max, mean, sum, count, std };
+    }
+    describeAll() {
+        const result = new Map();
+        for (const colName of this._columnNames) {
+            try {
+                result.set(colName, this.describe(colName));
+            }
+            catch (e) {
+                // Skip non-numeric columns
+            }
+        }
+        return result;
     }
     /**
-     * @returns {DataRecord[]} - A plain JavaScript object representation
+     * @returns {FlatRecord[]} - A plain JavaScript object representation
      */
     toJSON() {
         return this._data.map((record) => Object.fromEntries(this._columnNames.map((colName) => [colName, record[colName]])));

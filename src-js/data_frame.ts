@@ -1,5 +1,10 @@
+type PrimitiveValue = number | bigint | string | boolean | null
+type NestedValue = PrimitiveValue | NestedObject | NestedArray
+type NestedObject = { [key: string]: NestedValue }
+type NestedArray = NestedValue[]
+
 type DataValue = number | bigint
-type DataRecord = Record<string, DataValue>
+type FlatRecord = Record<string, DataValue>
 
 interface DataFrameOptions {
   include?: string[]
@@ -8,18 +13,19 @@ interface DataFrameOptions {
 
 class DataFrame {
   private readonly _columnNames: ReadonlyArray<string>
-  private readonly _data: ReadonlyArray<DataRecord>
+  private readonly _data: ReadonlyArray<FlatRecord>
+  private readonly _separator = '.'
 
-  constructor(data: DataRecord[], options: DataFrameOptions = {}) {
+  constructor(data: NestedObject[], options: DataFrameOptions = {}) {
     if (!Array.isArray(data) || data.length === 0) {
       throw new Error('Data must be a non-empty array.')
     }
 
-    // Deep freeze data to prevent external mutations
-    this._data = Object.freeze(data.map((record) => Object.freeze({ ...record })))
+    // Flatten all records
+    const flattenedData = data.map((record) => this.flattenObject(record))
 
-    const firstRecord = this._data[0]
-    const allColumns = Object.keys(firstRecord)
+    // Get all possible column names from flattened data
+    const allColumns = this.getAllColumns(flattenedData)
 
     // Apply exclude first, then include
     let columns = options.exclude ? allColumns.filter((col) => !options.exclude!.includes(col)) : allColumns
@@ -39,22 +45,82 @@ class DataFrame {
 
     this._columnNames = Object.freeze(columns)
 
-    // Validate data integrity
-    this.validateData()
+    this._data = Object.freeze(
+      flattenedData.map((record) => {
+        const filtered: FlatRecord = {}
+        for (const colName of this._columnNames) {
+          const value = record[colName]
+          if (value === undefined || value === null) {
+            throw new Error(`Missing value for column '${colName}'.`)
+          }
+          filtered[colName] = this.toDataValue(value, colName)
+        }
+        return Object.freeze(filtered)
+      }),
+    )
   }
 
   /**
-   * Validates that all records have values for all selected columns
+   * Flattens a nested object into a single-level object with dot notation
+   * @param {NestedObject} obj - A nested object
+   * @returns {Record<string, PrimitiveValue>} - A flattened object
    */
-  private validateData(): void {
-    this._data.forEach((record, idx) => {
-      this._columnNames.forEach((colName) => {
-        const value = record[colName]
-        if (value === undefined) {
-          throw new Error(`Record at index ${idx} is missing value for column '${colName}'.`)
-        }
-      })
-    })
+  private flattenObject(obj: NestedObject, prefix: string = ''): Record<string, PrimitiveValue> {
+    const result: Record<string, PrimitiveValue> = {}
+
+    for (const [key, value] of Object.entries(obj)) {
+      const newKey = prefix ? `${prefix}${this._separator}${key}` : key
+
+      if (value === null || value === undefined) {
+        result[newKey] = value
+      } else if (Array.isArray(value)) {
+        // Flatten arrays by index
+        value.forEach((item, idx) => {
+          if (item !== null && typeof item === 'object' && !Array.isArray(item)) {
+            Object.assign(result, this.flattenObject(item as NestedObject, `${newKey}${this._separator}${idx}`))
+          } else {
+            result[`${newKey}${this._separator}${idx}`] = item as PrimitiveValue
+          }
+        })
+      } else if (typeof value === 'object') {
+        // Recursively flatten nested objects
+        Object.assign(result, this.flattenObject(value as NestedObject, newKey))
+      } else {
+        // Primitive value
+        result[newKey] = value as PrimitiveValue
+      }
+    }
+
+    return result
+  }
+
+  /**
+   * Gets all unique column names from flattened records
+   * @param records
+   */
+  private getAllColumns(records: Record<string, PrimitiveValue>[]): string[] {
+    const columnSet = new Set<string>()
+    for (const record of records) {
+      Object.keys(record).forEach((key) => columnSet.add(key))
+    }
+    return Array.from(columnSet).sort()
+  }
+
+  private toDataValue(value: PrimitiveValue, columnName: string): DataValue {
+    if (typeof value === 'number' || typeof value === 'bigint') {
+      return value
+    }
+    if (typeof value === 'string') {
+      // Try to parse as number
+      const parsed = parseFloat(value)
+      if (!isNaN(parsed)) {
+        return parsed
+      }
+    }
+    if (typeof value === 'boolean') {
+      return value ? 1 : 0
+    }
+    throw new Error(`Cannot convert value '${value}' in column '${columnName}' to number`)
   }
 
   /**
@@ -103,9 +169,27 @@ class DataFrame {
    */
   getColumnByName(columnName: string): DataValue[] {
     if (!this._columnNames.includes(columnName)) {
-      throw new Error(`Unknown column name: '${columnName}'.`)
+      throw new Error(`Unknown column name: '${columnName}'. Available columns: ${this._columnNames.join(', ')}`)
     }
     return this._data.map((record) => record[columnName])
+  }
+
+  /**
+   * Returns all columns matching a prefix
+   * @param {string} prefix - A string to use as the prefix
+   * @returns {Map<string, DataValue>} Values for all matching columns mapped to the column names
+   */
+  getColumnsByPrefix(prefix: string): Map<string, DataValue[]> {
+    const matchingColumns = this._columnNames.filter(
+      (name) => name === prefix || name.startsWith(prefix + this._separator),
+    )
+
+    const result = new Map<string, DataValue[]>()
+    for (const colName of matchingColumns) {
+      result.set(colName, this.getColumnByName(colName))
+    }
+
+    return result
   }
 
   /**
@@ -158,12 +242,11 @@ class DataFrame {
    * Returns a row by its index
    * @param {number} idx - Index of the target row
    */
-  getRow(idx: number): DataRecord {
+  getRow(idx: number): FlatRecord {
     if (idx < 0 || idx >= this._data.length) {
       throw new Error(`Row index ${idx} out of bounds [0, ${this._data.length - 1}]`)
     }
-    const record = this._data[idx]
-    return Object.fromEntries(this._columnNames.map((colName) => [colName, record[colName]]))
+    return { ...this._data[idx] }
   }
 
   /**
@@ -194,42 +277,57 @@ class DataFrame {
     }
 
     // Create new data with only selected columns
-    const newData = this._data.map((record) => Object.fromEntries(names.map((name) => [name, record[name]])))
+    const newData = this._data.map((record) => {
+      const filtered: NestedObject = {}
+      for (const name of names) {
+        filtered[name] = record[name]
+      }
+      return filtered
+    })
 
-    return new DataFrame(newData as DataRecord[], { include: names })
+    return new DataFrame(newData, { include: names })
+  }
+
+  /**
+   * Selects all columns matching a prefix pattern
+   * @param {string} prefix - Prefix to be used in filter
+   */
+  selectColumnsByPrefix(prefix: string): DataFrame {
+    const matchingColumns = this._columnNames.filter(
+      (name) => name === prefix || name.startsWith(prefix + this._separator),
+    )
+
+    if (matchingColumns.length === 0) {
+      throw new Error(`No columns found with prefix '${prefix}'.`)
+    }
+
+    return this.selectColumnsByName([...matchingColumns])
   }
 
   /**
    * Filter rows based on a predicate function
-   * @param {function(record: DataRecord, index: number): boolean} predicate - Predicate function
+   * @param {function(record: FlatRecord, index: number): boolean} predicate - Predicate function
    */
-  filter(predicate: (record: DataRecord, index: number) => boolean): DataFrame {
+  filter(predicate: (record: FlatRecord, index: number) => boolean): DataFrame {
     const filteredData = this._data
-      .map((record, idx) => {
-        // Create a filtered record with only selected columns
-        const filteredRecord = Object.fromEntries(this._columnNames.map((colName) => [colName, record[colName]]))
-        return { record: filteredRecord, idx }
-      })
-      .filter(({ record, idx }) => predicate(record, idx))
-      .map(({ record }) => record)
+      .map((record, idx) => ({ record, idx }))
+      .filter(({ record, idx }) => predicate({ ...record }, idx))
+      .map(({ record }) => ({ ...record }))
 
     if (filteredData.length === 0) {
       throw new Error('Filter resulted in empty DataFrame.')
     }
 
-    return new DataFrame(filteredData as DataRecord[], { include: [...this._columnNames] })
+    return new DataFrame(filteredData as NestedObject[], { include: [...this._columnNames] })
   }
 
   /**
    * Maps each row to a new value using a transform function
-   * @param {function(record: DataRecord, index: number): T} transform Transform function
+   * @param {function(record: FlatRecord, index: number): T} transform Transform function
    * @returns {T[]} Transformed data
    */
-  map<T>(transform: (record: DataRecord, index: number) => T): T[] {
-    return this._data.map((record, idx) => {
-      const filteredRecord = Object.fromEntries(this._columnNames.map((colName) => [colName, record[colName]]))
-      return transform(filteredRecord, idx)
-    })
+  map<T>(transform: (record: FlatRecord, index: number) => T): T[] {
+    return this._data.map((record, idx) => transform({ ...record }, idx))
   }
 
   /**
@@ -242,6 +340,7 @@ class DataFrame {
     mean: number
     sum: number
     count: number
+    std: number
   } {
     const column = this.getColumnByName(columnName)
 
@@ -258,13 +357,29 @@ class DataFrame {
     const min = Math.min(...numericColumn)
     const max = Math.max(...numericColumn)
 
-    return { min, max, mean, sum, count }
+    // Calculate standard deviation
+    const variance = numericColumn.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / count
+    const std = Math.sqrt(variance)
+
+    return { min, max, mean, sum, count, std }
+  }
+
+  describeAll(): Map<string, ReturnType<typeof this.describe>> {
+    const result = new Map()
+    for (const colName of this._columnNames) {
+      try {
+        result.set(colName, this.describe(colName))
+      } catch (e) {
+        // Skip non-numeric columns
+      }
+    }
+    return result
   }
 
   /**
-   * @returns {DataRecord[]} - A plain JavaScript object representation
+   * @returns {FlatRecord[]} - A plain JavaScript object representation
    */
-  toJSON(): DataRecord[] {
+  toJSON(): FlatRecord[] {
     return this._data.map((record) =>
       Object.fromEntries(this._columnNames.map((colName) => [colName, record[colName]])),
     )
@@ -274,8 +389,8 @@ class DataFrame {
    * @returns {DataFrame} - A deep copy of the DataFrame
    */
   clone(): DataFrame {
-    return new DataFrame(this.toJSON() as DataRecord[], { include: [...this._columnNames] })
+    return new DataFrame(this.toJSON() as NestedObject[], { include: [...this._columnNames] })
   }
 }
 
-export { DataFrame, type DataValue, type DataRecord, type DataFrameOptions }
+export { DataFrame, type DataValue, type FlatRecord, type NestedObject, type DataFrameOptions }

@@ -1,5 +1,11 @@
+type PrimitiveValue = number | bigint | string | boolean | null;
+type NestedValue = PrimitiveValue | NestedObject | NestedArray;
+type NestedObject = {
+    [key: string]: NestedValue;
+};
+type NestedArray = NestedValue[];
 type DataValue = number | bigint;
-type DataRecord = Record<string, DataValue>;
+type FlatRecord = Record<string, DataValue>;
 interface DataFrameOptions {
     include?: string[];
     exclude?: string[];
@@ -7,11 +13,20 @@ interface DataFrameOptions {
 declare class DataFrame {
     private readonly _columnNames;
     private readonly _data;
-    constructor(data: DataRecord[], options?: DataFrameOptions);
+    private readonly _separator;
+    constructor(data: NestedObject[], options?: DataFrameOptions);
     /**
-     * Validates that all records have values for all selected columns
+     * Flattens a nested object into a single-level object with dot notation
+     * @param {NestedObject} obj - A nested object
+     * @returns {Record<string, PrimitiveValue>} - A flattened object
      */
-    private validateData;
+    private flattenObject;
+    /**
+     * Gets all unique column names from flattened records
+     * @param records
+     */
+    private getAllColumns;
+    private toDataValue;
     /**
      * Returns a copy of column names
      */
@@ -39,6 +54,12 @@ declare class DataFrame {
      */
     getColumnByName(columnName: string): DataValue[];
     /**
+     * Returns all columns matching a prefix
+     * @param {string} prefix - A string to use as the prefix
+     * @returns {Map<string, DataValue>} Values for all matching columns mapped to the column names
+     */
+    getColumnsByPrefix(prefix: string): Map<string, DataValue[]>;
+    /**
      * Returns all columns as a 2D array (row-major order)
      */
     getRows(): DataValue[][];
@@ -58,7 +79,7 @@ declare class DataFrame {
      * Returns a row by its index
      * @param {number} idx - Index of the target row
      */
-    getRow(idx: number): DataRecord;
+    getRow(idx: number): FlatRecord;
     /**
      * Selects columns by their indices
      * @param {number[]} indices - An Array containing the indices of the target columns
@@ -70,16 +91,21 @@ declare class DataFrame {
      */
     selectColumnsByName(names: string[]): DataFrame;
     /**
-     * Filter rows based on a predicate function
-     * @param {function(record: DataRecord, index: number): boolean} predicate - Predicate function
+     * Selects all columns matching a prefix pattern
+     * @param {string} prefix - Prefix to be used in filter
      */
-    filter(predicate: (record: DataRecord, index: number) => boolean): DataFrame;
+    selectColumnsByPrefix(prefix: string): DataFrame;
+    /**
+     * Filter rows based on a predicate function
+     * @param {function(record: FlatRecord, index: number): boolean} predicate - Predicate function
+     */
+    filter(predicate: (record: FlatRecord, index: number) => boolean): DataFrame;
     /**
      * Maps each row to a new value using a transform function
-     * @param {function(record: DataRecord, index: number): T} transform Transform function
+     * @param {function(record: FlatRecord, index: number): T} transform Transform function
      * @returns {T[]} Transformed data
      */
-    map<T>(transform: (record: DataRecord, index: number) => T): T[];
+    map<T>(transform: (record: FlatRecord, index: number) => T): T[];
     /**
      * Returns column statistics (min, max, mean, sum) for numeric columns
      * @param {string} columnName Name of the target column
@@ -90,14 +116,16 @@ declare class DataFrame {
         mean: number;
         sum: number;
         count: number;
+        std: number;
     };
+    describeAll(): Map<string, ReturnType<typeof this.describe>>;
     /**
-     * @returns {DataRecord[]} - A plain JavaScript object representation
+     * @returns {FlatRecord[]} - A plain JavaScript object representation
      */
-    toJSON(): DataRecord[];
+    toJSON(): FlatRecord[];
     /**
      * @returns {DataFrame} - A deep copy of the DataFrame
      */
     clone(): DataFrame;
 }
-export { DataFrame, type DataValue, type DataRecord, type DataFrameOptions };
+export { DataFrame, type DataValue, type FlatRecord, type NestedObject, type DataFrameOptions };

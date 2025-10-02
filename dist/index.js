@@ -1,4 +1,4 @@
-import { DataFrame } from './data_frame.js';
+export * as dataFrame from './data_frame.js';
 export * from './linalg/index.js';
 export * as linearModel from './linear_model/index.js';
 export * as ensemble from './ensemble/index.js';
@@ -11,4 +11,4 @@ export * as cluster from './cluster/index.js';
 export * as decomposition from './decomposition/index.js';
 export * as naiveBayes from './naive_bayes/index.js';
 export * as neighbors from './neighbors/index.js';
-export { DataFrame };
+export {};
