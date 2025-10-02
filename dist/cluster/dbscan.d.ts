@@ -9,15 +9,20 @@ interface DBSCANParams {
     eps?: number;
     distance?: DistanceRs;
 }
+interface ISerializedData {
+    columns: string[] | null;
+    data: Buffer;
+}
 declare class DBSCAN implements Estimator<XType, YType, DBSCAN>, Predictor<XType, YType> {
     private parameters;
     private estimator;
     static readonly className = "DBSCAN";
     readonly name: string;
+    private columns;
     constructor(params?: DBSCANParams);
     fit(x: XType, y: YType): DBSCAN;
     predict(x: XType): YType;
     serialize(): Buffer<ArrayBufferLike> | undefined;
-    static deserialize(data: Buffer): DBSCAN;
+    static deserialize(serializedData: ISerializedData): DBSCAN;
 }
 export { DBSCAN };

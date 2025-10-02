@@ -1,9 +1,11 @@
 import { PCAF64, PCAParameters } from '../../core-bindings/index.js';
+import { DataFrame } from '../index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class PCA {
     constructor(params) {
         this.estimator = null;
         this.name = PCA.className;
+        this.columns = null;
         this.parameters = new PCAParameters();
         if (params) {
             if (params.nComponents !== undefined) {
@@ -15,7 +17,17 @@ class PCA {
         }
     }
     fit(x, y) {
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
+        let matrix;
+        if (x instanceof DenseMatrix) {
+            matrix = x;
+        }
+        else if (x instanceof DataFrame) {
+            this.columns = x.columnNames;
+            matrix = DenseMatrix.f64(x.getColumns());
+        }
+        else {
+            matrix = DenseMatrix.f64(x);
+        }
         if (!y || y.length === 0) {
             throw new Error('Input arrays cannot be empty.');
         }

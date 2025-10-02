@@ -1,5 +1,5 @@
 import { PCAF64, PCAParameters } from '../../core-bindings/index.js'
-import type { XType, YType } from '../index.js'
+import { type XType, type YType, DataFrame } from '../index.js'
 import { DenseMatrix } from '../linalg/index.js'
 import type { Estimator, Transformer } from '../pipeline/index.js'
 
@@ -8,14 +8,20 @@ interface PCAParams {
   correlationMatrix?: boolean
 }
 
+interface ISerializedData {
+  columns: string[] | null
+  data: Buffer
+}
+
 type PCARs = PCAF64
 type PCAParametersRs = PCAParameters
 
-class PCA implements Estimator<XType, YType, PCA>, Transformer<XType> {
+class PCA implements Estimator<XType | DataFrame, YType, PCA>, Transformer<XType> {
   private parameters: PCAParametersRs
   private estimator: PCARs | null = null
   public static readonly className = 'PCA'
   public readonly name: string = PCA.className
+  private columns: string[] | null = null
 
   constructor(params?: PCAParams) {
     this.parameters = new PCAParameters()
@@ -30,7 +36,15 @@ class PCA implements Estimator<XType, YType, PCA>, Transformer<XType> {
   }
 
   fit(x: XType, y: YType): PCA {
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
+    let matrix: DenseMatrix
+    if (x instanceof DenseMatrix) {
+      matrix = x
+    } else if (x instanceof DataFrame) {
+      this.columns = x.columnNames
+      matrix = DenseMatrix.f64(x.getColumns())
+    } else {
+      matrix = DenseMatrix.f64(x)
+    }
 
     if (!y || y.length === 0) {
       throw new Error('Input arrays cannot be empty.')
@@ -50,7 +64,19 @@ class PCA implements Estimator<XType, YType, PCA>, Transformer<XType> {
       throw new Error("The 'fit' method should called before the 'predict' method is called.")
     }
 
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
+    let matrix: DenseMatrix
+    if (x instanceof DenseMatrix) {
+      matrix = x
+    } else if (x instanceof DataFrame) {
+      if (this.columns === null) {
+        matrix = DenseMatrix.f64(x.getColumns())
+      } else {
+        matrix = DenseMatrix.f64(x.selectColumnsByName(this.columns).getColumns())
+      }
+    } else {
+      matrix = DenseMatrix.f64(x)
+    }
+
     return new DenseMatrix(this.estimator.transform(matrix.asF64()))
   }
 
@@ -58,9 +84,10 @@ class PCA implements Estimator<XType, YType, PCA>, Transformer<XType> {
     return this.estimator?.serialize()
   }
 
-  static deserialize(data: Buffer): PCA {
-    let estimator = PCAF64.deserialize(data)
+  static deserialize(serializedData: ISerializedData): PCA {
+    let estimator = PCAF64.deserialize(serializedData.data)
     let instance = new PCA()
+    instance.columns = serializedData.columns
     instance.estimator = estimator
     return instance
   }
