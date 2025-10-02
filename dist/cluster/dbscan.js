@@ -1,12 +1,10 @@
 import { DBSCANF64EuclidianF64Parameters, DBSCANF64F64EuclidianF64, DBSCANF64F64HammingF64, DBSCANF64F64MahalanobisF64, DBSCANF64F64ManhattanF64, DBSCANF64F64MinkowskiF64, EuclidianF64, HammingF64, MahalanobisF64, ManhattanF64, MinkowskiF64, } from '../../core-bindings/index.js';
 import { DBSCANF64HammingF64Parameters, DBSCANF64MahalanobisF64Parameters, DBSCANF64ManhattanF64Parameters, DBSCANF64MinkowskiF64Parameters, } from '../../core-bindings/index.js';
-import { DataFrame } from '../data_frame.js';
 import { DenseMatrix } from '../linalg/index.js';
 class DBSCAN {
     constructor(params) {
         this.estimator = null;
         this.name = DBSCAN.className;
-        this.columns = null;
         this.parameters = new DBSCANF64EuclidianF64Parameters();
         if (params) {
             if (params.minSamples !== undefined) {
@@ -38,10 +36,6 @@ class DBSCAN {
         let matrix;
         if (x instanceof DenseMatrix) {
             matrix = x;
-        }
-        else if (x instanceof DataFrame) {
-            this.columns = x.columnNames;
-            matrix = DenseMatrix.f64(x.getColumns());
         }
         else {
             matrix = DenseMatrix.f64(x);
@@ -79,14 +73,6 @@ class DBSCAN {
         if (x instanceof DenseMatrix) {
             matrix = x;
         }
-        else if (x instanceof DataFrame) {
-            if (this.columns === null) {
-                matrix = DenseMatrix.f64(x.getColumns());
-            }
-            else {
-                matrix = DenseMatrix.f64(x.selectColumnsByName(this.columns).getColumns());
-            }
-        }
         else {
             matrix = DenseMatrix.f64(x);
         }
@@ -98,7 +84,6 @@ class DBSCAN {
     static deserialize(serializedData) {
         let estimator = DBSCANF64F64EuclidianF64.deserialize(serializedData.data);
         let instance = new DBSCAN();
-        instance.columns = serializedData.columns;
         instance.estimator = estimator;
         return instance;
     }

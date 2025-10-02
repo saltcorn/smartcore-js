@@ -1,11 +1,10 @@
 import { PCAF64, PCAParameters } from '../../core-bindings/index.js';
-import { DataFrame } from '../index.js';
+import {} from '../index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class PCA {
     constructor(params) {
         this.estimator = null;
         this.name = PCA.className;
-        this.columns = null;
         this.parameters = new PCAParameters();
         if (params) {
             if (params.nComponents !== undefined) {
@@ -20,10 +19,6 @@ class PCA {
         let matrix;
         if (x instanceof DenseMatrix) {
             matrix = x;
-        }
-        else if (x instanceof DataFrame) {
-            this.columns = x.columnNames;
-            matrix = DenseMatrix.f64(x.getColumns());
         }
         else {
             matrix = DenseMatrix.f64(x);
@@ -43,14 +38,20 @@ class PCA {
         if (this.estimator === null) {
             throw new Error("The 'fit' method should called before the 'predict' method is called.");
         }
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
+        let matrix;
+        if (x instanceof DenseMatrix) {
+            matrix = x;
+        }
+        else {
+            matrix = DenseMatrix.f64(x);
+        }
         return new DenseMatrix(this.estimator.transform(matrix.asF64()));
     }
     serialize() {
         return this.estimator?.serialize();
     }
-    static deserialize(data) {
-        let estimator = PCAF64.deserialize(data);
+    static deserialize(serializedData) {
+        let estimator = PCAF64.deserialize(serializedData.data);
         let instance = new PCA();
         instance.estimator = estimator;
         return instance;

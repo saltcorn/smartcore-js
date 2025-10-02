@@ -18,7 +18,6 @@ import {
   DBSCANF64MinkowskiF64Parameters,
   type KNNAlgorithmName,
 } from '../../core-bindings/index.js'
-import { DataFrame } from '../data_frame.js'
 import type { XType, YType } from '../index.js'
 import { DenseMatrix } from '../linalg/index.js'
 import type { Estimator, Predictor } from '../pipeline/index.js'
@@ -50,7 +49,6 @@ class DBSCAN implements Estimator<XType, YType, DBSCAN>, Predictor<XType, YType>
   private estimator: DBSCANRs | null = null
   public static readonly className = 'DBSCAN'
   public readonly name: string = DBSCAN.className
-  private columns: string[] | null = null
 
   constructor(params?: DBSCANParams) {
     this.parameters = new DBSCANF64EuclidianF64Parameters()
@@ -82,9 +80,6 @@ class DBSCAN implements Estimator<XType, YType, DBSCAN>, Predictor<XType, YType>
     let matrix: DenseMatrix
     if (x instanceof DenseMatrix) {
       matrix = x
-    } else if (x instanceof DataFrame) {
-      this.columns = x.columnNames
-      matrix = DenseMatrix.f64(x.getColumns())
     } else {
       matrix = DenseMatrix.f64(x)
     }
@@ -120,12 +115,6 @@ class DBSCAN implements Estimator<XType, YType, DBSCAN>, Predictor<XType, YType>
     let matrix: DenseMatrix
     if (x instanceof DenseMatrix) {
       matrix = x
-    } else if (x instanceof DataFrame) {
-      if (this.columns === null) {
-        matrix = DenseMatrix.f64(x.getColumns())
-      } else {
-        matrix = DenseMatrix.f64(x.selectColumnsByName(this.columns).getColumns())
-      }
     } else {
       matrix = DenseMatrix.f64(x)
     }
@@ -140,7 +129,6 @@ class DBSCAN implements Estimator<XType, YType, DBSCAN>, Predictor<XType, YType>
   static deserialize(serializedData: ISerializedData): DBSCAN {
     let estimator = DBSCANF64F64EuclidianF64.deserialize(serializedData.data)
     let instance = new DBSCAN()
-    instance.columns = serializedData.columns
     instance.estimator = estimator
     return instance
   }

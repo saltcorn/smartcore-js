@@ -18,7 +18,6 @@ declare class DBSCAN implements Estimator<XType, YType, DBSCAN>, Predictor<XType
     private estimator;
     static readonly className = "DBSCAN";
     readonly name: string;
-    private columns;
     constructor(params?: DBSCANParams);
     fit(x: XType, y: YType): DBSCAN;
     predict(x: XType): YType;
