@@ -31,7 +31,7 @@ class CategoricalNB implements Estimator<XType, YType, CategoricalNB>, Predictor
     }
 
     if (y instanceof BigUint64Array) {
-      this.estimator = CategoricalNBBigU64.fit(matrix.asF64(), y, this.parameters)
+      this.estimator = CategoricalNBBigU64.fit(matrix.asU64(), y, this.parameters)
     } else {
       throw new Error('Unsupported data type!')
     }
@@ -46,7 +46,7 @@ class CategoricalNB implements Estimator<XType, YType, CategoricalNB>, Predictor
 
     let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
 
-    return this.estimator.predict(matrix.asF64())
+    return this.estimator.predict(matrix.asU64())
   }
 
   serialize() {

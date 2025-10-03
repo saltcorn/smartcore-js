@@ -18,7 +18,7 @@ class MultinomialNB {
             throw new Error('Input arrays cannot be empty.');
         }
         if (y instanceof BigUint64Array) {
-            this.estimator = MultinomialNBU64BigU64.fit(matrix.asF64(), y, this.parameters);
+            this.estimator = MultinomialNBU64BigU64.fit(matrix.asU64(), y, this.parameters);
         }
         else {
             throw new Error('Unsupported data type!');
@@ -30,7 +30,7 @@ class MultinomialNB {
             throw new Error("The 'fit' method should called before the 'predict' method is called.");
         }
         let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
-        return this.estimator.predict(matrix.asF64());
+        return this.estimator.predict(matrix.asU64());
     }
     serialize() {
         return this.estimator?.serialize();

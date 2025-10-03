@@ -1,22 +1,39 @@
-import { type XType, type YType } from '../index.js';
-import type { Estimator, Transformer } from '../pipeline/index.js';
+import { PCAF64, PCAParameters } from '../../core-bindings/index.js';
+import { DenseMatrix } from '../linalg/index.js';
+import { BaseDecomposition } from './base.js';
 interface PCAParams {
     nComponents?: number;
     correlationMatrix?: boolean;
 }
-interface ISerializedData {
+interface PCASerializedData {
     columns: string[] | null;
     data: Buffer;
+    params: PCAParams;
 }
-declare class PCA implements Estimator<XType, YType, PCA>, Transformer<XType> {
-    private parameters;
-    private estimator;
+type PCARs = PCAF64;
+type PCAParametersRs = PCAParameters;
+declare class PCA extends BaseDecomposition<PCARs, PCAParametersRs> {
     static readonly className = "PCA";
     readonly name: string;
+    private readonly config;
     constructor(params?: PCAParams);
-    fit(x: XType, y: YType): PCA;
-    transform(x: XType): XType;
-    serialize(): Buffer<ArrayBufferLike> | undefined;
-    static deserialize(serializedData: ISerializedData): PCA;
+    protected fitEstimator(matrix: DenseMatrix): PCAF64;
+    protected transformMatrix(matrix: DenseMatrix): DenseMatrix;
+    /**
+     * Create a name for a column given its index
+     * @param {number} index - The index of the column
+     * @returns {string} The column name derived from the provided index
+     */
+    protected getComponentColumnName(index: number): string;
+    /**
+     * @returns An Object containing information that can be used to reinstantiate an identical PCA instance
+     */
+    serialize(): PCASerializedData;
+    /**
+     * Creates instance from serialized data
+     * @param {PCASerializedData} serializedData
+     * @returns {PCA} A PCA instance
+     */
+    static deserialize(serializedData: PCASerializedData): PCA;
 }
 export { PCA };

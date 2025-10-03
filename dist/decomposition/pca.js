@@ -1,59 +1,57 @@
 import { PCAF64, PCAParameters } from '../../core-bindings/index.js';
-import {} from '../index.js';
 import { DenseMatrix } from '../linalg/index.js';
-class PCA {
+import { BaseDecomposition } from './base.js';
+class PCA extends BaseDecomposition {
     constructor(params) {
-        this.estimator = null;
+        const parameters = new PCAParameters();
+        // Store config for serialization
+        const config = params || {};
+        if (config.nComponents !== undefined) {
+            parameters.withNComponents(config.nComponents);
+        }
+        if (config.correlationMatrix !== undefined) {
+            parameters.useCorrelationMatrix(config.correlationMatrix);
+        }
+        super(parameters);
         this.name = PCA.className;
-        this.parameters = new PCAParameters();
-        if (params) {
-            if (params.nComponents !== undefined) {
-                this.parameters.withNComponents(params.nComponents);
-            }
-            if (params.correlationMatrix !== undefined) {
-                this.parameters.useCorrelationMatrix(params.correlationMatrix);
-            }
-        }
+        this.config = config;
     }
-    fit(x, y) {
-        let matrix;
-        if (x instanceof DenseMatrix) {
-            matrix = x;
-        }
-        else {
-            matrix = DenseMatrix.f64(x);
-        }
-        if (!y || y.length === 0) {
-            throw new Error('Input arrays cannot be empty.');
-        }
-        if (y instanceof Float64Array) {
-            this.estimator = PCAF64.fit(matrix.asF64(), this.parameters);
-        }
-        else {
-            throw new Error('Unsupported data type for input arrays.');
-        }
-        return this;
+    fitEstimator(matrix) {
+        return PCAF64.fit(matrix.asF64(), this.parameters);
     }
-    transform(x) {
-        if (this.estimator === null) {
-            throw new Error("The 'fit' method should called before the 'predict' method is called.");
-        }
-        let matrix;
-        if (x instanceof DenseMatrix) {
-            matrix = x;
-        }
-        else {
-            matrix = DenseMatrix.f64(x);
-        }
+    transformMatrix(matrix) {
         return new DenseMatrix(this.estimator.transform(matrix.asF64()));
     }
-    serialize() {
-        return this.estimator?.serialize();
+    /**
+     * Create a name for a column given its index
+     * @param {number} index - The index of the column
+     * @returns {string} The column name derived from the provided index
+     */
+    getComponentColumnName(index) {
+        return `PC${index + 1}`;
     }
+    /**
+     * @returns An Object containing information that can be used to reinstantiate an identical PCA instance
+     */
+    serialize() {
+        this.ensureFitted('serialize');
+        return {
+            columns: this.columns,
+            data: this.estimator.serialize(),
+            params: this.config,
+        };
+    }
+    /**
+     * Creates instance from serialized data
+     * @param {PCASerializedData} serializedData
+     * @returns {PCA} A PCA instance
+     */
     static deserialize(serializedData) {
-        let estimator = PCAF64.deserialize(serializedData.data);
-        let instance = new PCA();
+        const estimator = PCAF64.deserialize(serializedData.data);
+        const instance = new PCA(serializedData.params);
         instance.estimator = estimator;
+        instance.columns = serializedData.columns;
+        instance._isFitted = true;
         return instance;
     }
 }

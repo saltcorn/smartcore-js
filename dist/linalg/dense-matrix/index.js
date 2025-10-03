@@ -9,10 +9,21 @@ class DenseMatrix {
             else {
                 this.inner = new DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor);
             }
+            this._ncols = ncols;
+            this._nrows = nrows;
         }
         else {
             this.inner = data;
+            let [nrows, ncols] = this.inner.shape();
+            this._ncols = ncols;
+            this._nrows = nrows;
         }
+    }
+    get ncols() {
+        return this._ncols;
+    }
+    get nrows() {
+        return this._nrows;
     }
     static prepData(data) {
         if (!(data instanceof Array)) {
@@ -39,7 +50,7 @@ class DenseMatrix {
     }
     asF64() {
         if (!(this.inner instanceof DenseMatrixF64)) {
-            throw new Error('Inner type not an f64 DenseMatrix');
+            throw new Error('Inner type not an f64 DenseMatrix.');
         }
         return this.inner;
     }
@@ -48,12 +59,36 @@ class DenseMatrix {
             return this.inner;
         }
         else if (this.inner instanceof DenseMatrixI64) {
-            //s
+            // Convert inner into DenseMatrixU64 only if all values are positive
+            if (this.inner.satisfies((x) => x > 0)) {
+                const values = this.inner.values().map((v) => BigInt(v));
+                return new DenseMatrixU64(this._nrows, this._ncols, new BigUint64Array(values));
+            }
+            else {
+                throw new Error(`Conversion from ${typeof this.inner} to DenseMatrixU64 failed. Negative numbers found.`);
+            }
         }
         else {
-            throw new Error(`Conversion from ${typeof this.inner} to DenseMatrixU64 not supported!`);
+            throw new Error(`Conversion from ${typeof this.inner} to DenseMatrixU64 not supported.`);
         }
-        return this.inner;
+    }
+    asI64() {
+        if (this.inner instanceof DenseMatrixI64) {
+            return this.inner;
+        }
+        else if (this.inner instanceof DenseMatrixU64) {
+            if (this.inner.satisfies((x) => x <= BigInt(Number.MAX_SAFE_INTEGER) && x >= BigInt(Number.MIN_SAFE_INTEGER))) {
+                const bigintValues = this.inner.values();
+                const values = [...bigintValues].map((v) => Number(v));
+                return new DenseMatrixI64(this._nrows, this._ncols, values);
+            }
+            else {
+                throw new Error(`Conversion from ${typeof this.inner} to DenseMatrixI64 failed. Maximum safe integer exceeded.`);
+            }
+        }
+        else {
+            throw new Error(`Conversion from ${typeof this.inner} to DenseMatrixI64 not supported.`);
+        }
     }
 }
 export default DenseMatrix;
