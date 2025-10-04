@@ -4,11 +4,14 @@ import {
   RandomForestRegressorF64I64,
   RandomForestRegressorParameters,
 } from '../../core-bindings/index.js'
-import type { XType, YType } from '../index.js'
-import { DenseMatrix } from '../linalg/index.js'
-import type { Estimator, Predictor } from '../pipeline/index.js'
+import type { SplitCriterion } from '../../core-bindings/index.js'
+import type { YType } from '../index.js'
+import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
+import { BasePredictor } from '../base_predictor.js'
+import { type YTypeKey } from '../base_estimator.js'
 
-interface RandomForestRegressorParams {
+interface IRandomForestRegressorParameters {
+  criterion?: SplitCriterion
   maxDepth?: number
   minSamplesLeaf?: bigint
   minSamplesSplit?: bigint
@@ -23,95 +26,100 @@ type RandomForestRegressorRs =
   | RandomForestRegressorF64BigI64
   | RandomForestRegressorF64BigU64
 
-enum EstimatorType {
-  F64I64,
-  F64BigI64,
-  F64BigU64,
+type RandomForestRegressorParametersRs = RandomForestRegressorParameters
+
+interface RandomForestRegressorSerializedData {
+  columns: string[] | null
+  data: Buffer
+  params: IRandomForestRegressorParameters
+  yType: YTypeKey
 }
 
-class RandomForestRegressor implements Estimator<XType, YType, RandomForestRegressor>, Predictor<XType, YType> {
-  private parameters: RandomForestRegressorParameters
-  private estimator: RandomForestRegressorRs | null = null
+interface EstimatorClass {
+  fit(matrix: DenseMatrixRs, y: YType, params: RandomForestRegressorParametersRs): RandomForestRegressorRs
+  deserialize(data: Buffer): RandomForestRegressorRs
+}
+
+class RandomForestRegressor extends BasePredictor<RandomForestRegressorRs, RandomForestRegressorParametersRs, YType> {
   public static readonly className = 'RandomForestRegressor'
   public readonly name: string = RandomForestRegressor.className
+  public readonly config: IRandomForestRegressorParameters
 
-  constructor(params?: RandomForestRegressorParams) {
-    this.parameters = new RandomForestRegressorParameters()
-    if (params) {
-      if (params.maxDepth !== undefined) {
-        this.parameters.withMaxDepth(params.maxDepth)
+  private estimatorClasses: Record<YTypeKey, EstimatorClass | null>
+
+  constructor(params?: IRandomForestRegressorParameters) {
+    const parameters = new RandomForestRegressorParameters()
+    const config = params || {}
+    if (config) {
+      if (config.maxDepth !== undefined) {
+        parameters.withMaxDepth(config.maxDepth)
       }
-      if (params.minSamplesLeaf !== undefined) {
-        this.parameters.withMinSamplesLeaf(params.minSamplesLeaf)
+      if (config.minSamplesLeaf !== undefined) {
+        parameters.withMinSamplesLeaf(config.minSamplesLeaf)
       }
-      if (params.minSamplesSplit !== undefined) {
-        this.parameters.withMinSamplesSplit(params.minSamplesSplit)
+      if (config.minSamplesSplit !== undefined) {
+        parameters.withMinSamplesSplit(config.minSamplesSplit)
       }
-      if (params.nTrees !== undefined) {
-        this.parameters.withNTrees(params.nTrees)
+      if (config.nTrees !== undefined) {
+        parameters.withNTrees(config.nTrees)
       }
-      if (params.m !== undefined) {
-        this.parameters.withM(params.m)
+      if (config.m !== undefined) {
+        parameters.withM(config.m)
       }
-      if (params.keepSamples !== undefined) {
-        this.parameters.withKeepSamples(params.keepSamples)
+      if (config.keepSamples !== undefined) {
+        parameters.withKeepSamples(config.keepSamples)
       }
-      if (params.seed !== undefined) {
-        this.parameters.withSeed(params.seed)
+      if (config.seed !== undefined) {
+        parameters.withSeed(config.seed)
       }
+    }
+    super(parameters)
+    this.config = config
+    this.estimatorClasses = {
+      bigI64: RandomForestRegressorF64BigI64,
+      bigU64: RandomForestRegressorF64BigU64,
+      i64: RandomForestRegressorF64I64,
+      f64: null,
     }
   }
 
-  fit(x: XType, y: YType): RandomForestRegressor {
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    if (!y || y.length === 0) {
-      throw new Error('Input arrays cannot be empty.')
-    }
-
-    if (y instanceof Float64Array) {
-      throw new Error('Unsupported data type for input arrays.')
-    } else if (y instanceof BigInt64Array) {
-      this.estimator = RandomForestRegressorF64BigI64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y instanceof BigUint64Array) {
-      this.estimator = RandomForestRegressorF64BigU64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y.every((val) => Number.isInteger(val))) {
-      this.estimator = RandomForestRegressorF64I64.fit(matrix.asF64(), y, this.parameters)
+  protected fitEstimator(matrix: DenseMatrix, y: YType): RandomForestRegressorRs {
+    const EstimatorClass = this.estimatorClasses[this._yType!]
+    if (EstimatorClass !== null) {
+      return EstimatorClass.fit(matrix.asF64(), y, this.parameters)
     } else {
-      throw new Error('Unsupported data type for input arrays.')
+      throw new Error(`${this.name}: Unsupported data type for y '${y.constructor?.name || typeof y}'`)
     }
-
-    return this
   }
 
-  predict(x: XType): YType {
-    if (this.estimator === null) {
-      throw new Error("The 'fit' method should called before the 'predict' method is called.")
-    }
-
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-    return this.estimator.predict(matrix.asF64())
+  protected getComponentColumnName(index: number): string {
+    return `RFR${index + 1}`
   }
 
-  serialize() {
-    return this.estimator?.serialize()
+  predictMatrix(matrix: DenseMatrix): YType {
+    return this.estimator!.predict(matrix.asF64())
   }
 
-  static deserialize(data: Buffer, estimatorType: EstimatorType): RandomForestRegressor {
-    let instance = new RandomForestRegressor()
-    switch (estimatorType) {
-      case EstimatorType.F64BigI64:
-        instance.estimator = RandomForestRegressorF64BigI64.deserialize(data)
-        break
-      case EstimatorType.F64BigU64:
-        instance.estimator = RandomForestRegressorF64BigU64.deserialize(data)
-        break
-      case EstimatorType.F64I64:
-        instance.estimator = RandomForestRegressorF64I64.deserialize(data)
-        break
-      default:
-        throw new Error(`Unrecognized estimator type: '${estimatorType}'`)
+  serialize(): RandomForestRegressorSerializedData {
+    this.ensureFitted('serialize')
+
+    return {
+      columns: this.columns,
+      data: this.estimator!.serialize(),
+      params: this.config,
+      yType: this._yType!,
     }
+  }
+
+  static deserialize(data: RandomForestRegressorSerializedData): RandomForestRegressor {
+    let instance = new RandomForestRegressor(data.params)
+    const EstimatorClass = instance.estimatorClasses[data.yType]
+    if (EstimatorClass === null) {
+      throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`)
+    }
+    instance.estimator = EstimatorClass.deserialize(data.data)
+    instance._isFitted = true
+    instance._yType = data.yType
     return instance
   }
 }
