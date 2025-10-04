@@ -35,7 +35,7 @@ class BernoulliNB extends BasePredictor {
         }
     }
     getComponentColumnName(index) {
-        return `EN${index + 1}`;
+        return `BNB${index + 1}`;
     }
     predictMatrix(matrix) {
         return this.estimator.predict(matrix.asF64());

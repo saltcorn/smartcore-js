@@ -64,7 +64,7 @@ class BernoulliNB extends BasePredictor<BernoulliNBRs, BernoulliNBParametersRs, 
   }
 
   protected getComponentColumnName(index: number): string {
-    return `EN${index + 1}`
+    return `BNB${index + 1}`
   }
 
   predictMatrix(matrix: DenseMatrix): YType {
