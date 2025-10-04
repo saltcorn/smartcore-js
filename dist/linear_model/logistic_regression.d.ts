@@ -1,25 +1,31 @@
+import { LogisticRegressionF64I64, LogisticRegressionParametersF64, LogisticRegressionF64BigI64, LogisticRegressionF64BigU64 } from '../../core-bindings/index.js';
+import { DenseMatrix } from '../linalg/index.js';
 import type { LogisticRegressionSolverName } from '../../core-bindings/index.js';
-import type { Estimator, Predictor, SerDe } from '../pipeline/index.js';
-import type { YType, XType } from '../index.js';
-declare enum EstimatorType {
-    F64BigI64 = 0,
-    F64BigU64 = 1,
-    F64I64 = 2
-}
-interface LogisticRegressionParametersValues {
+import type { YType } from '../index.js';
+import { BasePredictor } from '../base_predictor.js';
+import { type YTypeKey } from '../base_estimator.js';
+type LogisticRegressionRs = LogisticRegressionF64I64 | LogisticRegressionF64BigI64 | LogisticRegressionF64BigU64;
+type LogisticRegressionParameters = LogisticRegressionParametersF64;
+interface ILogicRegressionParameters {
     alpha?: number;
     solver?: LogisticRegressionSolverName.LBFGS;
 }
-declare class LogisticRegression implements Estimator<XType, YType, LogisticRegression>, Predictor<XType, YType>, SerDe<LogisticRegression> {
-    private estimator;
-    private parameters;
+interface LogisticRegressionSerializedData {
+    columns: string[] | null;
+    data: Buffer;
+    params: ILogicRegressionParameters;
+    yType: YTypeKey;
+}
+declare class LogisticRegression extends BasePredictor<LogisticRegressionRs, LogisticRegressionParameters, YType> {
     static readonly className = "LogisticRegression";
     readonly name: string;
-    constructor(params?: LogisticRegressionParametersValues);
-    predict(x: XType): YType;
-    fit(x: XType, y: YType): LogisticRegression;
-    serialize(): Buffer;
-    deserialize(data: Buffer): LogisticRegression;
-    static deserialize(data: Buffer, estimatorType: EstimatorType): LogisticRegression;
+    readonly config: ILogicRegressionParameters;
+    private estimatorClasses;
+    constructor(params?: ILogicRegressionParameters);
+    protected fitEstimator(matrix: DenseMatrix, y: YType): LogisticRegressionRs;
+    protected getComponentColumnName(index: number): string;
+    predictMatrix(matrix: DenseMatrix): YType;
+    serialize(): LogisticRegressionSerializedData;
+    static deserialize(data: LogisticRegressionSerializedData): LogisticRegression;
 }
 export default LogisticRegression;

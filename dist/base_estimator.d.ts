@@ -1,15 +1,20 @@
-import { DenseMatrix, type YType, type InputType } from '../index.js';
-import { DataFrame } from '../data_frame.js';
-import type { Estimator, Transformer } from '../pipeline/index.js';
+import { DenseMatrix, type InputType, type YType } from './index.js';
+import { DataFrame } from './data_frame.js';
+import type { Estimator } from './pipeline/index.js';
+type YTypeKey = 'bigI64' | 'bigU64' | 'i64' | 'f64';
+interface EstimatorClass {
+    fit(matrix: any, y: any, params: any): any;
+    deserialize(data: Buffer): any;
+}
 /**
- * Abstract base class for decomposition algorithms
- * Serves as a template for PCA and SVD
+ * Abstract base class for estimators
  */
-declare abstract class BaseDecomposition<TEstimator, TParams> implements Estimator<InputType, YType, any>, Transformer<InputType> {
+declare abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType, YType, any> {
     protected parameters: TParams;
     protected estimator: TEstimator | null;
     protected columns: string[] | null;
     protected _isFitted: boolean;
+    protected _yType: YTypeKey | null;
     abstract readonly name: string;
     constructor(parameters: TParams);
     /**
@@ -31,25 +36,20 @@ declare abstract class BaseDecomposition<TEstimator, TParams> implements Estimat
      * @param {InputType} x
      * @param {YType} y
      */
-    fit(x: InputType, _y?: YType): this;
+    fit(x: InputType, y: YType): this;
+    /**
+     * Records the type of y. Useful when determining the output of methods such as predict
+     */
+    private setYType;
     /**
      * @param {DenseMatrix} matrix
      */
-    protected abstract fitEstimator(matrix: DenseMatrix): TEstimator;
+    protected abstract fitEstimator(matrix: DenseMatrix, y: YType): TEstimator;
     /**
      * Validates that the model is fitted before operations
      * @param {string} methodName
      */
     protected ensureFitted(methodName: string): void;
-    /**
-     * A template for the transform method
-     * @param {InputType} x
-     */
-    transform(x: InputType): DenseMatrix | DataFrame;
-    /**
-     * @param {DenseMatrix} matrix
-     */
-    protected abstract transformMatrix(matrix: DenseMatrix): DenseMatrix;
     /**
      * Converts DenseMatrix to DataFrame
      * @param {DenseMatrix} matrix
@@ -70,4 +70,4 @@ declare abstract class BaseDecomposition<TEstimator, TParams> implements Estimat
      */
     abstract serialize(): any;
 }
-export { BaseDecomposition };
+export { BaseEstimator, type YTypeKey, type EstimatorClass };

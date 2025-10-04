@@ -1,11 +1,6 @@
-import { dataFrame, type XType, type YType } from '../index.js'
+import { type YType, type InputType, type OutputType, dataFrame } from '../index.js'
 import type { Estimator, Predictor, Transformer } from './index.js'
 import { StepAdapter } from './step_adapter.js'
-
-type DataFrame = dataFrame.DataFrame
-
-type InputType = XType | DataFrame
-type OutputType = XType | DataFrame
 
 type TransformerType = Estimator<any, any, any> & Transformer<any>
 type PredictorType = Estimator<any, any, any> & Predictor<any, any>

@@ -1,26 +1,30 @@
 import { RidgeRegressionF64I64, RidgeRegressionF64Parameters, RidgeRegressionF64F64, RidgeRegressionF64BigI64, RidgeRegressionF64BigU64 } from '../../core-bindings/index.js';
 import type { RidgeRegressionSolverName } from '../../core-bindings/index.js';
-import type { XType, YType } from '../index.js';
-import type { Estimator, Predictor } from '../pipeline/index.js';
+import type { YType } from '../index.js';
+import { DenseMatrix } from '../linalg/index.js';
+import { type YTypeKey } from '../base_estimator.js';
+import { BasePredictor } from '../base_predictor.js';
 type RidgeRegressionRs = RidgeRegressionF64I64 | RidgeRegressionF64F64 | RidgeRegressionF64BigI64 | RidgeRegressionF64BigU64;
+type RidgeRegressionParameters = RidgeRegressionF64Parameters;
 interface IRidgeRegressionParameters {
     solver?: RidgeRegressionSolverName;
 }
-declare enum EstimatorType {
-    F64BigI64 = 0,
-    F64BigU64 = 1,
-    F64I64 = 2,
-    F64F64 = 3
+interface RidgeRegressionSerializedData {
+    columns: string[] | null;
+    data: Buffer;
+    params: IRidgeRegressionParameters;
+    yType: YTypeKey;
 }
-declare class RidgeRegression implements Estimator<XType, YType, RidgeRegression>, Predictor<XType, YType> {
-    parameters: RidgeRegressionF64Parameters;
-    estimator: RidgeRegressionRs | null;
+declare class RidgeRegression extends BasePredictor<RidgeRegressionRs, RidgeRegressionParameters, YType> {
     static readonly className = "RidgeRegression";
     readonly name: string;
+    readonly config: IRidgeRegressionParameters;
+    private estimatorClasses;
     constructor(params?: IRidgeRegressionParameters);
-    fit(x: XType, y: YType): RidgeRegression;
-    predict(x: XType): YType;
-    serialize(): Buffer<ArrayBufferLike> | undefined;
-    static deserialize(data: Buffer, estimatorType: EstimatorType): RidgeRegression;
+    protected fitEstimator(matrix: DenseMatrix, y: YType): RidgeRegressionRs;
+    protected getComponentColumnName(index: number): string;
+    predictMatrix(matrix: DenseMatrix): YType;
+    serialize(): RidgeRegressionSerializedData;
+    static deserialize(data: RidgeRegressionSerializedData): RidgeRegression;
 }
 export default RidgeRegression;

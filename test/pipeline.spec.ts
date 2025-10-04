@@ -29,9 +29,8 @@ let { accuracyScore, DistanceType } = metrics
 let { makePipeline } = pipeline
 const { DataFrame } = dataFrame
 
-const parsedJson = readJSONFile('e-commerce.json')
-const data = extractNumericECommerceFields(parsedJson)
-const df = new DataFrame(data)
+const parsedJson = readJSONFile('e-commerce-enhanced.json')
+const df = new DataFrame(parsedJson, { exclude: ['transaction_id', 'customer_id', 'date', 'country', 'platform'] })
 
 describe('Pipelines', () => {
   it('StandardScaler + LogisticRegression', () => {
@@ -131,10 +130,10 @@ describe('Pipelines', () => {
   })
 
   it('PCA + DBSCAN', () => {
-    let pipe = makePipeline([new StandardScaler(), ['pca', new PCA({ nComponents: 2 })], new LogisticRegression()], {
+    let pipe = makePipeline([new StandardScaler(), ['pca', new PCA({ nComponents: 25 })], new RidgeRegression()], {
       verbose: true,
     })
-    const y = new Float64Array([0, 1, 0, 1, 1])
+    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1])
     pipe.fit(df, y).transform(df)
     const predictions = pipe.predict(df)
     assert(predictions)

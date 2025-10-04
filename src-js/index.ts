@@ -1,4 +1,5 @@
 import type { DenseMatrix } from './linalg/index.js'
+import type { DataFrame } from './data_frame.js'
 
 export * as dataFrame from './data_frame.js'
 export * from './linalg/index.js'
@@ -16,5 +17,7 @@ export * as neighbors from './neighbors/index.js'
 
 type XType = DenseMatrix | number[][]
 type YType = number[] | Float64Array | BigInt64Array | BigUint64Array
+type InputType = XType | DataFrame
+type OutputType = XType | DataFrame
 
-export { type YType, type XType }
+export type { YType, XType, InputType, OutputType }

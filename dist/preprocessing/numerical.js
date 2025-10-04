@@ -1,22 +1,38 @@
 import { StandardScalerF64, StandardScalerParameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
-class StandardScaler {
-    constructor(_params) {
-        this.estimator = null;
+import { BaseTransformer } from '../base_transformer.js';
+class StandardScaler extends BaseTransformer {
+    constructor(params) {
+        const parameters = new StandardScalerParameters();
+        const config = params || {};
+        super(parameters);
         this.name = StandardScaler.className;
-        this.parameters = new StandardScalerParameters();
+        this.config = config;
     }
-    fit(x, _y) {
-        x = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
-        this.estimator = new StandardScalerF64(x.asF64(), this.parameters);
-        return this;
+    fitEstimator(matrix) {
+        return new StandardScalerF64(matrix.asF64(), this.parameters);
     }
-    transform(x) {
-        if (this.estimator === null) {
-            throw new Error("The 'fit' method should called before the 'transform' method is called.");
-        }
-        x = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
-        return new DenseMatrix(this.estimator.transform(x.asF64()));
+    transformMatrix(matrix) {
+        return new DenseMatrix(this.estimator.transform(matrix.asF64()));
+    }
+    getComponentColumnName(index) {
+        return `SS${index + 1}`;
+    }
+    serialize() {
+        this.ensureFitted('serialize');
+        return {
+            columns: this.columns,
+            data: this.estimator.serialize(),
+            params: this.config,
+        };
+    }
+    static deserialize(serializedData) {
+        const estimator = StandardScalerF64.deserialize(serializedData.data);
+        const instance = new StandardScaler(serializedData.params);
+        instance.estimator = estimator;
+        instance.columns = serializedData.columns;
+        instance._isFitted = true;
+        return instance;
     }
 }
 StandardScaler.className = 'StandardScaler';
