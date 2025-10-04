@@ -1,91 +1,75 @@
 import { ExtraTreesRegressorF64BigU64, ExtraTreesRegressorF64BigI64, ExtraTreesRegressorF64I64, ExtraTreesRegressorParameters, ExtraTreesRegressorF64F64, } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
-var EstimatorType;
-(function (EstimatorType) {
-    EstimatorType[EstimatorType["F64I64"] = 0] = "F64I64";
-    EstimatorType[EstimatorType["F64BigI64"] = 1] = "F64BigI64";
-    EstimatorType[EstimatorType["F64BigU64"] = 2] = "F64BigU64";
-    EstimatorType[EstimatorType["F64F64"] = 3] = "F64F64";
-})(EstimatorType || (EstimatorType = {}));
-class ExtraTreesRegressor {
+import { BasePredictor } from '../base_predictor.js';
+import {} from '../base_estimator.js';
+class ExtraTreesRegressor extends BasePredictor {
     constructor(params) {
-        this.estimator = null;
+        const parameters = new ExtraTreesRegressorParameters();
+        const config = params || {};
+        if (config.maxDepth !== undefined) {
+            parameters.withMaxDepth(config.maxDepth);
+        }
+        if (config.minSamplesLeaf !== undefined) {
+            parameters.withMinSamplesLeaf(config.minSamplesLeaf);
+        }
+        if (config.minSamplesSplit !== undefined) {
+            parameters.withMinSamplesSplit(config.minSamplesSplit);
+        }
+        if (config.nTrees !== undefined) {
+            parameters.withNTrees(config.nTrees);
+        }
+        if (config.m !== undefined) {
+            parameters.withM(config.m);
+        }
+        if (config.keepSamples !== undefined) {
+            parameters.withKeepSamples(config.keepSamples);
+        }
+        if (config.seed !== undefined) {
+            parameters.withSeed(config.seed);
+        }
+        super(parameters);
         this.name = ExtraTreesRegressor.className;
-        this.parameters = new ExtraTreesRegressorParameters();
-        if (params) {
-            if (params.maxDepth !== undefined) {
-                this.parameters.withMaxDepth(params.maxDepth);
-            }
-            if (params.minSamplesLeaf !== undefined) {
-                this.parameters.withMinSamplesLeaf(params.minSamplesLeaf);
-            }
-            if (params.minSamplesSplit !== undefined) {
-                this.parameters.withMinSamplesSplit(params.minSamplesSplit);
-            }
-            if (params.nTrees !== undefined) {
-                this.parameters.withNTrees(params.nTrees);
-            }
-            if (params.m !== undefined) {
-                this.parameters.withM(params.m);
-            }
-            if (params.keepSamples !== undefined) {
-                this.parameters.withKeepSamples(params.keepSamples);
-            }
-            if (params.seed !== undefined) {
-                this.parameters.withSeed(params.seed);
-            }
-        }
+        this.config = config;
+        this.estimatorClasses = {
+            i64: ExtraTreesRegressorF64I64,
+            bigI64: ExtraTreesRegressorF64BigI64,
+            f64: ExtraTreesRegressorF64F64,
+            bigU64: ExtraTreesRegressorF64BigU64,
+        };
     }
-    fit(x, y) {
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
-        if (!y || y.length === 0) {
-            throw new Error('Input arrays cannot be empty.');
-        }
-        if (y instanceof Float64Array) {
-            this.estimator = ExtraTreesRegressorF64F64.fit(matrix.asF64(), y, this.parameters);
-        }
-        else if (y instanceof BigInt64Array) {
-            this.estimator = ExtraTreesRegressorF64BigI64.fit(matrix.asF64(), y, this.parameters);
-        }
-        else if (y instanceof BigUint64Array) {
-            this.estimator = ExtraTreesRegressorF64BigU64.fit(matrix.asF64(), y, this.parameters);
-        }
-        else if (y.every((val) => Number.isInteger(val))) {
-            this.estimator = ExtraTreesRegressorF64I64.fit(matrix.asF64(), y, this.parameters);
+    fitEstimator(matrix, y) {
+        const EstimatorClass = this.estimatorClasses[this._yType];
+        if (EstimatorClass !== null) {
+            return EstimatorClass.fit(matrix.asF64(), y, this.parameters);
         }
         else {
-            throw new Error('Unsupported data type for input arrays.');
+            throw new Error(`${this.name}: Unsupported data type for y '${y.constructor?.name || typeof y}'`);
         }
-        return this;
     }
-    predict(x) {
-        if (this.estimator === null) {
-            throw new Error("The 'fit' method should called before the 'predict' method is called.");
-        }
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
+    getComponentColumnName(index) {
+        return `LR${index + 1}`;
+    }
+    predictMatrix(matrix) {
         return this.estimator.predict(matrix.asF64());
     }
     serialize() {
-        return this.estimator?.serialize();
+        this.ensureFitted('serialize');
+        return {
+            columns: this.columns,
+            data: this.estimator.serialize(),
+            params: this.config,
+            yType: this._yType,
+        };
     }
-    static deserialize(data, estimatorType) {
-        let instance = new ExtraTreesRegressor();
-        switch (estimatorType) {
-            case EstimatorType.F64BigI64:
-                instance.estimator = ExtraTreesRegressorF64BigI64.deserialize(data);
-                break;
-            case EstimatorType.F64BigU64:
-                instance.estimator = ExtraTreesRegressorF64BigU64.deserialize(data);
-                break;
-            case EstimatorType.F64I64:
-                instance.estimator = ExtraTreesRegressorF64I64.deserialize(data);
-                break;
-            case EstimatorType.F64F64:
-                instance.estimator = ExtraTreesRegressorF64F64.deserialize(data);
-                break;
-            default:
-                throw new Error(`Unrecognized estimator type: '${estimatorType}'`);
+    static deserialize(data) {
+        let instance = new ExtraTreesRegressor(data.params);
+        const EstimatorClass = instance.estimatorClasses[data.yType];
+        if (EstimatorClass === null) {
+            throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`);
         }
+        instance.estimator = EstimatorClass.deserialize(data.data);
+        instance._isFitted = true;
+        instance._yType = data.yType;
         return instance;
     }
 }
