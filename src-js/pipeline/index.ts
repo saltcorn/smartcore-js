@@ -1,4 +1,4 @@
-import type { Step } from './pipeline.js'
+import type { Step, PipelineConfig } from './pipeline.js'
 import { Pipeline } from './pipeline.js'
 
 interface Estimator<X, Y, S> {
@@ -19,8 +19,8 @@ interface SerDe<S> {
   deserialize(data: Buffer): S
 }
 
-function makePipeline(steps: Step[]) {
-  return new Pipeline(steps)
+function makePipeline(steps: Step[], config?: PipelineConfig) {
+  return new Pipeline(steps, config)
 }
 
 export type { Estimator, Predictor, Transformer, SerDe }

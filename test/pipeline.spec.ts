@@ -11,8 +11,10 @@ import {
   decomposition,
   naiveBayes,
   neighbors,
+  dataFrame,
 } from '../dist/index.js'
 import { HammingF64, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../core-bindings/index.js'
+import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
@@ -25,6 +27,11 @@ let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = datas
 let { trainTestSplit } = modelSelection
 let { accuracyScore, DistanceType } = metrics
 let { makePipeline } = pipeline
+const { DataFrame } = dataFrame
+
+const parsedJson = readJSONFile('e-commerce.json')
+const data = extractNumericECommerceFields(parsedJson)
+const df = new DataFrame(data)
 
 describe('Pipelines', () => {
   it('StandardScaler + LogisticRegression', () => {
@@ -123,20 +130,14 @@ describe('Pipelines', () => {
     assert.equal(score, 0)
   })
 
-  it.skip('PCA + DBSCAN', () => {
-    let pipe = makePipeline([
-      ['pca', new PCA({ nComponents: 2 })],
-      ['ridgeregression', new RidgeRegression()],
-    ])
-    let digitsData = loadDigits({ returnXY: true })
-    let [x, y] = digitsData instanceof Array ? digitsData : []
-    if (!(x && y)) {
-      assert.fail('Expected both x and y to be defined')
-    }
-    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-    pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
-    assert.equal(score, 0)
+  it('PCA + DBSCAN', () => {
+    let pipe = makePipeline([new StandardScaler(), ['pca', new PCA({ nComponents: 2 })], new LogisticRegression()], {
+      verbose: true,
+    })
+    const y = new Float64Array([0, 1, 0, 1, 1])
+    pipe.fit(df, y).transform(df)
+    const predictions = pipe.predict(df)
+    assert(predictions)
   })
 
   it.skip('SVD + DBSCAN', () => {

@@ -1,35 +1,12 @@
 import { dataFrame } from '../dist/index.js'
-import fs from 'fs'
-import { dirname, join } from 'path'
 import assert from 'assert'
-import { fileURLToPath } from 'url'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = dirname(__filename)
+import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 const { DataFrame } = dataFrame
-type NestedObject = dataFrame.NestedObject
 type DataValue = dataFrame.DataValue
 
-const data_str = fs.readFileSync(join(__dirname, 'e-commerce.json'), 'utf-8')
-const dataRaw: {
-  product_views: number
-  session_duration_minutes: number
-  metrics: {
-    revenue: number
-    items_purchased: number
-    purchases: number
-  }
-}[] = JSON.parse(data_str)
-const data: NestedObject[] = dataRaw.map((record) => ({
-  product_views: record.product_views,
-  session_duration_minutes: record.session_duration_minutes,
-  metrics: {
-    revenue: record.metrics.revenue,
-    items_purchased: record.metrics.items_purchased,
-    purchases: record.metrics.purchases,
-  },
-}))
+const parsedJson = readJSONFile('e-commerce.json')
+const data = extractNumericECommerceFields(parsedJson)
 const df = new DataFrame(data)
 
 describe('DataFrame', () => {
