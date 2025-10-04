@@ -1,71 +1,51 @@
 import { RidgeRegressionF64I64, RidgeRegressionF64Parameters, RidgeRegressionF64F64, RidgeRegressionF64BigI64, RidgeRegressionF64BigU64, } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
-var EstimatorType;
-(function (EstimatorType) {
-    EstimatorType[EstimatorType["F64BigI64"] = 0] = "F64BigI64";
-    EstimatorType[EstimatorType["F64BigU64"] = 1] = "F64BigU64";
-    EstimatorType[EstimatorType["F64I64"] = 2] = "F64I64";
-    EstimatorType[EstimatorType["F64F64"] = 3] = "F64F64";
-})(EstimatorType || (EstimatorType = {}));
-class RidgeRegression {
+import {} from '../base_estimator.js';
+import { BasePredictor } from '../base_predictor.js';
+class RidgeRegression extends BasePredictor {
     constructor(params) {
-        this.estimator = null;
-        this.parameters = new RidgeRegressionF64Parameters();
-        if (params?.solver) {
-            this.parameters.withSolver(params.solver);
+        const parameters = new RidgeRegressionF64Parameters();
+        const config = params || {};
+        if (config?.solver) {
+            parameters.withSolver(config.solver);
         }
+        super(parameters);
+        this.name = RidgeRegression.className;
+        this.config = config;
+        this.estimatorClasses = {
+            bigI64: RidgeRegressionF64BigI64,
+            bigU64: RidgeRegressionF64BigU64,
+            i64: RidgeRegressionF64I64,
+            f64: RidgeRegressionF64F64,
+        };
     }
-    fit(x, y) {
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
-        if (!y || y.length === 0) {
-            throw new Error('Input arrays cannot be empty.');
-        }
-        if (y instanceof Float64Array) {
-            this.estimator = RidgeRegressionF64F64.fit(matrix.asF64(), y, this.parameters);
-        }
-        else if (y instanceof BigInt64Array) {
-            this.estimator = RidgeRegressionF64BigI64.fit(matrix.asF64(), y, this.parameters);
-        }
-        else if (y instanceof BigUint64Array) {
-            this.estimator = RidgeRegressionF64BigU64.fit(matrix.asF64(), y, this.parameters);
-        }
-        else if (y.every((val) => Number.isInteger(val))) {
-            this.estimator = RidgeRegressionF64I64.fit(matrix.asF64(), y, this.parameters);
-        }
-        else {
-            throw new Error('Unsupported data type!');
-        }
-        return this;
+    fitEstimator(matrix, y) {
+        const EstimatorClass = this.estimatorClasses[this._yType];
+        return EstimatorClass.fit(matrix.asF64(), y, this.parameters);
     }
-    predict(x) {
-        if (this.estimator === null) {
-            throw new Error("The 'fit' method should called before the 'predict' method is called.");
-        }
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
+    getComponentColumnName(index) {
+        return `RR${index + 1}`;
+    }
+    predictMatrix(matrix) {
         return this.estimator.predict(matrix.asF64());
     }
     serialize() {
-        return this.estimator?.serialize();
+        this.ensureFitted('serialize');
+        return {
+            columns: this.columns,
+            data: this.estimator.serialize(),
+            params: this.config,
+            yType: this._yType,
+        };
     }
-    static deserialize(data, estimatorType) {
-        let instance = new RidgeRegression();
-        switch (estimatorType) {
-            case EstimatorType.F64BigI64:
-                instance.estimator = RidgeRegressionF64BigI64.deserialize(data);
-                break;
-            case EstimatorType.F64BigU64:
-                instance.estimator = RidgeRegressionF64BigU64.deserialize(data);
-                break;
-            case EstimatorType.F64F64:
-                instance.estimator = RidgeRegressionF64F64.deserialize(data);
-                break;
-            case EstimatorType.F64I64:
-                instance.estimator = RidgeRegressionF64I64.deserialize(data);
-                break;
-            default:
-                throw new Error(`Unrecognized estimator type: '${estimatorType}'`);
-        }
+    static deserialize(data) {
+        let instance = new RidgeRegression(data.params);
+        const EstimatorClass = instance.estimatorClasses[data.yType];
+        instance.estimator = EstimatorClass.deserialize(data.data);
+        instance._isFitted = true;
+        instance._yType = data.yType;
         return instance;
     }
 }
+RidgeRegression.className = 'RidgeRegression';
 export default RidgeRegression;

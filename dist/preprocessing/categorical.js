@@ -1,21 +1,25 @@
 import { OneHotEncoderF64, OneHotEncoderParameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
-class OneHotEncoder {
+import { BaseTransformer } from '../base_transformer.js';
+class OneHotEncoder extends BaseTransformer {
     constructor(params) {
-        this.estimator = null;
-        this.parameters = new OneHotEncoderParameters(params.categoricalParams);
+        const parameters = new OneHotEncoderParameters(params.categoricalParams);
+        super(parameters);
+        this.name = OneHotEncoder.className;
     }
-    fit(x, _y) {
-        x = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
-        this.estimator = new OneHotEncoderF64(x.asF64(), this.parameters);
-        return this;
+    fitEstimator(matrix) {
+        return new OneHotEncoderF64(matrix.asF64(), this.parameters);
     }
-    transform(x) {
-        if (this.estimator === null) {
-            throw new Error("The 'fit' method should called before the 'transform' method is called.");
-        }
-        x = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
-        return new DenseMatrix(this.estimator.transform(x.asF64()));
+    transformMatrix(matrix) {
+        return new DenseMatrix(this.estimator.transform(matrix.asF64()));
+    }
+    getComponentColumnName(index) {
+        return `OHE${index + 1}`;
+    }
+    serialize() {
+        this.ensureFitted('serialize');
+        throw new Error(`${this.name}: Unimplemented!`);
     }
 }
+OneHotEncoder.className = 'OneHotEncoder';
 export default OneHotEncoder;

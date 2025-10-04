@@ -1,0 +1,72 @@
+[
+  {
+    "transaction_id": "T001",
+    "customer_id": "C001",
+    "date": "2025-09-29",
+    "country": "USA",
+    "platform": "mobile",
+    "product_views": 45,
+    "session_duration_minutes": 15.2,
+    "metrics": {
+      "revenue": 125.5,
+      "items_purchased": 3,
+      "purchases": 1
+    }
+  },
+  {
+    "transaction_id": "T002",
+    "customer_id": "C002",
+    "date": "2025-09-29",
+    "country": "Germany",
+    "platform": "desktop",
+    "product_views": 12,
+    "session_duration_minutes": 5.8,
+    "metrics": {
+      "revenue": 50.0,
+      "items_purchased": 1,
+      "purchases": 1
+    }
+  },
+  {
+    "transaction_id": "T003",
+    "customer_id": "C003",
+    "date": "2025-09-30",
+    "country": "USA",
+    "platform": "desktop",
+    "product_views": 80,
+    "session_duration_minutes": 25.1,
+    "metrics": {
+      "revenue": 210.75,
+      "items_purchased": 5,
+      "purchases": 2
+    }
+  },
+  {
+    "transaction_id": "T004",
+    "customer_id": "C004",
+    "date": "2025-09-30",
+    "country": "UK",
+    "platform": "mobile",
+    "product_views": 60,
+    "session_duration_minutes": 18.0,
+    "metrics": {
+      "revenue": 150.0,
+      "items_purchased": 4,
+      "purchases": 1
+    }
+  },
+  {
+    "transaction_id": "T005",
+    "customer_id": "C005",
+    "date": "2025-10-01",
+    "country": "USA",
+    "platform": "tablet",
+    "product_views": 30,
+    "session_duration_minutes": 10.5,
+    "metrics": {
+      "revenue": 85.25,
+      "items_purchased": 2,
+      "purchases": 1
+    }
+  }
+]

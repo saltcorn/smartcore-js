@@ -132,6 +132,8 @@ jobs:
       - name: Build
         run: ${{ matrix.settings.build }}
         shell: bash
+      - name: Compile TypeScript code
+        run: yarn build:tsc
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
@@ -177,6 +179,7 @@ jobs:
             freebsd-version
             yarn install
             yarn build
+            yarn build:tsc
             rm -rf node_modules
             rm -rf target
             rm -rf .yarn/cache
@@ -348,6 +351,8 @@ jobs:
           cache: yarn
       - name: Install dependencies
         run: yarn install
+      - name: Compile TypeScript code
+        run: yarn build:tsc
       - name: create npm dirs
         run: yarn napi create-npm-dirs
       - name: Download all artifacts

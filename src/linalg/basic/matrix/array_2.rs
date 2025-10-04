@@ -42,14 +42,14 @@ macro_rules! boxed_array_struct_impls {
 boxed_array_struct_impls! { f32, DenseMatrixF64 }
 boxed_array_struct_impls! { f64, DenseMatrixF64 }
 
-macro_rules! dense_matrix_svd_impl {
-  ( $js_inner:ty, $rs_inner:ty, $inner_name:ty, $svd:ty, $ys:ty ) => {
+macro_rules! dense_matrix_array_2_impl {
+  ( $x_js:ty, $x_rs:ty, $inner_name:ty, $xs_js:ty ) => {
     paste! {
         #[napi]
         impl $inner_name {
             #[napi]
-            pub fn fill(nrows: i64, ncols: i64, value: $js_inner) -> Self {
-                let inner = LibDenseMatrix::<$rs_inner>::fill(nrows as usize, ncols as usize, value as $rs_inner);
+            pub fn fill(nrows: i64, ncols: i64, value: $x_js) -> Self {
+                let inner = LibDenseMatrix::<$x_rs>::fill(nrows as usize, ncols as usize, value as $x_rs);
                 Self::from_inner(inner)
             }
 
@@ -69,60 +69,60 @@ macro_rules! dense_matrix_svd_impl {
             }
 
             #[napi]
-            pub fn get_row(&self, row: i64, reference: Reference<$inner_name>, env: Env) -> Result<[<JsBoxedArray $rs_inner:upper Ref>]> {
+            pub fn get_row(&self, row: i64, reference: Reference<$inner_name>, env: Env) -> Result<[<JsBoxedArray $x_rs:upper Ref>]> {
                 let inner = reference.share_with(env, |dm| {
                     let row = dm.inner().get_row(row as usize);
-                    Ok([<BoxedArray $rs_inner:upper Ref>] {
+                    Ok([<BoxedArray $x_rs:upper Ref>] {
                         inner: row
                     })
                 })?;
-                Ok([<JsBoxedArray $rs_inner:upper Ref>]::from_inner(inner))
+                Ok([<JsBoxedArray $x_rs:upper Ref>]::from_inner(inner))
             }
 
             #[napi]
-            pub fn get_col(&self, col: i64, reference: Reference<$inner_name>, env: Env) -> Result<[<JsBoxedArray $rs_inner:upper Ref>]> {
+            pub fn get_col(&self, col: i64, reference: Reference<$inner_name>, env: Env) -> Result<[<JsBoxedArray $x_rs:upper Ref>]> {
                 let inner = reference.share_with(env, |dm| {
                     let col = dm.inner().get_col(col as usize);
-                    Ok([<BoxedArray $rs_inner:upper Ref>] {
+                    Ok([<BoxedArray $x_rs:upper Ref>] {
                         inner: col
                     })
                 })?;
-                Ok([<JsBoxedArray $rs_inner:upper Ref>]::from_inner(inner))
+                Ok([<JsBoxedArray $x_rs:upper Ref>]::from_inner(inner))
             }
 
             #[napi]
             pub fn zeros(nrows: i64, ncols: i64) -> Self {
-                Self::from_inner(LibDenseMatrix::<$rs_inner>::zeros(nrows as usize, ncols as usize))
+                Self::from_inner(LibDenseMatrix::<$x_rs>::zeros(nrows as usize, ncols as usize))
             }
 
             #[napi]
             pub fn ones(nrows: i64, ncols: i64) -> Self {
-                Self::from_inner(LibDenseMatrix::<$rs_inner>::ones(nrows as usize, ncols as usize))
+                Self::from_inner(LibDenseMatrix::<$x_rs>::ones(nrows as usize, ncols as usize))
             }
 
             #[napi]
             pub fn eye(size: i64) -> Self {
-                Self::from_inner(LibDenseMatrix::<$rs_inner>::eye(size as usize))
+                Self::from_inner(LibDenseMatrix::<$x_rs>::eye(size as usize))
             }
 
             #[napi]
             pub fn rand(nrows: i64, ncols: i64) -> Self {
-                Self::from_inner(LibDenseMatrix::<$rs_inner>::rand(nrows as usize, ncols as usize))
+                Self::from_inner(LibDenseMatrix::<$x_rs>::rand(nrows as usize, ncols as usize))
             }
 
             #[napi]
             pub fn from_slice(slice: &$inner_name) -> Self {
-                Self::from_inner(LibDenseMatrix::<$rs_inner>::from_slice(slice.inner()))
+                Self::from_inner(LibDenseMatrix::<$x_rs>::from_slice(slice.inner()))
             }
 
             #[napi]
-            pub fn from_row(slice: $ys) -> Self {
-                Self::from_inner(LibDenseMatrix::<$rs_inner>::from_row(&slice.as_ref()))
+            pub fn from_row(slice: $xs_js) -> Self {
+                Self::from_inner(LibDenseMatrix::<$x_rs>::from_row(&slice.as_ref()))
             }
 
             #[napi]
-            pub fn from_column(slice: $ys) -> Self {
-                Self::from_inner(LibDenseMatrix::<$rs_inner>::from_column(&slice.as_ref()))
+            pub fn from_column(slice: $xs_js) -> Self {
+                Self::from_inner(LibDenseMatrix::<$x_rs>::from_column(&slice.as_ref()))
             }
 
             #[napi]
@@ -146,7 +146,7 @@ macro_rules! dense_matrix_svd_impl {
             }
 
             #[napi]
-            pub fn ax(&self, a_transpose: bool, b: $ys) -> Self {
+            pub fn ax(&self, a_transpose: bool, b: $xs_js) -> Self {
                 Self::from_inner(self.inner.ax(a_transpose, &b.as_ref()))
             }
 
@@ -203,23 +203,23 @@ macro_rules! dense_matrix_svd_impl {
             }
 
             #[napi]
-            pub fn add_scalar(&self, x: $js_inner) -> Self {
-                Self::from_inner(self.inner.add_scalar(x as $rs_inner))
+            pub fn add_scalar(&self, x: $x_js) -> Self {
+                Self::from_inner(self.inner.add_scalar(x as $x_rs))
             }
 
             #[napi]
-            pub fn sub_scalar(&self, x: $js_inner) -> Self {
-                Self::from_inner(self.inner.sub_scalar(x as $rs_inner))
+            pub fn sub_scalar(&self, x: $x_js) -> Self {
+                Self::from_inner(self.inner.sub_scalar(x as $x_rs))
             }
 
             #[napi]
-            pub fn div_scalar(&self, x: $js_inner) -> Self {
-                Self::from_inner(self.inner.div_scalar(x as $rs_inner))
+            pub fn div_scalar(&self, x: $x_js) -> Self {
+                Self::from_inner(self.inner.div_scalar(x as $x_rs))
             }
 
             #[napi]
-            pub fn mul_scalar(&self, x: $js_inner) -> Self {
-                Self::from_inner(self.inner.mul_scalar(x as $rs_inner))
+            pub fn mul_scalar(&self, x: $x_js) -> Self {
+                Self::from_inner(self.inner.mul_scalar(x as $x_rs))
             }
 
             #[napi]
@@ -253,8 +253,8 @@ macro_rules! dense_matrix_svd_impl {
             }
 
             #[napi]
-            pub fn pow(&self, p: $js_inner) -> Self {
-                Self::from_inner(self.inner.pow(p as $rs_inner))
+            pub fn pow(&self, p: $x_js) -> Self {
+                Self::from_inner(self.inner.pow(p as $x_rs))
             }
 
             #[napi]
@@ -269,12 +269,12 @@ macro_rules! dense_matrix_svd_impl {
             }
 
             #[napi]
-            pub fn approximate_eq(&self, other: &$inner_name, error: $js_inner) -> bool {
-                self.inner.approximate_eq(other, error as $rs_inner)
+            pub fn approximate_eq(&self, other: &$inner_name, error: $x_js) -> bool {
+                self.inner.approximate_eq(other, error as $x_rs)
             }
         }
     }
   };
 }
 
-dense_matrix_svd_impl! { f64, f64, DenseMatrixF64, SVDF64DenseMatrixF64, Float64Array }
+dense_matrix_array_2_impl! { f64, f64, DenseMatrixF64, Float64Array }

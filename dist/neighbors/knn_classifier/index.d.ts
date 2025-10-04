@@ -10,17 +10,35 @@ interface IKNNClassifierParameters {
     p?: number;
     data?: XType;
 }
-declare enum EstimatorType {
-    F64I64 = 0,
-    F64BigI64 = 1,
-    F64BigU64 = 2
-}
+type YTypeKey = 'bigI64' | 'bigU64' | 'i64';
 declare class KNNClassifier implements Estimator<XType, YType, KNNClassifier>, Predictor<XType, YType> {
     private estimator;
+    static readonly className = "KNNClassifier";
+    readonly name: string;
     constructor(params?: IKNNClassifierParameters);
     fit(x: XType, y: YType): KNNClassifier;
     predict(x: XType): YType;
-    serialize(): Buffer<ArrayBufferLike> | undefined;
-    static deserialize(data: Buffer, estimatorType: EstimatorType, distanceType: DistanceType): KNNClassifier;
+    serialize(): {
+        params: import("../../../core-bindings/index.js").KNNClassifierF64EuclidianF64Parameters;
+        estimatorKey: YTypeKey | null;
+        model: any;
+    } | {
+        params: import("../../../core-bindings/index.js").KNNClassifierF64HammingF64Parameters;
+        estimatorKey: YTypeKey | null;
+        model: any;
+    } | {
+        params: import("../../../core-bindings/index.js").KNNClassifierF64MahalanobisF64Parameters;
+        estimatorKey: YTypeKey | null;
+        model: any;
+    } | {
+        params: import("../../../core-bindings/index.js").KNNClassifierF64ManhattanF64Parameters;
+        estimatorKey: YTypeKey | null;
+        model: any;
+    } | {
+        params: import("../../../core-bindings/index.js").KNNClassifierF64MinkowskiF64Parameters;
+        estimatorKey: YTypeKey | null;
+        model: any;
+    };
+    deserialize(data: Buffer, yType: YTypeKey): KNNClassifier;
 }
-export { KNNClassifier, type IKNNClassifierParameters, EstimatorType };
+export { KNNClassifier, type IKNNClassifierParameters, type YTypeKey };

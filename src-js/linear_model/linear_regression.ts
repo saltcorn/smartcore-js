@@ -6,9 +6,10 @@ import {
   LinearRegressionF64BigU64,
 } from '../../core-bindings/index.js'
 import type { LinearRegressionSolverName } from '../../core-bindings/index.js'
-import type { XType, YType } from '../index.js'
-import { DenseMatrix } from '../linalg/index.js'
-import type { Estimator, Predictor } from '../pipeline/index.js'
+import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
+import type { YType } from '../index.js'
+import { BasePredictor } from '../base_predictor.js'
+import { type YTypeKey } from '../base_estimator.js'
 
 type LinearRegressionRs =
   | LinearRegressionF64I64
@@ -16,82 +17,84 @@ type LinearRegressionRs =
   | LinearRegressionF64BigI64
   | LinearRegressionF64BigU64
 
+type LinearRegressionParametersRs = LinearRegressionParameters
+
 interface ILinearRegressionParameters {
   solver?: LinearRegressionSolverName
 }
 
-enum EstimatorType {
-  F64BigI64,
-  F64BigU64,
-  F64I64,
-  F64F64,
+interface LinearRegressionSerializedData {
+  columns: string[] | null
+  data: Buffer
+  params: ILinearRegressionParameters
+  yType: YTypeKey
 }
 
-class LinearRegression implements Estimator<XType, YType, LinearRegression>, Predictor<XType, YType> {
-  parameters: LinearRegressionParameters
-  estimator: LinearRegressionRs | null = null
+interface EstimatorClass {
+  fit(matrix: DenseMatrixRs, y: YType, params: LinearRegressionParametersRs): LinearRegressionRs
+  deserialize(data: Buffer): LinearRegressionRs
+}
+
+class LinearRegression extends BasePredictor<LinearRegressionRs, LinearRegressionParametersRs, YType> {
+  public static readonly className = 'LinearRegression'
+  public readonly name: string = LinearRegression.className
+  public readonly config: ILinearRegressionParameters
+
+  private estimatorClasses: Record<YTypeKey, EstimatorClass | null>
 
   constructor(params?: ILinearRegressionParameters) {
-    this.parameters = new LinearRegressionParameters()
+    const parameters = new LinearRegressionParameters()
     if (params?.solver) {
-      this.parameters.withSolver(params.solver)
+      parameters.withSolver(params.solver)
+    }
+    const config = params || {}
+    super(parameters)
+    this.config = config
+    this.estimatorClasses = {
+      bigI64: LinearRegressionF64BigI64,
+      bigU64: LinearRegressionF64BigU64,
+      i64: LinearRegressionF64I64,
+      f64: LinearRegressionF64F64,
     }
   }
 
-  fit(x: XType, y: YType): LinearRegression {
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    if (!y || y.length === 0) {
-      throw new Error('Input arrays cannot be empty.')
-    }
-
-    if (y instanceof Float64Array) {
-      this.estimator = LinearRegressionF64F64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y instanceof BigInt64Array) {
-      this.estimator = LinearRegressionF64BigI64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y instanceof BigUint64Array) {
-      this.estimator = LinearRegressionF64BigU64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y.every((val) => Number.isInteger(val))) {
-      this.estimator = LinearRegressionF64I64.fit(matrix.asF64(), y, this.parameters)
+  protected fitEstimator(matrix: DenseMatrix, y: YType): LinearRegressionRs {
+    const EstimatorClass = this.estimatorClasses[this._yType!]
+    if (EstimatorClass !== null) {
+      return EstimatorClass.fit(matrix.asF64(), y, this.parameters)
     } else {
-      throw new Error('Unsupported data type!')
+      throw new Error(`${this.name}: Unsupported data type for y '${y.constructor?.name || typeof y}'`)
     }
-
-    return this
   }
 
-  predict(x: XType): YType {
-    if (this.estimator === null) {
-      throw new Error("The 'fit' method should called before the 'predict' method is called.")
-    }
-
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    return this.estimator.predict(matrix.asF64())
+  protected getComponentColumnName(index: number): string {
+    return `LR${index + 1}`
   }
 
-  serialize() {
-    return this.estimator?.serialize()
+  predictMatrix(matrix: DenseMatrix): YType {
+    return this.estimator!.predict(matrix.asF64())
   }
 
-  static deserialize(data: Buffer, estimatorType: EstimatorType): LinearRegression {
-    let instance = new LinearRegression()
-    switch (estimatorType) {
-      case EstimatorType.F64BigI64:
-        instance.estimator = LinearRegressionF64BigI64.deserialize(data)
-        break
-      case EstimatorType.F64BigU64:
-        instance.estimator = LinearRegressionF64BigU64.deserialize(data)
-        break
-      case EstimatorType.F64F64:
-        instance.estimator = LinearRegressionF64F64.deserialize(data)
-        break
-      case EstimatorType.F64I64:
-        instance.estimator = LinearRegressionF64I64.deserialize(data)
-        break
-      default:
-        throw new Error(`Unrecognized estimator type: '${estimatorType}'`)
+  serialize(): LinearRegressionSerializedData {
+    this.ensureFitted('serialize')
+
+    return {
+      columns: this.columns,
+      data: this.estimator!.serialize(),
+      params: this.config,
+      yType: this._yType!,
     }
+  }
+
+  static deserialize(data: LinearRegressionSerializedData): LinearRegression {
+    let instance = new LinearRegression(data.params)
+    const EstimatorClass = instance.estimatorClasses[data.yType]
+    if (EstimatorClass === null) {
+      throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`)
+    }
+    instance.estimator = EstimatorClass.deserialize(data.data)
+    instance._isFitted = true
+    instance._yType = data.yType
     return instance
   }
 }
