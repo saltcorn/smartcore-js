@@ -14,7 +14,7 @@ type LogisticRegressionRs = LogisticRegressionF64I64 | LogisticRegressionF64BigI
 
 type LogisticRegressionParametersRs = LogisticRegressionParametersF64
 
-interface ILogicRegressionParameters {
+interface ILogisticRegressionParameters {
   alpha?: number
   solver?: LogisticRegressionSolverName.LBFGS
 }
@@ -22,7 +22,7 @@ interface ILogicRegressionParameters {
 interface LogisticRegressionSerializedData {
   columns: string[] | null
   data: Buffer
-  params: ILogicRegressionParameters
+  params: ILogisticRegressionParameters
   yType: YTypeKey
 }
 
@@ -34,11 +34,11 @@ interface EstimatorClass {
 class LogisticRegression extends BasePredictor<LogisticRegressionRs, LogisticRegressionParametersRs, YType> {
   public static readonly className = 'LogisticRegression'
   public readonly name: string = LogisticRegression.className
-  public readonly config: ILogicRegressionParameters
+  public readonly config: ILogisticRegressionParameters
 
   private estimatorClasses: Record<YTypeKey, EstimatorClass | null>
 
-  constructor(params?: ILogicRegressionParameters) {
+  constructor(params?: ILogisticRegressionParameters) {
     const parameters = new LogisticRegressionParametersF64()
     const config = params || {}
     if (config.alpha !== undefined) {

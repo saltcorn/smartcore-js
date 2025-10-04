@@ -47,7 +47,7 @@ class ExtraTreesRegressor extends BasePredictor {
         }
     }
     getComponentColumnName(index) {
-        return `LR${index + 1}`;
+        return `ETR${index + 1}`;
     }
     predictMatrix(matrix) {
         return this.estimator.predict(matrix.asF64());

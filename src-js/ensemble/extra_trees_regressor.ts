@@ -91,7 +91,7 @@ class ExtraTreesRegressor extends BasePredictor<ExtraTreesRegressorRs, ExtraTree
   }
 
   protected getComponentColumnName(index: number): string {
-    return `LR${index + 1}`
+    return `ETR${index + 1}`
   }
 
   predictMatrix(matrix: DenseMatrix): YType {

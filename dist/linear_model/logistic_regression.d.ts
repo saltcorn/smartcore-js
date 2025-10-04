@@ -6,22 +6,22 @@ import { BasePredictor } from '../base_predictor.js';
 import { type YTypeKey } from '../base_estimator.js';
 type LogisticRegressionRs = LogisticRegressionF64I64 | LogisticRegressionF64BigI64 | LogisticRegressionF64BigU64;
 type LogisticRegressionParametersRs = LogisticRegressionParametersF64;
-interface ILogicRegressionParameters {
+interface ILogisticRegressionParameters {
     alpha?: number;
     solver?: LogisticRegressionSolverName.LBFGS;
 }
 interface LogisticRegressionSerializedData {
     columns: string[] | null;
     data: Buffer;
-    params: ILogicRegressionParameters;
+    params: ILogisticRegressionParameters;
     yType: YTypeKey;
 }
 declare class LogisticRegression extends BasePredictor<LogisticRegressionRs, LogisticRegressionParametersRs, YType> {
     static readonly className = "LogisticRegression";
     readonly name: string;
-    readonly config: ILogicRegressionParameters;
+    readonly config: ILogisticRegressionParameters;
     private estimatorClasses;
-    constructor(params?: ILogicRegressionParameters);
+    constructor(params?: ILogisticRegressionParameters);
     protected fitEstimator(matrix: DenseMatrix, y: YType): LogisticRegressionRs;
     protected getComponentColumnName(index: number): string;
     predictMatrix(matrix: DenseMatrix): YType;
