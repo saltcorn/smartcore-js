@@ -1,28 +1,32 @@
 import { LassoF64I64, LassoParameters, LassoF64F64, LassoF64BigI64, LassoF64BigU64 } from '../../core-bindings/index.js';
-import type { XType, YType } from '../index.js';
-import type { Estimator, Predictor } from '../pipeline/index.js';
+import { DenseMatrix } from '../linalg/index.js';
+import type { YType } from '../index.js';
+import { BasePredictor } from '../base_predictor.js';
+import { type YTypeKey } from '../base_estimator.js';
 type LassoRs = LassoF64I64 | LassoF64F64 | LassoF64BigI64 | LassoF64BigU64;
+type LassoParametersRs = LassoParameters;
 interface ILassoParameters {
     alpha?: number;
     normalize?: boolean;
     tol?: number;
     maxIter?: number;
 }
-declare enum EstimatorType {
-    F64BigI64 = 0,
-    F64BigU64 = 1,
-    F64I64 = 2,
-    F64F64 = 3
+interface LassoSerializedData {
+    columns: string[] | null;
+    data: Buffer;
+    params: ILassoParameters;
+    yType: YTypeKey;
 }
-declare class Lasso implements Estimator<XType, YType, Lasso>, Predictor<XType, YType> {
-    parameters: LassoParameters;
-    estimator: LassoRs | null;
+declare class Lasso extends BasePredictor<LassoRs, LassoParametersRs, YType> {
     static readonly className = "Lasso";
     readonly name: string;
+    readonly config: ILassoParameters;
+    private estimatorClasses;
     constructor(params?: ILassoParameters);
-    fit(x: XType, y: YType): Lasso;
-    predict(x: XType): YType;
-    serialize(): Buffer<ArrayBufferLike> | undefined;
-    static deserialize(data: Buffer, estimatorType: EstimatorType): Lasso;
+    protected fitEstimator(matrix: DenseMatrix, y: YType): LassoRs;
+    protected getComponentColumnName(index: number): string;
+    predictMatrix(matrix: DenseMatrix): YType;
+    serialize(): LassoSerializedData;
+    static deserialize(data: LassoSerializedData): Lasso;
 }
 export default Lasso;
