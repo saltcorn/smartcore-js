@@ -14,7 +14,7 @@ class OneHotEncoder extends BaseTransformer {
         return new DenseMatrix(this.estimator.transform(matrix.asF64()));
     }
     getComponentColumnName(index) {
-        return `SS${index + 1}`;
+        return `OHE${index + 1}`;
     }
     serialize() {
         this.ensureFitted('serialize');
