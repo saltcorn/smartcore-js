@@ -49,7 +49,7 @@ class RandomForestRegressor extends BasePredictor {
         }
     }
     getComponentColumnName(index) {
-        return `RFC${index + 1}`;
+        return `RFR${index + 1}`;
     }
     predictMatrix(matrix) {
         return this.estimator.predict(matrix.asF64());

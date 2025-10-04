@@ -5,11 +5,13 @@ import {
   ElasticNetF64BigI64,
   ElasticNetF64BigU64,
 } from '../../core-bindings/index.js'
-import type { XType, YType } from '../index.js'
-import { DenseMatrix } from '../linalg/index.js'
-import type { Estimator, Predictor } from '../pipeline/index.js'
+import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
+import type { YType } from '../index.js'
+import { BasePredictor } from '../base_predictor.js'
+import { type YTypeKey } from '../base_estimator.js'
 
 type ElasticNetRs = ElasticNetF64I64 | ElasticNetF64F64 | ElasticNetF64BigI64 | ElasticNetF64BigU64
+type ElasticNetParametersRs = ElasticNetParameters
 
 interface IElasticNetParameters {
   alpha?: number
@@ -19,92 +21,90 @@ interface IElasticNetParameters {
   l1Ratio?: number
 }
 
-enum EstimatorType {
-  F64BigU64,
-  F64BigI64,
-  F64I64,
-  F64F64,
+interface ElasticNetSerializedData {
+  columns: string[] | null
+  data: Buffer
+  params: IElasticNetParameters
+  yType: YTypeKey
 }
 
-class ElasticNet implements Estimator<XType, YType, ElasticNet>, Predictor<XType, YType> {
-  parameters: ElasticNetParameters
-  estimator: ElasticNetRs | null = null
+interface EstimatorClass {
+  fit(matrix: DenseMatrixRs, y: YType, params: ElasticNetParametersRs): ElasticNetRs
+  deserialize(data: Buffer): ElasticNetRs
+}
+
+class ElasticNet extends BasePredictor<ElasticNetRs, ElasticNetParametersRs, YType> {
   public static readonly className = 'ElasticNet'
   public readonly name: string = ElasticNet.className
+  public readonly config: IElasticNetParameters
+
+  private estimatorClasses: Record<YTypeKey, EstimatorClass | null>
 
   constructor(params?: IElasticNetParameters) {
-    this.parameters = new ElasticNetParameters()
-    if (params?.alpha) {
-      this.parameters.withAlpha(params.alpha)
+    const parameters = new ElasticNetParameters()
+    const config = params || {}
+    if (config?.alpha) {
+      parameters.withAlpha(config.alpha)
     }
-    if (params?.normalize) {
-      this.parameters.withNormalize(params.normalize)
+    if (config?.normalize) {
+      parameters.withNormalize(config.normalize)
     }
-    if (params?.tol) {
-      this.parameters.withTol(params.tol)
+    if (config?.tol) {
+      parameters.withTol(config.tol)
     }
-    if (params?.maxIter) {
-      this.parameters.withMaxIter(params.maxIter)
+    if (config?.maxIter) {
+      parameters.withMaxIter(config.maxIter)
     }
-    if (params?.l1Ratio) {
-      this.parameters.withL1Ratio(params.l1Ratio)
+    if (config?.l1Ratio) {
+      parameters.withL1Ratio(config.l1Ratio)
+    }
+    super(parameters)
+    this.config = config
+    this.estimatorClasses = {
+      bigI64: ElasticNetF64BigI64,
+      bigU64: ElasticNetF64BigU64,
+      i64: ElasticNetF64I64,
+      f64: ElasticNetF64F64,
     }
   }
 
-  fit(x: XType, y: YType): ElasticNet {
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    if (!y || y.length === 0) {
-      throw new Error('Input arrays cannot be empty.')
-    }
-
-    if (y instanceof Float64Array) {
-      this.estimator = ElasticNetF64F64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y instanceof BigInt64Array) {
-      this.estimator = ElasticNetF64BigI64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y instanceof BigUint64Array) {
-      this.estimator = ElasticNetF64BigU64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y.every((val) => Number.isInteger(val))) {
-      this.estimator = ElasticNetF64I64.fit(matrix.asF64(), y, this.parameters)
+  protected fitEstimator(matrix: DenseMatrix, y: YType): ElasticNetRs {
+    const EstimatorClass = this.estimatorClasses[this._yType!]
+    if (EstimatorClass !== null) {
+      return EstimatorClass.fit(matrix.asF64(), y, this.parameters)
     } else {
-      throw new Error('Unsupported data type!')
+      throw new Error(`${this.name}: Unsupported data type for y '${y.constructor?.name || typeof y}'`)
     }
-
-    return this
   }
 
-  predict(x: XType): YType {
-    if (this.estimator === null) {
-      throw new Error("The 'fit' method should called before the 'predict' method is called.")
-    }
-
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    return this.estimator.predict(matrix.asF64())
+  protected getComponentColumnName(index: number): string {
+    return `EN${index + 1}`
   }
 
-  serialize() {
-    return this.estimator?.serialize()
+  predictMatrix(matrix: DenseMatrix): YType {
+    return this.estimator!.predict(matrix.asF64())
   }
 
-  static deserialize(data: Buffer, estimatorType: EstimatorType): ElasticNet {
-    let instance = new ElasticNet()
-    switch (estimatorType) {
-      case EstimatorType.F64BigI64:
-        instance.estimator = ElasticNetF64BigI64.deserialize(data)
-        break
-      case EstimatorType.F64BigU64:
-        instance.estimator = ElasticNetF64BigU64.deserialize(data)
-        break
-      case EstimatorType.F64F64:
-        instance.estimator = ElasticNetF64F64.deserialize(data)
-        break
-      case EstimatorType.F64I64:
-        instance.estimator = ElasticNetF64I64.deserialize(data)
-        break
-      default:
-        throw new Error(`Unrecognized estimator type: '${estimatorType}'`)
+  serialize(): ElasticNetSerializedData {
+    this.ensureFitted('serialize')
+
+    return {
+      columns: this.columns,
+      data: this.estimator!.serialize(),
+      params: this.config,
+      yType: this._yType!,
     }
+  }
+
+  static deserialize(data: ElasticNetSerializedData): ElasticNet {
+    let instance = new ElasticNet(data.params)
+    const EstimatorClass = instance.estimatorClasses[data.yType]
+    if (EstimatorClass === null) {
+      throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`)
+    }
+    instance.estimator = EstimatorClass.deserialize(data.data)
+    instance._isFitted = true
+    instance._yType = data.yType
     return instance
   }
 }
