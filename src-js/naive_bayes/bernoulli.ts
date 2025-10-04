@@ -1,10 +1,11 @@
 import { BernoulliNBF64BigU64, BernoulliNBF64Parameters } from '../../core-bindings/index.js'
-import type { XType, YType } from '../index.js'
-import { DenseMatrix } from '../linalg/index.js'
-import type { Estimator, Predictor } from '../pipeline/index.js'
+import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
+import type { YType } from '../index.js'
+import { BasePredictor } from '../base_predictor.js'
+import { type YTypeKey } from '../base_estimator.js'
 
 type BernoulliNBRs = BernoulliNBF64BigU64
-type BernoulliNBParameters = BernoulliNBF64Parameters
+type BernoulliNBParametersRs = BernoulliNBF64Parameters
 
 interface IBernoulliNBParameters {
   priors?: Float64Array
@@ -12,58 +13,84 @@ interface IBernoulliNBParameters {
   binarize?: number
 }
 
-class BernoulliNB implements Estimator<XType, YType, BernoulliNB>, Predictor<XType, BigUint64Array> {
-  parameters: BernoulliNBParameters
-  estimator: BernoulliNBRs | null = null
+interface BernoulliNBSerializedData {
+  columns: string[] | null
+  data: Buffer
+  params: IBernoulliNBParameters
+  yType: YTypeKey
+}
+
+interface EstimatorClass {
+  fit(matrix: DenseMatrixRs, y: YType, params: BernoulliNBParametersRs): BernoulliNBRs
+  deserialize(data: Buffer): BernoulliNBRs
+}
+
+class BernoulliNB extends BasePredictor<BernoulliNBRs, BernoulliNBParametersRs, YType> {
   public static readonly className = 'BernoulliNB'
   public readonly name: string = BernoulliNB.className
+  public readonly config: IBernoulliNBParameters
+
+  private estimatorClasses: Record<YTypeKey, EstimatorClass | null>
 
   constructor(params?: IBernoulliNBParameters) {
-    this.parameters = new BernoulliNBF64Parameters()
-    if (params?.alpha) {
-      this.parameters.withAlpha(params.alpha)
+    const parameters = new BernoulliNBF64Parameters()
+    const config = params || {}
+    if (config?.alpha) {
+      parameters.withAlpha(config.alpha)
     }
-    if (params?.priors) {
-      this.parameters.withPriors(params.priors)
+    if (config?.priors) {
+      parameters.withPriors(config.priors)
     }
-    if (params?.binarize) {
-      this.parameters.withBinarize(params.binarize)
+    if (config?.binarize) {
+      parameters.withBinarize(config.binarize)
+    }
+    super(parameters)
+    this.config = config
+    this.estimatorClasses = {
+      bigU64: BernoulliNBF64BigU64,
+      bigI64: null,
+      i64: null,
+      f64: null,
     }
   }
 
-  fit(x: XType, y: YType): BernoulliNB {
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    if (!y || y.length === 0) {
-      throw new Error('Input arrays cannot be empty.')
-    }
-
-    if (y instanceof BigUint64Array) {
-      this.estimator = BernoulliNBF64BigU64.fit(matrix.asF64(), y, this.parameters)
+  protected fitEstimator(matrix: DenseMatrix, y: YType): BernoulliNBRs {
+    const EstimatorClass = this.estimatorClasses[this._yType!]
+    if (EstimatorClass !== null) {
+      return EstimatorClass.fit(matrix.asF64(), y, this.parameters)
     } else {
-      throw new Error('Unsupported data type!')
+      throw new Error(`${this.name}: Unsupported data type for y '${y.constructor?.name || typeof y}'`)
     }
-
-    return this
   }
 
-  predict(x: XType): BigUint64Array {
-    if (this.estimator === null) {
-      throw new Error("The 'fit' method should called before the 'predict' method is called.")
+  protected getComponentColumnName(index: number): string {
+    return `EN${index + 1}`
+  }
+
+  predictMatrix(matrix: DenseMatrix): YType {
+    return this.estimator!.predict(matrix.asF64())
+  }
+
+  serialize(): BernoulliNBSerializedData {
+    this.ensureFitted('serialize')
+
+    return {
+      columns: this.columns,
+      data: this.estimator!.serialize(),
+      params: this.config,
+      yType: this._yType!,
     }
-
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    return this.estimator.predict(matrix.asF64())
   }
 
-  serialize() {
-    return this.estimator?.serialize()
-  }
-
-  static deserialize(data: Buffer): BernoulliNB {
-    let instance = new BernoulliNB()
-    instance.estimator = BernoulliNBF64BigU64.deserialize(data)
+  static deserialize(data: BernoulliNBSerializedData): BernoulliNB {
+    let instance = new BernoulliNB(data.params)
+    const EstimatorClass = instance.estimatorClasses[data.yType]
+    if (EstimatorClass === null) {
+      throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`)
+    }
+    instance.estimator = EstimatorClass.deserialize(data.data)
+    instance._isFitted = true
+    instance._yType = data.yType
     return instance
   }
 }
