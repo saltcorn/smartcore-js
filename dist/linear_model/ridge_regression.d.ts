@@ -5,7 +5,7 @@ import { DenseMatrix } from '../linalg/index.js';
 import { type YTypeKey } from '../base_estimator.js';
 import { BasePredictor } from '../base_predictor.js';
 type RidgeRegressionRs = RidgeRegressionF64I64 | RidgeRegressionF64F64 | RidgeRegressionF64BigI64 | RidgeRegressionF64BigU64;
-type RidgeRegressionParameters = RidgeRegressionF64Parameters;
+type RidgeRegressionParametersRs = RidgeRegressionF64Parameters;
 interface IRidgeRegressionParameters {
     solver?: RidgeRegressionSolverName;
 }
@@ -15,7 +15,7 @@ interface RidgeRegressionSerializedData {
     params: IRidgeRegressionParameters;
     yType: YTypeKey;
 }
-declare class RidgeRegression extends BasePredictor<RidgeRegressionRs, RidgeRegressionParameters, YType> {
+declare class RidgeRegression extends BasePredictor<RidgeRegressionRs, RidgeRegressionParametersRs, YType> {
     static readonly className = "RidgeRegression";
     readonly name: string;
     readonly config: IRidgeRegressionParameters;

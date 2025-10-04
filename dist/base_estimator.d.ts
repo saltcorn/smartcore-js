@@ -2,10 +2,6 @@ import { DenseMatrix, type InputType, type YType } from './index.js';
 import { DataFrame } from './data_frame.js';
 import type { Estimator } from './pipeline/index.js';
 type YTypeKey = 'bigI64' | 'bigU64' | 'i64' | 'f64';
-interface EstimatorClass {
-    fit(matrix: any, y: any, params: any): any;
-    deserialize(data: Buffer): any;
-}
 /**
  * Abstract base class for estimators
  */
@@ -62,4 +58,4 @@ declare abstract class BaseEstimator<TEstimator, TParams> implements Estimator<I
      */
     abstract serialize(): any;
 }
-export { BaseEstimator, type YTypeKey, type EstimatorClass };
+export { BaseEstimator, type YTypeKey };

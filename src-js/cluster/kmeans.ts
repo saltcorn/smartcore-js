@@ -1,86 +1,93 @@
 import { KMeansF64BigI64, KMeansF64I64, KMeansParameters, KMeansF64F64 } from '../../core-bindings/index.js'
-import type { XType, YType } from '../index.js'
 import { DenseMatrix } from '../linalg/index.js'
-import type { Estimator, Predictor } from '../pipeline/index.js'
+import type { YType } from '../index.js'
+import type { YTypeKey } from '../base_estimator.js'
+import { BasePredictor } from '../base_predictor.js'
+import { type DenseMatrixRs } from '../linalg/index.js'
 
-interface KMeansParams {
+interface IKMeansParameters {
   maxIter?: number
   k?: number
 }
 
 type KMeansRs = KMeansF64I64 | KMeansF64BigI64 | KMeansF64F64
-enum EstimatorType {
-  F64I64,
-  F64BigI64,
-  F64F64,
+type KMeansParametersRs = KMeansParameters
+
+interface KMeansSerializedData {
+  columns: string[] | null
+  data: Buffer
+  params: IKMeansParameters
+  yType: YTypeKey
 }
 
-class KMeans implements Estimator<XType, YType, KMeans>, Predictor<XType, YType> {
-  private parameters: KMeansParameters
-  private estimator: KMeansRs | null = null
+interface EstimatorClass {
+  fit(matrix: DenseMatrixRs, params: KMeansParametersRs): KMeansRs
+  deserialize(data: Buffer): KMeansRs
+}
+
+class KMeans extends BasePredictor<KMeansRs, KMeansParametersRs, YType> {
   public static readonly className = 'KMeans'
   public readonly name: string = KMeans.className
+  public readonly config: IKMeansParameters
+  private estimatorClasses: Record<YTypeKey, EstimatorClass | null>
 
-  constructor(params?: KMeansParams) {
-    this.parameters = new KMeansParameters()
-    if (params) {
-      if (params.maxIter !== undefined) {
-        this.parameters.withMaxIter(params.maxIter)
-      }
-      if (params.k !== undefined) {
-        this.parameters.withK(params.k)
-      }
+  constructor(params?: IKMeansParameters) {
+    const parameters = new KMeansParameters()
+    let config = params || {}
+    if (config.maxIter !== undefined) {
+      parameters.withMaxIter(config.maxIter)
+    }
+    if (config.k !== undefined) {
+      parameters.withK(config.k)
+    }
+    super(parameters)
+    this.config = config
+
+    this.estimatorClasses = {
+      bigI64: KMeansF64BigI64,
+      f64: KMeansF64F64,
+      i64: KMeansF64I64,
+      bigU64: null,
     }
   }
 
-  fit(x: XType, y: YType): KMeans {
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    if (!y || y.length === 0) {
-      throw new Error('Input arrays cannot be empty.')
-    }
-
-    if (y instanceof Float64Array) {
-      this.estimator = KMeansF64F64.fit(matrix.asF64(), this.parameters)
-    } else if (y instanceof BigInt64Array) {
-      this.estimator = KMeansF64BigI64.fit(matrix.asF64(), this.parameters)
-    } else if (y.every((val) => Number.isInteger(val))) {
-      this.estimator = KMeansF64I64.fit(matrix.asF64(), this.parameters)
+  protected fitEstimator(matrix: DenseMatrix, y: YType): KMeansRs {
+    const EstimatorClass = this.estimatorClasses[this._yType!]
+    if (EstimatorClass !== null) {
+      return EstimatorClass.fit(matrix.asF64(), this.parameters)
     } else {
-      throw new Error('Unsupported data type for input arrays.')
+      throw new Error(`${this.name}: Unsupported data type for y '${y.constructor?.name || typeof y}'`)
     }
-
-    return this
   }
 
-  predict(x: XType): YType {
-    if (this.estimator === null) {
-      throw new Error("The 'fit' method should called before the 'predict' method is called.")
-    }
-
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-    return this.estimator.predict(matrix.asF64())
+  protected getComponentColumnName(index: number): string {
+    return `KM${index + 1}`
   }
 
-  serialize() {
-    return this.estimator?.serialize()
+  predictMatrix(matrix: DenseMatrix): YType {
+    return this.estimator!.predict(matrix.asF64())
   }
 
-  static deserialize(data: Buffer, estimatorType: EstimatorType): KMeans {
-    let instance = new KMeans()
-    switch (estimatorType) {
-      case EstimatorType.F64BigI64:
-        instance.estimator = KMeansF64BigI64.deserialize(data)
-        break
-      case EstimatorType.F64I64:
-        instance.estimator = KMeansF64I64.deserialize(data)
-        break
-      case EstimatorType.F64F64:
-        instance.estimator = KMeansF64F64.deserialize(data)
-        break
-      default:
-        throw new Error(`Unrecognized estimator type: '${estimatorType}'`)
+  serialize(): KMeansSerializedData {
+    this.ensureFitted('serialize')
+
+    return {
+      columns: this.columns,
+      data: this.estimator!.serialize(),
+      params: this.config,
+      yType: this._yType!,
     }
+  }
+
+  static deserialize(data: KMeansSerializedData): KMeans {
+    let instance = new KMeans(data.params)
+    const EstimatorClass = instance.estimatorClasses[data.yType]
+    if (EstimatorClass === null) {
+      throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`)
+    }
+    instance.estimator = EstimatorClass.deserialize(data.data)
+    instance._isFitted = true
+    instance._yType = data.yType
     return instance
   }
 }

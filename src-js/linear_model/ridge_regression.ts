@@ -7,8 +7,8 @@ import {
 } from '../../core-bindings/index.js'
 import type { RidgeRegressionSolverName } from '../../core-bindings/index.js'
 import type { YType } from '../index.js'
-import { DenseMatrix } from '../linalg/index.js'
-import { type YTypeKey, type EstimatorClass } from '../base_estimator.js'
+import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
+import { type YTypeKey } from '../base_estimator.js'
 import { BasePredictor } from '../base_predictor.js'
 
 type RidgeRegressionRs =
@@ -17,7 +17,7 @@ type RidgeRegressionRs =
   | RidgeRegressionF64BigI64
   | RidgeRegressionF64BigU64
 
-type RidgeRegressionParameters = RidgeRegressionF64Parameters
+type RidgeRegressionParametersRs = RidgeRegressionF64Parameters
 
 interface IRidgeRegressionParameters {
   solver?: RidgeRegressionSolverName
@@ -30,7 +30,12 @@ interface RidgeRegressionSerializedData {
   yType: YTypeKey
 }
 
-class RidgeRegression extends BasePredictor<RidgeRegressionRs, RidgeRegressionParameters, YType> {
+interface EstimatorClass {
+  fit(matrix: DenseMatrixRs, y: YType, params: RidgeRegressionParametersRs): RidgeRegressionRs
+  deserialize(data: Buffer): RidgeRegressionRs
+}
+
+class RidgeRegression extends BasePredictor<RidgeRegressionRs, RidgeRegressionParametersRs, YType> {
   public static readonly className = 'RidgeRegression'
   public readonly name: string = RidgeRegression.className
   public readonly config: IRidgeRegressionParameters

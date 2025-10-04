@@ -1,2 +1,2 @@
-import DenseMatrix from './dense-matrix/index.js';
+import { DenseMatrix } from './dense-matrix/index.js';
 export { DenseMatrix };

@@ -4,11 +4,6 @@ import type { Estimator } from './pipeline/index.js'
 
 type YTypeKey = 'bigI64' | 'bigU64' | 'i64' | 'f64'
 
-interface EstimatorClass {
-  fit(matrix: any, y: any, params: any): any
-  deserialize(data: Buffer): any
-}
-
 /**
  * Abstract base class for estimators
  */
@@ -153,4 +148,4 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
   abstract serialize(): any
 }
 
-export { BaseEstimator, type YTypeKey, type EstimatorClass }
+export { BaseEstimator, type YTypeKey }

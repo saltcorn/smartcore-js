@@ -5,7 +5,7 @@ import type { YType } from '../index.js';
 import { BasePredictor } from '../base_predictor.js';
 import { type YTypeKey } from '../base_estimator.js';
 type LogisticRegressionRs = LogisticRegressionF64I64 | LogisticRegressionF64BigI64 | LogisticRegressionF64BigU64;
-type LogisticRegressionParameters = LogisticRegressionParametersF64;
+type LogisticRegressionParametersRs = LogisticRegressionParametersF64;
 interface ILogicRegressionParameters {
     alpha?: number;
     solver?: LogisticRegressionSolverName.LBFGS;
@@ -16,7 +16,7 @@ interface LogisticRegressionSerializedData {
     params: ILogicRegressionParameters;
     yType: YTypeKey;
 }
-declare class LogisticRegression extends BasePredictor<LogisticRegressionRs, LogisticRegressionParameters, YType> {
+declare class LogisticRegression extends BasePredictor<LogisticRegressionRs, LogisticRegressionParametersRs, YType> {
     static readonly className = "LogisticRegression";
     readonly name: string;
     readonly config: ILogicRegressionParameters;

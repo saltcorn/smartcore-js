@@ -121,6 +121,7 @@ export declare class DBSCANF64EuclidianF64Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
   withEps(eps: number): void
+  serialize(): Buffer
   constructor()
   withDistanceHammingF64(distance: HammingF64): DBSCANF64HammingF64Parameters
   withDistanceMahalanobisF64(distance: MahalanobisF64): DBSCANF64MahalanobisF64Parameters
@@ -167,24 +168,28 @@ export declare class DBSCANF64HammingF64Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
   withEps(eps: number): void
+  serialize(): Buffer
 }
 
 export declare class DBSCANF64MahalanobisF64Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
   withEps(eps: number): void
+  serialize(): Buffer
 }
 
 export declare class DBSCANF64ManhattanF64Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
   withEps(eps: number): void
+  serialize(): Buffer
 }
 
 export declare class DBSCANF64MinkowskiF64Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
   withEps(eps: number): void
+  serialize(): Buffer
 }
 
 export declare class DecisionTreeClassifierI64I64 {

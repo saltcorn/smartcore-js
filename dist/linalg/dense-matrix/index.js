@@ -91,4 +91,4 @@ class DenseMatrix {
         }
     }
 }
-export default DenseMatrix;
+export { DenseMatrix };

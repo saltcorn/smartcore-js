@@ -1,3 +1,3 @@
-import DenseMatrix from './dense-matrix/index.js'
+import { DenseMatrix, type DenseMatrixRs } from './dense-matrix/index.js'
 
-export { DenseMatrix }
+export { DenseMatrix, type DenseMatrixRs }

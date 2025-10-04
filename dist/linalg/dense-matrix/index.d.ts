@@ -15,4 +15,4 @@ declare class DenseMatrix {
     asU64(): DenseMatrixU64;
     asI64(): DenseMatrixI64;
 }
-export default DenseMatrix;
+export { DenseMatrix, type DenseMatrixRs };

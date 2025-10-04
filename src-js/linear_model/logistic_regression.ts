@@ -4,15 +4,15 @@ import {
   LogisticRegressionF64BigI64,
   LogisticRegressionF64BigU64,
 } from '../../core-bindings/index.js'
-import { DenseMatrix } from '../linalg/index.js'
+import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
 import type { LogisticRegressionSolverName } from '../../core-bindings/index.js'
 import type { YType } from '../index.js'
 import { BasePredictor } from '../base_predictor.js'
-import { type YTypeKey, type EstimatorClass } from '../base_estimator.js'
+import { type YTypeKey } from '../base_estimator.js'
 
 type LogisticRegressionRs = LogisticRegressionF64I64 | LogisticRegressionF64BigI64 | LogisticRegressionF64BigU64
 
-type LogisticRegressionParameters = LogisticRegressionParametersF64
+type LogisticRegressionParametersRs = LogisticRegressionParametersF64
 
 interface ILogicRegressionParameters {
   alpha?: number
@@ -26,7 +26,12 @@ interface LogisticRegressionSerializedData {
   yType: YTypeKey
 }
 
-class LogisticRegression extends BasePredictor<LogisticRegressionRs, LogisticRegressionParameters, YType> {
+interface EstimatorClass {
+  fit(matrix: DenseMatrixRs, y: YType, params: LogisticRegressionParametersRs): LogisticRegressionRs
+  deserialize(data: Buffer): LogisticRegressionRs
+}
+
+class LogisticRegression extends BasePredictor<LogisticRegressionRs, LogisticRegressionParametersRs, YType> {
   public static readonly className = 'LogisticRegression'
   public readonly name: string = LogisticRegression.className
   public readonly config: ILogicRegressionParameters
