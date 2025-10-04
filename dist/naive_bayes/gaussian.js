@@ -29,7 +29,7 @@ class GaussianNB extends BasePredictor {
         }
     }
     getComponentColumnName(index) {
-        return `BNB${index + 1}`;
+        return `GNB${index + 1}`;
     }
     predictMatrix(matrix) {
         return this.estimator.predict(matrix.asF64());

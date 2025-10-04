@@ -1,7 +1,8 @@
 import { MultinomialNBU64BigU64, MultinomialNBParameters } from '../../core-bindings/index.js'
-import type { XType, YType } from '../index.js'
-import { DenseMatrix } from '../linalg/index.js'
-import type { Estimator, Predictor } from '../pipeline/index.js'
+import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
+import type { YType } from '../index.js'
+import { BasePredictor } from '../base_predictor.js'
+import { type YTypeKey } from '../base_estimator.js'
 
 type MultinomialNBRs = MultinomialNBU64BigU64
 type MultinomialNBParametersRs = MultinomialNBParameters
@@ -11,55 +12,81 @@ interface IMultinomialNBParameters {
   alpha?: number
 }
 
-class MultinomialNB implements Estimator<XType, YType, MultinomialNB>, Predictor<XType, BigUint64Array> {
-  parameters: MultinomialNBParametersRs
-  estimator: MultinomialNBRs | null = null
+interface MultinomialNBSerializedData {
+  columns: string[] | null
+  data: Buffer
+  params: IMultinomialNBParameters
+  yType: YTypeKey
+}
+
+interface EstimatorClass {
+  fit(matrix: DenseMatrixRs, y: YType, params: MultinomialNBParametersRs): MultinomialNBRs
+  deserialize(data: Buffer): MultinomialNBRs
+}
+
+class MultinomialNB extends BasePredictor<MultinomialNBRs, MultinomialNBParametersRs, YType> {
   public static readonly className = 'MultinomialNB'
   public readonly name: string = MultinomialNB.className
+  public readonly config: IMultinomialNBParameters
+
+  private estimatorClasses: Record<YTypeKey, EstimatorClass | null>
 
   constructor(params?: IMultinomialNBParameters) {
-    this.parameters = new MultinomialNBParameters()
-    if (params?.priors) {
-      this.parameters.withPriors(params.priors)
+    const parameters = new MultinomialNBParameters()
+    const config = params || {}
+    if (config.priors) {
+      parameters.withPriors(config.priors)
     }
-    if (params?.alpha) {
-      this.parameters.withAlpha(params.alpha)
+    if (config.alpha) {
+      parameters.withAlpha(config.alpha)
+    }
+    super(parameters)
+    this.config = config
+    this.estimatorClasses = {
+      bigU64: MultinomialNBU64BigU64,
+      bigI64: null,
+      i64: null,
+      f64: null,
     }
   }
 
-  fit(x: XType, y: YType): MultinomialNB {
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    if (!y || y.length === 0) {
-      throw new Error('Input arrays cannot be empty.')
-    }
-
-    if (y instanceof BigUint64Array) {
-      this.estimator = MultinomialNBU64BigU64.fit(matrix.asU64(), y, this.parameters)
+  protected fitEstimator(matrix: DenseMatrix, y: YType): MultinomialNBRs {
+    const EstimatorClass = this.estimatorClasses[this._yType!]
+    if (EstimatorClass !== null) {
+      return EstimatorClass.fit(matrix.asF64(), y, this.parameters)
     } else {
-      throw new Error('Unsupported data type!')
+      throw new Error(`${this.name}: Unsupported data type for y '${y.constructor?.name || typeof y}'`)
     }
-
-    return this
   }
 
-  predict(x: XType): BigUint64Array {
-    if (this.estimator === null) {
-      throw new Error("The 'fit' method should called before the 'predict' method is called.")
+  protected getComponentColumnName(index: number): string {
+    return `MNB${index + 1}`
+  }
+
+  predictMatrix(matrix: DenseMatrix): YType {
+    return this.estimator!.predict(matrix.asU64())
+  }
+
+  serialize(): MultinomialNBSerializedData {
+    this.ensureFitted('serialize')
+
+    return {
+      columns: this.columns,
+      data: this.estimator!.serialize(),
+      params: this.config,
+      yType: this._yType!,
     }
-
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    return this.estimator.predict(matrix.asU64())
   }
 
-  serialize() {
-    return this.estimator?.serialize()
-  }
-
-  static deserialize(data: Buffer): MultinomialNB {
-    let instance = new MultinomialNB()
-    instance.estimator = MultinomialNBU64BigU64.deserialize(data)
+  static deserialize(data: MultinomialNBSerializedData): MultinomialNB {
+    let instance = new MultinomialNB(data.params)
+    const EstimatorClass = instance.estimatorClasses[data.yType]
+    if (EstimatorClass === null) {
+      throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`)
+    }
+    instance.estimator = EstimatorClass.deserialize(data.data)
+    instance._isFitted = true
+    instance._yType = data.yType
     return instance
   }
 }

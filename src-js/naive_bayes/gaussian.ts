@@ -58,7 +58,7 @@ class GaussianNB extends BasePredictor<GaussianNBRs, GaussianNBParametersRs, YTy
   }
 
   protected getComponentColumnName(index: number): string {
-    return `BNB${index + 1}`
+    return `GNB${index + 1}`
   }
 
   predictMatrix(matrix: DenseMatrix): YType {
