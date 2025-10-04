@@ -129,7 +129,7 @@ describe('Pipelines', () => {
     assert.equal(score, 0)
   })
 
-  it('PCA + DBSCAN', () => {
+  it('StandardScaler + PCA + LogisticRegression', () => {
     let pipe = makePipeline([new StandardScaler(), ['pca', new PCA({ nComponents: 25 })], new RidgeRegression()], {
       verbose: true,
     })
@@ -139,9 +139,9 @@ describe('Pipelines', () => {
     assert(predictions)
   })
 
-  it.skip('SVD + DBSCAN', () => {
+  it('SVD + DBSCAN', () => {
     let pipe = makePipeline([
-      ['pca', new SVD()],
+      ['svd', new SVD()],
       ['kmeans', new DBSCAN({ distance: new ManhattanF64() })],
     ])
     let irisData = loadBoston({ returnXY: true })

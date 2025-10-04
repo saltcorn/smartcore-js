@@ -1,7 +1,7 @@
 import { PCAF64, PCAParameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
-import { BaseDecomposition } from './base.js';
-class PCA extends BaseDecomposition {
+import { BaseTransformer } from '../base_transformer.js';
+class PCA extends BaseTransformer {
     constructor(params) {
         const parameters = new PCAParameters();
         // Store config for serialization
@@ -22,17 +22,9 @@ class PCA extends BaseDecomposition {
     transformMatrix(matrix) {
         return new DenseMatrix(this.estimator.transform(matrix.asF64()));
     }
-    /**
-     * Create a name for a column given its index
-     * @param {number} index - The index of the column
-     * @returns {string} The column name derived from the provided index
-     */
     getComponentColumnName(index) {
         return `PC${index + 1}`;
     }
-    /**
-     * @returns An Object containing information that can be used to reinstantiate an identical PCA instance
-     */
     serialize() {
         this.ensureFitted('serialize');
         return {
@@ -43,8 +35,6 @@ class PCA extends BaseDecomposition {
     }
     /**
      * Creates instance from serialized data
-     * @param {PCASerializedData} serializedData
-     * @returns {PCA} A PCA instance
      */
     static deserialize(serializedData) {
         const estimator = PCAF64.deserialize(serializedData.data);

@@ -19,7 +19,6 @@ class BaseEstimator {
     }
     /**
      * Converts input to DenseMatrix and tracks DataFrame columns
-     * @param {InputType} x
      */
     toMatrix(x) {
         if (x instanceof DenseMatrix) {
@@ -36,7 +35,6 @@ class BaseEstimator {
     }
     /**
      * Validates input data
-     * @param {InputType} x
      */
     validateInput(x) {
         if (x === null || x === undefined) {
@@ -51,8 +49,6 @@ class BaseEstimator {
     }
     /**
      * A template for the fit method
-     * @param {InputType} x
-     * @param {YType} y
      */
     fit(x, y) {
         this.validateInput(x);
@@ -84,7 +80,6 @@ class BaseEstimator {
     }
     /**
      * Validates that the model is fitted before operations
-     * @param {string} methodName
      */
     ensureFitted(methodName) {
         if (!this._isFitted || this.estimator === null) {
@@ -93,7 +88,6 @@ class BaseEstimator {
     }
     /**
      * Converts DenseMatrix to DataFrame
-     * @param {DenseMatrix} matrix
      */
     toDataFrame(matrix) {
         const rows = matrix.nrows;

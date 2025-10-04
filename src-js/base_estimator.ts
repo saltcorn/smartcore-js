@@ -34,7 +34,6 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
 
   /**
    * Converts input to DenseMatrix and tracks DataFrame columns
-   * @param {InputType} x
    */
   protected toMatrix(x: InputType): DenseMatrix {
     if (x instanceof DenseMatrix) {
@@ -54,7 +53,6 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
 
   /**
    * Validates input data
-   * @param {InputType} x
    */
   protected validateInput(x: InputType): void {
     if (x === null || x === undefined) {
@@ -72,8 +70,6 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
 
   /**
    * A template for the fit method
-   * @param {InputType} x
-   * @param {YType} y
    */
   fit(x: InputType, y: YType): this {
     this.validateInput(x)
@@ -110,7 +106,6 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
 
   /**
    * Validates that the model is fitted before operations
-   * @param {string} methodName
    */
   protected ensureFitted(methodName: string): void {
     if (!this._isFitted || this.estimator === null) {
@@ -120,7 +115,6 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
 
   /**
    * Converts DenseMatrix to DataFrame
-   * @param {DenseMatrix} matrix
    */
   protected toDataFrame(matrix: DenseMatrix): DataFrame {
     const rows = matrix.nrows
@@ -143,8 +137,6 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
 
   /**
    * Create a name for a column given its index
-   * @param {number} index - The index of the column
-   * @returns {string} The column name derived from the provided index
    */
   protected abstract getComponentColumnName(index: number): string
 

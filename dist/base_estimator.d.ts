@@ -23,18 +23,14 @@ declare abstract class BaseEstimator<TEstimator, TParams> implements Estimator<I
     get isFitted(): boolean;
     /**
      * Converts input to DenseMatrix and tracks DataFrame columns
-     * @param {InputType} x
      */
     protected toMatrix(x: InputType): DenseMatrix;
     /**
      * Validates input data
-     * @param {InputType} x
      */
     protected validateInput(x: InputType): void;
     /**
      * A template for the fit method
-     * @param {InputType} x
-     * @param {YType} y
      */
     fit(x: InputType, y: YType): this;
     /**
@@ -47,18 +43,14 @@ declare abstract class BaseEstimator<TEstimator, TParams> implements Estimator<I
     protected abstract fitEstimator(matrix: DenseMatrix, y: YType): TEstimator;
     /**
      * Validates that the model is fitted before operations
-     * @param {string} methodName
      */
     protected ensureFitted(methodName: string): void;
     /**
      * Converts DenseMatrix to DataFrame
-     * @param {DenseMatrix} matrix
      */
     protected toDataFrame(matrix: DenseMatrix): DataFrame;
     /**
      * Create a name for a column given its index
-     * @param {number} index - The index of the column
-     * @returns {string} The column name derived from the provided index
      */
     protected abstract getComponentColumnName(index: number): string;
     /**
