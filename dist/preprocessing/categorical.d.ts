@@ -1,18 +1,23 @@
 import { OneHotEncoderF64, OneHotEncoderParameters } from '../../core-bindings/index.js';
-import type { Estimator, Transformer } from '../pipeline/index.js';
-import type { YType, XType } from '../index.js';
+import { DenseMatrix } from '../linalg/index.js';
+import { BaseTransformer } from '../base_transformer.js';
 type OneHotEncoderRs = OneHotEncoderF64;
 type OneHotEncoderParametersRs = OneHotEncoderParameters;
-interface OneHotEncoderParametersValues {
+interface IOneHotEncoderParameters {
     categoricalParams: BigUint64Array;
 }
-declare class OneHotEncoder implements Estimator<XType, YType, OneHotEncoder>, Transformer<XType> {
-    parameters: OneHotEncoderParametersRs;
-    estimator: null | OneHotEncoderRs;
+interface OneHotEncoderSerializedData {
+    columns: string[] | null;
+    data: Buffer;
+    params: IOneHotEncoderParameters;
+}
+declare class OneHotEncoder extends BaseTransformer<OneHotEncoderRs, OneHotEncoderParametersRs> {
     static readonly className = "OneHotEncoder";
     readonly name: string;
-    constructor(params: OneHotEncoderParametersValues);
-    fit(x: XType, _y: YType): OneHotEncoder;
-    transform(x: XType): XType;
+    constructor(params: IOneHotEncoderParameters);
+    protected fitEstimator(matrix: DenseMatrix): OneHotEncoderF64;
+    protected transformMatrix(matrix: DenseMatrix): DenseMatrix;
+    protected getComponentColumnName(index: number): string;
+    serialize(): OneHotEncoderSerializedData;
 }
 export default OneHotEncoder;

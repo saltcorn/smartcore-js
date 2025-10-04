@@ -32,7 +32,7 @@ class MultinomialNB extends BasePredictor {
         }
     }
     getComponentColumnName(index) {
-        return `BNB${index + 1}`;
+        return `MNB${index + 1}`;
     }
     predictMatrix(matrix) {
         return this.estimator.predict(matrix.asU64());
