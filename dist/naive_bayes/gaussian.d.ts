@@ -1,20 +1,29 @@
 import { GaussianNBF64BigU64, GaussianNBParameters } from '../../core-bindings/index.js';
-import type { XType, YType } from '../index.js';
-import type { Estimator, Predictor } from '../pipeline/index.js';
+import { DenseMatrix } from '../linalg/index.js';
+import type { YType } from '../index.js';
+import { BasePredictor } from '../base_predictor.js';
+import { type YTypeKey } from '../base_estimator.js';
 type GaussianNBRs = GaussianNBF64BigU64;
 type GaussianNBParametersRs = GaussianNBParameters;
 interface IGaussianNBParameters {
     priors?: Float64Array;
 }
-declare class GaussianNB implements Estimator<XType, YType, GaussianNB>, Predictor<XType, BigUint64Array> {
-    parameters: GaussianNBParametersRs;
-    estimator: GaussianNBRs | null;
+interface GaussianNBSerializedData {
+    columns: string[] | null;
+    data: Buffer;
+    params: IGaussianNBParameters;
+    yType: YTypeKey;
+}
+declare class GaussianNB extends BasePredictor<GaussianNBRs, GaussianNBParametersRs, YType> {
     static readonly className = "GaussianNB";
     readonly name: string;
+    readonly config: IGaussianNBParameters;
+    private estimatorClasses;
     constructor(params?: IGaussianNBParameters);
-    fit(x: XType, y: YType): GaussianNB;
-    predict(x: XType): BigUint64Array;
-    serialize(): Buffer<ArrayBufferLike> | undefined;
-    static deserialize(data: Buffer): GaussianNB;
+    protected fitEstimator(matrix: DenseMatrix, y: YType): GaussianNBRs;
+    protected getComponentColumnName(index: number): string;
+    predictMatrix(matrix: DenseMatrix): YType;
+    serialize(): GaussianNBSerializedData;
+    static deserialize(data: GaussianNBSerializedData): GaussianNB;
 }
 export default GaussianNB;

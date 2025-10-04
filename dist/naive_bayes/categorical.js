@@ -29,7 +29,7 @@ class CategoricalNB extends BasePredictor {
         }
     }
     getComponentColumnName(index) {
-        return `EN${index + 1}`;
+        return `CNB${index + 1}`;
     }
     predictMatrix(matrix) {
         return this.estimator.predict(matrix.asU64());

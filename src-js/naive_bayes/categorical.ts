@@ -56,7 +56,7 @@ class CategoricalNB extends BasePredictor<CategoricalNBRs, CategoricalNBParamete
   }
 
   protected getComponentColumnName(index: number): string {
-    return `EN${index + 1}`
+    return `CNB${index + 1}`
   }
 
   predictMatrix(matrix: DenseMatrix): YType {

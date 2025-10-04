@@ -1,40 +1,57 @@
 import { GaussianNBF64BigU64, GaussianNBParameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
-class GaussianNB {
+import { BasePredictor } from '../base_predictor.js';
+import {} from '../base_estimator.js';
+class GaussianNB extends BasePredictor {
     constructor(params) {
-        this.estimator = null;
+        const parameters = new GaussianNBParameters();
+        const config = params || {};
+        if (config.priors) {
+            parameters.withPriors(config.priors);
+        }
+        super(parameters);
         this.name = GaussianNB.className;
-        this.parameters = new GaussianNBParameters();
-        if (params?.priors) {
-            this.parameters.withPriors(params.priors);
-        }
+        this.config = config;
+        this.estimatorClasses = {
+            bigU64: GaussianNBF64BigU64,
+            bigI64: null,
+            i64: null,
+            f64: null,
+        };
     }
-    fit(x, y) {
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
-        if (!y || y.length === 0) {
-            throw new Error('Input arrays cannot be empty.');
-        }
-        if (y instanceof BigUint64Array) {
-            this.estimator = GaussianNBF64BigU64.fit(matrix.asF64(), y, this.parameters);
+    fitEstimator(matrix, y) {
+        const EstimatorClass = this.estimatorClasses[this._yType];
+        if (EstimatorClass !== null) {
+            return EstimatorClass.fit(matrix.asF64(), y, this.parameters);
         }
         else {
-            throw new Error('Unsupported data type!');
+            throw new Error(`${this.name}: Unsupported data type for y '${y.constructor?.name || typeof y}'`);
         }
-        return this;
     }
-    predict(x) {
-        if (this.estimator === null) {
-            throw new Error("The 'fit' method should called before the 'predict' method is called.");
-        }
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
+    getComponentColumnName(index) {
+        return `BNB${index + 1}`;
+    }
+    predictMatrix(matrix) {
         return this.estimator.predict(matrix.asF64());
     }
     serialize() {
-        return this.estimator?.serialize();
+        this.ensureFitted('serialize');
+        return {
+            columns: this.columns,
+            data: this.estimator.serialize(),
+            params: this.config,
+            yType: this._yType,
+        };
     }
     static deserialize(data) {
-        let instance = new GaussianNB();
-        instance.estimator = GaussianNBF64BigU64.deserialize(data);
+        let instance = new GaussianNB(data.params);
+        const EstimatorClass = instance.estimatorClasses[data.yType];
+        if (EstimatorClass === null) {
+            throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`);
+        }
+        instance.estimator = EstimatorClass.deserialize(data.data);
+        instance._isFitted = true;
+        instance._yType = data.yType;
         return instance;
     }
 }
