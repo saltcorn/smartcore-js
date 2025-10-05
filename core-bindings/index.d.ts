@@ -121,6 +121,7 @@ export declare class DBSCANF64EuclidianF64Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
   withEps(eps: number): void
+  serialize(): Buffer
   constructor()
   withDistanceHammingF64(distance: HammingF64): DBSCANF64HammingF64Parameters
   withDistanceMahalanobisF64(distance: MahalanobisF64): DBSCANF64MahalanobisF64Parameters
@@ -167,24 +168,28 @@ export declare class DBSCANF64HammingF64Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
   withEps(eps: number): void
+  serialize(): Buffer
 }
 
 export declare class DBSCANF64MahalanobisF64Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
   withEps(eps: number): void
+  serialize(): Buffer
 }
 
 export declare class DBSCANF64ManhattanF64Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
   withEps(eps: number): void
+  serialize(): Buffer
 }
 
 export declare class DBSCANF64MinkowskiF64Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
   withEps(eps: number): void
+  serialize(): Buffer
 }
 
 export declare class DecisionTreeClassifierI64I64 {
@@ -218,8 +223,13 @@ export declare class DecisionTreeRegressorParameters {
 
 export declare class DenseMatrixF64 {
   constructor(nrows: number, ncols: number, values: Float64Array, columnMajor?: boolean | undefined | null)
+  satisfies(predicate: (arg: number) => boolean): boolean
+  values(): Float64Array
   serialize(): Buffer
   static deserialize(data: Buffer): DenseMatrixF64
+  get(pos: [number, number]): number
+  shape(): [number, number]
+  isEmpty(): boolean
   static fill(nrows: number, ncols: number, value: number): DenseMatrixF64
   slice(): DenseMatrixF64
   sliceMut(): DenseMatrixF64
@@ -268,14 +278,24 @@ export declare class DenseMatrixF64 {
 
 export declare class DenseMatrixI64 {
   constructor(nrows: number, ncols: number, values: Array<number>, columnMajor?: boolean | undefined | null)
+  satisfies(predicate: (arg: number) => boolean): boolean
+  values(): Array<number>
   serialize(): Buffer
   static deserialize(data: Buffer): DenseMatrixI64
+  get(pos: [number, number]): number
+  shape(): [number, number]
+  isEmpty(): boolean
 }
 
 export declare class DenseMatrixU64 {
   constructor(nrows: number, ncols: number, values: BigUint64Array, columnMajor?: boolean | undefined | null)
+  satisfies(predicate: (arg: bigint) => boolean): boolean
+  values(): BigUint64Array
   serialize(): Buffer
   static deserialize(data: Buffer): DenseMatrixU64
+  get(pos: [number, number]): bigint
+  shape(): [number, number]
+  isEmpty(): boolean
 }
 
 export declare class Diabetes {

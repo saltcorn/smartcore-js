@@ -1,43 +1,45 @@
 import { SVDF64, SVDParameters } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
-class SVD {
+import { BaseTransformer } from '../base_transformer.js';
+class SVD extends BaseTransformer {
     constructor(params) {
-        this.estimator = null;
-        this.parameters = new SVDParameters();
-        if (params) {
-            if (params.nComponents !== undefined) {
-                this.parameters.withNComponents(params.nComponents);
-            }
+        const parameters = new SVDParameters();
+        const config = params || {};
+        if (config.nComponents !== undefined) {
+            parameters.withNComponents(config.nComponents);
         }
+        super(parameters);
+        this.name = SVD.className;
+        this.config = config;
     }
-    fit(x, y) {
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
-        if (!y || y.length === 0) {
-            throw new Error('Input arrays cannot be empty.');
-        }
-        if (y instanceof Float64Array) {
-            this.estimator = SVDF64.fit(matrix.asF64(), this.parameters);
-        }
-        else {
-            throw new Error('Unsupported data type for input arrays.');
-        }
-        return this;
+    fitEstimator(matrix) {
+        return SVDF64.fit(matrix.asF64(), this.parameters);
     }
-    transform(x) {
-        if (this.estimator === null) {
-            throw new Error("The 'fit' method should called before the 'predict' method is called.");
-        }
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
+    transformMatrix(matrix) {
         return new DenseMatrix(this.estimator.transform(matrix.asF64()));
     }
-    serialize() {
-        return this.estimator?.serialize();
+    getComponentColumnName(index) {
+        return `PC${index + 1}`;
     }
-    static deserialize(data) {
-        let estimator = SVDF64.deserialize(data);
-        let instance = new SVD();
+    serialize() {
+        this.ensureFitted('serialize');
+        return {
+            columns: this.columns,
+            data: this.estimator.serialize(),
+            params: this.config,
+        };
+    }
+    /**
+     * Creates instance from serialized data
+     */
+    static deserialize(serializedData) {
+        const estimator = SVDF64.deserialize(serializedData.data);
+        const instance = new SVD(serializedData.params);
         instance.estimator = estimator;
+        instance.columns = serializedData.columns;
+        instance._isFitted = true;
         return instance;
     }
 }
+SVD.className = 'SVD';
 export { SVD };

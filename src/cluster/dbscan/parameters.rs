@@ -1,3 +1,5 @@
+use bincode::{config::standard, serde::encode_to_vec};
+use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 use smartcore::{
@@ -45,6 +47,13 @@ macro_rules! dbscan_parameters_struct {
 
             pub fn owned_inner(&self) -> LibDBSCANParameters<$y, $d> {
                 self.inner.to_owned()
+            }
+
+            #[napi]
+            pub fn serialize(&self) -> Result<Buffer> {
+                let encoded = encode_to_vec(&self.inner, standard())
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                Ok(Buffer::from(encoded))
             }
         }
     }

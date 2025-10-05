@@ -1,87 +1,62 @@
 import { LogisticRegressionF64I64, LogisticRegressionParametersF64, LogisticRegressionF64BigI64, LogisticRegressionF64BigU64, } from '../../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
-var EstimatorType;
-(function (EstimatorType) {
-    EstimatorType[EstimatorType["F64BigI64"] = 0] = "F64BigI64";
-    EstimatorType[EstimatorType["F64BigU64"] = 1] = "F64BigU64";
-    EstimatorType[EstimatorType["F64I64"] = 2] = "F64I64";
-})(EstimatorType || (EstimatorType = {}));
-class LogisticRegression {
+import { BasePredictor } from '../base_predictor.js';
+import {} from '../base_estimator.js';
+class LogisticRegression extends BasePredictor {
     constructor(params) {
-        this.estimator = null;
-        let parameters = new LogisticRegressionParametersF64();
-        if (params) {
-            if (params.alpha !== undefined) {
-                parameters.withAlpha(params.alpha);
-            }
-            if (params.solver !== undefined) {
-                parameters.withSolver(params.solver);
-            }
+        const parameters = new LogisticRegressionParametersF64();
+        const config = params || {};
+        if (config.alpha !== undefined) {
+            parameters.withAlpha(config.alpha);
         }
-        this.parameters = parameters;
+        if (config.solver !== undefined) {
+            parameters.withSolver(config.solver);
+        }
+        super(parameters);
+        this.name = LogisticRegression.className;
+        this.config = config;
+        this.estimatorClasses = {
+            bigI64: LogisticRegressionF64BigI64,
+            bigU64: LogisticRegressionF64BigU64,
+            i64: LogisticRegressionF64I64,
+            f64: null,
+        };
     }
-    predict(x) {
-        if (this.estimator === null) {
-            throw new Error("The 'fit' method should called before the 'predict' method is called.");
-        }
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
-        return this.estimator.predict(matrix.asF64());
-    }
-    fit(x, y) {
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
-        if (!y || y.length === 0) {
-            throw new Error('Input arrays cannot be empty.');
-        }
-        if (y instanceof Float64Array) {
-            throw new Error('Unsupported data type for input arrays.');
-        }
-        if (y instanceof BigInt64Array) {
-            this.estimator = LogisticRegressionF64BigI64.fit(matrix.asF64(), y, this.parameters);
-        }
-        else if (y instanceof BigUint64Array) {
-            this.estimator = LogisticRegressionF64BigU64.fit(matrix.asF64(), y, this.parameters);
-        }
-        else if (y.every((val) => Number.isInteger(val))) {
-            this.estimator = LogisticRegressionF64I64.fit(matrix.asF64(), y, this.parameters);
+    fitEstimator(matrix, y) {
+        const EstimatorClass = this.estimatorClasses[this._yType];
+        if (EstimatorClass !== null) {
+            return EstimatorClass.fit(matrix.asF64(), y, this.parameters);
         }
         else {
-            throw new Error('Unsupported data type for input arrays.');
+            throw new Error(`${this.name}: Unsupported data type for y '${y.constructor?.name || typeof y}'`);
         }
-        return this;
+    }
+    getComponentColumnName(index) {
+        return `LR${index + 1}`;
+    }
+    predictMatrix(matrix) {
+        return this.estimator.predict(matrix.asF64());
     }
     serialize() {
-        if (this.estimator === null) {
-            throw new Error("The 'fit' method should called before the 'serialize' method is called.");
-        }
-        return this.estimator?.serialize();
+        this.ensureFitted('serialize');
+        return {
+            columns: this.columns,
+            data: this.estimator.serialize(),
+            params: this.config,
+            yType: this._yType,
+        };
     }
-    deserialize(data) {
-        try {
-            let estimator = LogisticRegressionF64I64.deserialize(data);
-            let lr = new LogisticRegression({});
-            lr.estimator = estimator;
-            return lr;
+    static deserialize(data) {
+        let instance = new LogisticRegression(data.params);
+        const EstimatorClass = instance.estimatorClasses[data.yType];
+        if (EstimatorClass === null) {
+            throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`);
         }
-        catch (e) {
-            throw e;
-        }
-    }
-    static deserialize(data, estimatorType) {
-        let instance = new LogisticRegression();
-        switch (estimatorType) {
-            case EstimatorType.F64BigI64:
-                instance.estimator = LogisticRegressionF64BigI64.deserialize(data);
-                break;
-            case EstimatorType.F64BigU64:
-                instance.estimator = LogisticRegressionF64BigU64.deserialize(data);
-                break;
-            case EstimatorType.F64I64:
-                instance.estimator = LogisticRegressionF64I64.deserialize(data);
-                break;
-            default:
-                throw new Error(`Unrecognized estimator type: '${estimatorType}'`);
-        }
+        instance.estimator = EstimatorClass.deserialize(data.data);
+        instance._isFitted = true;
+        instance._yType = data.yType;
         return instance;
     }
 }
+LogisticRegression.className = 'LogisticRegression';
 export default LogisticRegression;

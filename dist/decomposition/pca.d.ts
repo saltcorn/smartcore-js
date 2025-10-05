@@ -1,16 +1,29 @@
-import type { XType, YType } from '../index.js';
-import type { Estimator, Transformer } from '../pipeline/index.js';
+import { PCAF64, PCAParameters } from '../../core-bindings/index.js';
+import { DenseMatrix } from '../linalg/index.js';
+import { BaseTransformer } from '../base_transformer.js';
 interface PCAParams {
     nComponents?: number;
     correlationMatrix?: boolean;
 }
-declare class PCA implements Estimator<XType, YType, PCA>, Transformer<XType> {
-    private parameters;
-    private estimator;
+interface PCASerializedData {
+    columns: string[] | null;
+    data: Buffer;
+    params: PCAParams;
+}
+type PCARs = PCAF64;
+type PCAParametersRs = PCAParameters;
+declare class PCA extends BaseTransformer<PCARs, PCAParametersRs> {
+    static readonly className = "PCA";
+    readonly name: string;
+    private readonly config;
     constructor(params?: PCAParams);
-    fit(x: XType, y: YType): PCA;
-    transform(x: XType): XType;
-    serialize(): Buffer<ArrayBufferLike> | undefined;
-    static deserialize(data: Buffer): PCA;
+    protected fitEstimator(matrix: DenseMatrix): PCAF64;
+    protected transformMatrix(matrix: DenseMatrix): DenseMatrix;
+    protected getComponentColumnName(index: number): string;
+    serialize(): PCASerializedData;
+    /**
+     * Creates instance from serialized data
+     */
+    static deserialize(serializedData: PCASerializedData): PCA;
 }
 export { PCA };

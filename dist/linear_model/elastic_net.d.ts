@@ -1,7 +1,10 @@
 import { ElasticNetF64I64, ElasticNetParameters, ElasticNetF64F64, ElasticNetF64BigI64, ElasticNetF64BigU64 } from '../../core-bindings/index.js';
-import type { XType, YType } from '../index.js';
-import type { Estimator, Predictor } from '../pipeline/index.js';
+import { DenseMatrix } from '../linalg/index.js';
+import type { YType } from '../index.js';
+import { BasePredictor } from '../base_predictor.js';
+import { type YTypeKey } from '../base_estimator.js';
 type ElasticNetRs = ElasticNetF64I64 | ElasticNetF64F64 | ElasticNetF64BigI64 | ElasticNetF64BigU64;
+type ElasticNetParametersRs = ElasticNetParameters;
 interface IElasticNetParameters {
     alpha?: number;
     normalize?: boolean;
@@ -9,19 +12,22 @@ interface IElasticNetParameters {
     maxIter?: number;
     l1Ratio?: number;
 }
-declare enum EstimatorType {
-    F64BigU64 = 0,
-    F64BigI64 = 1,
-    F64I64 = 2,
-    F64F64 = 3
+interface ElasticNetSerializedData {
+    columns: string[] | null;
+    data: Buffer;
+    params: IElasticNetParameters;
+    yType: YTypeKey;
 }
-declare class ElasticNet implements Estimator<XType, YType, ElasticNet>, Predictor<XType, YType> {
-    parameters: ElasticNetParameters;
-    estimator: ElasticNetRs | null;
+declare class ElasticNet extends BasePredictor<ElasticNetRs, ElasticNetParametersRs, YType> {
+    static readonly className = "ElasticNet";
+    readonly name: string;
+    readonly config: IElasticNetParameters;
+    private estimatorClasses;
     constructor(params?: IElasticNetParameters);
-    fit(x: XType, y: YType): ElasticNet;
-    predict(x: XType): YType;
-    serialize(): Buffer<ArrayBufferLike> | undefined;
-    static deserialize(data: Buffer, estimatorType: EstimatorType): ElasticNet;
+    protected fitEstimator(matrix: DenseMatrix, y: YType): ElasticNetRs;
+    protected getComponentColumnName(index: number): string;
+    predictMatrix(matrix: DenseMatrix): YType;
+    serialize(): ElasticNetSerializedData;
+    static deserialize(data: ElasticNetSerializedData): ElasticNet;
 }
 export default ElasticNet;

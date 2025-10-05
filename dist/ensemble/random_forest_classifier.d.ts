@@ -1,7 +1,10 @@
+import { RandomForestClassifierF64BigI64, RandomForestClassifierF64BigU64, RandomForestClassifierF64I64, RandomForestClassifierParameters } from '../../core-bindings/index.js';
 import type { SplitCriterion } from '../../core-bindings/index.js';
-import type { XType, YType } from '../index.js';
-import type { Estimator, Predictor } from '../pipeline/index.js';
-interface RandomForestClassifierParams {
+import type { YType } from '../index.js';
+import { DenseMatrix } from '../linalg/index.js';
+import { BasePredictor } from '../base_predictor.js';
+import { type YTypeKey } from '../base_estimator.js';
+interface IRandomForestClassifierParameters {
     criterion?: SplitCriterion;
     maxDepth?: number;
     minSamplesLeaf?: bigint;
@@ -10,18 +13,24 @@ interface RandomForestClassifierParams {
     m?: number;
     keepSamples?: boolean;
 }
-declare enum EstimatorType {
-    F64I64 = 0,
-    F64BigI64 = 1,
-    F64BigU64 = 2
+type RandomForestClassifierRs = RandomForestClassifierF64I64 | RandomForestClassifierF64BigI64 | RandomForestClassifierF64BigU64;
+type RandomForestClassifierParametersRs = RandomForestClassifierParameters;
+interface RandomForestClassifierSerializedData {
+    columns: string[] | null;
+    data: Buffer;
+    params: IRandomForestClassifierParameters;
+    yType: YTypeKey;
 }
-declare class RandomForestClassifier implements Estimator<XType, YType, RandomForestClassifier>, Predictor<XType, YType> {
-    private parameters;
-    private estimator;
-    constructor(params?: RandomForestClassifierParams);
-    fit(x: XType, y: YType): RandomForestClassifier;
-    predict(x: XType): YType;
-    serialize(): Buffer<ArrayBufferLike> | undefined;
-    static deserialize(data: Buffer, estimatorType: EstimatorType): RandomForestClassifier;
+declare class RandomForestClassifier extends BasePredictor<RandomForestClassifierRs, RandomForestClassifierParametersRs, YType> {
+    static readonly className = "RandomForestClassifier";
+    readonly name: string;
+    readonly config: IRandomForestClassifierParameters;
+    private estimatorClasses;
+    constructor(params?: IRandomForestClassifierParameters);
+    protected fitEstimator(matrix: DenseMatrix, y: YType): RandomForestClassifierRs;
+    protected getComponentColumnName(index: number): string;
+    predictMatrix(matrix: DenseMatrix): YType;
+    serialize(): RandomForestClassifierSerializedData;
+    static deserialize(data: RandomForestClassifierSerializedData): RandomForestClassifier;
 }
 export { RandomForestClassifier };

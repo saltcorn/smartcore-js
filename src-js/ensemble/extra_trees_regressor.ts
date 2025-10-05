@@ -5,11 +5,12 @@ import {
   ExtraTreesRegressorParameters,
   ExtraTreesRegressorF64F64,
 } from '../../core-bindings/index.js'
-import type { XType, YType } from '../index.js'
-import { DenseMatrix } from '../linalg/index.js'
-import type { Estimator, Predictor } from '../pipeline/index.js'
+import type { YType } from '../index.js'
+import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
+import { BasePredictor } from '../base_predictor.js'
+import { type YTypeKey } from '../base_estimator.js'
 
-interface ExtraTreesRegressorParams {
+interface IExtraTreesRegressorParameters {
   maxDepth?: number
   minSamplesLeaf?: bigint
   minSamplesSplit?: bigint
@@ -25,97 +26,98 @@ type ExtraTreesRegressorRs =
   | ExtraTreesRegressorF64F64
   | ExtraTreesRegressorF64BigU64
 
-enum EstimatorType {
-  F64I64,
-  F64BigI64,
-  F64BigU64,
-  F64F64,
+type ExtraTreesRegressorParametersRs = ExtraTreesRegressorParameters
+
+interface EstimatorClass {
+  fit(matrix: DenseMatrixRs, y: YType, params: ExtraTreesRegressorParametersRs): ExtraTreesRegressorRs
+  deserialize(data: Buffer): ExtraTreesRegressorRs
 }
 
-class ExtraTreesRegressor implements Estimator<XType, YType, ExtraTreesRegressor>, Predictor<XType, YType> {
-  private parameters: ExtraTreesRegressorParameters
-  private estimator: ExtraTreesRegressorRs | null = null
+interface ExtraTreesRegressorSerializedData {
+  columns: string[] | null
+  data: Buffer
+  params: IExtraTreesRegressorParameters
+  yType: YTypeKey
+}
 
-  constructor(params?: ExtraTreesRegressorParams) {
-    this.parameters = new ExtraTreesRegressorParameters()
-    if (params) {
-      if (params.maxDepth !== undefined) {
-        this.parameters.withMaxDepth(params.maxDepth)
-      }
-      if (params.minSamplesLeaf !== undefined) {
-        this.parameters.withMinSamplesLeaf(params.minSamplesLeaf)
-      }
-      if (params.minSamplesSplit !== undefined) {
-        this.parameters.withMinSamplesSplit(params.minSamplesSplit)
-      }
-      if (params.nTrees !== undefined) {
-        this.parameters.withNTrees(params.nTrees)
-      }
-      if (params.m !== undefined) {
-        this.parameters.withM(params.m)
-      }
-      if (params.keepSamples !== undefined) {
-        this.parameters.withKeepSamples(params.keepSamples)
-      }
-      if (params.seed !== undefined) {
-        this.parameters.withSeed(params.seed)
-      }
+class ExtraTreesRegressor extends BasePredictor<ExtraTreesRegressorRs, ExtraTreesRegressorParametersRs, YType> {
+  public static readonly className = 'ExtraTreesRegressor'
+  public readonly name: string = ExtraTreesRegressor.className
+  public readonly config: IExtraTreesRegressorParameters
+  private estimatorClasses: Record<YTypeKey, EstimatorClass>
+
+  constructor(params?: IExtraTreesRegressorParameters) {
+    const parameters = new ExtraTreesRegressorParameters()
+    const config = params || {}
+    if (config.maxDepth !== undefined) {
+      parameters.withMaxDepth(config.maxDepth)
+    }
+    if (config.minSamplesLeaf !== undefined) {
+      parameters.withMinSamplesLeaf(config.minSamplesLeaf)
+    }
+    if (config.minSamplesSplit !== undefined) {
+      parameters.withMinSamplesSplit(config.minSamplesSplit)
+    }
+    if (config.nTrees !== undefined) {
+      parameters.withNTrees(config.nTrees)
+    }
+    if (config.m !== undefined) {
+      parameters.withM(config.m)
+    }
+    if (config.keepSamples !== undefined) {
+      parameters.withKeepSamples(config.keepSamples)
+    }
+    if (config.seed !== undefined) {
+      parameters.withSeed(config.seed)
+    }
+    super(parameters)
+    this.config = config
+
+    this.estimatorClasses = {
+      i64: ExtraTreesRegressorF64I64,
+      bigI64: ExtraTreesRegressorF64BigI64,
+      f64: ExtraTreesRegressorF64F64,
+      bigU64: ExtraTreesRegressorF64BigU64,
     }
   }
 
-  fit(x: XType, y: YType): ExtraTreesRegressor {
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    if (!y || y.length === 0) {
-      throw new Error('Input arrays cannot be empty.')
-    }
-
-    if (y instanceof Float64Array) {
-      this.estimator = ExtraTreesRegressorF64F64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y instanceof BigInt64Array) {
-      this.estimator = ExtraTreesRegressorF64BigI64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y instanceof BigUint64Array) {
-      this.estimator = ExtraTreesRegressorF64BigU64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y.every((val) => Number.isInteger(val))) {
-      this.estimator = ExtraTreesRegressorF64I64.fit(matrix.asF64(), y, this.parameters)
+  protected fitEstimator(matrix: DenseMatrix, y: YType): ExtraTreesRegressorRs {
+    const EstimatorClass = this.estimatorClasses[this._yType!]
+    if (EstimatorClass !== null) {
+      return EstimatorClass.fit(matrix.asF64(), y, this.parameters)
     } else {
-      throw new Error('Unsupported data type for input arrays.')
+      throw new Error(`${this.name}: Unsupported data type for y '${y.constructor?.name || typeof y}'`)
     }
-
-    return this
   }
 
-  predict(x: XType): YType {
-    if (this.estimator === null) {
-      throw new Error("The 'fit' method should called before the 'predict' method is called.")
-    }
-
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-    return this.estimator.predict(matrix.asF64())
+  protected getComponentColumnName(index: number): string {
+    return `ETR${index + 1}`
   }
 
-  serialize() {
-    return this.estimator?.serialize()
+  predictMatrix(matrix: DenseMatrix): YType {
+    return this.estimator!.predict(matrix.asF64())
   }
 
-  static deserialize(data: Buffer, estimatorType: EstimatorType): ExtraTreesRegressor {
-    let instance = new ExtraTreesRegressor()
-    switch (estimatorType) {
-      case EstimatorType.F64BigI64:
-        instance.estimator = ExtraTreesRegressorF64BigI64.deserialize(data)
-        break
-      case EstimatorType.F64BigU64:
-        instance.estimator = ExtraTreesRegressorF64BigU64.deserialize(data)
-        break
-      case EstimatorType.F64I64:
-        instance.estimator = ExtraTreesRegressorF64I64.deserialize(data)
-        break
-      case EstimatorType.F64F64:
-        instance.estimator = ExtraTreesRegressorF64F64.deserialize(data)
-        break
-      default:
-        throw new Error(`Unrecognized estimator type: '${estimatorType}'`)
+  serialize(): ExtraTreesRegressorSerializedData {
+    this.ensureFitted('serialize')
+
+    return {
+      columns: this.columns,
+      data: this.estimator!.serialize(),
+      params: this.config,
+      yType: this._yType!,
     }
+  }
+
+  static deserialize(data: ExtraTreesRegressorSerializedData): ExtraTreesRegressor {
+    let instance = new ExtraTreesRegressor(data.params)
+    const EstimatorClass = instance.estimatorClasses[data.yType]
+    if (EstimatorClass === null) {
+      throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`)
+    }
+    instance.estimator = EstimatorClass.deserialize(data.data)
+    instance._isFitted = true
+    instance._yType = data.yType
     return instance
   }
 }

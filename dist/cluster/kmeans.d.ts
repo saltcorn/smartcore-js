@@ -1,21 +1,30 @@
-import type { XType, YType } from '../index.js';
-import type { Estimator, Predictor } from '../pipeline/index.js';
-interface KMeansParams {
+import { KMeansF64BigI64, KMeansF64I64, KMeansParameters, KMeansF64F64 } from '../../core-bindings/index.js';
+import { DenseMatrix } from '../linalg/index.js';
+import type { YType } from '../index.js';
+import type { YTypeKey } from '../base_estimator.js';
+import { BasePredictor } from '../base_predictor.js';
+interface IKMeansParameters {
     maxIter?: number;
     k?: number;
 }
-declare enum EstimatorType {
-    F64I64 = 0,
-    F64BigI64 = 1,
-    F64F64 = 2
+type KMeansRs = KMeansF64I64 | KMeansF64BigI64 | KMeansF64F64;
+type KMeansParametersRs = KMeansParameters;
+interface KMeansSerializedData {
+    columns: string[] | null;
+    data: Buffer;
+    params: IKMeansParameters;
+    yType: YTypeKey;
 }
-declare class KMeans implements Estimator<XType, YType, KMeans>, Predictor<XType, YType> {
-    private parameters;
-    private estimator;
-    constructor(params?: KMeansParams);
-    fit(x: XType, y: YType): KMeans;
-    predict(x: XType): YType;
-    serialize(): Buffer<ArrayBufferLike> | undefined;
-    static deserialize(data: Buffer, estimatorType: EstimatorType): KMeans;
+declare class KMeans extends BasePredictor<KMeansRs, KMeansParametersRs, YType> {
+    static readonly className = "KMeans";
+    readonly name: string;
+    readonly config: IKMeansParameters;
+    private estimatorClasses;
+    constructor(params?: IKMeansParameters);
+    protected fitEstimator(matrix: DenseMatrix, y: YType): KMeansRs;
+    protected getComponentColumnName(index: number): string;
+    predictMatrix(matrix: DenseMatrix): YType;
+    serialize(): KMeansSerializedData;
+    static deserialize(data: KMeansSerializedData): KMeans;
 }
 export { KMeans };

@@ -1,0 +1,72 @@
+[
+  {
+    "user_id": "U001",
+    "daily_steps": 8500,
+    "calories_burned": 520,
+    "hours_slept": 7.5,
+    "daily_stress_level": 3
+  },
+  {
+    "user_id": "U002",
+    "daily_steps": 12000,
+    "calories_burned": 710,
+    "hours_slept": 6.8,
+    "daily_stress_level": 5
+  },
+  {
+    "user_id": "U003",
+    "daily_steps": 5500,
+    "calories_burned": 380,
+    "hours_slept": 8.1,
+    "daily_stress_level": 2
+  },
+  {
+    "user_id": "U004",
+    "daily_steps": 15000,
+    "calories_burned": 900,
+    "hours_slept": 6.0,
+    "daily_stress_level": 6
+  },
+  {
+    "user_id": "U005",
+    "daily_steps": 7200,
+    "calories_burned": 450,
+    "hours_slept": 7.9,
+    "daily_stress_level": 3
+  },
+  {
+    "user_id": "U006",
+    "daily_steps": 9800,
+    "calories_burned": 600,
+    "hours_slept": 7.1,
+    "daily_stress_level": 4
+  },
+  {
+    "user_id": "U007",
+    "daily_steps": 6200,
+    "calories_burned": 400,
+    "hours_slept": 8.0,
+    "daily_stress_level": 2
+  },
+  {
+    "user_id": "U008",
+    "daily_steps": 11500,
+    "calories_burned": 690,
+    "hours_slept": 6.5,
+    "daily_stress_level": 5
+  },
+  {
+    "user_id": "U009",
+    "daily_steps": 7900,
+    "calories_burned": 480,
+    "hours_slept": 7.7,
+    "daily_stress_level": 3
+  },
+  {
+    "user_id": "U010",
+    "daily_steps": 14000,
+    "calories_burned": 850,
+    "hours_slept": 6.2,
+    "daily_stress_level": 6
+  }
+]

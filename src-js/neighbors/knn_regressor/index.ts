@@ -17,6 +17,8 @@ interface IKNNRegressorParameters {
   data?: XType
 }
 
+type YTypeKey = 'bigI64' | 'bigU64' | 'i64' | 'f64'
+
 type KNNRegressorDistance =
   | KNNRegressorEuclidian
   | KNNRegressorHamming
@@ -24,17 +26,13 @@ type KNNRegressorDistance =
   | KNNRegressorManhattan
   | KNNRegressorMinkowski
 
-enum EstimatorType {
-  F64F64,
-  F64I64,
-  F64BigI64,
-  F64BigU64,
-}
-
 class KNNRegressor implements Estimator<XType, YType, KNNRegressor>, Predictor<XType, YType> {
   private estimator: KNNRegressorDistance
+  public static readonly className = 'KNNRegressor'
+  public readonly name: string
 
   constructor(params?: IKNNRegressorParameters) {
+    this.name = KNNRegressor.className
     switch (params?.distance) {
       case undefined:
       case DistanceType.EUCLIDIAN:
@@ -70,27 +68,10 @@ class KNNRegressor implements Estimator<XType, YType, KNNRegressor>, Predictor<X
     return this.estimator?.serialize()
   }
 
-  static deserialize(data: Buffer, estimatorType: EstimatorType, distanceType: DistanceType): KNNRegressor {
-    let instance = new KNNRegressor()
-    switch (distanceType) {
-      case DistanceType.EUCLIDIAN:
-        instance.estimator = KNNRegressorEuclidian.deserialize(data, estimatorType)
-        break
-      case DistanceType.HAMMING:
-        instance.estimator = KNNRegressorHamming.deserialize(data, estimatorType)
-        break
-      case DistanceType.MAHALANOBIS:
-        instance.estimator = KNNRegressorMahalanobis.deserialize(data, estimatorType)
-        break
-      case DistanceType.MANHATTAN:
-        instance.estimator = KNNRegressorManhattan.deserialize(data, estimatorType)
-        break
-      case DistanceType.MINKOWSKI:
-        instance.estimator = KNNRegressorMinkowski.deserialize(data, estimatorType)
-        break
-    }
-    return instance
+  deserialize(data: Buffer, yType: YTypeKey): KNNRegressor {
+    this.estimator.deserialize(data, yType)
+    return this
   }
 }
 
-export { KNNRegressor, type IKNNRegressorParameters, EstimatorType }
+export { KNNRegressor, type IKNNRegressorParameters, type YTypeKey }

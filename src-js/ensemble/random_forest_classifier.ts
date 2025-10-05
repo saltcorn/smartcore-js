@@ -5,11 +5,12 @@ import {
   RandomForestClassifierParameters,
 } from '../../core-bindings/index.js'
 import type { SplitCriterion } from '../../core-bindings/index.js'
-import type { XType, YType } from '../index.js'
-import { DenseMatrix } from '../linalg/index.js'
-import type { Estimator, Predictor } from '../pipeline/index.js'
+import type { YType } from '../index.js'
+import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
+import { BasePredictor } from '../base_predictor.js'
+import { type YTypeKey } from '../base_estimator.js'
 
-interface RandomForestClassifierParams {
+interface IRandomForestClassifierParameters {
   criterion?: SplitCriterion
   maxDepth?: number
   minSamplesLeaf?: bigint
@@ -24,93 +25,104 @@ type RandomForestClassifierRs =
   | RandomForestClassifierF64BigI64
   | RandomForestClassifierF64BigU64
 
-enum EstimatorType {
-  F64I64,
-  F64BigI64,
-  F64BigU64,
+type RandomForestClassifierParametersRs = RandomForestClassifierParameters
+
+interface RandomForestClassifierSerializedData {
+  columns: string[] | null
+  data: Buffer
+  params: IRandomForestClassifierParameters
+  yType: YTypeKey
 }
 
-class RandomForestClassifier implements Estimator<XType, YType, RandomForestClassifier>, Predictor<XType, YType> {
-  private parameters: RandomForestClassifierParameters
-  private estimator: RandomForestClassifierRs | null = null
+interface EstimatorClass {
+  fit(matrix: DenseMatrixRs, y: YType, params: RandomForestClassifierParametersRs): RandomForestClassifierRs
+  deserialize(data: Buffer): RandomForestClassifierRs
+}
 
-  constructor(params?: RandomForestClassifierParams) {
-    this.parameters = new RandomForestClassifierParameters()
-    if (params) {
-      if (params.criterion !== undefined) {
-        this.parameters.withCriterion(params.criterion)
+class RandomForestClassifier extends BasePredictor<
+  RandomForestClassifierRs,
+  RandomForestClassifierParametersRs,
+  YType
+> {
+  public static readonly className = 'RandomForestClassifier'
+  public readonly name: string = RandomForestClassifier.className
+  public readonly config: IRandomForestClassifierParameters
+
+  private estimatorClasses: Record<YTypeKey, EstimatorClass | null>
+
+  constructor(params?: IRandomForestClassifierParameters) {
+    const parameters = new RandomForestClassifierParameters()
+    const config = params || {}
+    if (config) {
+      if (config.criterion !== undefined) {
+        parameters.withCriterion(config.criterion)
       }
-      if (params.maxDepth !== undefined) {
-        this.parameters.withMaxDepth(params.maxDepth)
+      if (config.maxDepth !== undefined) {
+        parameters.withMaxDepth(config.maxDepth)
       }
-      if (params.minSamplesLeaf !== undefined) {
-        this.parameters.withMinSamplesLeaf(params.minSamplesLeaf)
+      if (config.minSamplesLeaf !== undefined) {
+        parameters.withMinSamplesLeaf(config.minSamplesLeaf)
       }
-      if (params.minSamplesSplit !== undefined) {
-        this.parameters.withMinSamplesSplit(params.minSamplesSplit)
+      if (config.minSamplesSplit !== undefined) {
+        parameters.withMinSamplesSplit(config.minSamplesSplit)
       }
-      if (params.nTrees !== undefined) {
-        this.parameters.withNTrees(params.nTrees)
+      if (config.nTrees !== undefined) {
+        parameters.withNTrees(config.nTrees)
       }
-      if (params.m !== undefined) {
-        this.parameters.withM(params.m)
+      if (config.m !== undefined) {
+        parameters.withM(config.m)
       }
-      if (params.keepSamples !== undefined) {
-        this.parameters.withKeepSamples(params.keepSamples)
+      if (config.keepSamples !== undefined) {
+        parameters.withKeepSamples(config.keepSamples)
       }
+    }
+    super(parameters)
+    this.config = config
+    this.estimatorClasses = {
+      bigI64: RandomForestClassifierF64BigI64,
+      bigU64: RandomForestClassifierF64BigU64,
+      i64: RandomForestClassifierF64I64,
+      f64: null,
     }
   }
 
-  fit(x: XType, y: YType): RandomForestClassifier {
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    if (!y || y.length === 0) {
-      throw new Error('Input arrays cannot be empty.')
-    }
-
-    if (y instanceof Float64Array) {
-      throw new Error('Unsupported data type for input arrays.')
-    } else if (y instanceof BigInt64Array) {
-      this.estimator = RandomForestClassifierF64BigI64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y instanceof BigUint64Array) {
-      this.estimator = RandomForestClassifierF64BigU64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y.every((val) => Number.isInteger(val))) {
-      this.estimator = RandomForestClassifierF64I64.fit(matrix.asF64(), y, this.parameters)
+  protected fitEstimator(matrix: DenseMatrix, y: YType): RandomForestClassifierRs {
+    const EstimatorClass = this.estimatorClasses[this._yType!]
+    if (EstimatorClass !== null) {
+      return EstimatorClass.fit(matrix.asF64(), y, this.parameters)
     } else {
-      throw new Error('Unsupported data type for input arrays.')
+      throw new Error(`${this.name}: Unsupported data type for y '${y.constructor?.name || typeof y}'`)
     }
-
-    return this
   }
 
-  predict(x: XType): YType {
-    if (this.estimator === null) {
-      throw new Error("The 'fit' method should called before the 'predict' method is called.")
-    }
-
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-    return this.estimator.predict(matrix.asF64())
+  protected getComponentColumnName(index: number): string {
+    return `RFC${index + 1}`
   }
 
-  serialize() {
-    return this.estimator?.serialize()
+  predictMatrix(matrix: DenseMatrix): YType {
+    return this.estimator!.predict(matrix.asF64())
   }
 
-  static deserialize(data: Buffer, estimatorType: EstimatorType): RandomForestClassifier {
-    let instance = new RandomForestClassifier()
-    switch (estimatorType) {
-      case EstimatorType.F64BigI64:
-        instance.estimator = RandomForestClassifierF64BigI64.deserialize(data)
-        break
-      case EstimatorType.F64BigU64:
-        instance.estimator = RandomForestClassifierF64BigU64.deserialize(data)
-        break
-      case EstimatorType.F64I64:
-        instance.estimator = RandomForestClassifierF64I64.deserialize(data)
-        break
-      default:
-        throw new Error(`Unrecognized estimator type: '${estimatorType}'`)
+  serialize(): RandomForestClassifierSerializedData {
+    this.ensureFitted('serialize')
+
+    return {
+      columns: this.columns,
+      data: this.estimator!.serialize(),
+      params: this.config,
+      yType: this._yType!,
     }
+  }
+
+  static deserialize(data: RandomForestClassifierSerializedData): RandomForestClassifier {
+    let instance = new RandomForestClassifier(data.params)
+    const EstimatorClass = instance.estimatorClasses[data.yType]
+    if (EstimatorClass === null) {
+      throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`)
+    }
+    instance.estimator = EstimatorClass.deserialize(data.data)
+    instance._isFitted = true
+    instance._yType = data.yType
     return instance
   }
 }

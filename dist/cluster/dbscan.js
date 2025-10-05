@@ -1,78 +1,93 @@
 import { DBSCANF64EuclidianF64Parameters, DBSCANF64F64EuclidianF64, DBSCANF64F64HammingF64, DBSCANF64F64MahalanobisF64, DBSCANF64F64ManhattanF64, DBSCANF64F64MinkowskiF64, EuclidianF64, HammingF64, MahalanobisF64, ManhattanF64, MinkowskiF64, } from '../../core-bindings/index.js';
 import { DBSCANF64HammingF64Parameters, DBSCANF64MahalanobisF64Parameters, DBSCANF64ManhattanF64Parameters, DBSCANF64MinkowskiF64Parameters, } from '../../core-bindings/index.js';
+import { BasePredictor } from '../base_predictor.js';
+import {} from '../base_estimator.js';
 import { DenseMatrix } from '../linalg/index.js';
-class DBSCAN {
+class DBSCAN extends BasePredictor {
     constructor(params) {
-        this.estimator = null;
-        this.parameters = new DBSCANF64EuclidianF64Parameters();
-        if (params) {
-            if (params.minSamples !== undefined) {
-                this.parameters.withMinSamples(params.minSamples);
+        let parameters = new DBSCANF64EuclidianF64Parameters();
+        const config = params || {};
+        if (config.minSamples !== undefined) {
+            parameters.withMinSamples(config.minSamples);
+        }
+        if (config.algorithm !== undefined) {
+            parameters.withAlgorithm(config.algorithm);
+        }
+        if (config.eps !== undefined) {
+            parameters.withEps(config.eps);
+        }
+        if (config.distance && parameters instanceof DBSCANF64EuclidianF64Parameters) {
+            if (config.distance instanceof HammingF64) {
+                parameters = parameters.withDistanceHammingF64(config.distance);
             }
-            if (params.algorithm !== undefined) {
-                this.parameters.withAlgorithm(params.algorithm);
+            else if (config.distance instanceof MahalanobisF64) {
+                parameters = parameters.withDistanceMahalanobisF64(config.distance);
             }
-            if (params.eps !== undefined) {
-                this.parameters.withEps(params.eps);
+            else if (config.distance instanceof ManhattanF64) {
+                parameters = parameters.withDistanceManhattanF64(config.distance);
             }
-            if (params.distance && this.parameters instanceof DBSCANF64EuclidianF64Parameters) {
-                if (params.distance instanceof HammingF64) {
-                    this.parameters = this.parameters.withDistanceHammingF64(params.distance);
-                }
-                else if (params.distance instanceof MahalanobisF64) {
-                    this.parameters = this.parameters.withDistanceMahalanobisF64(params.distance);
-                }
-                else if (params.distance instanceof ManhattanF64) {
-                    this.parameters = this.parameters.withDistanceManhattanF64(params.distance);
-                }
-                else if (params.distance instanceof MinkowskiF64) {
-                    this.parameters = this.parameters.withDistanceMinkowskiF64(params.distance);
-                }
+            else if (config.distance instanceof MinkowskiF64) {
+                parameters = parameters.withDistanceMinkowskiF64(config.distance);
             }
         }
+        super(parameters);
+        this.name = DBSCAN.className;
+        this.config = config;
+        this.estimatorClasses = {
+            EuclidianF64: DBSCANF64F64EuclidianF64,
+            HammingF64: DBSCANF64F64HammingF64,
+            MahalanobisF64: DBSCANF64F64MahalanobisF64,
+            ManhattanF64: DBSCANF64F64ManhattanF64,
+            MinkowskiF64: DBSCANF64F64MinkowskiF64,
+        };
     }
-    fit(x, y) {
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
-        if (!y || y.length === 0) {
-            throw new Error('Input arrays cannot be empty.');
-        }
-        if (y instanceof Float64Array) {
-            if (this.parameters instanceof DBSCANF64EuclidianF64Parameters) {
-                this.estimator = DBSCANF64F64EuclidianF64.fit(matrix.asF64(), this.parameters);
-            }
-            else if (this.parameters instanceof DBSCANF64HammingF64Parameters) {
-                this.estimator = DBSCANF64F64HammingF64.fit(matrix.asF64(), this.parameters);
-            }
-            else if (this.parameters instanceof DBSCANF64MahalanobisF64Parameters) {
-                this.estimator = DBSCANF64F64MahalanobisF64.fit(matrix.asF64(), this.parameters);
-            }
-            else if (this.parameters instanceof DBSCANF64ManhattanF64Parameters) {
-                this.estimator = DBSCANF64F64ManhattanF64.fit(matrix.asF64(), this.parameters);
-            }
-            else if (this.parameters instanceof DBSCANF64MinkowskiF64Parameters) {
-                this.estimator = DBSCANF64F64MinkowskiF64.fit(matrix.asF64(), this.parameters);
-            }
-        }
-        else {
-            throw new Error('Unsupported data type for input arrays.');
-        }
-        return this;
+    get distanceKey() {
+        return DBSCAN.getDistanceKey(this.config.distance);
     }
-    predict(x) {
-        if (this.estimator === null) {
-            throw new Error("The 'fit' method should called before the 'predict' method is called.");
-        }
-        let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);
+    static getDistanceKey(distance) {
+        if (distance instanceof EuclidianF64 || distance === undefined)
+            return 'EuclidianF64';
+        if (distance instanceof HammingF64)
+            return 'HammingF64';
+        if (distance instanceof MahalanobisF64)
+            return 'MahalanobisF64';
+        if (distance instanceof ManhattanF64)
+            return 'ManhattanF64';
+        if (distance instanceof MinkowskiF64)
+            return 'MinkowskiF64';
+        throw new Error(`${this.name}: Unexpected value of distance '${typeof distance}'`);
+    }
+    fitEstimator(matrix, _y) {
+        const EstimatorClass = this.estimatorClasses[this.distanceKey];
+        return EstimatorClass.fit(matrix.asF64(), this.parameters);
+    }
+    getComponentColumnName(index) {
+        return `DBSCAN${index + 1}`;
+    }
+    predictMatrix(matrix) {
         return this.estimator.predict(matrix.asF64());
     }
     serialize() {
-        return this.estimator?.serialize();
+        this.ensureFitted('serialize');
+        return {
+            columns: this.columns,
+            data: this.estimator.serialize(),
+            params: this.config,
+            yType: this._yType,
+        };
     }
     static deserialize(data) {
-        let estimator = DBSCANF64F64EuclidianF64.deserialize(data);
-        let instance = new DBSCAN();
-        instance.estimator = estimator;
+        let instance = new DBSCAN(data.params);
+        let distanceKey = DBSCAN.getDistanceKey(data.params.distance);
+        const EstimatorClass = instance.estimatorClasses[distanceKey];
+        if (EstimatorClass === null) {
+            throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`);
+        }
+        instance.estimator = EstimatorClass.deserialize(data.data);
+        instance._isFitted = true;
+        instance._yType = data.yType;
         return instance;
     }
 }
+DBSCAN.className = 'DBSCAN';
 export { DBSCAN };

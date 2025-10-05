@@ -1,35 +1,45 @@
 import { OneHotEncoderF64, OneHotEncoderParameters } from '../../core-bindings/index.js'
 import { DenseMatrix } from '../linalg/index.js'
-import type { Estimator, Transformer } from '../pipeline/index.js'
-import type { YType, XType } from '../index.js'
+import { BaseTransformer } from '../base_transformer.js'
 
 type OneHotEncoderRs = OneHotEncoderF64
 type OneHotEncoderParametersRs = OneHotEncoderParameters
 
-interface OneHotEncoderParametersValues {
+interface IOneHotEncoderParameters {
   categoricalParams: BigUint64Array
 }
 
-class OneHotEncoder implements Estimator<XType, YType, OneHotEncoder>, Transformer<XType> {
-  parameters: OneHotEncoderParametersRs
-  estimator: null | OneHotEncoderRs = null
+interface OneHotEncoderSerializedData {
+  columns: string[] | null
+  data: Buffer
+  params: IOneHotEncoderParameters
+}
 
-  constructor(params: OneHotEncoderParametersValues) {
-    this.parameters = new OneHotEncoderParameters(params.categoricalParams)
+class OneHotEncoder extends BaseTransformer<OneHotEncoderRs, OneHotEncoderParametersRs> {
+  public static readonly className = 'OneHotEncoder'
+  public readonly name: string = OneHotEncoder.className
+
+  constructor(params: IOneHotEncoderParameters) {
+    const parameters = new OneHotEncoderParameters(params.categoricalParams)
+    super(parameters)
   }
 
-  fit(x: XType, _y: YType): OneHotEncoder {
-    x = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-    this.estimator = new OneHotEncoderF64(x.asF64(), this.parameters)
-    return this
+  protected fitEstimator(matrix: DenseMatrix): OneHotEncoderF64 {
+    return new OneHotEncoderF64(matrix.asF64(), this.parameters)
   }
 
-  transform(x: XType): XType {
-    if (this.estimator === null) {
-      throw new Error("The 'fit' method should called before the 'transform' method is called.")
-    }
-    x = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-    return new DenseMatrix(this.estimator.transform(x.asF64()))
+  protected transformMatrix(matrix: DenseMatrix): DenseMatrix {
+    return new DenseMatrix(this.estimator!.transform(matrix.asF64()))
+  }
+
+  protected getComponentColumnName(index: number): string {
+    return `OHE${index + 1}`
+  }
+
+  serialize(): OneHotEncoderSerializedData {
+    this.ensureFitted('serialize')
+
+    throw new Error(`${this.name}: Unimplemented!`)
   }
 }
 

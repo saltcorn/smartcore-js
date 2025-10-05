@@ -1,3 +1,4 @@
+export * as dataFrame from './data_frame.js';
 export * from './linalg/index.js';
 export * as linearModel from './linear_model/index.js';
 export * as ensemble from './ensemble/index.js';

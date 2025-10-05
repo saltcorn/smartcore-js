@@ -1,6 +1,9 @@
-import type { XType, YType } from '../index.js';
-import type { Estimator, Predictor } from '../pipeline/index.js';
-interface ExtraTreesRegressorParams {
+import { ExtraTreesRegressorF64BigU64, ExtraTreesRegressorF64BigI64, ExtraTreesRegressorF64I64, ExtraTreesRegressorParameters, ExtraTreesRegressorF64F64 } from '../../core-bindings/index.js';
+import type { YType } from '../index.js';
+import { DenseMatrix } from '../linalg/index.js';
+import { BasePredictor } from '../base_predictor.js';
+import { type YTypeKey } from '../base_estimator.js';
+interface IExtraTreesRegressorParameters {
     maxDepth?: number;
     minSamplesLeaf?: bigint;
     minSamplesSplit?: bigint;
@@ -9,19 +12,24 @@ interface ExtraTreesRegressorParams {
     keepSamples?: boolean;
     seed?: number;
 }
-declare enum EstimatorType {
-    F64I64 = 0,
-    F64BigI64 = 1,
-    F64BigU64 = 2,
-    F64F64 = 3
+type ExtraTreesRegressorRs = ExtraTreesRegressorF64I64 | ExtraTreesRegressorF64BigI64 | ExtraTreesRegressorF64F64 | ExtraTreesRegressorF64BigU64;
+type ExtraTreesRegressorParametersRs = ExtraTreesRegressorParameters;
+interface ExtraTreesRegressorSerializedData {
+    columns: string[] | null;
+    data: Buffer;
+    params: IExtraTreesRegressorParameters;
+    yType: YTypeKey;
 }
-declare class ExtraTreesRegressor implements Estimator<XType, YType, ExtraTreesRegressor>, Predictor<XType, YType> {
-    private parameters;
-    private estimator;
-    constructor(params?: ExtraTreesRegressorParams);
-    fit(x: XType, y: YType): ExtraTreesRegressor;
-    predict(x: XType): YType;
-    serialize(): Buffer<ArrayBufferLike> | undefined;
-    static deserialize(data: Buffer, estimatorType: EstimatorType): ExtraTreesRegressor;
+declare class ExtraTreesRegressor extends BasePredictor<ExtraTreesRegressorRs, ExtraTreesRegressorParametersRs, YType> {
+    static readonly className = "ExtraTreesRegressor";
+    readonly name: string;
+    readonly config: IExtraTreesRegressorParameters;
+    private estimatorClasses;
+    constructor(params?: IExtraTreesRegressorParameters);
+    protected fitEstimator(matrix: DenseMatrix, y: YType): ExtraTreesRegressorRs;
+    protected getComponentColumnName(index: number): string;
+    predictMatrix(matrix: DenseMatrix): YType;
+    serialize(): ExtraTreesRegressorSerializedData;
+    static deserialize(data: ExtraTreesRegressorSerializedData): ExtraTreesRegressor;
 }
 export { ExtraTreesRegressor };

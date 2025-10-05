@@ -1,9 +1,11 @@
 import { LassoF64I64, LassoParameters, LassoF64F64, LassoF64BigI64, LassoF64BigU64 } from '../../core-bindings/index.js'
-import type { XType, YType } from '../index.js'
-import { DenseMatrix } from '../linalg/index.js'
-import type { Estimator, Predictor } from '../pipeline/index.js'
+import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
+import type { YType } from '../index.js'
+import { BasePredictor } from '../base_predictor.js'
+import { type YTypeKey } from '../base_estimator.js'
 
 type LassoRs = LassoF64I64 | LassoF64F64 | LassoF64BigI64 | LassoF64BigU64
+type LassoParametersRs = LassoParameters
 
 interface ILassoParameters {
   alpha?: number
@@ -12,87 +14,87 @@ interface ILassoParameters {
   maxIter?: number
 }
 
-enum EstimatorType {
-  F64BigI64,
-  F64BigU64,
-  F64I64,
-  F64F64,
+interface LassoSerializedData {
+  columns: string[] | null
+  data: Buffer
+  params: ILassoParameters
+  yType: YTypeKey
 }
 
-class Lasso implements Estimator<XType, YType, Lasso>, Predictor<XType, YType> {
-  parameters: LassoParameters
-  estimator: LassoRs | null = null
+interface EstimatorClass {
+  fit(matrix: DenseMatrixRs, y: YType, params: LassoParametersRs): LassoRs
+  deserialize(data: Buffer): LassoRs
+}
+
+class Lasso extends BasePredictor<LassoRs, LassoParametersRs, YType> {
+  public static readonly className = 'Lasso'
+  public readonly name: string = Lasso.className
+  public readonly config: ILassoParameters
+
+  private estimatorClasses: Record<YTypeKey, EstimatorClass | null>
 
   constructor(params?: ILassoParameters) {
-    this.parameters = new LassoParameters()
-    if (params?.alpha) {
-      this.parameters.withAlpha(params.alpha)
+    const parameters = new LassoParameters()
+    const config = params || {}
+    if (config?.alpha) {
+      parameters.withAlpha(config.alpha)
     }
-    if (params?.normalize) {
-      this.parameters.withNormalize(params.normalize)
+    if (config?.normalize) {
+      parameters.withNormalize(config.normalize)
     }
-    if (params?.tol) {
-      this.parameters.withTol(params.tol)
+    if (config?.tol) {
+      parameters.withTol(config.tol)
     }
-    if (params?.maxIter) {
-      this.parameters.withMaxIter(params.maxIter)
+    if (config?.maxIter) {
+      parameters.withMaxIter(config.maxIter)
+    }
+    super(parameters)
+    this.config = config
+    this.estimatorClasses = {
+      bigI64: LassoF64BigI64,
+      bigU64: LassoF64BigU64,
+      i64: LassoF64I64,
+      f64: LassoF64F64,
     }
   }
 
-  fit(x: XType, y: YType): Lasso {
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    if (!y || y.length === 0) {
-      throw new Error('Input arrays cannot be empty.')
-    }
-
-    if (y instanceof Float64Array) {
-      this.estimator = LassoF64F64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y instanceof BigInt64Array) {
-      this.estimator = LassoF64BigI64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y instanceof BigUint64Array) {
-      this.estimator = LassoF64BigU64.fit(matrix.asF64(), y, this.parameters)
-    } else if (y.every((val) => Number.isInteger(val))) {
-      this.estimator = LassoF64I64.fit(matrix.asF64(), y, this.parameters)
+  protected fitEstimator(matrix: DenseMatrix, y: YType): LassoRs {
+    const EstimatorClass = this.estimatorClasses[this._yType!]
+    if (EstimatorClass !== null) {
+      return EstimatorClass.fit(matrix.asF64(), y, this.parameters)
     } else {
-      throw new Error('Unsupported data type!')
+      throw new Error(`${this.name}: Unsupported data type for y '${y.constructor?.name || typeof y}'`)
     }
-
-    return this
   }
 
-  predict(x: XType): YType {
-    if (this.estimator === null) {
-      throw new Error("The 'fit' method should called before the 'predict' method is called.")
-    }
-
-    let matrix = x instanceof DenseMatrix ? x : DenseMatrix.f64(x)
-
-    return this.estimator.predict(matrix.asF64())
+  protected getComponentColumnName(index: number): string {
+    return `LASSO${index + 1}`
   }
 
-  serialize() {
-    return this.estimator?.serialize()
+  predictMatrix(matrix: DenseMatrix): YType {
+    return this.estimator!.predict(matrix.asF64())
   }
 
-  static deserialize(data: Buffer, estimatorType: EstimatorType): Lasso {
-    let instance = new Lasso()
-    switch (estimatorType) {
-      case EstimatorType.F64BigI64:
-        instance.estimator = LassoF64BigI64.deserialize(data)
-        break
-      case EstimatorType.F64BigU64:
-        instance.estimator = LassoF64BigU64.deserialize(data)
-        break
-      case EstimatorType.F64F64:
-        instance.estimator = LassoF64F64.deserialize(data)
-        break
-      case EstimatorType.F64I64:
-        instance.estimator = LassoF64I64.deserialize(data)
-        break
-      default:
-        throw new Error(`Unrecognized estimator type: '${estimatorType}'`)
+  serialize(): LassoSerializedData {
+    this.ensureFitted('serialize')
+
+    return {
+      columns: this.columns,
+      data: this.estimator!.serialize(),
+      params: this.config,
+      yType: this._yType!,
     }
+  }
+
+  static deserialize(data: LassoSerializedData): Lasso {
+    let instance = new Lasso(data.params)
+    const EstimatorClass = instance.estimatorClasses[data.yType]
+    if (EstimatorClass === null) {
+      throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`)
+    }
+    instance.estimator = EstimatorClass.deserialize(data.data)
+    instance._isFitted = true
+    instance._yType = data.yType
     return instance
   }
 }
