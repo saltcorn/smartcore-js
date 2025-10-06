@@ -27,7 +27,7 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
-      "require": "./dist/cjs/index.js"
+      "require": "./dist-cjs/index.js"
     }
   },
   "napi": {
