@@ -21,6 +21,7 @@
   ],
   "files": [
     "dist",
+    "dist-cjs",
     "core-bindings",
     "browser.js"
   ],
