@@ -14,5 +14,5 @@
     "outDir": "./dist"
   },
   "include": ["."],
-  "exclude": ["node_modules", "bench", "core-bindings/**/*", "test/**/*", "dist/**/*"]
+  "exclude": ["node_modules", "bench", "core-bindings/**/*", "test/**/*", "dist/**/*", "dist-cjs/**/*"]
 }
