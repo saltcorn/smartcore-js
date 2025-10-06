@@ -1,4 +1,4 @@
-import { SVDF64, SVDParameters } from '../../core-bindings/index.js';
+import { SVDF64, SVDParameters } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import { BaseTransformer } from '../base_transformer.js';
 interface SVDParams {

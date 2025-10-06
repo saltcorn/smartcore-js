@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PCA = void 0;
-const index_js_1 = require("../../core-bindings/index.js");
+const index_js_1 = require("../core-bindings/index.js");
 const index_js_2 = require("../linalg/index.js");
 const base_transformer_js_1 = require("../base_transformer.js");
 class PCA extends base_transformer_js_1.BaseTransformer {

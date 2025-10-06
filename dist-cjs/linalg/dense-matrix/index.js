@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DenseMatrix = void 0;
-const index_js_1 = require("../../../core-bindings/index.js");
+const index_js_1 = require("../../core-bindings/index.js");
 class DenseMatrix {
     constructor(data, columnMajor) {
         if (data instanceof Array) {

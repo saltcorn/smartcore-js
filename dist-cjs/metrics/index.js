@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DistanceType = void 0;
 exports.accuracyScore = accuracyScore;
-const index_js_1 = require("../../core-bindings/index.js");
+const index_js_1 = require("../core-bindings/index.js");
 function toBigInt64Array(values) {
     if (!values.every((n) => Number.isInteger(n))) {
         throw new Error("Can't convert an Array containing non-integers to a BigInt64Array.");

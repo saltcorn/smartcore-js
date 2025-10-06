@@ -1,4 +1,4 @@
-import { DenseMatrixF64, DenseMatrixI64, DenseMatrixU64 } from '../../../core-bindings/index.js';
+import { DenseMatrixF64, DenseMatrixI64, DenseMatrixU64 } from '../../core-bindings/index.js';
 class DenseMatrix {
     constructor(data, columnMajor) {
         if (data instanceof Array) {

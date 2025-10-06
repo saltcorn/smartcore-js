@@ -5,7 +5,7 @@ import {
   KNNClassifierF64BigU64ManhattanF64,
   KNNClassifierF64I64ManhattanF64,
   ManhattanF64,
-} from '../../../core-bindings/index.js'
+} from '../../core-bindings/index.js'
 import { GenericKNNClassifier } from './generic.js'
 import { type IKNNClassifierParameters, type YTypeKey } from './index.js'
 import { type XType, type YType } from '../../index.js'

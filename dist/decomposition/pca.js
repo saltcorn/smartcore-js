@@ -1,4 +1,4 @@
-import { PCAF64, PCAParameters } from '../../core-bindings/index.js';
+import { PCAF64, PCAParameters } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import { BaseTransformer } from '../base_transformer.js';
 class PCA extends BaseTransformer {

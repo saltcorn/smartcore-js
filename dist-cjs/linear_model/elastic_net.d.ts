@@ -1,4 +1,4 @@
-import { ElasticNetF64I64, ElasticNetParameters, ElasticNetF64F64, ElasticNetF64BigI64, ElasticNetF64BigU64 } from '../../core-bindings/index.js';
+import { ElasticNetF64I64, ElasticNetParameters, ElasticNetF64F64, ElasticNetF64BigI64, ElasticNetF64BigU64 } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import type { YType } from '../index.js';
 import { BasePredictor } from '../base_predictor.js';

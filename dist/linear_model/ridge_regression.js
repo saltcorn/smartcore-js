@@ -1,4 +1,4 @@
-import { RidgeRegressionF64I64, RidgeRegressionF64Parameters, RidgeRegressionF64F64, RidgeRegressionF64BigI64, RidgeRegressionF64BigU64, } from '../../core-bindings/index.js';
+import { RidgeRegressionF64I64, RidgeRegressionF64Parameters, RidgeRegressionF64F64, RidgeRegressionF64BigI64, RidgeRegressionF64BigU64, } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import {} from '../base_estimator.js';
 import { BasePredictor } from '../base_predictor.js';

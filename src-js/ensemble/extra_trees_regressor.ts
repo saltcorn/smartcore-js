@@ -4,7 +4,7 @@ import {
   ExtraTreesRegressorF64I64,
   ExtraTreesRegressorParameters,
   ExtraTreesRegressorF64F64,
-} from '../../core-bindings/index.js'
+} from '../core-bindings/index.js'
 import type { YType } from '../index.js'
 import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
 import { BasePredictor } from '../base_predictor.js'

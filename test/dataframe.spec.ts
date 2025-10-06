@@ -1,4 +1,4 @@
-import { dataFrame } from '../dist/index.js'
+import { dataFrame } from '../src-js/index.js'
 import assert from 'assert'
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 

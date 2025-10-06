@@ -1,5 +1,4 @@
-import { RandomForestRegressorF64BigI64, RandomForestRegressorF64BigU64, RandomForestRegressorF64I64, RandomForestRegressorParameters } from '../../core-bindings/index.js';
-import type { SplitCriterion } from '../../core-bindings/index.js';
+import { RandomForestRegressorF64BigI64, RandomForestRegressorF64BigU64, RandomForestRegressorF64I64, RandomForestRegressorParameters, type SplitCriterion } from '../core-bindings/index.js';
 import type { YType } from '../index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import { BasePredictor } from '../base_predictor.js';

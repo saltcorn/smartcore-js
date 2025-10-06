@@ -1,4 +1,4 @@
-import { AccuracyF64, AccuracyI64, AccuracyU64 } from '../../core-bindings/index.js'
+import { AccuracyF64, AccuracyI64, AccuracyU64 } from '../core-bindings/index.js'
 import { type YType } from '../index.js'
 
 function toBigInt64Array(values: number[]): BigInt64Array {

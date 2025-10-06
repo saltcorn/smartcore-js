@@ -1,4 +1,4 @@
-import {} from '../../../core-bindings/index.js';
+import {} from '../../core-bindings/index.js';
 import { DistanceType } from '../../metrics/index.js';
 import { KNNRegressorEuclidian } from './euclidian.js';
 import { KNNRegressorHamming } from './hamming.js';

@@ -1,4 +1,4 @@
-import { ExtraTreesRegressorF64BigU64, ExtraTreesRegressorF64BigI64, ExtraTreesRegressorF64I64, ExtraTreesRegressorParameters, ExtraTreesRegressorF64F64, } from '../../core-bindings/index.js';
+import { ExtraTreesRegressorF64BigU64, ExtraTreesRegressorF64BigI64, ExtraTreesRegressorF64I64, ExtraTreesRegressorParameters, ExtraTreesRegressorF64F64, } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import { BasePredictor } from '../base_predictor.js';
 import {} from '../base_estimator.js';

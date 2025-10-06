@@ -10,14 +10,12 @@ import {
   MahalanobisF64,
   ManhattanF64,
   MinkowskiF64,
-} from '../../core-bindings/index.js'
-import {
   DBSCANF64HammingF64Parameters,
   DBSCANF64MahalanobisF64Parameters,
   DBSCANF64ManhattanF64Parameters,
   DBSCANF64MinkowskiF64Parameters,
   type KNNAlgorithmName,
-} from '../../core-bindings/index.js'
+} from '../core-bindings/index.js'
 import type { YType } from '../index.js'
 import { BasePredictor } from '../base_predictor.js'
 import { type YTypeKey } from '../base_estimator.js'

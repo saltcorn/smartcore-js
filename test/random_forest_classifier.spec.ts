@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { ensemble } from '../dist/index.js'
+import { ensemble } from '../src-js/index.js'
 
 let { RandomForestClassifier } = ensemble
 

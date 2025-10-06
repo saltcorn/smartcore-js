@@ -1,4 +1,4 @@
-import { KNNRegressorF64EuclidianF64Parameters } from '../../../core-bindings/index.js';
+import { KNNRegressorF64EuclidianF64Parameters } from '../../core-bindings/index.js';
 import { type IKNNRegressorParameters, type YTypeKey } from './index.js';
 import { type XType, type YType } from '../../index.js';
 declare class KNNRegressorEuclidian {

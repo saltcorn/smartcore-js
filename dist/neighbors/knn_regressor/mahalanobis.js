@@ -1,4 +1,4 @@
-import { KNNRegressorF64EuclidianF64Parameters, KNNRegressorF64MahalanobisF64Parameters, KNNRegressorF64BigI64MahalanobisF64, KNNRegressorF64BigU64MahalanobisF64, KNNRegressorF64I64MahalanobisF64, MahalanobisF64, KNNRegressorF64F64MahalanobisF64, } from '../../../core-bindings/index.js';
+import { KNNRegressorF64EuclidianF64Parameters, KNNRegressorF64MahalanobisF64Parameters, KNNRegressorF64BigI64MahalanobisF64, KNNRegressorF64BigU64MahalanobisF64, KNNRegressorF64I64MahalanobisF64, MahalanobisF64, KNNRegressorF64F64MahalanobisF64, } from '../../core-bindings/index.js';
 import { GenericKNNRegressor } from './generic.js';
 import {} from './index.js';
 import { DenseMatrix } from '../../index.js';

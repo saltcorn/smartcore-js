@@ -1,4 +1,4 @@
-import { KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64MinkowskiF64Parameters, KNNClassifierF64BigI64MinkowskiF64, KNNClassifierF64BigU64MinkowskiF64, KNNClassifierF64I64MinkowskiF64, MinkowskiF64, } from '../../../core-bindings/index.js';
+import { KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64MinkowskiF64Parameters, KNNClassifierF64BigI64MinkowskiF64, KNNClassifierF64BigU64MinkowskiF64, KNNClassifierF64I64MinkowskiF64, MinkowskiF64, } from '../../core-bindings/index.js';
 import { GenericKNNClassifier } from './generic.js';
 import {} from './index.js';
 import {} from '../../index.js';

@@ -1,4 +1,4 @@
-import { CategoricalNBBigU64, CategoricalNBParameters } from '../../core-bindings/index.js';
+import { CategoricalNBBigU64, CategoricalNBParameters } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import { BasePredictor } from '../base_predictor.js';
 import {} from '../base_estimator.js';

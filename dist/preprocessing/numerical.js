@@ -1,4 +1,4 @@
-import { StandardScalerF64, StandardScalerParameters } from '../../core-bindings/index.js';
+import { StandardScalerF64, StandardScalerParameters } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import { BaseTransformer } from '../base_transformer.js';
 class StandardScaler extends BaseTransformer {

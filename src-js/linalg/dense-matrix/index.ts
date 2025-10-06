@@ -1,4 +1,4 @@
-import { DenseMatrixF64, DenseMatrixI64, DenseMatrixU64 } from '../../../core-bindings/index.js'
+import { DenseMatrixF64, DenseMatrixI64, DenseMatrixU64 } from '../../core-bindings/index.js'
 
 type DenseMatrixRs = DenseMatrixF64 | DenseMatrixI64 | DenseMatrixU64
 

@@ -8,7 +8,7 @@ exports.loadDigits = loadDigits;
 exports.makeCircles = makeCircles;
 exports.makeBlobs = makeBlobs;
 exports.makeMoons = makeMoons;
-const index_js_1 = require("../../core-bindings/index.js");
+const index_js_1 = require("../core-bindings/index.js");
 const index_js_2 = require("../linalg/index.js");
 class Dataset {
     constructor(inner) {

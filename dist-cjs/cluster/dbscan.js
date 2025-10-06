@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DBSCAN = void 0;
-const index_js_1 = require("../../core-bindings/index.js");
+const index_js_1 = require("../core-bindings/index.js");
 const base_predictor_js_1 = require("../base_predictor.js");
 class DBSCAN extends base_predictor_js_1.BasePredictor {
     constructor(params) {

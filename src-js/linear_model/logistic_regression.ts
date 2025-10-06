@@ -3,9 +3,9 @@ import {
   LogisticRegressionParametersF64,
   LogisticRegressionF64BigI64,
   LogisticRegressionF64BigU64,
-} from '../../core-bindings/index.js'
+  type LogisticRegressionSolverName,
+} from '../core-bindings/index.js'
 import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
-import type { LogisticRegressionSolverName } from '../../core-bindings/index.js'
 import type { YType } from '../index.js'
 import { BasePredictor } from '../base_predictor.js'
 import { type YTypeKey } from '../base_estimator.js'

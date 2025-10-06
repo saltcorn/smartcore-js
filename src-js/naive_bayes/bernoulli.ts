@@ -1,4 +1,4 @@
-import { BernoulliNBF64BigU64, BernoulliNBF64Parameters } from '../../core-bindings/index.js'
+import { BernoulliNBF64BigU64, BernoulliNBF64Parameters } from '../core-bindings/index.js'
 import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
 import type { YType } from '../index.js'
 import { BasePredictor } from '../base_predictor.js'

@@ -1,4 +1,4 @@
-import { GaussianNBF64BigU64, GaussianNBParameters } from '../../core-bindings/index.js';
+import { GaussianNBF64BigU64, GaussianNBParameters } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import type { YType } from '../index.js';
 import { BasePredictor } from '../base_predictor.js';

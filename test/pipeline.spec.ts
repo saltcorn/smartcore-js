@@ -12,8 +12,8 @@ import {
   naiveBayes,
   neighbors,
   dataFrame,
-} from '../dist/index.js'
-import { HammingF64, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../core-bindings/index.js'
+} from '../src-js/index.js'
+import { HammingF64, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-js/core-bindings/index.js'
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel

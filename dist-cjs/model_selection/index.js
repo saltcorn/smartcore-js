@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.trainTestSplit = trainTestSplit;
-const index_js_1 = require("../../core-bindings/index.js");
+const index_js_1 = require("../core-bindings/index.js");
 const index_js_2 = require("../linalg/index.js");
 function trainTestSplit(x, y, params) {
     x = x instanceof index_js_2.DenseMatrix ? x : index_js_2.DenseMatrix.f64(x);

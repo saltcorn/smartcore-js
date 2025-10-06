@@ -1,4 +1,4 @@
-import { type KNNAlgorithmName, type KNNWeightFunction } from '../../../core-bindings/index.js'
+import { type KNNAlgorithmName, type KNNWeightFunction } from '../../core-bindings/index.js'
 import type { XType, YType } from '../../index.js'
 import { DistanceType } from '../../metrics/index.js'
 import type { Estimator, Predictor } from '../../pipeline/index.js'

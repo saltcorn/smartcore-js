@@ -1,4 +1,4 @@
-import { type KNNAlgorithmName, type KNNWeightFunction } from '../../../core-bindings/index.js';
+import { type KNNAlgorithmName, type KNNWeightFunction } from '../../core-bindings/index.js';
 import type { XType, YType } from '../../index.js';
 import { DistanceType } from '../../metrics/index.js';
 import type { Estimator, Predictor } from '../../pipeline/index.js';
@@ -19,23 +19,23 @@ declare class KNNClassifier implements Estimator<XType, YType, KNNClassifier>, P
     fit(x: XType, y: YType): KNNClassifier;
     predict(x: XType): YType;
     serialize(): {
-        params: import("../../../core-bindings/index.js").KNNClassifierF64EuclidianF64Parameters;
+        params: import("../../core-bindings/index.js").KNNClassifierF64EuclidianF64Parameters;
         estimatorKey: YTypeKey | null;
         model: any;
     } | {
-        params: import("../../../core-bindings/index.js").KNNClassifierF64HammingF64Parameters;
+        params: import("../../core-bindings/index.js").KNNClassifierF64HammingF64Parameters;
         estimatorKey: YTypeKey | null;
         model: any;
     } | {
-        params: import("../../../core-bindings/index.js").KNNClassifierF64MahalanobisF64Parameters;
+        params: import("../../core-bindings/index.js").KNNClassifierF64MahalanobisF64Parameters;
         estimatorKey: YTypeKey | null;
         model: any;
     } | {
-        params: import("../../../core-bindings/index.js").KNNClassifierF64ManhattanF64Parameters;
+        params: import("../../core-bindings/index.js").KNNClassifierF64ManhattanF64Parameters;
         estimatorKey: YTypeKey | null;
         model: any;
     } | {
-        params: import("../../../core-bindings/index.js").KNNClassifierF64MinkowskiF64Parameters;
+        params: import("../../core-bindings/index.js").KNNClassifierF64MinkowskiF64Parameters;
         estimatorKey: YTypeKey | null;
         model: any;
     };

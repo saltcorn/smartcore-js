@@ -1,4 +1,4 @@
-import { KMeansF64BigI64, KMeansF64I64, KMeansParameters, KMeansF64F64 } from '../../core-bindings/index.js';
+import { KMeansF64BigI64, KMeansF64I64, KMeansParameters, KMeansF64F64 } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import type { YType } from '../index.js';
 import type { YTypeKey } from '../base_estimator.js';

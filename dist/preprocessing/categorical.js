@@ -1,4 +1,4 @@
-import { OneHotEncoderF64, OneHotEncoderParameters } from '../../core-bindings/index.js';
+import { OneHotEncoderF64, OneHotEncoderParameters } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import { BaseTransformer } from '../base_transformer.js';
 class OneHotEncoder extends BaseTransformer {

@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KNNClassifierEuclidian = void 0;
-const index_js_1 = require("../../../core-bindings/index.js");
+const index_js_1 = require("../../core-bindings/index.js");
 const generic_js_1 = require("./generic.js");
 class KNNClassifierEuclidian {
     constructor(params) {

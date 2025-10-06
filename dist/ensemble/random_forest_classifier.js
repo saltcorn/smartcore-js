@@ -1,4 +1,4 @@
-import { RandomForestClassifierF64BigI64, RandomForestClassifierF64BigU64, RandomForestClassifierF64I64, RandomForestClassifierParameters, } from '../../core-bindings/index.js';
+import { RandomForestClassifierF64BigI64, RandomForestClassifierF64BigU64, RandomForestClassifierF64I64, RandomForestClassifierParameters, } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import { BasePredictor } from '../base_predictor.js';
 import {} from '../base_estimator.js';

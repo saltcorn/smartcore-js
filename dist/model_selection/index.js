@@ -1,4 +1,4 @@
-import { trainTestSplitF64F64, trainTestSplitF64I64, trainTestSplitF64BigI64, trainTestSplitF64BigU64, } from '../../core-bindings/index.js';
+import { trainTestSplitF64F64, trainTestSplitF64I64, trainTestSplitF64BigI64, trainTestSplitF64BigU64, } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 function trainTestSplit(x, y, params) {
     x = x instanceof DenseMatrix ? x : DenseMatrix.f64(x);

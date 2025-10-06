@@ -6,7 +6,7 @@ import {
   KNNRegressorF64I64MinkowskiF64,
   MinkowskiF64,
   KNNRegressorF64F64MinkowskiF64,
-} from '../../../core-bindings/index.js'
+} from '../../core-bindings/index.js'
 import { GenericKNNRegressor } from './generic.js'
 import { type IKNNRegressorParameters, type YTypeKey } from './index.js'
 import { type XType, type YType } from '../../index.js'

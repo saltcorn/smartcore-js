@@ -1,4 +1,4 @@
-import { AccuracyF64, AccuracyI64, AccuracyU64 } from '../../core-bindings/index.js';
+import { AccuracyF64, AccuracyI64, AccuracyU64 } from '../core-bindings/index.js';
 import {} from '../index.js';
 function toBigInt64Array(values) {
     if (!values.every((n) => Number.isInteger(n))) {

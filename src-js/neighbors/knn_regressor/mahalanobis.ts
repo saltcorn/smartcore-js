@@ -6,7 +6,7 @@ import {
   KNNRegressorF64I64MahalanobisF64,
   MahalanobisF64,
   KNNRegressorF64F64MahalanobisF64,
-} from '../../../core-bindings/index.js'
+} from '../../core-bindings/index.js'
 import { GenericKNNRegressor } from './generic.js'
 import { type IKNNRegressorParameters, type YTypeKey } from './index.js'
 import { DenseMatrix, type XType, type YType } from '../../index.js'

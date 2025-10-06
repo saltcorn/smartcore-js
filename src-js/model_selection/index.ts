@@ -3,7 +3,7 @@ import {
   trainTestSplitF64I64,
   trainTestSplitF64BigI64,
   trainTestSplitF64BigU64,
-} from '../../core-bindings/index.js'
+} from '../core-bindings/index.js'
 import type { XType, YType } from '../index.js'
 import { DenseMatrix } from '../linalg/index.js'
 

@@ -1,4 +1,4 @@
-import { KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64MahalanobisF64Parameters, KNNClassifierF64BigI64MahalanobisF64, KNNClassifierF64BigU64MahalanobisF64, KNNClassifierF64I64MahalanobisF64, MahalanobisF64, } from '../../../core-bindings/index.js';
+import { KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64MahalanobisF64Parameters, KNNClassifierF64BigI64MahalanobisF64, KNNClassifierF64BigU64MahalanobisF64, KNNClassifierF64I64MahalanobisF64, MahalanobisF64, } from '../../core-bindings/index.js';
 import { GenericKNNClassifier } from './generic.js';
 import {} from './index.js';
 import { DenseMatrix } from '../../index.js';

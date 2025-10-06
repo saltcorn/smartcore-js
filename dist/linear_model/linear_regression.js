@@ -1,4 +1,4 @@
-import { LinearRegressionF64I64, LinearRegressionParameters, LinearRegressionF64F64, LinearRegressionF64BigI64, LinearRegressionF64BigU64, } from '../../core-bindings/index.js';
+import { LinearRegressionF64I64, LinearRegressionParameters, LinearRegressionF64F64, LinearRegressionF64BigI64, LinearRegressionF64BigU64, } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import { BasePredictor } from '../base_predictor.js';
 import {} from '../base_estimator.js';

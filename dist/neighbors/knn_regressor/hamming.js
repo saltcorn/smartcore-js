@@ -1,4 +1,4 @@
-import { KNNRegressorF64EuclidianF64Parameters, KNNRegressorF64HammingF64Parameters, KNNRegressorF64BigI64HammingF64, KNNRegressorF64BigU64HammingF64, KNNRegressorF64I64HammingF64, HammingF64, KNNRegressorF64F64HammingF64, } from '../../../core-bindings/index.js';
+import { KNNRegressorF64EuclidianF64Parameters, KNNRegressorF64HammingF64Parameters, KNNRegressorF64BigI64HammingF64, KNNRegressorF64BigU64HammingF64, KNNRegressorF64I64HammingF64, HammingF64, KNNRegressorF64F64HammingF64, } from '../../core-bindings/index.js';
 import { GenericKNNRegressor } from './generic.js';
 import {} from './index.js';
 import {} from '../../index.js';

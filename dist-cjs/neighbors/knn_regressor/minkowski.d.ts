@@ -1,4 +1,4 @@
-import { KNNRegressorF64MinkowskiF64Parameters } from '../../../core-bindings/index.js';
+import { KNNRegressorF64MinkowskiF64Parameters } from '../../core-bindings/index.js';
 import { type IKNNRegressorParameters, type YTypeKey } from './index.js';
 import { type XType, type YType } from '../../index.js';
 declare class KNNRegressorMinkowski {

@@ -36,7 +36,7 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.neighbors = exports.naiveBayes = exports.decomposition = exports.cluster = exports.pipeline = exports.metrics = exports.modelSelection = exports.dataset = exports.preprocessing = exports.ensemble = exports.linearModel = exports.dataFrame = void 0;
+exports.coreBindings = exports.neighbors = exports.naiveBayes = exports.decomposition = exports.cluster = exports.pipeline = exports.metrics = exports.modelSelection = exports.dataset = exports.preprocessing = exports.ensemble = exports.linearModel = exports.dataFrame = void 0;
 exports.dataFrame = __importStar(require("./data_frame.js"));
 __exportStar(require("./linalg/index.js"), exports);
 exports.linearModel = __importStar(require("./linear_model/index.js"));
@@ -50,3 +50,4 @@ exports.cluster = __importStar(require("./cluster/index.js"));
 exports.decomposition = __importStar(require("./decomposition/index.js"));
 exports.naiveBayes = __importStar(require("./naive_bayes/index.js"));
 exports.neighbors = __importStar(require("./neighbors/index.js"));
+exports.coreBindings = __importStar(require("./core-bindings/index.js"));

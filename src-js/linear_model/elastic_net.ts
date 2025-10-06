@@ -4,7 +4,7 @@ import {
   ElasticNetF64F64,
   ElasticNetF64BigI64,
   ElasticNetF64BigU64,
-} from '../../core-bindings/index.js'
+} from '../core-bindings/index.js'
 import { DenseMatrix, type DenseMatrixRs } from '../linalg/index.js'
 import type { YType } from '../index.js'
 import { BasePredictor } from '../base_predictor.js'

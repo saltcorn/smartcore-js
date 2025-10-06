@@ -1,4 +1,4 @@
-import { KMeansF64BigI64, KMeansF64I64, KMeansParameters, KMeansF64F64 } from '../../core-bindings/index.js';
+import { KMeansF64BigI64, KMeansF64I64, KMeansParameters, KMeansF64F64 } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import { BasePredictor } from '../base_predictor.js';
 import {} from '../linalg/index.js';

@@ -1,4 +1,4 @@
-import { LogisticRegressionF64I64, LogisticRegressionParametersF64, LogisticRegressionF64BigI64, LogisticRegressionF64BigU64, } from '../../core-bindings/index.js';
+import { LogisticRegressionF64I64, LogisticRegressionParametersF64, LogisticRegressionF64BigI64, LogisticRegressionF64BigU64, } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import { BasePredictor } from '../base_predictor.js';
 import {} from '../base_estimator.js';

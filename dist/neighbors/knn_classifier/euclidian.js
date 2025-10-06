@@ -1,4 +1,4 @@
-import { KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64BigI64EuclidianF64, KNNClassifierF64BigU64EuclidianF64, KNNClassifierF64I64EuclidianF64, } from '../../../core-bindings/index.js';
+import { KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64BigI64EuclidianF64, KNNClassifierF64BigU64EuclidianF64, KNNClassifierF64I64EuclidianF64, } from '../../core-bindings/index.js';
 import { GenericKNNClassifier } from './generic.js';
 import {} from './index.js';
 import {} from '../../index.js';

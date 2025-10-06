@@ -1,4 +1,4 @@
-import { LassoF64I64, LassoParameters, LassoF64F64, LassoF64BigI64, LassoF64BigU64 } from '../../core-bindings/index.js';
+import { LassoF64I64, LassoParameters, LassoF64F64, LassoF64BigI64, LassoF64BigU64 } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 import type { YType } from '../index.js';
 import { BasePredictor } from '../base_predictor.js';
