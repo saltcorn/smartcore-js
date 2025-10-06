@@ -20,8 +20,8 @@
     "node-addon-api"
   ],
   "files": [
-    "index.d.ts",
-    "index.js",
+    "dist",
+    "core-bindings",
     "browser.js"
   ],
   "napi": {
