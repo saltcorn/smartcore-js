@@ -1,4 +1,3 @@
-// import { DataFrame } from '../data_frame.js'
 import { dataFrame } from '../index.js';
 import { StepAdapter } from './step_adapter.js';
 class Pipeline {
@@ -163,9 +162,6 @@ class Pipeline {
             const adapter = new StepAdapter(step, stepName);
             if (adapter.isTransformer) {
                 Xt = this._fitTransformOne(adapter, Xt, y, stepIdx);
-                // if (Xt instanceof DataFrame) {
-                //   console.log(`[Pipeline] after ${stepName}: `, Xt.columnNames)
-                // }
             }
             else {
                 adapter.fit(Xt, y);

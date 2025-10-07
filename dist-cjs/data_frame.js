@@ -168,27 +168,10 @@ class DataFrame {
     getColumns() {
         return this._columnNames.map((colName) => this.getColumnByName(colName));
     }
-    //   private reshapeMatrix(matrix: number[][]): number[][] {
-    //     const rows = matrix.length
-    //     if (rows === 0) return []
-    //     const cols = matrix[0].length
-    //     const reshapedMatrix: number[][] = Array(cols)
-    //       .fill(null)
-    //       .map(() => Array(rows))
-    //     for (let i = 0; i < rows * cols; i++) {
-    //       const sourceRow = Math.floor(i / cols)
-    //       const sourceCol = i % rows
-    //       const targetRow = Math.floor(i / rows)
-    //       const targetCol = i % rows
-    //       reshapedMatrix[targetRow][targetCol] = matrix[sourceRow][sourceCol]
-    //     }
-    //     return reshapedMatrix
-    //   }
     /**
      * Returns numeric columns only as number[][]
      */
     getNumericColumns() {
-        // if (columnMajor)
         return this._columnNames.map((colName) => {
             const column = this.getColumnByName(colName);
             return column.map((value, idx) => {
@@ -198,10 +181,6 @@ class DataFrame {
                 return value;
             });
         });
-        // else {
-        //   const numericColumns = this.getNumericColumns(true)
-        //   return this.reshapeMatrix(numericColumns)
-        // }
     }
     /**
      * Returns bigint columns only as bigint[][]
@@ -246,7 +225,6 @@ class DataFrame {
      */
     selectColumnsByName(names) {
         // Validate column names
-        // console.log('DataFrame: ', this._columnNames)
         const invalidColumns = names.filter((name) => !this._columnNames.includes(name));
         if (invalidColumns.length > 0) {
             throw new Error(`Invalid column names: ${invalidColumns.join(', ')}`);

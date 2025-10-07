@@ -22,9 +22,6 @@ abstract class BasePredictor<TEstimator, TParams, PredictionType>
     this.ensureFitted('transform')
     this.validateInput(x)
 
-    if (x instanceof DenseMatrix) console.log(`[${this.name}].predict (x: ${x.nrows}, y: ${x.ncols})`)
-    if (x instanceof DataFrame) console.log(`[${this.name}].predict (x: ${x.rowsCount}, y: ${x.columnsCount}) `)
-
     const isDataFrame = x instanceof DataFrame
     let matrix: DenseMatrix
 

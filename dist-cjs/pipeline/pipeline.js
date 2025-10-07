@@ -1,7 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StepAdapter = exports.Pipeline = void 0;
-// import { DataFrame } from '../data_frame.js'
 const index_js_1 = require("../index.js");
 const step_adapter_js_1 = require("./step_adapter.js");
 Object.defineProperty(exports, "StepAdapter", { enumerable: true, get: function () { return step_adapter_js_1.StepAdapter; } });
@@ -167,9 +166,6 @@ class Pipeline {
             const adapter = new step_adapter_js_1.StepAdapter(step, stepName);
             if (adapter.isTransformer) {
                 Xt = this._fitTransformOne(adapter, Xt, y, stepIdx);
-                // if (Xt instanceof DataFrame) {
-                //   console.log(`[Pipeline] after ${stepName}: `, Xt.columnNames)
-                // }
             }
             else {
                 adapter.fit(Xt, y);

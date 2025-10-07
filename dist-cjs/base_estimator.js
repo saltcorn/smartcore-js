@@ -14,7 +14,6 @@ class BaseEstimator {
         this._yType = null;
         this.parameters = parameters;
         this.columns = selectedColumns ?? null;
-        // console.log(`BaseEstimator.constructor: `, this.columns)
     }
     /**
      * Check if model is fitted
@@ -39,7 +38,6 @@ class BaseEstimator {
                     this.columns = x.columnNames;
                 }
             }
-            //   console.log(`${this.name}.toMatrix: `, this.columns)
             return index_js_1.DenseMatrix.f64(x.getNumericColumns(), true);
         }
         return index_js_1.DenseMatrix.f64(x);
@@ -74,12 +72,7 @@ class BaseEstimator {
      */
     fit(x, y) {
         this.validateInput(x);
-        if (x instanceof index_js_1.DenseMatrix)
-            console.log(`[${this.name}].fit: (x: ${x.nrows}, y: ${x.ncols})`);
-        if (x instanceof data_frame_js_1.DataFrame)
-            console.log(`[${this.name}].fit: (x: ${x.rowsCount}, y: ${x.columnsCount})`);
         const matrix = this.toMatrix(this.getMatrixWindow(x));
-        console.log(`[${this.name}].fit (matrix): (x: ${matrix.nrows}, y: ${matrix.ncols})`);
         this.setYType(y);
         this.estimator = this.fitEstimator(matrix, y);
         this._isFitted = true;
@@ -119,7 +112,6 @@ class BaseEstimator {
     toDataFrame(matrix) {
         const rows = matrix.nrows;
         const cols = matrix.ncols;
-        console.log(`[${this.name}].toDataFrame (x: ${rows}, y: ${cols})`);
         const matrixData = matrix.asF64();
         // Build records with component names
         const records = [];
