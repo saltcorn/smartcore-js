@@ -5,6 +5,7 @@ import { BaseTransformer } from '../base_transformer.js'
 interface PCAParams {
   nComponents?: number
   correlationMatrix?: boolean
+  columns?: string[]
 }
 
 interface PCASerializedData {
@@ -35,7 +36,7 @@ class PCA extends BaseTransformer<PCARs, PCAParametersRs> {
       parameters.useCorrelationMatrix(config.correlationMatrix)
     }
 
-    super(parameters)
+    super(parameters, config.columns)
     this.config = config
   }
 

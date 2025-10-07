@@ -11,7 +11,7 @@ class SVD extends base_transformer_js_1.BaseTransformer {
         if (config.nComponents !== undefined) {
             parameters.withNComponents(config.nComponents);
         }
-        super(parameters);
+        super(parameters, config.columns);
         this.name = SVD.className;
         this.config = config;
     }

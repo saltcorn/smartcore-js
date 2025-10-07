@@ -4,6 +4,7 @@ import { BaseTransformer } from '../base_transformer.js';
 interface PCAParams {
     nComponents?: number;
     correlationMatrix?: boolean;
+    columns?: string[];
 }
 interface PCASerializedData {
     columns: string[] | null;

@@ -16,8 +16,10 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
 
   public abstract readonly name: string
 
-  constructor(parameters: TParams) {
+  constructor(parameters: TParams, selectedColumns?: string[]) {
     this.parameters = parameters
+    this.columns = selectedColumns ?? null
+    // console.log(`BaseEstimator.constructor: `, this.columns)
   }
 
   /**
@@ -38,9 +40,14 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
     if (x instanceof DataFrame) {
       // Store columns for later use in transform
       if (!this._isFitted) {
-        this.columns = x.columnNames
+        if (Array.isArray(this.columns) && this.columns.length > 0) {
+          this.columns = x.columnNames.filter((n) => this.columns?.includes(n))
+        } else {
+          this.columns = x.columnNames
+        }
       }
-      return DenseMatrix.f64(x.getNumericColumns())
+      //   console.log(`${this.name}.toMatrix: `, this.columns)
+      return DenseMatrix.f64(x.getNumericColumns(), true)
     }
 
     return DenseMatrix.f64(x)
@@ -64,11 +71,28 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
   }
 
   /**
+   * @returns data containing values from only the selected columns
+   */
+  protected getMatrixWindow(x: InputType): InputType {
+    const isDataFrame = x instanceof DataFrame
+
+    // Handle selective column transformation
+    if (isDataFrame && this.columns !== null) {
+      return x.selectColumnsByName(this.columns)
+    }
+
+    return x
+  }
+
+  /**
    * A template for the fit method
    */
   fit(x: InputType, y: YType): this {
     this.validateInput(x)
-    const matrix = this.toMatrix(x)
+    if (x instanceof DenseMatrix) console.log(`[${this.name}].fit: (x: ${x.nrows}, y: ${x.ncols})`)
+    if (x instanceof DataFrame) console.log(`[${this.name}].fit: (x: ${x.rowsCount}, y: ${x.columnsCount})`)
+    const matrix = this.toMatrix(this.getMatrixWindow(x))
+    console.log(`[${this.name}].fit (matrix): (x: ${matrix.nrows}, y: ${matrix.ncols})`)
 
     this.setYType(y)
     this.estimator = this.fitEstimator(matrix, y)
@@ -114,6 +138,7 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
   protected toDataFrame(matrix: DenseMatrix): DataFrame {
     const rows = matrix.nrows
     const cols = matrix.ncols
+    console.log(`[${this.name}].toDataFrame (x: ${rows}, y: ${cols})`)
     const matrixData = matrix.asF64()
 
     // Build records with component names
@@ -122,7 +147,18 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
     for (let i = 0; i < rows; i++) {
       const record: Record<string, number> = {}
       for (let j = 0; j < cols; j++) {
-        record[this.getComponentColumnName(j)] = matrixData.get([i, j])
+        let columnName: string
+        if (Array.isArray(this.columns) && this.columns.length !== 0) {
+          if (j >= this.columns.length) {
+            throw new Error(
+              `${this.name}: Column names count mismatch. Expected: ${cols} Found: ${this.columns.length}`,
+            )
+          }
+          columnName = this.columns[j]
+        } else {
+          columnName = this.getComponentColumnName(j)
+        }
+        record[columnName] = matrixData.get([i, j])
       }
       records.push(record)
     }

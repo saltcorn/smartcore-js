@@ -4,7 +4,7 @@ import { BaseTransformer } from '../base_transformer.js';
 class OneHotEncoder extends BaseTransformer {
     constructor(params) {
         const parameters = new OneHotEncoderParameters(params.categoricalParams);
-        super(parameters);
+        super(parameters, params.columns);
         this.name = OneHotEncoder.className;
     }
     fitEstimator(matrix) {

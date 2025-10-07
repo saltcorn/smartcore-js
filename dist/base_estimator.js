@@ -4,12 +4,14 @@ import { DataFrame } from './data_frame.js';
  * Abstract base class for estimators
  */
 class BaseEstimator {
-    constructor(parameters) {
+    constructor(parameters, selectedColumns) {
         this.estimator = null;
         this.columns = null;
         this._isFitted = false;
         this._yType = null;
         this.parameters = parameters;
+        this.columns = selectedColumns ?? null;
+        // console.log(`BaseEstimator.constructor: `, this.columns)
     }
     /**
      * Check if model is fitted
@@ -27,9 +29,15 @@ class BaseEstimator {
         if (x instanceof DataFrame) {
             // Store columns for later use in transform
             if (!this._isFitted) {
-                this.columns = x.columnNames;
+                if (Array.isArray(this.columns) && this.columns.length > 0) {
+                    this.columns = x.columnNames.filter((n) => this.columns?.includes(n));
+                }
+                else {
+                    this.columns = x.columnNames;
+                }
             }
-            return DenseMatrix.f64(x.getNumericColumns());
+            //   console.log(`${this.name}.toMatrix: `, this.columns)
+            return DenseMatrix.f64(x.getNumericColumns(), true);
         }
         return DenseMatrix.f64(x);
     }
@@ -48,11 +56,27 @@ class BaseEstimator {
         }
     }
     /**
+     * @returns data containing values from only the selected columns
+     */
+    getMatrixWindow(x) {
+        const isDataFrame = x instanceof DataFrame;
+        // Handle selective column transformation
+        if (isDataFrame && this.columns !== null) {
+            return x.selectColumnsByName(this.columns);
+        }
+        return x;
+    }
+    /**
      * A template for the fit method
      */
     fit(x, y) {
         this.validateInput(x);
-        const matrix = this.toMatrix(x);
+        if (x instanceof DenseMatrix)
+            console.log(`[${this.name}].fit: (x: ${x.nrows}, y: ${x.ncols})`);
+        if (x instanceof DataFrame)
+            console.log(`[${this.name}].fit: (x: ${x.rowsCount}, y: ${x.columnsCount})`);
+        const matrix = this.toMatrix(this.getMatrixWindow(x));
+        console.log(`[${this.name}].fit (matrix): (x: ${matrix.nrows}, y: ${matrix.ncols})`);
         this.setYType(y);
         this.estimator = this.fitEstimator(matrix, y);
         this._isFitted = true;
@@ -92,13 +116,24 @@ class BaseEstimator {
     toDataFrame(matrix) {
         const rows = matrix.nrows;
         const cols = matrix.ncols;
+        console.log(`[${this.name}].toDataFrame (x: ${rows}, y: ${cols})`);
         const matrixData = matrix.asF64();
         // Build records with component names
         const records = [];
         for (let i = 0; i < rows; i++) {
             const record = {};
             for (let j = 0; j < cols; j++) {
-                record[this.getComponentColumnName(j)] = matrixData.get([i, j]);
+                let columnName;
+                if (Array.isArray(this.columns) && this.columns.length !== 0) {
+                    if (j >= this.columns.length) {
+                        throw new Error(`${this.name}: Column names count mismatch. Expected: ${cols} Found: ${this.columns.length}`);
+                    }
+                    columnName = this.columns[j];
+                }
+                else {
+                    columnName = this.getComponentColumnName(j);
+                }
+                record[columnName] = matrixData.get([i, j]);
             }
             records.push(record);
         }

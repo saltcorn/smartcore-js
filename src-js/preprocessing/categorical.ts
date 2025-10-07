@@ -7,6 +7,7 @@ type OneHotEncoderParametersRs = OneHotEncoderParameters
 
 interface IOneHotEncoderParameters {
   categoricalParams: BigUint64Array
+  columns?: string[]
 }
 
 interface OneHotEncoderSerializedData {
@@ -21,7 +22,7 @@ class OneHotEncoder extends BaseTransformer<OneHotEncoderRs, OneHotEncoderParame
 
   constructor(params: IOneHotEncoderParameters) {
     const parameters = new OneHotEncoderParameters(params.categoricalParams)
-    super(parameters)
+    super(parameters, params.columns)
   }
 
   protected fitEstimator(matrix: DenseMatrix): OneHotEncoderF64 {

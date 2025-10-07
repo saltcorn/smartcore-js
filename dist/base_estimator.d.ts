@@ -12,7 +12,7 @@ declare abstract class BaseEstimator<TEstimator, TParams> implements Estimator<I
     protected _isFitted: boolean;
     protected _yType: YTypeKey | null;
     abstract readonly name: string;
-    constructor(parameters: TParams);
+    constructor(parameters: TParams, selectedColumns?: string[]);
     /**
      * Check if model is fitted
      */
@@ -25,6 +25,10 @@ declare abstract class BaseEstimator<TEstimator, TParams> implements Estimator<I
      * Validates input data
      */
     protected validateInput(x: InputType): void;
+    /**
+     * @returns data containing values from only the selected columns
+     */
+    protected getMatrixWindow(x: InputType): InputType;
     /**
      * A template for the fit method
      */

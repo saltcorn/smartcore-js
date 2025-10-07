@@ -4,6 +4,7 @@ import { BaseTransformer } from '../base_transformer.js'
 
 interface SVDParams {
   nComponents?: number
+  columns?: string[]
 }
 
 interface SVDSerializedData {
@@ -27,7 +28,7 @@ class SVD extends BaseTransformer<SVDRs, SVDParametersRs> {
     if (config.nComponents !== undefined) {
       parameters.withNComponents(config.nComponents)
     }
-    super(parameters)
+    super(parameters, config.columns)
     this.config = config
   }
 

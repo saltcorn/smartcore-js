@@ -6,7 +6,7 @@ import { BaseEstimator } from './base_estimator.js';
  * Abstract base class for transformers
  */
 declare abstract class BaseTransformer<TEstimator, TParams> extends BaseEstimator<TEstimator, TParams> implements Transformer<InputType> {
-    constructor(parameters: TParams);
+    constructor(parameters: TParams, selectedColumns?: string[]);
     /**
      * A template for the transform method
      * @param {InputType} x
@@ -16,5 +16,13 @@ declare abstract class BaseTransformer<TEstimator, TParams> extends BaseEstimato
      * @param {DenseMatrix} matrix
      */
     protected abstract transformMatrix(matrix: DenseMatrix): DenseMatrix;
+    /**
+     * Gets columns that were not selected for transformation
+     */
+    protected getRemainingColumns(x: DataFrame, selectedColumns: string[]): DataFrame | null;
+    /**
+     * Combines transformed columns with remaining untransformed columns
+     */
+    protected combineResults(transformed: DenseMatrix | DataFrame, remaining: DataFrame | null): DataFrame;
 }
 export { BaseTransformer };

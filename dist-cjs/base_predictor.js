@@ -18,11 +18,15 @@ class BasePredictor extends base_estimator_js_1.BaseEstimator {
     predict(x) {
         this.ensureFitted('transform');
         this.validateInput(x);
+        if (x instanceof index_js_1.DenseMatrix)
+            console.log(`[${this.name}].predict (x: ${x.nrows}, y: ${x.ncols})`);
+        if (x instanceof data_frame_js_1.DataFrame)
+            console.log(`[${this.name}].predict (x: ${x.rowsCount}, y: ${x.columnsCount}) `);
         const isDataFrame = x instanceof data_frame_js_1.DataFrame;
         let matrix;
         // Handle DataFrame column selection
         if (isDataFrame && this.columns !== null) {
-            matrix = index_js_1.DenseMatrix.f64(x.selectColumnsByName(this.columns).getNumericColumns());
+            matrix = index_js_1.DenseMatrix.f64(x.selectColumnsByName(this.columns).getNumericColumns(), true);
         }
         else {
             matrix = this.toMatrix(x);

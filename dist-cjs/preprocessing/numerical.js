@@ -7,7 +7,7 @@ class StandardScaler extends base_transformer_js_1.BaseTransformer {
     constructor(params) {
         const parameters = new index_js_1.StandardScalerParameters();
         const config = params || {};
-        super(parameters);
+        super(parameters, config.columns);
         this.name = StandardScaler.className;
         this.config = config;
     }
