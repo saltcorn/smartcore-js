@@ -20,6 +20,8 @@ type RidgeRegressionRs =
 type RidgeRegressionParametersRs = RidgeRegressionF64Parameters
 
 interface IRidgeRegressionParameters {
+  alpha?: number
+  normalize?: boolean
   solver?: RidgeRegressionSolverName
 }
 
@@ -46,8 +48,14 @@ class RidgeRegression extends BasePredictor<RidgeRegressionRs, RidgeRegressionPa
     const parameters = new RidgeRegressionF64Parameters()
     const config = params || {}
 
-    if (config?.solver) {
+    if (config.solver) {
       parameters.withSolver(config.solver)
+    }
+    if (config.alpha) {
+      parameters.withAlpha(config.alpha)
+    }
+    if (config.normalize) {
+      parameters.withNormalize(config.normalize)
     }
 
     super(parameters)
