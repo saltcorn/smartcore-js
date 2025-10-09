@@ -15,7 +15,7 @@ class PCA extends base_transformer_js_1.BaseTransformer {
         if (config.correlationMatrix !== undefined) {
             parameters.useCorrelationMatrix(config.correlationMatrix);
         }
-        super(parameters);
+        super(parameters, config.columns);
         this.name = PCA.className;
         this.config = config;
     }

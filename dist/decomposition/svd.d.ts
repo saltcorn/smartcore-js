@@ -3,6 +3,7 @@ import { DenseMatrix } from '../linalg/index.js';
 import { BaseTransformer } from '../base_transformer.js';
 interface SVDParams {
     nComponents?: number;
+    columns?: string[];
 }
 interface SVDSerializedData {
     columns: string[] | null;

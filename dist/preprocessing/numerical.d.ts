@@ -4,6 +4,7 @@ import { BaseTransformer } from '../base_transformer.js';
 type StandardScalerRs = StandardScalerF64;
 type StandardScalerParametersRs = StandardScalerParameters;
 interface IStandardScalerParameters {
+    columns?: string[];
 }
 interface StandardScalerSerializedData {
     columns: string[] | null;

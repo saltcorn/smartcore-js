@@ -5,6 +5,7 @@ type OneHotEncoderRs = OneHotEncoderF64;
 type OneHotEncoderParametersRs = OneHotEncoderParameters;
 interface IOneHotEncoderParameters {
     categoricalParams: BigUint64Array;
+    columns?: string[];
 }
 interface OneHotEncoderSerializedData {
     columns: string[] | null;

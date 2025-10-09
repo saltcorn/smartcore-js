@@ -10,8 +10,8 @@ abstract class BaseTransformer<TEstimator, TParams>
   extends BaseEstimator<TEstimator, TParams>
   implements Transformer<InputType>
 {
-  constructor(parameters: TParams) {
-    super(parameters)
+  constructor(parameters: TParams, selectedColumns?: string[]) {
+    super(parameters, selectedColumns)
   }
 
   /**
@@ -25,12 +25,19 @@ abstract class BaseTransformer<TEstimator, TParams>
     const isDataFrame = x instanceof DataFrame
     let matrix: DenseMatrix
 
-    // Handle DataFrame column selection
+    // Handle selective column transformation
     if (isDataFrame && this.columns !== null) {
-      matrix = DenseMatrix.f64(x.selectColumnsByName(this.columns).getNumericColumns())
-    } else {
-      matrix = this.toMatrix(x)
+      // Transform only selected columns
+      const selected = x.selectColumnsByName(this.columns)
+      matrix = this.toMatrix(selected)
+      const transformed = this.transformMatrix(matrix)
+
+      // Get remaining columns and combine
+      const remaining = this.getRemainingColumns(x, this.columns)
+      return this.combineResults(transformed, remaining)
     }
+
+    matrix = this.toMatrix(x)
 
     // 'transformMatrix' implementation is provided by subclasses
     const transformed = this.transformMatrix(matrix)
@@ -43,6 +50,54 @@ abstract class BaseTransformer<TEstimator, TParams>
    * @param {DenseMatrix} matrix
    */
   protected abstract transformMatrix(matrix: DenseMatrix): DenseMatrix
+
+  /**
+   * Gets columns that were not selected for transformation
+   */
+  protected getRemainingColumns(x: DataFrame, selectedColumns: string[]): DataFrame | null {
+    const allColumns = x.columnNames
+    const remainingColumnNames = allColumns.filter((col) => !selectedColumns.includes(col))
+
+    if (remainingColumnNames.length === 0) {
+      return null
+    }
+
+    return x.selectColumnsByName(remainingColumnNames)
+  }
+
+  /**
+   * Combines transformed columns with remaining untransformed columns
+   */
+  protected combineResults(transformed: DenseMatrix | DataFrame, remaining: DataFrame | null): DataFrame {
+    const transformedDf = transformed instanceof DenseMatrix ? this.toDataFrame(transformed) : transformed
+
+    if (remaining === null) {
+      return transformedDf
+    }
+
+    // Ensure the rows in both the transformed and remaining matrices columns are equal
+    const transformedRecords = transformedDf.toJSON()
+    const remainingRecords = remaining.toJSON()
+
+    if (transformedRecords.length !== remainingRecords.length) {
+      throw new Error(
+        `${this.name}: Row count mistmatch. Transformed: ${transformedRecords.length}, Remaining: ${remainingRecords.length}`,
+      )
+    }
+
+    // Merge records
+    const combinedRecords = transformedRecords.map((transformedRecord, idx) => ({
+      ...transformedRecord,
+      ...remainingRecords[idx],
+    }))
+
+    const transformedColumns = transformedDf.columnNames
+    const remainingColumns = remaining.columnNames
+
+    return new DataFrame(combinedRecords, {
+      include: [...transformedColumns, ...remainingColumns],
+    })
+  }
 }
 
 export { BaseTransformer }

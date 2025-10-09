@@ -6,7 +6,7 @@ const base_transformer_js_1 = require("../base_transformer.js");
 class OneHotEncoder extends base_transformer_js_1.BaseTransformer {
     constructor(params) {
         const parameters = new index_js_1.OneHotEncoderParameters(params.categoricalParams);
-        super(parameters);
+        super(parameters, params.columns);
         this.name = OneHotEncoder.className;
     }
     fitEstimator(matrix) {

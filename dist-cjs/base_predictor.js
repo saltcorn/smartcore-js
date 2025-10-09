@@ -22,7 +22,7 @@ class BasePredictor extends base_estimator_js_1.BaseEstimator {
         let matrix;
         // Handle DataFrame column selection
         if (isDataFrame && this.columns !== null) {
-            matrix = index_js_1.DenseMatrix.f64(x.selectColumnsByName(this.columns).getNumericColumns());
+            matrix = index_js_1.DenseMatrix.f64(x.selectColumnsByName(this.columns).getNumericColumns(), true);
         }
         else {
             matrix = this.toMatrix(x);

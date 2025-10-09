@@ -130,10 +130,15 @@ describe('Pipelines', () => {
   })
 
   it('StandardScaler + PCA + LogisticRegression', () => {
-    let pipe = makePipeline([new StandardScaler(), ['pca', new PCA({ nComponents: 25 })], new RidgeRegression()], {
-      verbose: true,
-    })
-    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1])
+    let columns = df.columnNames.filter((column) => !column.startsWith('customer'))
+    // console.log('Selected: ', columns)
+    let pipe = makePipeline(
+      [new StandardScaler(), ['pca', new PCA({ nComponents: 14, columns })], new RidgeRegression()],
+      {
+        verbose: true,
+      },
+    )
+    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
     pipe.fit(df, y).transform(df)
     const predictions = pipe.predict(df)
     assert(predictions)

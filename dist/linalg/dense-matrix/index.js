@@ -2,7 +2,7 @@ import { DenseMatrixF64, DenseMatrixI64, DenseMatrixU64 } from '../../core-bindi
 class DenseMatrix {
     constructor(data, columnMajor) {
         if (data instanceof Array) {
-            let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data);
+            let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor);
             if (valuesFlat.every((val) => Number.isInteger(val))) {
                 this.inner = new DenseMatrixI64(nrows, ncols, valuesFlat, columnMajor);
             }
@@ -25,12 +25,12 @@ class DenseMatrix {
     get nrows() {
         return this._nrows;
     }
-    static prepData(data) {
+    static prepData(data, columnMajor) {
         if (!(data instanceof Array)) {
             throw new Error('Expected data to be an array.');
         }
-        let nrows = data.length;
-        let ncols = data[0] instanceof Array ? data[0].length : 0;
+        let nrows = columnMajor ? (data[0] instanceof Array ? data[0].length : 0) : data.length;
+        let ncols = columnMajor ? data.length : data[0] instanceof Array ? data[0].length : 0;
         let valuesFlat = data.flat();
         return [nrows, ncols, valuesFlat];
     }
@@ -38,12 +38,12 @@ class DenseMatrix {
         return this.inner;
     }
     static f64(data, columnMajor) {
-        let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data);
+        let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor);
         let matrix = new DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor);
         return new DenseMatrix(matrix, columnMajor);
     }
     static u64(data, columnMajor) {
-        let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data);
+        let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor);
         let BigValuesFlat = valuesFlat.map((v) => BigInt(v));
         let matrix = new DenseMatrixU64(nrows, ncols, new BigUint64Array(BigValuesFlat), columnMajor);
         return new DenseMatrix(matrix, columnMajor);

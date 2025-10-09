@@ -27,7 +27,7 @@ abstract class BasePredictor<TEstimator, TParams, PredictionType>
 
     // Handle DataFrame column selection
     if (isDataFrame && this.columns !== null) {
-      matrix = DenseMatrix.f64(x.selectColumnsByName(this.columns).getNumericColumns())
+      matrix = DenseMatrix.f64(x.selectColumnsByName(this.columns).getNumericColumns(), true)
     } else {
       matrix = this.toMatrix(x)
     }

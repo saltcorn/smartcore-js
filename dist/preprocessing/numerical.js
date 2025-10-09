@@ -5,7 +5,7 @@ class StandardScaler extends BaseTransformer {
     constructor(params) {
         const parameters = new StandardScalerParameters();
         const config = params || {};
-        super(parameters);
+        super(parameters, config.columns);
         this.name = StandardScaler.className;
         this.config = config;
     }

@@ -7,9 +7,9 @@ class DenseMatrix {
   private _ncols: number
   private _nrows: number
 
-  constructor(data: number[][] | DenseMatrixRs, columnMajor?: boolean | undefined) {
+  constructor(data: number[][] | DenseMatrixRs, columnMajor?: boolean) {
     if (data instanceof Array) {
-      let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data)
+      let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor)
       if (valuesFlat.every((val) => Number.isInteger(val))) {
         this.inner = new DenseMatrixI64(nrows, ncols, valuesFlat, columnMajor)
       } else {
@@ -33,12 +33,12 @@ class DenseMatrix {
     return this._nrows
   }
 
-  private static prepData(data: number[][]): [number, number, number[]] {
+  private static prepData(data: number[][], columnMajor?: boolean): [number, number, number[]] {
     if (!(data instanceof Array)) {
       throw new Error('Expected data to be an array.')
     }
-    let nrows = data.length
-    let ncols = data[0] instanceof Array ? data[0].length : 0
+    let nrows = columnMajor ? (data[0] instanceof Array ? data[0].length : 0) : data.length
+    let ncols = columnMajor ? data.length : data[0] instanceof Array ? data[0].length : 0
     let valuesFlat = data.flat()
     return [nrows, ncols, valuesFlat]
   }
@@ -47,14 +47,14 @@ class DenseMatrix {
     return this.inner
   }
 
-  static f64(data: number[][], columnMajor?: boolean | undefined): DenseMatrix {
-    let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data)
+  static f64(data: number[][], columnMajor?: boolean): DenseMatrix {
+    let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor)
     let matrix = new DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor)
     return new DenseMatrix(matrix, columnMajor)
   }
 
-  static u64(data: number[][], columnMajor?: boolean | undefined): DenseMatrix {
-    let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data)
+  static u64(data: number[][], columnMajor?: boolean): DenseMatrix {
+    let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor)
     let BigValuesFlat = valuesFlat.map((v) => BigInt(v))
     let matrix = new DenseMatrixU64(nrows, ncols, new BigUint64Array(BigValuesFlat), columnMajor)
     return new DenseMatrix(matrix, columnMajor)

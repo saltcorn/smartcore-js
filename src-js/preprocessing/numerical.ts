@@ -5,7 +5,9 @@ import { BaseTransformer } from '../base_transformer.js'
 type StandardScalerRs = StandardScalerF64
 type StandardScalerParametersRs = StandardScalerParameters
 
-interface IStandardScalerParameters {}
+interface IStandardScalerParameters {
+  columns?: string[]
+}
 
 interface StandardScalerSerializedData {
   columns: string[] | null
@@ -22,7 +24,7 @@ class StandardScaler extends BaseTransformer<StandardScalerRs, StandardScalerPar
     const parameters = new StandardScalerParameters()
     const config = params || {}
 
-    super(parameters)
+    super(parameters, config.columns)
     this.config = config
   }
 
