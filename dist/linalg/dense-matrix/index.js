@@ -1,14 +1,95 @@
-import { DenseMatrixF64, DenseMatrixI64, DenseMatrixU64 } from '../../core-bindings/index.js';
+import { DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32, DenseMatrixU64, DenseMatrixU8, } from '../../core-bindings/index.js';
+function isU8(no) {
+    return Number.isInteger(no) && no >= 0 && no <= 255;
+}
+function asU8(no) {
+    if (!isU8(no)) {
+        throw new Error(`Expected an unsigned 8-bit integer (0 - 255). Found: ${no}.`);
+    }
+    return Number(no);
+}
+function isU16(no) {
+    return Number.isInteger(no) && no >= 0 && no <= 65535;
+}
+function asU16(no) {
+    if (!isU16(no)) {
+        throw new Error(`Expected an unsigned 16-bit integer (0 - 65535): Found: ${no}.`);
+    }
+    return Number(no);
+}
+function isI32(no) {
+    return Number.isInteger(no) && no >= -2147483648 && no <= 2147483647;
+}
+function asI32(no) {
+    if (!isI32(no)) {
+        throw new Error(`Expected a signed 32-bit integer (-2147483648 - 2147483647). Found: ${no}.`);
+    }
+    return Number(no);
+}
+function isU32(no) {
+    return Number.isInteger(no) && no >= 0 && no <= 4294967295;
+}
+function asU32(no) {
+    if (!isU32(no)) {
+        throw new Error(`Expected an unsigned 32-bit integer (0 - 4294967295). Found: ${no}.`);
+    }
+    return Number(no);
+}
+function isI64(no) {
+    return typeof no === 'bigint' && no >= -9223372036854775808n && no <= 9223372036854775807n;
+}
+function asI64(no) {
+    let noBig = typeof no === 'number' ? BigInt(no) : no;
+    if (!isI64(noBig)) {
+        throw new Error(`Expected a number between -2^63 and 2^63-1. Found: ${no}.`);
+    }
+    return noBig;
+}
+function isU64(no) {
+    return typeof no === 'bigint' && no >= 0n && no <= 18446744073709551615n;
+}
+function asU64(no) {
+    let noBig = typeof no === 'number' ? BigInt(no) : no;
+    if (!isU64(noBig)) {
+        throw new Error(`Expected a number between 0 an 2^64-1. Found: ${no}.`);
+    }
+    return noBig;
+}
+function isF32(no) {
+    return typeof no === 'number' && isFinite(no) && Math.abs(no) < 3.40282347e38;
+}
+function bigintToNumber(no) {
+    let regularNo;
+    if (no <= Number.MAX_VALUE)
+        regularNo = Number(no);
+    else
+        throw new Error(`Could not represent the value ${no} as a number.`);
+    return regularNo;
+}
+function asF32(no) {
+    let floatNo = typeof no === 'bigint' ? bigintToNumber(no) : no;
+    if (!isF32(floatNo)) {
+        throw new Error(`Expected a finite number within the F32 range. Found: ${no}.`);
+    }
+    return floatNo;
+}
+function isF64(no) {
+    return typeof no === 'number' && isFinite(no);
+}
+function asF64(no) {
+    let floatNo = typeof no === 'bigint' ? bigintToNumber(no) : no;
+    if (!isF64(floatNo)) {
+        throw new Error(`Expected a finite number. Found ${no}.`);
+    }
+    return floatNo;
+}
 class DenseMatrix {
-    constructor(data, columnMajor) {
+    constructor(data, params) {
         if (data instanceof Array) {
-            let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor);
-            if (valuesFlat.every((val) => Number.isInteger(val))) {
-                this.inner = new DenseMatrixI64(nrows, ncols, valuesFlat, columnMajor);
-            }
-            else {
-                this.inner = new DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor);
-            }
+            let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, params?.columnMajor);
+            let floatValues = valuesFlat.map((v) => asF64(v));
+            let matrix = new DenseMatrixF64(nrows, ncols, new Float64Array(floatValues), params?.columnMajor);
+            this.inner = matrix;
             this._ncols = ncols;
             this._nrows = nrows;
         }
@@ -39,56 +120,126 @@ class DenseMatrix {
     }
     static f64(data, columnMajor) {
         let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor);
-        let matrix = new DenseMatrixF64(nrows, ncols, new Float64Array(valuesFlat), columnMajor);
-        return new DenseMatrix(matrix, columnMajor);
+        let floatValues = valuesFlat.map((v) => asF64(v));
+        let matrix = new DenseMatrixF64(nrows, ncols, new Float64Array(floatValues), columnMajor);
+        return new DenseMatrix(matrix, { columnMajor });
+    }
+    static f32(data, columnMajor) {
+        let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor);
+        let floatValues = valuesFlat.map((v) => asF32(v));
+        let matrix = new DenseMatrixF32(nrows, ncols, new Float32Array(floatValues), columnMajor);
+        return new DenseMatrix(matrix, { columnMajor });
+    }
+    static i32(data, columnMajor) {
+        let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor);
+        let floatValues = valuesFlat.map((v) => asI32(v));
+        let matrix = new DenseMatrixI32(nrows, ncols, new Int32Array(floatValues), columnMajor);
+        return new DenseMatrix(matrix, { columnMajor });
+    }
+    static u32(data, columnMajor) {
+        let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor);
+        let floatValues = valuesFlat.map((v) => asU32(v));
+        let matrix = new DenseMatrixU32(nrows, ncols, new Uint32Array(floatValues), columnMajor);
+        return new DenseMatrix(matrix, { columnMajor });
+    }
+    static u8(data, columnMajor) {
+        let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor);
+        let floatValues = valuesFlat.map((v) => asU8(v));
+        let matrix = new DenseMatrixU8(nrows, ncols, new Uint8Array(floatValues), columnMajor);
+        return new DenseMatrix(matrix, { columnMajor });
+    }
+    static u16(data, columnMajor) {
+        let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor);
+        let floatValues = valuesFlat.map((v) => asU16(v));
+        let matrix = new DenseMatrixU16(nrows, ncols, new Uint16Array(floatValues), columnMajor);
+        return new DenseMatrix(matrix, { columnMajor });
+    }
+    static i64(data, columnMajor) {
+        let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor);
+        let floatValues = valuesFlat.map((v) => asI64(v));
+        let matrix = new DenseMatrixI64(nrows, ncols, new BigInt64Array(floatValues), columnMajor);
+        return new DenseMatrix(matrix, { columnMajor });
     }
     static u64(data, columnMajor) {
         let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor);
-        let BigValuesFlat = valuesFlat.map((v) => BigInt(v));
-        let matrix = new DenseMatrixU64(nrows, ncols, new BigUint64Array(BigValuesFlat), columnMajor);
-        return new DenseMatrix(matrix, columnMajor);
+        let floatValues = valuesFlat.map((v) => asU64(v));
+        let matrix = new DenseMatrixU64(nrows, ncols, new BigUint64Array(floatValues), columnMajor);
+        return new DenseMatrix(matrix, { columnMajor });
     }
-    asF64() {
-        if (!(this.inner instanceof DenseMatrixF64)) {
-            throw new Error('Inner type not an f64 DenseMatrix.');
+    asRsMatrix(dataType) {
+        let expectedType;
+        let foundType;
+        switch (dataType) {
+            case undefined:
+                return this.inner;
+            case 'F64':
+                if (this.inner instanceof DenseMatrixF64)
+                    return this.inner;
+                else {
+                    expectedType = 'DenseMatrixF64';
+                    foundType = this.inner.constructor?.name || typeof this.inner;
+                }
+                break;
+            case 'F32':
+                if (this.inner instanceof DenseMatrixF32)
+                    return this.inner;
+                else {
+                    expectedType = 'DenseMatrixF32';
+                    foundType = this.inner.constructor?.name || typeof this.inner;
+                }
+                break;
+            case 'I32':
+                if (this.inner instanceof DenseMatrixI32)
+                    return this.inner;
+                else {
+                    expectedType = 'DenseMatrixI32';
+                    foundType = this.inner.constructor?.name || typeof this.inner;
+                }
+                break;
+            case 'U32':
+                if (this.inner instanceof DenseMatrixU32)
+                    return this.inner;
+                else {
+                    expectedType = 'DenseMatrixU32';
+                    foundType = this.inner.constructor?.name || typeof this.inner;
+                }
+                break;
+            case 'U8':
+                if (this.inner instanceof DenseMatrixU8)
+                    return this.inner;
+                else {
+                    expectedType = 'DenseMatrixU8';
+                    foundType = this.inner.constructor?.name || typeof this.inner;
+                }
+                break;
+            case 'U16':
+                if (this.inner instanceof DenseMatrixU16)
+                    return this.inner;
+                else {
+                    expectedType = 'DenseMatrixU16';
+                    foundType = this.inner.constructor?.name || typeof this.inner;
+                }
+                break;
+            case 'I64':
+                if (this.inner instanceof DenseMatrixI64)
+                    return this.inner;
+                else {
+                    expectedType = 'DenseMatrixI64';
+                    foundType = this.inner.constructor?.name || typeof this.inner;
+                }
+                break;
+            case 'U64':
+                if (this.inner instanceof DenseMatrixU64)
+                    return this.inner;
+                else {
+                    expectedType = 'DenseMatrixU64';
+                    foundType = this.inner.constructor?.name || typeof this.inner;
+                }
+                break;
+            default:
+                throw new Error(`[${this.constructor?.name}] Unexpected dataTypeValue '${dataType}'. Valid values are: F64, F32, I32, U32, U8, U16, I64, U64.`);
         }
-        return this.inner;
-    }
-    asU64() {
-        if (this.inner instanceof DenseMatrixU64) {
-            return this.inner;
-        }
-        else if (this.inner instanceof DenseMatrixI64) {
-            // Convert inner into DenseMatrixU64 only if all values are positive
-            if (this.inner.satisfies((x) => x > 0)) {
-                const values = this.inner.values().map((v) => BigInt(v));
-                return new DenseMatrixU64(this._nrows, this._ncols, new BigUint64Array(values));
-            }
-            else {
-                throw new Error(`Conversion from ${typeof this.inner} to DenseMatrixU64 failed. Negative numbers found.`);
-            }
-        }
-        else {
-            throw new Error(`Conversion from ${typeof this.inner} to DenseMatrixU64 not supported.`);
-        }
-    }
-    asI64() {
-        if (this.inner instanceof DenseMatrixI64) {
-            return this.inner;
-        }
-        else if (this.inner instanceof DenseMatrixU64) {
-            if (this.inner.satisfies((x) => x <= BigInt(Number.MAX_SAFE_INTEGER) && x >= BigInt(Number.MIN_SAFE_INTEGER))) {
-                const bigintValues = this.inner.values();
-                const values = [...bigintValues].map((v) => Number(v));
-                return new DenseMatrixI64(this._nrows, this._ncols, values);
-            }
-            else {
-                throw new Error(`Conversion from ${typeof this.inner} to DenseMatrixI64 failed. Maximum safe integer exceeded.`);
-            }
-        }
-        else {
-            throw new Error(`Conversion from ${typeof this.inner} to DenseMatrixI64 not supported.`);
-        }
+        throw new Error(`[$this.constructor?.name].asRsMatrix Expected '${expectedType}' found '${foundType}'`);
     }
 }
 export { DenseMatrix };

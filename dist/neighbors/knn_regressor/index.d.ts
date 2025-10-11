@@ -19,23 +19,7 @@ declare class KNNRegressor implements Estimator<XType, YType, KNNRegressor>, Pre
     fit(x: XType, y: YType): KNNRegressor;
     predict(x: XType): YType;
     serialize(): {
-        params: import("../../core-bindings/index.js").KNNRegressorF64EuclidianF64Parameters;
-        estimatorKey: YTypeKey | null;
-        model: any;
-    } | {
-        params: import("../../core-bindings/index.js").KNNRegressorF64HammingF64Parameters;
-        estimatorKey: YTypeKey | null;
-        model: any;
-    } | {
-        params: import("../../core-bindings/index.js").KNNRegressorF64MahalanobisF64Parameters;
-        estimatorKey: YTypeKey | null;
-        model: any;
-    } | {
-        params: import("../../core-bindings/index.js").KNNRegressorF64ManhattanF64Parameters;
-        estimatorKey: YTypeKey | null;
-        model: any;
-    } | {
-        params: import("../../core-bindings/index.js").KNNRegressorF64MinkowskiF64Parameters;
+        params: KNNRegressorF64HammingF64Parameters;
         estimatorKey: YTypeKey | null;
         model: any;
     };

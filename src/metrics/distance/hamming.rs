@@ -4,24 +4,34 @@ use paste::paste;
 use smartcore::metrics::distance::{hamming::Hamming as LibHamming, Distance};
 
 macro_rules! hamming_struct {
-  ( $ty:ty ) => {
+  (
+    feature_type: $feat:ty,
+    array_type: $array_napi:ty
+  ) => {
     paste! {
-        #[napi(js_name=""[<Hamming $ty:upper>]"")]
+        #[napi(js_name=""[<Hamming $feat:upper>]"")]
         #[derive(Debug, Clone, Default)]
-        pub struct [<Hamming $ty:upper>] {
-            inner: LibHamming<$ty>,
+        pub struct [<Hamming $feat:upper>] {
+            inner: LibHamming<$feat>,
         }
 
         #[napi]
-        impl [<Hamming $ty:upper>] {
+        impl [<Hamming $feat:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self {
-                    inner: LibHamming::<$ty>::new()
+                    inner: LibHamming::<$feat>::new()
                 }
             }
 
-            pub fn owned_inner(&self) -> LibHamming<$ty> {
+            #[napi]
+            pub fn distance(&self, x: $array_napi, y: $array_napi) -> f64 {
+                let x = x.to_vec();
+                let y = y.to_vec();
+                self.inner.distance(&x, &y)
+            }
+
+            pub fn owned_inner(&self) -> LibHamming<$feat> {
                 self.inner.to_owned()
             }
         }
@@ -29,27 +39,13 @@ macro_rules! hamming_struct {
   };
 }
 
-macro_rules! hamming_distance_impl {
-  ( $ty:ty, $x:ty, $y:ty ) => {
-    paste! {
-        #[napi]
-        impl [<Hamming $ty:upper>] {
-            #[napi]
-            pub fn distance(&self, x: $x, y: $y) -> f64 {
-                let x = x.to_vec();
-                let y = y.to_vec();
-                self.inner.distance(&x, &y)
-            }
-        }
-    }
-  };
-}
-
-hamming_struct! {i64}
-hamming_distance_impl! {i64, BigInt64Array, BigInt64Array}
-
-hamming_struct! {u64}
-hamming_distance_impl! {u64, BigUint64Array, BigUint64Array}
-
-hamming_struct! {f64}
-hamming_distance_impl! {f64, Float64Array, Float64Array}
+// Hamming is designed for categorical features
+// Values typically fall within the range 0 - 255
+// Signed categories are rare
+// Type Choice:
+// u8 - ideal for categorical data
+// u16 - where the number of categories exceed 256
+// i32 - for cases where negative labels exist
+hamming_struct! { feature_type: u8, array_type: Uint8Array}
+hamming_struct! { feature_type: u16, array_type: Uint16Array}
+hamming_struct! { feature_type: i32, array_type: Int32Array}
