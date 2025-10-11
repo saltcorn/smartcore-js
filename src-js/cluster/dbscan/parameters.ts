@@ -72,107 +72,90 @@ import {
   type KNNAlgorithmName,
   DenseMatrixF32,
   DenseMatrixF64,
+  DenseMatrixU32,
+  DenseMatrixI32,
+  DenseMatrixI64,
+  DenseMatrixU16,
+  DenseMatrixU64,
+  DenseMatrixU8,
 } from '../../core-bindings/index.js'
 
-type DistanceRs =
-  | EuclidianF32
-  | EuclidianF64
-  | EuclidianU32
-  | EuclidianI32
-  | EuclidianI64
-  | EuclidianU16
-  | EuclidianU8
-  | EuclidianU64
-  | HammingU8
-  | HammingU16
-  | HammingI32
-  | MahalanobisF32
-  | MahalanobisF64
-  | ManhattanF32
-  | ManhattanF64
-  | ManhattanI32
-  | ManhattanU32
-  | ManhattanI64
-  | ManhattanU64
-  | MinkowskiF32
-  | MinkowskiF64
-  | MinkowskiI32
-  | MinkowskiI64
+type FeatureTypeMap = {
+  f32: {
+    matrix: DenseMatrixF32
+    distances: {
+      euclidian: { params: DBSCANF32EuclidianF32Parameters; estimator: DBSCANF32I32EuclidianF32 }
+      mahalanobis: {
+        params: DBSCANF32MahalanobisF32Parameters
+        estimator: DBSCANF32I32MahalanobisF32
+        data: DenseMatrixF32
+      }
+      manhattan: { params: DBSCANF32ManhattanF32Parameters; estimator: DBSCANF32I32ManhattanF32 }
+      minkowski: { params: DBSCANF32MinkowskiF32Parameters; estimator: DBSCANF32I32MinkowskiF32; p: number }
+    }
+  }
+  f64: {
+    matrix: DenseMatrixF64
+    distances: {
+      euclidian: { params: DBSCANF64EuclidianF64Parameters; estimator: DBSCANF64I32EuclidianF64 }
+      mahalanobis: {
+        params: DBSCANF64MahalanobisF64Parameters
+        estimator: DBSCANF64I32MahalanobisF64
+        data: DenseMatrixF64
+      }
+      manhattan: { params: DBSCANF64ManhattanF64Parameters; estimator: DBSCANF64ManhattanF64Parameters }
+      minkowski: { params: DBSCANF64MinkowskiF64Parameters; estimator: DBSCANF64I32MinkowskiF64; p: number }
+    }
+  }
+  u32: {
+    matrix: DenseMatrixU32
+    distances: {
+      euclidian: { params: DBSCANU32EuclidianU32Parameters; estimator: DBSCANU32I32EuclidianU32 }
+      manhattan: { params: DBSCANU32ManhattanU32Parameters; estimator: DBSCANU32I32ManhattanU32 }
+    }
+  }
+  i32: {
+    matrix: DenseMatrixI32
+    distances: {
+      euclidian: { params: DBSCANI32EuclidianI32Parameters; estimator: DBSCANI32I32EuclidianI32 }
+      hamming: { params: DBSCANI32HammingI32Parameters; estimator: DBSCANI32I32HammingI32 }
+      manhattan: { params: DBSCANI32ManhattanI32Parameters; estimator: DBSCANI32I32ManhattanI32 }
+      minkowski: { params: DBSCANI32MinkowskiI32Parameters; estimator: DBSCANI32I32MinkowskiI32; p: number }
+    }
+  }
+  i64: {
+    matrix: DenseMatrixI64
+    distances: {
+      euclidian: { params: DBSCANI64EuclidianI64Parameters; estimator: DBSCANI64I32EuclidianI64 }
+      manhattan: { params: DBSCANI64ManhattanI64Parameters; estimator: DBSCANI64I32ManhattanI64 }
+      minkowski: { params: DBSCANI64MinkowskiI64Parameters; estimator: DBSCANI64I32MinkowskiI64; p: number }
+    }
+  }
+  u16: {
+    matrix: DenseMatrixU16
+    distances: {
+      euclidian: { params: DBSCANU16EuclidianU16Parameters; estimator: DBSCANU16I32EuclidianU16 }
+      hamming: { params: DBSCANU16HammingU16Parameters; estimator: DBSCANU16I32HammingU16 }
+    }
+  }
+  u8: {
+    matrix: DenseMatrixU8
+    distances: {
+      euclidian: { params: DBSCANU8EuclidianU8Parameters; estimator: DBSCANU8I32EuclidianU8 }
+      hamming: { params: DBSCANU8HammingU8Parameters; estimator: DBSCANU8I32HammingU8 }
+    }
+  }
+  u64: {
+    matrix: DenseMatrixU64
+    distances: {
+      euclidian: { params: DBSCANU64EuclidianU64Parameters; estimator: DBSCANU64I32EuclidianU64 }
+      manhattan: { params: DBSCANU64ManhattanU64Parameters; estimator: DBSCANU64I32ManhattanU64 }
+    }
+  }
+}
 
-type DistanceKey =
-  | 'EuclidianF32'
-  | 'EuclidianF64'
-  | 'EuclidianI32'
-  | 'EuclidianU32'
-  | 'EuclidianI64'
-  | 'EuclidianU16'
-  | 'EuclidianU8'
-  | 'EuclidianU64'
-  | 'HammingU8'
-  | 'HammingU16'
-  | 'HammingI32'
-  | 'MahalanobisF32'
-  | 'MahalanobisF64'
-  | 'ManhattanF32'
-  | 'ManhattanF64'
-  | 'ManhattanI32'
-  | 'ManhattanU32'
-  | 'ManhattanI64'
-  | 'ManhattanU64'
-  | 'MinkowskiF32'
-  | 'MinkowskiF64'
-  | 'MinkowskiI32'
-  | 'MinkowskiI64'
-
-type DBSCANParametersRs =
-  | DBSCANF32EuclidianF32Parameters
-  | DBSCANF32MahalanobisF32Parameters
-  | DBSCANF32ManhattanF32Parameters
-  | DBSCANF32MinkowskiF32Parameters
-  | DBSCANF64EuclidianF64Parameters
-  | DBSCANF64MahalanobisF64Parameters
-  | DBSCANF64ManhattanF64Parameters
-  | DBSCANF64MinkowskiF64Parameters
-  | DBSCANI32EuclidianI32Parameters
-  | DBSCANI32HammingI32Parameters
-  | DBSCANI32ManhattanI32Parameters
-  | DBSCANI32MinkowskiI32Parameters
-  | DBSCANI64EuclidianI64Parameters
-  | DBSCANI64ManhattanI64Parameters
-  | DBSCANI64MinkowskiI64Parameters
-  | DBSCANU16EuclidianU16Parameters
-  | DBSCANU16HammingU16Parameters
-  | DBSCANU32EuclidianU32Parameters
-  | DBSCANU32ManhattanU32Parameters
-  | DBSCANU64EuclidianU64Parameters
-  | DBSCANU64ManhattanU64Parameters
-  | DBSCANU8EuclidianU8Parameters
-  | DBSCANU8HammingU8Parameters
-
-type DBSCANRs =
-  | DBSCANF32I32EuclidianF32
-  | DBSCANF32I32MahalanobisF32
-  | DBSCANF32I32ManhattanF32
-  | DBSCANF32I32MinkowskiF32
-  | DBSCANF64I32EuclidianF64
-  | DBSCANF64I32MahalanobisF64
-  | DBSCANF64I32ManhattanF64
-  | DBSCANF64I32MinkowskiF64
-  | DBSCANI32I32EuclidianI32
-  | DBSCANI32I32HammingI32
-  | DBSCANI32I32ManhattanI32
-  | DBSCANI32I32MinkowskiI32
-  | DBSCANI64I32EuclidianI64
-  | DBSCANI64I32ManhattanI64
-  | DBSCANI64I32MinkowskiI64
-  | DBSCANU16I32EuclidianU16
-  | DBSCANU16I32HammingU16
-  | DBSCANU32I32EuclidianU32
-  | DBSCANU32I32ManhattanU32
-  | DBSCANU64I32EuclidianU64
-  | DBSCANU64I32ManhattanU64
-  | DBSCANU8I32EuclidianU8
-  | DBSCANU8I32HammingU8
+type FeatureType = keyof FeatureTypeMap
+type DistanceType<F extends FeatureType> = keyof FeatureTypeMap[F]['distances']
 
 interface EstimatorClass {
   fit(matrix: DenseMatrixRs, params: DBSCANParametersRs): DBSCANRs
@@ -205,16 +188,51 @@ const estimatorClasses: Record<DistanceKey, EstimatorClass> = {
   HammingU8: DBSCANU8I32HammingU8,
 }
 
-interface IDBSCANParameters {
+// interface IDBSCANBaseParameters<F extends FeatureType> {
+//   minSamples?: number
+//   algorithm?: KNNAlgorithmName
+//   eps?: number
+//   distance: keyof FeatureTypeMap[F]['distances']
+// }
+
+// type IDBSCANParameters<
+//   F extends FeatureType,
+//   B extends IDBSCANBaseParameters<F>,
+// > = FeatureTypeMap[F]['distances'][B['distance']] extends { data: any }
+//   ? { data: FeatureTypeMap[F]['distances'][B['distance']]['data'] }
+//   : FeatureTypeMap[F]['distances'][B['distance']] extends { p: any }
+//     ? { p: number }
+//     : never
+
+// interface IDBSCANParameters<F extends FeatureType> {
+//   minSamples?: number
+//   algorithm?: KNNAlgorithmName
+//   eps?: number
+//   data?: DenseMatrixF32 | DenseMatrixF64
+//   p?: number
+//   distance?: keyof FeatureTypeMap[F]['distances']
+// }
+
+// type DistanceType<F extends FeatureType> = keyof FeatureTypeMap[F]['distances']
+
+interface IDBSCANBaseParameters<F extends FeatureType, D extends DistanceType<F>> {
   minSamples?: number
   algorithm?: KNNAlgorithmName
   eps?: number
-  data?: DenseMatrixF32 | DenseMatrixF64
-  p?: number
-  distance?: DistanceKey
+  distance: D
 }
 
-function instanceFromParameters(params: IDBSCANParameters): DBSCANParametersRs {
+type IDBSCANParameters<F extends FeatureType, D extends DistanceType<F>> = IDBSCANBaseParameters<F, D> &
+  (FeatureTypeMap[F]['distances'][D] extends { data: infer DataType }
+    ? { data: DataType }
+    : FeatureTypeMap[F]['distances'][D] extends { p: number }
+      ? { p: number }
+      : {})
+
+function instanceFromParameters<F extends FeatureType, D extends DistanceType<F>>(
+  featureType: F,
+  params: IDBSCANParameters<F, D>,
+): DBSCANParametersRs {
   switch (params.distance) {
     case 'EuclidianF32':
       return new DBSCANF32EuclidianF32Parameters()
@@ -314,10 +332,9 @@ function getParametersInstance(params: IDBSCANParameters): DBSCANParametersRs {
 export {
   estimatorClasses,
   getParametersInstance,
-  type DistanceKey,
-  type DistanceRs,
+  type FeatureTypeMap,
+  type FeatureType,
+  type DistanceType,
   type EstimatorClass,
-  type DBSCANParametersRs,
-  type DBSCANRs,
   type IDBSCANParameters,
 }
