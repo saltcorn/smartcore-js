@@ -2,7 +2,7 @@ import assert from 'assert'
 import {
   dataset,
   DBSCANF64EuclidianF64Parameters,
-  DBSCANF64F64EuclidianF64,
+  DBSCANF64I32EuclidianF64,
 } from '../../../../../src-js/core-bindings/index.js'
 
 export default () => {
@@ -12,7 +12,7 @@ export default () => {
   let parameters = new DBSCANF64EuclidianF64Parameters()
   parameters.withEps(0.2)
   parameters.withMinSamples(5)
-  let labels = DBSCANF64F64EuclidianF64.fit(x, parameters).predict(x)
+  let labels = DBSCANF64I32EuclidianF64.fit(x, parameters).predict(x)
   // Missing metrics
   // - homogeneity_score
   // - completeness_score

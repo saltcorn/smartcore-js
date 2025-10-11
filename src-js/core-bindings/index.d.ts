@@ -6,6 +6,12 @@ export declare class AccuracyF64 {
 }
 export type Accuracyf64 = AccuracyF64
 
+export declare class AccuracyI32 {
+  constructor()
+  getScore(yTrue: Int32Array, yPred: Int32Array): number
+}
+export type Accuracyi32 = AccuracyI32
+
 export declare class AccuracyI64 {
   constructor()
   getScore(yTrue: BigInt64Array, yPred: BigInt64Array): number
@@ -43,7 +49,7 @@ export declare class Boston {
 }
 
 export declare class BreastCancer {
-  loadDataset(): DatasetF64I64
+  loadDataset(): DatasetF64I32
 }
 
 export declare class CategoricalNBBigU64 {
@@ -90,25 +96,25 @@ export declare class DatasetF64F64JsVecRef {
   asArray(): Float64Array
 }
 
-export declare class DatasetF64I64 {
+export declare class DatasetF64I32 {
   get data(): Float64Array
-  get target(): BigInt64Array
+  get target(): Int32Array
   get numSamples(): number
   get numFeatures(): number
   get featureNames(): Array<string>
   get targetNames(): Array<string>
   get description(): string
   denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF64
-  withTargetUnsigned(): DatasetF64U64
+  withTargetUnsigned(): DatasetF64U32
 }
 
-export declare class DatasetF64I64JsVecRef {
+export declare class DatasetF64I32JsVecRef {
   asArray(): BigInt64Array
 }
 
-export declare class DatasetF64U64 {
+export declare class DatasetF64U32 {
   get data(): Float64Array
-  get target(): BigUint64Array
+  get target(): Uint32Array
   get numSamples(): number
   get numFeatures(): number
   get featureNames(): Array<string>
@@ -855,7 +861,7 @@ export declare class DenseMatrixU8 {
 }
 
 export declare class Diabetes {
-  loadDataset(): DatasetF64I64
+  loadDataset(): DatasetF64I32
 }
 
 export declare class Digits {
@@ -1002,8 +1008,8 @@ export declare class GaussianNBParameters {
 
 export declare class Generator {
   makeBlobs(numSamples: number, numFeatures: number, numCenters: number): DatasetF64F64
-  makeCircles(numSamples: number, factor: number, noise: number): DatasetF64I64
-  makeMoons(numSamples: number, noise: number): DatasetF64I64
+  makeCircles(numSamples: number, factor: number, noise: number): DatasetF64I32
+  makeMoons(numSamples: number, noise: number): DatasetF64I32
 }
 
 export declare class HammingI32 {
@@ -1034,7 +1040,7 @@ export declare class HCVScoreU64 {
 export type HCVScoreu64 = HCVScoreU64
 
 export declare class Iris {
-  loadDataset(): DatasetF64I64
+  loadDataset(): DatasetF64I32
 }
 
 export declare class JsBoxedArrayF32Ref {
@@ -2330,10 +2336,10 @@ export declare const enum SplitCriterion {
   ClassificationError = 2
 }
 
-export declare function trainTestSplitF64BigI64(x: DenseMatrixF64, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, BigInt64Array, BigInt64Array]
-
-export declare function trainTestSplitF64BigU64(x: DenseMatrixF64, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, BigUint64Array, BigUint64Array]
-
 export declare function trainTestSplitF64F64(x: DenseMatrixF64, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, Float64Array, Float64Array]
 
-export declare function trainTestSplitF64I64(x: DenseMatrixF64, y: Array<number>, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, Array<number>, Array<number>]
+export declare function trainTestSplitF64I32(x: DenseMatrixF64, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, Int32Array, Int32Array]
+
+export declare function trainTestSplitF64I64(x: DenseMatrixF64, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, BigInt64Array, BigInt64Array]
+
+export declare function trainTestSplitF64U64(x: DenseMatrixF64, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, BigUint64Array, BigUint64Array]

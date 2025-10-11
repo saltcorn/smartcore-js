@@ -20,10 +20,15 @@ function accuracyScore(yTrue, yPred) {
     else if (yTrue instanceof BigUint64Array && yPred instanceof BigUint64Array) {
         return new index_js_1.AccuracyU64().getScore(yTrue, yPred);
     }
+    else if (yTrue instanceof Int32Array && yPred instanceof Int32Array) {
+        return new index_js_1.AccuracyI32().getScore(yTrue, yPred);
+    }
     else if (yTrue instanceof Array && yPred instanceof Array) {
         return new index_js_1.AccuracyI64().getScore(toBigInt64Array(yTrue), toBigInt64Array(yPred));
     }
-    throw new Error('Unsupported data type for input arrays.');
+    throw new Error(`Unsupported data type for input arrays: ` +
+        `yTrue=${yTrue.constructor?.name || typeof yTrue}, ` +
+        `yPred=${yPred.constructor?.name || typeof yPred}.`);
 }
 var DistanceType;
 (function (DistanceType) {

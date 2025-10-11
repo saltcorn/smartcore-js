@@ -1,5 +1,7 @@
-import {} from '../../index.js';
-import { EstimatorProviders, } from './estimator_providers.js';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DBSCAN = void 0;
+const estimator_providers_js_1 = require("./estimator_providers.js");
 class DBSCAN {
     constructor(params) {
         this.name = DBSCAN.className;
@@ -9,7 +11,7 @@ class DBSCAN {
         this.config = config;
         this.config.numberType = this.config.numberType ?? 'f32';
         this.config.distanceType = this.config.distanceType ?? 'euclidian';
-        const distanceTypeMap = EstimatorProviders.get(this.config.numberType);
+        const distanceTypeMap = estimator_providers_js_1.EstimatorProviders.get(this.config.numberType);
         if (!distanceTypeMap) {
             throw new Error(`Unknown number type '${this.config.numberType}'`);
         }
@@ -60,5 +62,5 @@ class DBSCAN {
         return instance;
     }
 }
+exports.DBSCAN = DBSCAN;
 DBSCAN.className = 'DBSCAN';
-export { DBSCAN };

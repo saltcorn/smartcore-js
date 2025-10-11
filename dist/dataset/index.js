@@ -1,4 +1,4 @@
-import { dataset, DatasetF64I64, DatasetF64F64, DatasetF64U64 } from '../core-bindings/index.js';
+import { dataset, DatasetF64I32, DatasetF64F64, DatasetF64U32 } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class Dataset {
     constructor(inner) {

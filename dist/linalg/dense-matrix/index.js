@@ -172,7 +172,7 @@ class DenseMatrix {
         switch (dataType) {
             case undefined:
                 return this.inner;
-            case 'F64':
+            case 'f64':
                 if (this.inner instanceof DenseMatrixF64)
                     return this.inner;
                 else {
@@ -180,7 +180,7 @@ class DenseMatrix {
                     foundType = this.inner.constructor?.name || typeof this.inner;
                 }
                 break;
-            case 'F32':
+            case 'f32':
                 if (this.inner instanceof DenseMatrixF32)
                     return this.inner;
                 else {
@@ -188,7 +188,7 @@ class DenseMatrix {
                     foundType = this.inner.constructor?.name || typeof this.inner;
                 }
                 break;
-            case 'I32':
+            case 'i32':
                 if (this.inner instanceof DenseMatrixI32)
                     return this.inner;
                 else {
@@ -196,7 +196,7 @@ class DenseMatrix {
                     foundType = this.inner.constructor?.name || typeof this.inner;
                 }
                 break;
-            case 'U32':
+            case 'u32':
                 if (this.inner instanceof DenseMatrixU32)
                     return this.inner;
                 else {
@@ -204,7 +204,7 @@ class DenseMatrix {
                     foundType = this.inner.constructor?.name || typeof this.inner;
                 }
                 break;
-            case 'U8':
+            case 'u8':
                 if (this.inner instanceof DenseMatrixU8)
                     return this.inner;
                 else {
@@ -212,7 +212,7 @@ class DenseMatrix {
                     foundType = this.inner.constructor?.name || typeof this.inner;
                 }
                 break;
-            case 'U16':
+            case 'u16':
                 if (this.inner instanceof DenseMatrixU16)
                     return this.inner;
                 else {
@@ -220,7 +220,7 @@ class DenseMatrix {
                     foundType = this.inner.constructor?.name || typeof this.inner;
                 }
                 break;
-            case 'I64':
+            case 'i64':
                 if (this.inner instanceof DenseMatrixI64)
                     return this.inner;
                 else {
@@ -228,7 +228,7 @@ class DenseMatrix {
                     foundType = this.inner.constructor?.name || typeof this.inner;
                 }
                 break;
-            case 'U64':
+            case 'u64':
                 if (this.inner instanceof DenseMatrixU64)
                     return this.inner;
                 else {
@@ -237,7 +237,7 @@ class DenseMatrix {
                 }
                 break;
             default:
-                throw new Error(`[${this.constructor?.name}] Unexpected dataTypeValue '${dataType}'. Valid values are: F64, F32, I32, U32, U8, U16, I64, U64.`);
+                throw new Error(`[${this.constructor?.name}] Unexpected dataTypeValue '${dataType}'. Valid values are: f64, f32, i32, u32, u8, u16, i64, u64.`);
         }
         throw new Error(`[$this.constructor?.name].asRsMatrix Expected '${expectedType}' found '${foundType}'`);
     }

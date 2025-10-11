@@ -6,6 +6,8 @@ import { BasePredictor } from '../base_predictor.js';
 type RidgeRegressionRs = RidgeRegressionF64I64 | RidgeRegressionF64F64 | RidgeRegressionF64BigI64 | RidgeRegressionF64BigU64;
 type RidgeRegressionParametersRs = RidgeRegressionF64Parameters;
 interface IRidgeRegressionParameters {
+    alpha?: number;
+    normalize?: boolean;
     solver?: RidgeRegressionSolverName;
 }
 interface RidgeRegressionSerializedData {

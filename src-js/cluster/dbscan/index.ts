@@ -1,137 +1,96 @@
-import type { YType } from '../../index.js'
-import { BasePredictor } from '../../base_predictor.js'
-import { type YTypeKey } from '../../base_estimator.js'
-import { DenseMatrix } from '../../linalg/index.js'
+import { type InputType, type YType } from '../../index.js'
 import {
-  estimatorClasses,
-  getParametersInstance,
-  type FeatureType,
-  type EstimatorClass,
+  type EstimatorProvider,
+  type IDBSCANBaseParameters,
+  type NumberTypeRs,
   type DistanceType,
-  type IDBSCANParameters,
-  type FeatureTypeMap,
-} from './parameters.js'
+  type Estimator,
+  EstimatorProviders,
+} from './estimator_providers.js'
 
-interface DBSCANSerializedData<F extends FeatureType, D extends DistanceType<F>> {
-  columns: string[] | null
-  data: Buffer
-  featureType: F
-  params: Partial<IDBSCANParameters<F, D>>
-  yType: YTypeKey
+interface IDBSCANParameters extends IDBSCANBaseParameters {
+  numberType?: NumberTypeRs
+  distanceType?: DistanceType
 }
 
-// class DBSCANOld extends BasePredictor<DBSCANRs, DBSCANParametersRs, YType> {
-//   public static readonly className = 'DBSCAN'
-//   public readonly name: string = DBSCAN.className
-//   public readonly config: IDBSCANParameters
+interface DBSCANSerializedData {
+  config: IDBSCANParameters
+  data: Buffer
+}
 
-//   private estimatorClasses: Record<DistanceKey, EstimatorClass>
+class DBSCAN {
+  public static readonly className = 'DBSCAN'
+  public readonly name: string = DBSCAN.className
+  public readonly config: IDBSCANParameters
 
-//   constructor(params?: IDBSCANParameters) {
-//     const config = params || {}
-//     super(getParametersInstance(config))
-//     this.config = config
+  private _isFitted: boolean = false
+  private estimatorProvider: EstimatorProvider<IDBSCANBaseParameters, any, any>
+  private parameters: any
+  private estimator: Estimator | null = null
 
-//     this.estimatorClasses = estimatorClasses
-//   }
-
-//   static defaultDistanceKey(): DistanceKey {
-//     return 'EuclidianF32'
-//   }
-
-//   get distanceKey(): DistanceKey {
-//     return this.config.distance || DBSCAN.defaultDistanceKey()
-//   }
-
-//   protected fitEstimator(matrix: DenseMatrix, _y: YType): DBSCANRs {
-//     const EstimatorClass = this.estimatorClasses[this.distanceKey!]
-//     return EstimatorClass.fit(matrix.asRsMatrix(), this.parameters)
-//   }
-
-//   protected getComponentColumnName(index: number): string {
-//     return `DBSCAN${index + 1}`
-//   }
-
-//   predictMatrix(matrix: DenseMatrix): YType {
-//     return this.estimator!.predict(matrix.asRsMatrix())
-//   }
-
-//   serialize(): DBSCANSerializedData {
-//     this.ensureFitted('serialize')
-
-//     return {
-//       columns: this.columns,
-//       data: this.estimator!.serialize(),
-//       params: this.config,
-//       yType: this._yType!,
-//     }
-//   }
-
-//   static deserialize(data: DBSCANSerializedData): DBSCAN {
-//     let instance = new DBSCAN(data.params)
-//     const EstimatorClass = instance.estimatorClasses[data.params.distance || DBSCAN.defaultDistanceKey()]
-//     if (EstimatorClass === null) {
-//       throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`)
-//     }
-//     instance.estimator = EstimatorClass.deserialize(data.data)
-//     instance._isFitted = true
-//     instance._yType = data.yType
-//     return instance
-//   }
-// }
-
-class DBSCAN<F extends FeatureType = 'f32', D extends DistanceType<F> = DistanceType<F> & string> extends BasePredictor<
-  FeatureTypeMap[F]['distances'][D] extends { estimator: infer E } ? E : never,
-  FeatureTypeMap[F]['distances'][D] extends { params: infer P } ? P : never,
-  YType
-> {
-  private featureType: F
-  private distanceType: D
-  private config: Partial<IDBSCANParameters<F, D>> = {}
-
-  constructor(featureType: F = 'f32' as F, config: Partial<IDBSCANParameters<F, D>>) {
-    super(getParametersInstance(featureType, config))
-    this.featureType = featureType
-    this.distanceType = (config.distance ?? 'euclidian') as D
+  constructor(params?: IDBSCANParameters) {
+    const config = params || {}
     this.config = config
+    this.config.numberType = this.config.numberType ?? 'f32'
+    this.config.distanceType = this.config.distanceType ?? 'euclidian'
+    const distanceTypeMap = EstimatorProviders.get(this.config.numberType)
+    if (!distanceTypeMap) {
+      throw new Error(`Unknown number type '${this.config.numberType}'`)
+    }
+    const estimatorProvider = distanceTypeMap.get(this.config.distanceType)
+    if (!estimatorProvider) {
+      throw new Error(`Unknown distance type '${this.config.distanceType}' for '${this.config.numberType}'`)
+    }
+    const parameters = estimatorProvider.parameters(this.config)
+    this.estimatorProvider = estimatorProvider
+    this.parameters = parameters
   }
 
-  protected fitEstimator(matrix: DenseMatrix, _y: YType): DBSCANRs {
-    const EstimatorClass = this.estimatorClasses[this.distanceKey!]
-    return EstimatorClass.fit(matrix.asRsMatrix(), this.parameters)
+  fit(x: InputType, y: YType): this {
+    this.estimator = this.estimatorProvider.estimator(x, y, this.parameters)
+    this._isFitted = true
+    return this
   }
 
   protected getComponentColumnName(index: number): string {
     return `DBSCAN${index + 1}`
   }
 
-  predictMatrix(matrix: DenseMatrix): YType {
-    return this.estimator!.predict(matrix.asRsMatrix())
-  }
-
-  serialize(): DBSCANSerializedData<F, D> {
-    this.ensureFitted('serialize')
-
-    return {
-      featureType: this.featureType,
-      columns: this.columns,
-      data: this.estimator!.serialize(),
-      params: this.config,
-      yType: this._yType!,
+  protected ensureFitted(methodName: string): void {
+    if (!this._isFitted || this.estimator === null) {
+      throw new Error(`${this.name}: Cannot call '${methodName}' before calling 'fit'. Please fit the model first.`)
     }
   }
 
-  //   static deserialize(data: DBSCANSerializedData): DBSCAN {
-  //     let instance = new DBSCAN(data.params)
-  //     const EstimatorClass = instance.estimatorClasses[data.params.distance || DBSCAN.defaultDistanceKey()]
-  //     if (EstimatorClass === null) {
-  //       throw new Error(`${this.name}: Unexpected yType value '${data.yType}'`)
-  //     }
-  //     instance.estimator = EstimatorClass.deserialize(data.data)
-  //     instance._isFitted = true
-  //     instance._yType = data.yType
-  //     return instance
-  //   }
+  predict(matrix: InputType): YType {
+    this.ensureFitted('predict')
+    let denseMatrix = this.estimatorProvider.toMatrix(matrix)
+    return this.estimator!.predict(denseMatrix)
+  }
+
+  serialize(): DBSCANSerializedData {
+    this.ensureFitted('serialize')
+
+    return {
+      data: this.estimator!.serialize(),
+      config: this.config,
+    }
+  }
+
+  private _deserialize(data: Buffer): this {
+    if (this._isFitted) {
+      throw new Error("Cannot call 'deserialize' on a fitted instance!")
+    }
+    this.estimator = this.estimatorProvider.deserialize(data)
+    return this
+  }
+
+  static deserialize(data: DBSCANSerializedData): DBSCAN {
+    let instance = new DBSCAN(data.config)
+    instance._deserialize(data.data)
+    instance._isFitted = true
+    return instance
+  }
 }
 
 export { DBSCAN }

@@ -6,8 +6,14 @@ class RidgeRegression extends BasePredictor {
     constructor(params) {
         const parameters = new RidgeRegressionF64Parameters();
         const config = params || {};
-        if (config?.solver) {
+        if (config.solver) {
             parameters.withSolver(config.solver);
+        }
+        if (config.alpha) {
+            parameters.withAlpha(config.alpha);
+        }
+        if (config.normalize) {
+            parameters.withNormalize(config.normalize);
         }
         super(parameters);
         this.name = RidgeRegression.className;

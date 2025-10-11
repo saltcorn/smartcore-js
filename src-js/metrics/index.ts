@@ -1,4 +1,4 @@
-import { AccuracyF64, AccuracyI64, AccuracyU64 } from '../core-bindings/index.js'
+import { AccuracyF64, AccuracyI64, AccuracyU64, AccuracyI32 } from '../core-bindings/index.js'
 import { type YType } from '../index.js'
 
 function toBigInt64Array(values: number[]): BigInt64Array {
@@ -16,10 +16,16 @@ function accuracyScore(yTrue: YType, yPred: YType) {
     return new AccuracyI64().getScore(yTrue, yPred)
   } else if (yTrue instanceof BigUint64Array && yPred instanceof BigUint64Array) {
     return new AccuracyU64().getScore(yTrue, yPred)
+  } else if (yTrue instanceof Int32Array && yPred instanceof Int32Array) {
+    return new AccuracyI32().getScore(yTrue, yPred)
   } else if (yTrue instanceof Array && yPred instanceof Array) {
     return new AccuracyI64().getScore(toBigInt64Array(yTrue), toBigInt64Array(yPred))
   }
-  throw new Error('Unsupported data type for input arrays.')
+  throw new Error(
+    `Unsupported data type for input arrays: ` +
+      `yTrue=${yTrue.constructor?.name || typeof yTrue}, ` +
+      `yPred=${yPred.constructor?.name || typeof yPred}.`,
+  )
 }
 
 enum DistanceType {
