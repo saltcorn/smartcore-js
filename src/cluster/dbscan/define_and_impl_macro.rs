@@ -1,7 +1,7 @@
 macro_rules! define_and_impl {
   (
     feature_type: $feat:ty,
-    target_type: $target:ty,
+    ids_type: $id:ty,
     matrix_type: $matrix:ty,
     array_type: $array:ty,
     distance_type: $dist:ty,
@@ -9,17 +9,17 @@ macro_rules! define_and_impl {
     distance_export_type: $dist_napi:ty
   ) => {
     paste! {
-        #[napi(js_name=""[<DBSCAN $feat:upper $target:upper $dist_napi>]"")]
+        #[napi(js_name=""[<DBSCAN $feat:upper $id:upper $dist_napi>]"")]
         #[derive(Debug)]
-        pub struct [<DBSCAN $feat:upper $target:upper $dist_napi>] {
-            inner: LibDBSCAN<$feat, $target, DenseMatrix<$feat>, Vec<$target>, $dist>,
+        pub struct [<DBSCAN $feat:upper $id:upper $dist_napi>] {
+            inner: LibDBSCAN<$feat, $id, DenseMatrix<$feat>, Vec<$id>, $dist>,
         }
 
         #[napi]
-        impl [<DBSCAN $feat:upper $target:upper $dist_napi>] {
+        impl [<DBSCAN $feat:upper $id:upper $dist_napi>] {
             #[napi(factory)]
             pub fn fit(x: &$matrix, parameters:&$params) -> Result<Self> {
-                let inner = LibDBSCAN::<$feat, $target, DenseMatrix<$feat>, Vec<$target>, $dist>::fit(x, parameters.owned_inner())
+                let inner = LibDBSCAN::<$feat, $id, DenseMatrix<$feat>, Vec<$id>, $dist>::fit(x, parameters.owned_inner())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok(Self { inner })
             }
@@ -39,7 +39,7 @@ macro_rules! define_and_impl {
 
             #[napi(factory)]
             pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibDBSCAN<$feat, $target, DenseMatrix<$feat>, Vec<$target>, $dist>, _>(data.as_ref(), standard())
+                let inner = decode_from_slice::<LibDBSCAN<$feat, $id, DenseMatrix<$feat>, Vec<$id>, $dist>, _>(data.as_ref(), standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
                 Ok(Self { inner })
             }

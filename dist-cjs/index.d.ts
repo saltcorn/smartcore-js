@@ -2,6 +2,7 @@ import type { DenseMatrix } from './linalg/index.js';
 import type { DataFrame } from './data_frame.js';
 export * as dataFrame from './data_frame.js';
 export * from './linalg/index.js';
+export * as preprocessing from './preprocessing/index.js';
 export * as dataset from './dataset/index.js';
 export * as modelSelection from './model_selection/index.js';
 export * as metrics from './metrics/index.js';

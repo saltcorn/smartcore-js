@@ -1,7 +1,7 @@
 import assert from 'assert'
 import {
   //   linearModel,
-  //   preprocessing,
+  preprocessing,
   dataset,
   //   ensemble,
   modelSelection,
@@ -18,17 +18,18 @@ import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 // let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
 // let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
-// let { StandardScaler, OneHotEncoder } = preprocessing
 let {
-  // KMeans,
-  DBSCAN,
-} = cluster
+  StandardScaler,
+  // OneHotEncoder
+} = preprocessing
+let { KMeans, DBSCAN } = cluster
 // let { PCA, SVD } = decomposition
 // let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
 // let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
 let { trainTestSplit } = modelSelection
-let { accuracyScore, DistanceType } = metrics
+let { accuracyScore } = metrics
+type DistanceType = metrics.DistanceType
 let { makePipeline } = pipeline
 const { DataFrame } = dataFrame
 
@@ -96,21 +97,23 @@ describe('Pipelines', () => {
   //     let score = accuracyScore(pipe.predict(xTest), yTest)
   //     assert(score)
   //   })
-  //   it('StandardScaler + KMeans', () => {
-  //     let pipe = makePipeline([
-  //       ['standardscaler', new StandardScaler()],
-  //       ['kmeans', new KMeans()],
-  //     ])
-  //     let irisData = loadIris({ returnXY: true })
-  //     let [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected both x and y to be defined')
-  //     }
-  //     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     pipe.fit(xTrain, yTrain)
-  //     let score = accuracyScore(pipe.predict(xTest), yTest)
-  //     assert(score)
-  //   })
+
+  it('StandardScaler + KMeans', () => {
+    let pipe = makePipeline([
+      ['standardscaler', new StandardScaler({ targetType: 'f64' })],
+      ['kmeans', new KMeans({ targetType: 'f64' })],
+    ])
+    let irisData = loadIris({ returnXY: true })
+    let [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert(score)
+  })
+
   //   it('StandardScaler + DBSCAN', () => {
   //     let pipe = makePipeline([
   //       ['standardscaler', new StandardScaler()],

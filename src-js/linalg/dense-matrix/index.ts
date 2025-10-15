@@ -293,7 +293,7 @@ class DenseMatrix {
           `[${this.constructor?.name}] Unexpected dataTypeValue '${dataType}'. Valid values are: f64, f32, i32, u32, u8, u16, i64, u64.`,
         )
     }
-    throw new Error(`[$this.constructor?.name].asRsMatrix Expected '${expectedType}' found '${foundType}'`)
+    throw new Error(`[${this.constructor?.name}].asRsMatrix Expected '${expectedType}' found '${foundType}'`)
   }
 }
 

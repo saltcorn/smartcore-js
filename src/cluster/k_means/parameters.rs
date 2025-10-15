@@ -1,3 +1,4 @@
+use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use smartcore::cluster::kmeans::KMeansParameters as LibKMeansParameters;
 
@@ -25,16 +26,18 @@ impl KMeansParameters {
   }
 
   #[napi]
-  pub fn with_max_iter(&mut self, max_iter: i64) {
+  pub fn with_max_iter(&mut self, max_iter: BigInt) {
+    let max_iter = max_iter.get_u64().1 as usize;
     if let Some(inner) = self.inner.take() {
-      self.inner = Some(inner.with_max_iter(max_iter as usize))
+      self.inner = Some(inner.with_max_iter(max_iter))
     }
   }
 
   #[napi]
-  pub fn with_k(&mut self, k: i64) {
+  pub fn with_k(&mut self, k: BigInt) {
+    let k = k.get_u64().1 as usize;
     if let Some(inner) = self.inner.take() {
-      self.inner = Some(inner.with_k(k as usize))
+      self.inner = Some(inner.with_k(k))
     }
   }
 

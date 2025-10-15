@@ -43,14 +43,14 @@ use crate::{
 // - Feature type is typically a floating point value: f32, f64
 // - f32 provided in case smaller memory footprint and faster operations or hardware acceleration are desired
 // - f64 provides a higher precision and supports working with large number datasets
-// target_type:
+// ids_type:
 // - Cluster labels can be negative (-1 for noise): i32, i64 (not exhaustive)
 // - Sensible default: i32
 //   - Handles negative values, has sufficient range, recommended for cluster labels
 
 define_and_impl! {
     feature_type: f32,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixF32,
     array_type: Int32Array,
     distance_type: Euclidian<f32>,
@@ -60,7 +60,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: f32,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixF32,
     array_type: Int32Array,
     distance_type: Mahalanobis<f32, DenseMatrix<f64>>,
@@ -70,7 +70,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: f32,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixF32,
     array_type: Int32Array,
     distance_type: Manhattan<f32>,
@@ -80,7 +80,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: f32,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixF32,
     array_type: Int32Array,
     distance_type: Minkowski<f32>,
@@ -90,7 +90,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: f64,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixF64,
     array_type: Int32Array,
     distance_type: Euclidian<f64>,
@@ -100,7 +100,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: f64,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixF64,
     array_type: Int32Array,
     distance_type: Mahalanobis<f64, DenseMatrix<f64>>,
@@ -110,7 +110,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: f64,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixF64,
     array_type: Int32Array,
     distance_type: Manhattan<f64>,
@@ -120,7 +120,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: f64,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixF64,
     array_type: Int32Array,
     distance_type: Minkowski<f64>,
@@ -130,7 +130,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: i32,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixI32,
     array_type: Int32Array,
     distance_type: Euclidian<i32>,
@@ -140,7 +140,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: i32,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixI32,
     array_type: Int32Array,
     distance_type: Hamming<i32>,
@@ -150,7 +150,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: i32,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixI32,
     array_type: Int32Array,
     distance_type: Manhattan<i32>,
@@ -160,7 +160,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: i32,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixI32,
     array_type: Int32Array,
     distance_type: Minkowski<i32>,
@@ -170,7 +170,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: i64,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixI64,
     array_type: Int32Array,
     distance_type: Euclidian<i64>,
@@ -180,7 +180,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: i64,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixI64,
     array_type: Int32Array,
     distance_type: Manhattan<i64>,
@@ -190,7 +190,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: i64,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixI64,
     array_type: Int32Array,
     distance_type: Minkowski<i64>,
@@ -200,7 +200,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: u16,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixU16,
     array_type: Int32Array,
     distance_type: Euclidian<u16>,
@@ -210,7 +210,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: u16,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixU16,
     array_type: Int32Array,
     distance_type: Hamming<u16>,
@@ -220,7 +220,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: u32,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixU32,
     array_type: Int32Array,
     distance_type: Euclidian<u32>,
@@ -230,7 +230,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: u32,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixU32,
     array_type: Int32Array,
     distance_type: Manhattan<u32>,
@@ -240,7 +240,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: u64,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixU64,
     array_type: Int32Array,
     distance_type: Euclidian<u64>,
@@ -250,7 +250,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: u64,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixU64,
     array_type: Int32Array,
     distance_type: Manhattan<u64>,
@@ -260,7 +260,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: u8,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixU8,
     array_type: Int32Array,
     distance_type: Euclidian<u8>,
@@ -270,7 +270,7 @@ define_and_impl! {
 
 define_and_impl! {
     feature_type: u8,
-    target_type: i32,
+    ids_type: i32,
     matrix_type: DenseMatrixU8,
     array_type: Int32Array,
     distance_type: Hamming<u8>,

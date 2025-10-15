@@ -19,19 +19,19 @@ use parameters::KMeansParameters;
 macro_rules! k_means_nb_struct {
   (
     feature_type: $feat:ty,
-    target_type: $target:ty,
+    predict_output_type: $id:ty,
     matrix_type: $matrix:ty,
     array_type: $array:ty
   ) => {
     paste! {
-        #[napi(js_name=""[<KMeans $feat:upper $target:upper>]"")]
+        #[napi(js_name=""[<KMeans $feat:upper $id:upper>]"")]
         #[derive(Debug)]
-        pub struct [<KMeans $feat:upper $target:upper>] {
-            inner: LibKMeans<$feat, $target, DenseMatrix<$feat>, Vec<$target>>,
+        pub struct [<KMeans $feat:upper $id:upper>] {
+            inner: LibKMeans<$feat, $id, DenseMatrix<$feat>, Vec<$id>>,
         }
 
         #[napi]
-        impl [<KMeans $feat:upper $target:upper>] {
+        impl [<KMeans $feat:upper $id:upper>] {
             #[napi(factory)]
             pub fn fit(x: &$matrix, parameters: &KMeansParameters) -> Result<Self> {
                 let inner = LibKMeans::fit(
@@ -60,14 +60,14 @@ macro_rules! k_means_nb_struct {
 
             #[napi(factory)]
             pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibKMeans<$feat, $target, DenseMatrix<$feat>, Vec<$target>>, _>(data.as_ref(), standard())
+                let inner = decode_from_slice::<LibKMeans<$feat, $id, DenseMatrix<$feat>, Vec<$id>>, _>(data.as_ref(), standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
                 Ok(Self { inner })
             }
         }
 
-        impl Deref for [<KMeans $feat:upper $target:upper>] {
-            type Target = LibKMeans<$feat, $target, DenseMatrix<$feat>, Vec<$target>>;
+        impl Deref for [<KMeans $feat:upper $id:upper>] {
+            type Target = LibKMeans<$feat, $id, DenseMatrix<$feat>, Vec<$id>>;
 
             fn deref(&self) -> &Self::Target {
                 &self.inner
@@ -80,104 +80,103 @@ macro_rules! k_means_nb_struct {
 // Type selection justification (clustering algorithms - KMeans):
 // feature_type:
 // f32, f64, i64, i32, u64, u32 - Appear in most feature
-// u8, u16 - Appears in the Hamming distance metrics
-// target_type:
+// predict_output_type:
 // - Cluster labels are positive: u32, u64 (not exhaustive)
-// - Sensible default: u32 // for consistency
+// - Sensible default: i32 // for consistency
 //   - Has sufficient range, recommended for cluster labels
 
-// [f32, u32]
+// [f32, i32]
 k_means_nb_struct! {
     feature_type: f32,
-    target_type: u32,
+    predict_output_type: i32,
     matrix_type: DenseMatrixF32,
-    array_type: Uint32Array
+    array_type: Int32Array
 }
 
-// [f32, u64]
+// [f32, i64]
 k_means_nb_struct! {
     feature_type: f32,
-    target_type: u64,
+    predict_output_type: i64,
     matrix_type: DenseMatrixF32,
-    array_type: BigUint64Array
+    array_type: BigInt64Array
 }
 
-// [f64, u32]
+// [f64, i32]
 k_means_nb_struct! {
     feature_type: f64,
-    target_type: u32,
+    predict_output_type: i32,
     matrix_type: DenseMatrixF64,
-    array_type: Uint32Array
+    array_type: Int32Array
 }
 
-// [f64, u64]
+// [f64, i64]
 k_means_nb_struct! {
     feature_type: f64,
-    target_type: u64,
+    predict_output_type: i64,
     matrix_type: DenseMatrixF64,
-    array_type: BigUint64Array
+    array_type: BigInt64Array
 }
 
-// [i64, u32]
+// [i64, i32]
 k_means_nb_struct! {
     feature_type: i64,
-    target_type: u32,
+    predict_output_type: i32,
     matrix_type: DenseMatrixI64,
-    array_type: Uint32Array
+    array_type: Int32Array
 }
 
-// [i64, u64]
+// [i64, i64]
 k_means_nb_struct! {
     feature_type: i64,
-    target_type: u64,
+    predict_output_type: i64,
     matrix_type: DenseMatrixI64,
-    array_type: BigUint64Array
+    array_type: BigInt64Array
 }
 
-// [i32, u32]
+// [i32, i32]
 k_means_nb_struct! {
     feature_type: i32,
-    target_type: u32,
+    predict_output_type: i32,
     matrix_type: DenseMatrixI32,
-    array_type: Uint32Array
+    array_type: Int32Array
 }
 
-// [i32, u64]
+// [i32, i64]
 k_means_nb_struct! {
     feature_type: i32,
-    target_type: u64,
+    predict_output_type: i64,
     matrix_type: DenseMatrixI32,
-    array_type: BigUint64Array
+    array_type: BigInt64Array
 }
 
-// [u64, u32]
+// [u64, i32]
 k_means_nb_struct! {
     feature_type: u64,
-    target_type: u32,
+    predict_output_type: i32,
     matrix_type: DenseMatrixU64,
-    array_type: Uint32Array
+    array_type: Int32Array
 }
 
-// [u64, u64]
+// [u64, i64]
 k_means_nb_struct! {
     feature_type: u64,
-    target_type: u64,
+    predict_output_type: i64,
     matrix_type: DenseMatrixU64,
-    array_type: BigUint64Array
+    array_type: BigInt64Array
 }
 
-// [u32, u32]
+// [u32, i32]
 k_means_nb_struct! {
     feature_type: u32,
-    target_type: u32,
+    predict_output_type: i32,
     matrix_type: DenseMatrixU32,
-    array_type: Uint32Array
+    array_type: Int32Array
 }
 
-// [u32, u64]
+// [u32, i64]
 k_means_nb_struct! {
     feature_type: u32,
-    target_type: u64,
+    predict_output_type: i64,
     matrix_type: DenseMatrixU32,
-    array_type: BigUint64Array
+    array_type: BigInt64Array
 }

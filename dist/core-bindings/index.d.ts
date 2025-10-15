@@ -1096,94 +1096,94 @@ export declare class KFold {
   withNSplits(nSplits: number): void
 }
 
-export declare class KMeansF32U32 {
-  static fit(x: DenseMatrixF32, parameters: KMeansParameters): KMeansF32U32
-  predict(x: DenseMatrixF32): Uint32Array
+export declare class KMeansF32I32 {
+  static fit(x: DenseMatrixF32, parameters: KMeansParameters): KMeansF32I32
+  predict(x: DenseMatrixF32): Int32Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KMeansF32U32
+  static deserialize(data: Buffer): KMeansF32I32
 }
 
-export declare class KMeansF32U64 {
-  static fit(x: DenseMatrixF32, parameters: KMeansParameters): KMeansF32U64
-  predict(x: DenseMatrixF32): BigUint64Array
+export declare class KMeansF32I64 {
+  static fit(x: DenseMatrixF32, parameters: KMeansParameters): KMeansF32I64
+  predict(x: DenseMatrixF32): BigInt64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KMeansF32U64
+  static deserialize(data: Buffer): KMeansF32I64
 }
 
-export declare class KMeansF64U32 {
-  static fit(x: DenseMatrixF64, parameters: KMeansParameters): KMeansF64U32
-  predict(x: DenseMatrixF64): Uint32Array
+export declare class KMeansF64I32 {
+  static fit(x: DenseMatrixF64, parameters: KMeansParameters): KMeansF64I32
+  predict(x: DenseMatrixF64): Int32Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KMeansF64U32
+  static deserialize(data: Buffer): KMeansF64I32
 }
 
-export declare class KMeansF64U64 {
-  static fit(x: DenseMatrixF64, parameters: KMeansParameters): KMeansF64U64
-  predict(x: DenseMatrixF64): BigUint64Array
+export declare class KMeansF64I64 {
+  static fit(x: DenseMatrixF64, parameters: KMeansParameters): KMeansF64I64
+  predict(x: DenseMatrixF64): BigInt64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KMeansF64U64
+  static deserialize(data: Buffer): KMeansF64I64
 }
 
-export declare class KMeansI32U32 {
-  static fit(x: DenseMatrixI32, parameters: KMeansParameters): KMeansI32U32
-  predict(x: DenseMatrixI32): Uint32Array
+export declare class KMeansI32I32 {
+  static fit(x: DenseMatrixI32, parameters: KMeansParameters): KMeansI32I32
+  predict(x: DenseMatrixI32): Int32Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KMeansI32U32
+  static deserialize(data: Buffer): KMeansI32I32
 }
 
-export declare class KMeansI32U64 {
-  static fit(x: DenseMatrixI32, parameters: KMeansParameters): KMeansI32U64
-  predict(x: DenseMatrixI32): BigUint64Array
+export declare class KMeansI32I64 {
+  static fit(x: DenseMatrixI32, parameters: KMeansParameters): KMeansI32I64
+  predict(x: DenseMatrixI32): BigInt64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KMeansI32U64
+  static deserialize(data: Buffer): KMeansI32I64
 }
 
-export declare class KMeansI64U32 {
-  static fit(x: DenseMatrixI64, parameters: KMeansParameters): KMeansI64U32
-  predict(x: DenseMatrixI64): Uint32Array
+export declare class KMeansI64I32 {
+  static fit(x: DenseMatrixI64, parameters: KMeansParameters): KMeansI64I32
+  predict(x: DenseMatrixI64): Int32Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KMeansI64U32
+  static deserialize(data: Buffer): KMeansI64I32
 }
 
-export declare class KMeansI64U64 {
-  static fit(x: DenseMatrixI64, parameters: KMeansParameters): KMeansI64U64
-  predict(x: DenseMatrixI64): BigUint64Array
+export declare class KMeansI64I64 {
+  static fit(x: DenseMatrixI64, parameters: KMeansParameters): KMeansI64I64
+  predict(x: DenseMatrixI64): BigInt64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KMeansI64U64
+  static deserialize(data: Buffer): KMeansI64I64
 }
 
 export declare class KMeansParameters {
   constructor()
-  withMaxIter(maxIter: number): void
-  withK(k: number): void
+  withMaxIter(maxIter: bigint): void
+  withK(k: bigint): void
 }
 
-export declare class KMeansU32U32 {
-  static fit(x: DenseMatrixU32, parameters: KMeansParameters): KMeansU32U32
-  predict(x: DenseMatrixU32): Uint32Array
+export declare class KMeansU32I32 {
+  static fit(x: DenseMatrixU32, parameters: KMeansParameters): KMeansU32I32
+  predict(x: DenseMatrixU32): Int32Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KMeansU32U32
+  static deserialize(data: Buffer): KMeansU32I32
 }
 
-export declare class KMeansU32U64 {
-  static fit(x: DenseMatrixU32, parameters: KMeansParameters): KMeansU32U64
-  predict(x: DenseMatrixU32): BigUint64Array
+export declare class KMeansU32I64 {
+  static fit(x: DenseMatrixU32, parameters: KMeansParameters): KMeansU32I64
+  predict(x: DenseMatrixU32): BigInt64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KMeansU32U64
+  static deserialize(data: Buffer): KMeansU32I64
 }
 
-export declare class KMeansU64U32 {
-  static fit(x: DenseMatrixU64, parameters: KMeansParameters): KMeansU64U32
-  predict(x: DenseMatrixU64): Uint32Array
+export declare class KMeansU64I32 {
+  static fit(x: DenseMatrixU64, parameters: KMeansParameters): KMeansU64I32
+  predict(x: DenseMatrixU64): Int32Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KMeansU64U32
+  static deserialize(data: Buffer): KMeansU64I32
 }
 
-export declare class KMeansU64U64 {
-  static fit(x: DenseMatrixU64, parameters: KMeansParameters): KMeansU64U64
-  predict(x: DenseMatrixU64): BigUint64Array
+export declare class KMeansU64I64 {
+  static fit(x: DenseMatrixU64, parameters: KMeansParameters): KMeansU64I64
+  predict(x: DenseMatrixU64): BigInt64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): KMeansU64U64
+  static deserialize(data: Buffer): KMeansU64I64
 }
 
 export declare class KNNClassifierF32EuclidianF32Parameters {
@@ -2231,8 +2231,15 @@ export declare class RidgeRegressionF64Parameters {
   withSolver(solver: RidgeRegressionSolverName): void
 }
 
+export declare class StandardScalerF32 {
+  static fit(data: DenseMatrixF32, parameters: StandardScalerParameters): StandardScalerF32
+  transform(x: DenseMatrixF32): DenseMatrixF32
+  serialize(): Buffer
+  static deserialize(data: Buffer): StandardScalerF32
+}
+
 export declare class StandardScalerF64 {
-  constructor(data: DenseMatrixF64, parameters: StandardScalerParameters)
+  static fit(data: DenseMatrixF64, parameters: StandardScalerParameters): StandardScalerF64
   transform(x: DenseMatrixF64): DenseMatrixF64
   serialize(): Buffer
   static deserialize(data: Buffer): StandardScalerF64

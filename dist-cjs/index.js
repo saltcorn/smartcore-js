@@ -36,12 +36,12 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.coreBindings = exports.cluster = exports.pipeline = exports.metrics = exports.modelSelection = exports.dataset = exports.dataFrame = void 0;
+exports.coreBindings = exports.cluster = exports.pipeline = exports.metrics = exports.modelSelection = exports.dataset = exports.preprocessing = exports.dataFrame = void 0;
 exports.dataFrame = __importStar(require("./data_frame.js"));
 __exportStar(require("./linalg/index.js"), exports);
 // export * as linearModel from './linear_model/index.js'
 // export * as ensemble from './ensemble/index.js'
-// export * as preprocessing from './preprocessing/index.js'
+exports.preprocessing = __importStar(require("./preprocessing/index.js"));
 exports.dataset = __importStar(require("./dataset/index.js"));
 exports.modelSelection = __importStar(require("./model_selection/index.js"));
 exports.metrics = __importStar(require("./metrics/index.js"));
