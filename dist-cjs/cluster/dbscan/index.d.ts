@@ -1,5 +1,6 @@
 import { type InputType, type YType } from '../../index.js';
-import { type IDBSCANBaseParameters, type NumberTypeRs, type DistanceType } from './estimator_providers.js';
+import { type IDBSCANBaseParameters, type NumberTypeRs } from './parameters.js';
+import { type DistanceType } from '../../metrics/index.js';
 interface IDBSCANParameters extends IDBSCANBaseParameters {
     numberType?: NumberTypeRs;
     distanceType?: DistanceType;

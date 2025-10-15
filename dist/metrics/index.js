@@ -27,12 +27,4 @@ function accuracyScore(yTrue, yPred) {
         `yTrue=${yTrue.constructor?.name || typeof yTrue}, ` +
         `yPred=${yPred.constructor?.name || typeof yPred}.`);
 }
-var DistanceType;
-(function (DistanceType) {
-    DistanceType[DistanceType["EUCLIDIAN"] = 0] = "EUCLIDIAN";
-    DistanceType[DistanceType["HAMMING"] = 1] = "HAMMING";
-    DistanceType[DistanceType["MANHATTAN"] = 2] = "MANHATTAN";
-    DistanceType[DistanceType["MAHALANOBIS"] = 3] = "MAHALANOBIS";
-    DistanceType[DistanceType["MINKOWSKI"] = 4] = "MINKOWSKI";
-})(DistanceType || (DistanceType = {}));
-export { accuracyScore, DistanceType };
+export { accuracyScore };

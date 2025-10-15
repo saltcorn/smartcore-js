@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DBSCAN = void 0;
-const estimator_providers_js_1 = require("./estimator_providers.js");
+const index_js_1 = require("./estimator_providers_map/index.js");
 class DBSCAN {
     constructor(params) {
         this.name = DBSCAN.className;
@@ -11,7 +11,7 @@ class DBSCAN {
         this.config = config;
         this.config.numberType = this.config.numberType ?? 'f32';
         this.config.distanceType = this.config.distanceType ?? 'euclidian';
-        const distanceTypeMap = estimator_providers_js_1.EstimatorProviders.get(this.config.numberType);
+        const distanceTypeMap = index_js_1.PredictorProvidersMap.get(this.config.numberType);
         if (!distanceTypeMap) {
             throw new Error(`Unknown number type '${this.config.numberType}'`);
         }

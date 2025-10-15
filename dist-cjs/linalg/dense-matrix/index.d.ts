@@ -1,4 +1,5 @@
 import { DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32, DenseMatrixU64, DenseMatrixU8 } from '../../core-bindings/index.js';
+import * as converters from './converters.js';
 type DenseMatrixRs = DenseMatrixF64 | DenseMatrixF32 | DenseMatrixI32 | DenseMatrixU32 | DenseMatrixU8 | DenseMatrixU16 | DenseMatrixI64 | DenseMatrixU64;
 type NumberTypeRs = 'f32' | 'f64' | 'u32' | 'i32' | 'i64' | 'u16' | 'u8' | 'u64';
 interface IDenseMatrixParams {
@@ -24,4 +25,4 @@ declare class DenseMatrix {
     static u64(data: (number | bigint)[][], columnMajor?: boolean): DenseMatrix;
     asRsMatrix(dataType?: NumberTypeRs): DenseMatrixRs;
 }
-export { DenseMatrix, type DenseMatrixRs, type NumberTypeRs };
+export { DenseMatrix, type DenseMatrixRs, type NumberTypeRs, converters };

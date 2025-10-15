@@ -9,6 +9,8 @@ import {
   DenseMatrixU8,
 } from '../../core-bindings/index.js'
 
+import * as converters from './converters.js'
+
 type DenseMatrixRs =
   | DenseMatrixF64
   | DenseMatrixF32
@@ -295,4 +297,4 @@ class DenseMatrix {
   }
 }
 
-export { DenseMatrix, type DenseMatrixRs, type NumberTypeRs }
+export { DenseMatrix, type DenseMatrixRs, type NumberTypeRs, converters }

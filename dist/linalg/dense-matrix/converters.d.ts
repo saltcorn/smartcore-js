@@ -1,0 +1,11 @@
+import { type InputType } from '../../index.js';
+import { DenseMatrixF32, DenseMatrixF64, DenseMatrixU32, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU64, DenseMatrixU8 } from '../../core-bindings/index.js';
+declare function toDenseMatrixF32(x: InputType): DenseMatrixF32;
+declare function toDenseMatrixF64(x: InputType): DenseMatrixF64;
+declare function toDenseMatrixU32(x: InputType): DenseMatrixU32;
+declare function toDenseMatrixI32(x: InputType): DenseMatrixI32;
+declare function toDenseMatrixI64(x: InputType): DenseMatrixI64;
+declare function toDenseMatrixU16(x: InputType): DenseMatrixU16;
+declare function toDenseMatrixU8(x: InputType): DenseMatrixU8;
+declare function toDenseMatrixU64(x: InputType): DenseMatrixU64;
+export { toDenseMatrixF32, toDenseMatrixF64, toDenseMatrixU32, toDenseMatrixI32, toDenseMatrixI64, toDenseMatrixU16, toDenseMatrixU8, toDenseMatrixU64, };

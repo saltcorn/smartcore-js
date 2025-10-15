@@ -1,0 +1,39 @@
+import { type DenseMatrixRs, type InputType, type YType } from '../../../index.js'
+import { converters } from '../../../linalg/dense-matrix/index.js'
+import {
+  DBSCANF64I32MahalanobisF64,
+  DBSCANF64EuclidianF64Parameters,
+  DBSCANF64MahalanobisF64Parameters,
+  MahalanobisF64,
+} from '../../../core-bindings/index.js'
+import { type IDBSCANBaseParameters, setDBSCANParametersValues } from '../parameters.js'
+import { type PredictorProvider } from '../../../estimator.js'
+
+class DBSCANF64MahalanobisF64Provider
+  implements PredictorProvider<IDBSCANBaseParameters, DBSCANF64MahalanobisF64Parameters, DBSCANF64I32MahalanobisF64>
+{
+  parameters(config: IDBSCANBaseParameters): DBSCANF64MahalanobisF64Parameters {
+    if (!config.data) {
+      throw new Error(`MahalanobisF64 expects 'config.data' to be provided.`)
+    }
+    const dataAsF64 = converters.toDenseMatrixF64(config.data)
+    const parameters = new DBSCANF64EuclidianF64Parameters().withDistanceMahalanobisF64(new MahalanobisF64(dataAsF64))
+    setDBSCANParametersValues(parameters, config)
+    return parameters
+  }
+
+  estimator(x: InputType, _y: YType, parameters: DBSCANF64MahalanobisF64Parameters): DBSCANF64I32MahalanobisF64 {
+    const xAsF64 = converters.toDenseMatrixF64(x)
+    return DBSCANF64I32MahalanobisF64.fit(xAsF64, parameters)
+  }
+
+  toMatrix(x: InputType): DenseMatrixRs {
+    return converters.toDenseMatrixF64(x)
+  }
+
+  deserialize(data: Buffer): DBSCANF64I32MahalanobisF64 {
+    return DBSCANF64I32MahalanobisF64.deserialize(data)
+  }
+}
+
+export default DBSCANF64MahalanobisF64Provider

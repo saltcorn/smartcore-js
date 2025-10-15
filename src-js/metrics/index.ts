@@ -28,12 +28,6 @@ function accuracyScore(yTrue: YType, yPred: YType) {
   )
 }
 
-enum DistanceType {
-  EUCLIDIAN,
-  HAMMING,
-  MANHATTAN,
-  MAHALANOBIS,
-  MINKOWSKI,
-}
+type DistanceType = 'euclidian' | 'hamming' | 'mahalanobis' | 'manhattan' | 'minkowski'
 
-export { accuracyScore, DistanceType }
+export { accuracyScore, type DistanceType }

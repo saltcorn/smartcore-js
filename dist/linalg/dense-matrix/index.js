@@ -1,4 +1,5 @@
 import { DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32, DenseMatrixU64, DenseMatrixU8, } from '../../core-bindings/index.js';
+import * as converters from './converters.js';
 function isU8(no) {
     return Number.isInteger(no) && no >= 0 && no <= 255;
 }
@@ -242,4 +243,4 @@ class DenseMatrix {
         throw new Error(`[$this.constructor?.name].asRsMatrix Expected '${expectedType}' found '${foundType}'`);
     }
 }
-export { DenseMatrix };
+export { DenseMatrix, converters };

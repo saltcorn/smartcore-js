@@ -1,12 +1,8 @@
 import { type InputType, type YType } from '../../index.js'
-import {
-  type EstimatorProvider,
-  type IDBSCANBaseParameters,
-  type NumberTypeRs,
-  type DistanceType,
-  type Estimator,
-  EstimatorProviders,
-} from './estimator_providers.js'
+import { type IDBSCANBaseParameters, type NumberTypeRs } from './parameters.js'
+import { type PredictorProvider, type Predictor } from '../../estimator.js'
+import { type DistanceType } from '../../metrics/index.js'
+import { PredictorProvidersMap } from './estimator_providers_map/index.js'
 
 interface IDBSCANParameters extends IDBSCANBaseParameters {
   numberType?: NumberTypeRs
@@ -24,16 +20,16 @@ class DBSCAN {
   public readonly config: IDBSCANParameters
 
   private _isFitted: boolean = false
-  private estimatorProvider: EstimatorProvider<IDBSCANBaseParameters, any, any>
+  private estimatorProvider: PredictorProvider<IDBSCANBaseParameters, any, any>
   private parameters: any
-  private estimator: Estimator | null = null
+  private estimator: Predictor | null = null
 
   constructor(params?: IDBSCANParameters) {
     const config = params || {}
     this.config = config
     this.config.numberType = this.config.numberType ?? 'f32'
     this.config.distanceType = this.config.distanceType ?? 'euclidian'
-    const distanceTypeMap = EstimatorProviders.get(this.config.numberType)
+    const distanceTypeMap = PredictorProvidersMap.get(this.config.numberType)
     if (!distanceTypeMap) {
       throw new Error(`Unknown number type '${this.config.numberType}'`)
     }

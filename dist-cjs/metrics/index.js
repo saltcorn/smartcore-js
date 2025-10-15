@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.DistanceType = void 0;
 exports.accuracyScore = accuracyScore;
 const index_js_1 = require("../core-bindings/index.js");
 function toBigInt64Array(values) {
@@ -30,11 +29,3 @@ function accuracyScore(yTrue, yPred) {
         `yTrue=${yTrue.constructor?.name || typeof yTrue}, ` +
         `yPred=${yPred.constructor?.name || typeof yPred}.`);
 }
-var DistanceType;
-(function (DistanceType) {
-    DistanceType[DistanceType["EUCLIDIAN"] = 0] = "EUCLIDIAN";
-    DistanceType[DistanceType["HAMMING"] = 1] = "HAMMING";
-    DistanceType[DistanceType["MANHATTAN"] = 2] = "MANHATTAN";
-    DistanceType[DistanceType["MAHALANOBIS"] = 3] = "MAHALANOBIS";
-    DistanceType[DistanceType["MINKOWSKI"] = 4] = "MINKOWSKI";
-})(DistanceType || (exports.DistanceType = DistanceType = {}));

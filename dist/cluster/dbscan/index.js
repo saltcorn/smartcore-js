@@ -1,5 +1,8 @@
 import {} from '../../index.js';
-import { EstimatorProviders, } from './estimator_providers.js';
+import {} from './parameters.js';
+import {} from '../../estimator.js';
+import {} from '../../metrics/index.js';
+import { PredictorProvidersMap } from './estimator_providers_map/index.js';
 class DBSCAN {
     constructor(params) {
         this.name = DBSCAN.className;
@@ -9,7 +12,7 @@ class DBSCAN {
         this.config = config;
         this.config.numberType = this.config.numberType ?? 'f32';
         this.config.distanceType = this.config.distanceType ?? 'euclidian';
-        const distanceTypeMap = EstimatorProviders.get(this.config.numberType);
+        const distanceTypeMap = PredictorProvidersMap.get(this.config.numberType);
         if (!distanceTypeMap) {
             throw new Error(`Unknown number type '${this.config.numberType}'`);
         }
