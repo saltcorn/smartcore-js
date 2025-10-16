@@ -1,14 +1,13 @@
-import { DatasetF64I32, DatasetF64F64, DatasetF64U32 } from '../core-bindings/index.js';
+import { DatasetF64I32, DatasetF64F64 } from '../core-bindings/index.js';
 import type { YType } from '../index.js';
 import { DenseMatrix } from '../linalg/index.js';
-type DatasetRs = DatasetF64F64 | DatasetF64I32 | DatasetF64U32;
+type DatasetRs = DatasetF64F64 | DatasetF64I32;
 declare class Dataset {
     inner: DatasetRs;
     constructor(inner: DatasetRs);
 }
 interface LoadParams {
     returnXY?: boolean;
-    unsigned?: boolean;
 }
 declare function loadIris(params?: LoadParams): Dataset | [DenseMatrix, YType];
 declare function loadBoston(params?: LoadParams): Dataset | [DenseMatrix, YType];

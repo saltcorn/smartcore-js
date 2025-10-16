@@ -1,23 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const index_js_1 = require("../../../linalg/dense-matrix/index.js");
-const index_js_2 = require("../../../core-bindings/index.js");
+const index_js_1 = require("../../../core-bindings/index.js");
 const parameters_js_1 = require("../parameters.js");
 class DBSCANU64ManhattanU64Provider {
     parameters(config) {
-        const parameters = new index_js_2.DBSCANU64EuclidianU64Parameters().withDistanceManhattanU64(new index_js_2.ManhattanU64());
+        const parameters = new index_js_1.DBSCANU64EuclidianU64Parameters().withDistanceManhattanU64(new index_js_1.ManhattanU64());
         (0, parameters_js_1.setDBSCANParametersValues)(parameters, config);
         return parameters;
     }
     estimator(x, _y, parameters) {
-        const xAsU64 = index_js_1.converters.toDenseMatrixU64(x);
-        return index_js_2.DBSCANU64I32ManhattanU64.fit(xAsU64, parameters);
+        // TODO: Handle case where x is DataFrame
+        const xAsU64 = x.asRsMatrix('u64');
+        return index_js_1.DBSCANU64I32ManhattanU64.fit(xAsU64, parameters);
     }
     toMatrix(x) {
-        return index_js_1.converters.toDenseMatrixU64(x);
+        // TODO: Handle case where x is DataFrame
+        return x.asRsMatrix('u64');
     }
     deserialize(data) {
-        return index_js_2.DBSCANU64I32ManhattanU64.deserialize(data);
+        return index_js_1.DBSCANU64I32ManhattanU64.deserialize(data);
     }
 }
 exports.default = DBSCANU64ManhattanU64Provider;

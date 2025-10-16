@@ -1,6 +1,6 @@
 import {} from '../../../index.js';
-import { converters } from '../../../linalg/dense-matrix/index.js';
-import { DBSCANI32I32ManhattanI32, DBSCANI32EuclidianI32Parameters, DBSCANI32ManhattanI32Parameters, ManhattanI32, } from '../../../core-bindings/index.js';
+import { DenseMatrix } from '../../../linalg/dense-matrix/index.js';
+import { DBSCANI32I32ManhattanI32, DBSCANI32EuclidianI32Parameters, DBSCANI32ManhattanI32Parameters, ManhattanI32, DenseMatrixI32, } from '../../../core-bindings/index.js';
 import { setDBSCANParametersValues } from '../parameters.js';
 import {} from '../../../estimator.js';
 class DBSCANI32ManhattanI32Provider {
@@ -10,11 +10,13 @@ class DBSCANI32ManhattanI32Provider {
         return parameters;
     }
     estimator(x, _y, parameters) {
-        const xAsI32 = converters.toDenseMatrixI32(x);
+        // TODO: Handle case where x is DataFrame
+        const xAsI32 = x.asRsMatrix('i32');
         return DBSCANI32I32ManhattanI32.fit(xAsI32, parameters);
     }
     toMatrix(x) {
-        return converters.toDenseMatrixI32(x);
+        // TODO: Handle case where x is DataFrame
+        return x.asRsMatrix('i32');
     }
     deserialize(data) {
         return DBSCANI32I32ManhattanI32.deserialize(data);

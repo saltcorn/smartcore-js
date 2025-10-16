@@ -1,10 +1,11 @@
 import { type DenseMatrixRs, type InputType, type YType } from '../../../index.js'
-import { converters } from '../../../linalg/dense-matrix/index.js'
+import { DenseMatrix } from '../../../linalg/dense-matrix/index.js'
 import {
   DBSCANI32EuclidianI32Parameters,
   DBSCANI32I32HammingI32,
   DBSCANI32HammingI32Parameters,
   HammingI32,
+  DenseMatrixI32,
 } from '../../../core-bindings/index.js'
 import { type IDBSCANBaseParameters, setDBSCANParametersValues } from '../parameters.js'
 import { type PredictorProvider } from '../../../estimator.js'
@@ -19,12 +20,14 @@ class DBSCANI32HammingI32Provider
   }
 
   estimator(x: InputType, _y: YType, parameters: DBSCANI32HammingI32Parameters): DBSCANI32I32HammingI32 {
-    const xAsI32 = converters.toDenseMatrixI32(x)
+    // TODO: Handle case where x is DataFrame
+    const xAsI32 = (x as DenseMatrix).asRsMatrix('i32') as DenseMatrixI32
     return DBSCANI32I32HammingI32.fit(xAsI32, parameters)
   }
 
   toMatrix(x: InputType): DenseMatrixRs {
-    return converters.toDenseMatrixI32(x)
+    // TODO: Handle case where x is DataFrame
+    return (x as DenseMatrix).asRsMatrix('i32')
   }
 
   deserialize(data: Buffer): DBSCANI32I32HammingI32 {

@@ -1,6 +1,6 @@
 import { type DenseMatrixRs, type InputType, type YType } from '../../../index.js'
-import { converters } from '../../../linalg/dense-matrix/index.js'
-import { KMeansU64I64, KMeansParameters } from '../../../core-bindings/index.js'
+import { DenseMatrix } from '../../../linalg/dense-matrix/index.js'
+import { KMeansU64I64, KMeansParameters, DenseMatrixU64 } from '../../../core-bindings/index.js'
 import { type IKMeansBaseParameters, setKMeansParametersValues } from '../parameters.js'
 import { type PredictorProvider } from '../../../estimator.js'
 
@@ -12,12 +12,12 @@ class KMeansU64U64Provider implements PredictorProvider<IKMeansBaseParameters, K
   }
 
   estimator(x: InputType, _y: YType, parameters: KMeansParameters): KMeansU64I64 {
-    const xAsU64 = converters.toDenseMatrixU64(x)
+    const xAsU64 = (x as DenseMatrix).asRsMatrix('u64') as DenseMatrixU64
     return KMeansU64I64.fit(xAsU64, parameters)
   }
 
   toMatrix(x: InputType): DenseMatrixRs {
-    return converters.toDenseMatrixU64(x)
+    return (x as DenseMatrix).asRsMatrix('u64')
   }
 
   deserialize(data: Buffer): KMeansU64I64 {

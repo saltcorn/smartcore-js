@@ -114,21 +114,22 @@ describe('Pipelines', () => {
     assert(score)
   })
 
-  //   it('StandardScaler + DBSCAN', () => {
-  //     let pipe = makePipeline([
-  //       ['standardscaler', new StandardScaler()],
-  //       ['dbscan', new DBSCAN()],
-  //     ])
-  //     let irisData = loadBoston({ returnXY: true })
-  //     let [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected both x and y to be defined')
-  //     }
-  //     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     pipe.fit(xTrain, yTrain)
-  //     let score = accuracyScore(pipe.predict(xTest), yTest)
-  //     assert(score >= 0)
-  //   })
+  it('StandardScaler + DBSCAN', () => {
+    let pipe = makePipeline([
+      ['standardscaler', new StandardScaler()],
+      ['dbscan', new DBSCAN()],
+    ])
+    let irisData = loadBoston({ returnXY: true })
+    let [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert(score >= 0)
+  })
+
   //   it('StandardScaler + PCA + LogisticRegression', () => {
   //     let columns = df.columnNames.filter((column) => !column.startsWith('customer'))
   //     // console.log('Selected: ', columns)

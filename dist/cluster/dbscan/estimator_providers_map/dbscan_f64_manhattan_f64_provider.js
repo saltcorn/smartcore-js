@@ -1,6 +1,6 @@
 import {} from '../../../index.js';
-import { converters } from '../../../linalg/dense-matrix/index.js';
-import { DBSCANF64I32ManhattanF64, DBSCANF64EuclidianF64Parameters, DBSCANF64ManhattanF64Parameters, ManhattanF64, } from '../../../core-bindings/index.js';
+import { DenseMatrix } from '../../../linalg/dense-matrix/index.js';
+import { DBSCANF64I32ManhattanF64, DBSCANF64EuclidianF64Parameters, DBSCANF64ManhattanF64Parameters, ManhattanF64, DenseMatrixF64, } from '../../../core-bindings/index.js';
 import { setDBSCANParametersValues } from '../parameters.js';
 import {} from '../../../estimator.js';
 class DBSCANF64ManhattanF64Provider {
@@ -10,11 +10,13 @@ class DBSCANF64ManhattanF64Provider {
         return parameters;
     }
     estimator(x, _y, parameters) {
-        const xAsF64 = converters.toDenseMatrixF64(x);
+        // TODO: Handle case where x is DataFrame
+        const xAsF64 = x.asRsMatrix('f64');
         return DBSCANF64I32ManhattanF64.fit(xAsF64, parameters);
     }
     toMatrix(x) {
-        return converters.toDenseMatrixF64(x);
+        // TODO: Handle case where x is DataFrame
+        return x.asRsMatrix('f64');
     }
     deserialize(data) {
         return DBSCANF64I32ManhattanF64.deserialize(data);

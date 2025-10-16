@@ -2,28 +2,36 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.accuracyScore = accuracyScore;
 const index_js_1 = require("../core-bindings/index.js");
-function toBigInt64Array(values) {
-    if (!values.every((n) => Number.isInteger(n))) {
-        throw new Error("Can't convert an Array containing non-integers to a BigInt64Array.");
+const index_js_2 = require("../index.js");
+function getNormalizedYType(yTrue, yPred) {
+    if (yTrue instanceof Float64Array || yPred instanceof Float64Array) {
+        const yTrueConverted = yTrue instanceof Float64Array
+            ? yTrue
+            : Float64Array.from(yTrue, (x) => index_js_2.numberTypeCheckers.asF64(x));
+        const yPredConverted = yPred instanceof Float64Array
+            ? yPred
+            : Float64Array.from(yPred, (x) => index_js_2.numberTypeCheckers.asF64(x));
+        return [yTrueConverted, yPredConverted];
     }
-    let valuesMapped = values.map((n) => BigInt(n));
-    return new BigInt64Array(valuesMapped);
+    if (yTrue instanceof BigInt64Array || yPred instanceof BigInt64Array)
+        return [BigInt64Array.from(yTrue), BigInt64Array.from(yPred)];
+    if (yTrue instanceof BigUint64Array || yPred instanceof BigUint64Array)
+        return [BigUint64Array.from(yTrue), BigUint64Array.from(yPred)];
+    return [Int32Array.from(yTrue), Int32Array.from(yPred)];
 }
 function accuracyScore(yTrue, yPred) {
-    if (yTrue instanceof Float64Array && yPred instanceof Float64Array) {
-        return new index_js_1.AccuracyF64().getScore(yTrue, yPred);
+    let [yTrueTyped, yPredTyped] = getNormalizedYType((0, index_js_2.asTypedY)(yTrue), (0, index_js_2.asTypedY)(yPred));
+    if (yTrueTyped instanceof Float64Array && yPredTyped instanceof Float64Array) {
+        return new index_js_1.AccuracyF64().getScore(yTrueTyped, yPredTyped);
     }
-    else if (yTrue instanceof BigInt64Array && yPred instanceof BigInt64Array) {
-        return new index_js_1.AccuracyI64().getScore(yTrue, yPred);
+    else if (yTrueTyped instanceof BigInt64Array && yPredTyped instanceof BigInt64Array) {
+        return new index_js_1.AccuracyI64().getScore(yTrueTyped, yPredTyped);
     }
-    else if (yTrue instanceof BigUint64Array && yPred instanceof BigUint64Array) {
-        return new index_js_1.AccuracyU64().getScore(yTrue, yPred);
+    else if (yTrueTyped instanceof BigUint64Array && yPredTyped instanceof BigUint64Array) {
+        return new index_js_1.AccuracyU64().getScore(yTrueTyped, yPredTyped);
     }
-    else if (yTrue instanceof Int32Array && yPred instanceof Int32Array) {
-        return new index_js_1.AccuracyI32().getScore(yTrue, yPred);
-    }
-    else if (yTrue instanceof Array && yPred instanceof Array) {
-        return new index_js_1.AccuracyI64().getScore(toBigInt64Array(yTrue), toBigInt64Array(yPred));
+    else if (yTrueTyped instanceof Int32Array && yPredTyped instanceof Int32Array) {
+        return new index_js_1.AccuracyI32().getScore(yTrueTyped, yPredTyped);
     }
     throw new Error(`Unsupported data type for input arrays: ` +
         `yTrue=${yTrue.constructor?.name || typeof yTrue}, ` +

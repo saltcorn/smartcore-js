@@ -1,6 +1,6 @@
 import { type DenseMatrixRs, type InputType, type YType } from '../../../index.js'
-import { converters } from '../../../linalg/dense-matrix/index.js'
-import { StandardScalerF32, StandardScalerParameters } from '../../../core-bindings/index.js'
+import { DenseMatrix } from '../../../linalg/dense-matrix/index.js'
+import { DenseMatrixF32, StandardScalerF32, StandardScalerParameters } from '../../../core-bindings/index.js'
 import { type IStandardScalerBaseParameters } from '../index.js'
 import { type TransformerProvider } from '../../../estimator.js'
 
@@ -13,12 +13,12 @@ class StandardScalerF32Provider
   }
 
   estimator(x: InputType, _y: YType, parameters: StandardScalerParameters): StandardScalerF32 {
-    const xAsF32 = converters.toDenseMatrixF32(x)
+    const xAsF32 = (x as DenseMatrix).asRsMatrix('f32') as DenseMatrixF32
     return StandardScalerF32.fit(xAsF32, parameters)
   }
 
   toMatrix(x: InputType): DenseMatrixRs {
-    return converters.toDenseMatrixF32(x)
+    return (x as DenseMatrix).asRsMatrix('f32')
   }
 
   deserialize(data: Buffer): StandardScalerF32 {

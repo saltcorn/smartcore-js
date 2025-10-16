@@ -7,7 +7,10 @@ use bincode::{
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
-use smartcore::linalg::basic::matrix::DenseMatrix as LibDenseMatrix;
+use smartcore::linalg::basic::{
+  arrays::{Array, ArrayView2},
+  matrix::DenseMatrix as LibDenseMatrix,
+};
 
 macro_rules! dense_matrix_struct {
   ( $ty:ty, $values:ty ) => {
@@ -36,6 +39,11 @@ macro_rules! dense_matrix_struct {
                 )
                 .map_err(|e| Error::new(Status::InvalidArg, format!("{}", e)))?;
                 Ok(Self { inner: matrix })
+            }
+
+            #[napi(getter)]
+            pub fn number_type(&self) -> String {
+                stringify!($ty).to_owned()
             }
 
             #[napi]
@@ -117,6 +125,147 @@ dense_matrix_struct! {u8, Uint8Array}
 dense_matrix_struct! {u16, Uint16Array}
 dense_matrix_struct! {i64, BigInt64Array}
 dense_matrix_struct! {u64, BigUint64Array}
+
+macro_rules! max_min_impl {
+  ( $ty:ty ) => {
+    paste! {
+        #[napi]
+        impl [<DenseMatrix $ty:upper>] {
+            #[napi]
+            pub fn max(&self) -> $ty {
+                *self.inner.max(0).iter().max().unwrap_or(&0)
+            }
+
+            #[napi]
+            pub fn min(&self) -> $ty {
+                *self.inner.min(0).iter().min().unwrap_or(&0)
+            }
+        }
+    }
+  };
+}
+
+max_min_impl! {i32}
+max_min_impl! {u32}
+max_min_impl! {u8}
+max_min_impl! {u16}
+max_min_impl! {i64}
+max_min_impl! {u64}
+
+macro_rules! max_min_impl {
+  ( $ty:ty ) => {
+    paste! {
+        #[napi]
+        impl [<DenseMatrix $ty:upper>] {
+            #[napi]
+            pub fn max(&self) -> $ty {
+                *self
+                .inner
+                .iterator(0)
+                .reduce(|arg0: &$ty, other: &$ty| {
+                    if $ty::max(*arg0, *other) == *arg0 {
+                        arg0
+                    } else {
+                        other
+                    }
+                })
+                .unwrap_or(&0.)
+            }
+
+            #[napi]
+            pub fn min(&self) -> $ty {
+                *self
+                .inner
+                .iterator(0)
+                .reduce(|arg0: &$ty, other: &$ty| {
+                    if $ty::min(*arg0, *other) == *arg0 {
+                        arg0
+                    } else {
+                        other
+                    }
+                })
+                .unwrap_or(&0.)
+            }
+        }
+    }
+  };
+}
+
+max_min_impl! {f32}
+max_min_impl! {f64}
+
+macro_rules! convert_impl {
+  (
+    implementor: $from:ty,
+    to_type:$to:ty
+  ) => {
+    paste! {
+        #[napi]
+        impl $from {
+            #[napi]
+            pub fn [<as_ $to>](&self) -> Result<[<DenseMatrix $to:upper>]> {
+                let values = self.iterator(1).map(|n| *n as $to).collect::<Vec<_>>();
+                let (nrows, ncols) = self.shape();
+                let inner = LibDenseMatrix::new(nrows as usize, ncols as usize, values, true)
+                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                Ok([<DenseMatrix $to:upper>]::from_inner(inner))
+            }
+        }
+    }
+  };
+}
+
+convert_impl! {implementor: DenseMatrixF32, to_type: f64}
+
+convert_impl! {implementor: DenseMatrixF64, to_type: f32}
+
+convert_impl! {implementor: DenseMatrixU8, to_type: u16}
+convert_impl! {implementor: DenseMatrixU8, to_type: i32}
+convert_impl! {implementor: DenseMatrixU8, to_type: u32}
+convert_impl! {implementor: DenseMatrixU8, to_type: i64}
+convert_impl! {implementor: DenseMatrixU8, to_type: u64}
+convert_impl! {implementor: DenseMatrixU8, to_type: f32}
+convert_impl! {implementor: DenseMatrixU8, to_type: f64}
+
+convert_impl! {implementor: DenseMatrixU16, to_type: u8}
+convert_impl! {implementor: DenseMatrixU16, to_type: i32}
+convert_impl! {implementor: DenseMatrixU16, to_type: u32}
+convert_impl! {implementor: DenseMatrixU16, to_type: i64}
+convert_impl! {implementor: DenseMatrixU16, to_type: u64}
+convert_impl! {implementor: DenseMatrixU16, to_type: f32}
+convert_impl! {implementor: DenseMatrixU16, to_type: f64}
+
+convert_impl! {implementor: DenseMatrixI32, to_type: u8}
+convert_impl! {implementor: DenseMatrixI32, to_type: u16}
+convert_impl! {implementor: DenseMatrixI32, to_type: u32}
+convert_impl! {implementor: DenseMatrixI32, to_type: i64}
+convert_impl! {implementor: DenseMatrixI32, to_type: u64}
+convert_impl! {implementor: DenseMatrixI32, to_type: f32}
+convert_impl! {implementor: DenseMatrixI32, to_type: f64}
+
+convert_impl! {implementor: DenseMatrixU32, to_type: u8}
+convert_impl! {implementor: DenseMatrixU32, to_type: u16}
+convert_impl! {implementor: DenseMatrixU32, to_type: i32}
+convert_impl! {implementor: DenseMatrixU32, to_type: i64}
+convert_impl! {implementor: DenseMatrixU32, to_type: u64}
+convert_impl! {implementor: DenseMatrixU32, to_type: f32}
+convert_impl! {implementor: DenseMatrixU32, to_type: f64}
+
+convert_impl! {implementor: DenseMatrixI64, to_type: u8}
+convert_impl! {implementor: DenseMatrixI64, to_type: u16}
+convert_impl! {implementor: DenseMatrixI64, to_type: u32}
+convert_impl! {implementor: DenseMatrixI64, to_type: i32}
+convert_impl! {implementor: DenseMatrixI64, to_type: u64}
+convert_impl! {implementor: DenseMatrixI64, to_type: f32}
+convert_impl! {implementor: DenseMatrixI64, to_type: f64}
+
+convert_impl! {implementor: DenseMatrixU64, to_type: u8}
+convert_impl! {implementor: DenseMatrixU64, to_type: u16}
+convert_impl! {implementor: DenseMatrixU64, to_type: i32}
+convert_impl! {implementor: DenseMatrixU64, to_type: i64}
+convert_impl! {implementor: DenseMatrixU64, to_type: u32}
+convert_impl! {implementor: DenseMatrixU64, to_type: f32}
+convert_impl! {implementor: DenseMatrixU64, to_type: f64}
 
 mod array;
 mod array_2;

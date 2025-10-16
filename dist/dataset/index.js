@@ -1,4 +1,4 @@
-import { dataset, DatasetF64I32, DatasetF64F64, DatasetF64U32 } from '../core-bindings/index.js';
+import { dataset, DatasetF64I32, DatasetF64F64 } from '../core-bindings/index.js';
 import { DenseMatrix } from '../linalg/index.js';
 class Dataset {
     constructor(inner) {
@@ -7,10 +7,6 @@ class Dataset {
 }
 function prepResponse(data, params) {
     if (params?.returnXY) {
-        if (params.unsigned && 'withTargetUnsigned' in data && typeof data.withTargetUnsigned === 'function') {
-            let irisDataUnsigned = data.withTargetUnsigned();
-            return [new DenseMatrix(data.denseMatrix()), irisDataUnsigned.target];
-        }
         return [new DenseMatrix(data.denseMatrix()), data.target];
     }
     return new Dataset(data);

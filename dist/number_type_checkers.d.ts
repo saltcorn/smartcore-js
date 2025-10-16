@@ -1,0 +1,12 @@
+declare function isU8(no: number | bigint): boolean;
+declare function isU16(no: number | bigint): boolean;
+declare function isI32(no: number | bigint): boolean;
+declare function isU32(no: number | bigint): boolean;
+declare function isI64(no: bigint): boolean;
+declare function isU64(no: bigint): boolean;
+declare function isF32(no: number): boolean;
+declare function bigintToNumber(no: number | bigint): number;
+declare function isF64(no: number): boolean;
+declare function asF64(no: number | bigint): number;
+export { isF32, isF64, isI32, isI64, isU16, isU32, isU64, isU8, bigintToNumber };
+export { asF64 };

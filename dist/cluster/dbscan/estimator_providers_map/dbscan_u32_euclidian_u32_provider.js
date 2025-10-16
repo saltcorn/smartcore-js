@@ -1,6 +1,6 @@
 import {} from '../../../index.js';
-import { converters } from '../../../linalg/dense-matrix/index.js';
-import { DBSCANU32I32EuclidianU32, DBSCANU32EuclidianU32Parameters } from '../../../core-bindings/index.js';
+import { DenseMatrix } from '../../../linalg/dense-matrix/index.js';
+import { DBSCANU32I32EuclidianU32, DBSCANU32EuclidianU32Parameters, DenseMatrixU32, } from '../../../core-bindings/index.js';
 import { setDBSCANParametersValues } from '../parameters.js';
 import {} from '../../../estimator.js';
 class DBSCANU32EuclidianU32Provider {
@@ -10,11 +10,13 @@ class DBSCANU32EuclidianU32Provider {
         return parameters;
     }
     estimator(x, _y, parameters) {
-        const xAsU32 = converters.toDenseMatrixU32(x);
+        // TODO: Handle case where x is DataFrame
+        const xAsU32 = x.asRsMatrix('u32');
         return DBSCANU32I32EuclidianU32.fit(xAsU32, parameters);
     }
     toMatrix(x) {
-        return converters.toDenseMatrixU32(x);
+        // TODO: Handle case where x is DataFrame
+        return x.asRsMatrix('u32');
     }
     deserialize(data) {
         return DBSCANU32I32EuclidianU32.deserialize(data);

@@ -1,6 +1,6 @@
 import {} from '../../../index.js';
-import { converters } from '../../../linalg/dense-matrix/index.js';
-import { DBSCANI64I32EuclidianI64, DBSCANI64EuclidianI64Parameters } from '../../../core-bindings/index.js';
+import { DenseMatrix } from '../../../linalg/dense-matrix/index.js';
+import { DBSCANI64I32EuclidianI64, DBSCANI64EuclidianI64Parameters, DenseMatrixI64, } from '../../../core-bindings/index.js';
 import { setDBSCANParametersValues } from '../parameters.js';
 import {} from '../../../estimator.js';
 class DBSCANI64EuclidianI64Provider {
@@ -10,11 +10,13 @@ class DBSCANI64EuclidianI64Provider {
         return parameters;
     }
     estimator(x, _y, parameters) {
-        const xAsI64 = converters.toDenseMatrixI64(x);
+        // TODO: Handle case where x is DataFrame
+        const xAsI64 = x.asRsMatrix('i64');
         return DBSCANI64I32EuclidianI64.fit(xAsI64, parameters);
     }
     toMatrix(x) {
-        return converters.toDenseMatrixI64(x);
+        // TODO: Handle case where x is DataFrame
+        return x.asRsMatrix('i64');
     }
     deserialize(data) {
         return DBSCANI64I32EuclidianI64.deserialize(data);

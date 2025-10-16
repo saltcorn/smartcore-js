@@ -1,10 +1,11 @@
 import { type DenseMatrixRs, type InputType, type YType } from '../../../index.js'
-import { converters } from '../../../linalg/dense-matrix/index.js'
+import { DenseMatrix } from '../../../linalg/dense-matrix/index.js'
 import {
   DBSCANU16EuclidianU16Parameters,
   DBSCANU16I32HammingU16,
   DBSCANU16HammingU16Parameters,
   HammingU16,
+  DenseMatrixU16,
 } from '../../../core-bindings/index.js'
 import { type IDBSCANBaseParameters, setDBSCANParametersValues } from '../parameters.js'
 import { type PredictorProvider } from '../../../estimator.js'
@@ -19,12 +20,14 @@ class DBSCANU16HammingU16Provider
   }
 
   estimator(x: InputType, _y: YType, parameters: DBSCANU16EuclidianU16Parameters): DBSCANU16I32HammingU16 {
-    const xAsU16 = converters.toDenseMatrixU16(x)
+    // TODO: Handle case where x is DataFrame
+    const xAsU16 = (x as DenseMatrix).asRsMatrix('u16') as DenseMatrixU16
     return DBSCANU16I32HammingU16.fit(xAsU16, parameters)
   }
 
   toMatrix(x: InputType): DenseMatrixRs {
-    return converters.toDenseMatrixU16(x)
+    // TODO: Handle case where x is DataFrame
+    return (x as DenseMatrix).asRsMatrix('u16')
   }
 
   deserialize(data: Buffer): DBSCANU16I32HammingU16 {

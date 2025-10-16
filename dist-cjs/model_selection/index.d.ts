@@ -1,4 +1,4 @@
-import type { XType, YType } from '../index.js';
+import { type XType, type YType } from '../index.js';
 interface TrainTestSplitParams {
     testSize: number;
     shuffle?: boolean;
