@@ -1,5 +1,4 @@
 import { DenseMatrix, type InputType, type YType } from './index.js';
-import { DataFrame } from './data_frame.js';
 import type { Estimator } from './pipeline/index.js';
 type YTypeKey = 'bigI64' | 'bigU64' | 'i64' | 'f64';
 /**
@@ -45,10 +44,6 @@ declare abstract class BaseEstimator<TEstimator, TParams> implements Estimator<I
      * Validates that the model is fitted before operations
      */
     protected ensureFitted(methodName: string): void;
-    /**
-     * Converts DenseMatrix to DataFrame
-     */
-    protected toDataFrame(matrix: DenseMatrix): DataFrame;
     /**
      * Create a name for a column given its index
      */

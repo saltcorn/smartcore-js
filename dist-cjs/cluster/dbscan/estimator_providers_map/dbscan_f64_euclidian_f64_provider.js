@@ -9,12 +9,10 @@ class DBSCANF64EuclidianF64Provider {
         return parameters;
     }
     estimator(x, _y, parameters) {
-        // TODO: Handle case where x is DataFrame
         const xAsF64 = x.asRsMatrix('f64');
         return index_js_1.DBSCANF64I32EuclidianF64.fit(xAsF64, parameters);
     }
     toMatrix(x) {
-        // TODO: Handle case where x is DataFrame
         return x.asRsMatrix('f64');
     }
     deserialize(data) {

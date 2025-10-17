@@ -1,4 +1,4 @@
-import { DenseMatrix } from '../../index.js';
+import { DenseMatrix, utilities } from '../../index.js';
 import {} from '../../estimator.js';
 import { TransformerProvidersMap } from './estimator_providers_map/index.js';
 class StandardScaler {
@@ -18,7 +18,8 @@ class StandardScaler {
         this.parameters = parameters;
     }
     fit(x, y) {
-        this.estimator = this.estimatorProvider.estimator(x, y, this.parameters);
+        const matrix = utilities.inputTypeToDenseMatrix(x);
+        this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters);
         this._isFitted = true;
         return this;
     }
@@ -32,7 +33,7 @@ class StandardScaler {
     }
     transform(matrix) {
         this.ensureFitted('transform');
-        let denseMatrix = this.estimatorProvider.toMatrix(matrix);
+        let denseMatrix = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(matrix));
         return new DenseMatrix(this.estimator.transform(denseMatrix));
     }
     serialize() {

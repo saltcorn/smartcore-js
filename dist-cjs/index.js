@@ -36,13 +36,14 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.numberTypeCheckers = exports.coreBindings = exports.cluster = exports.pipeline = exports.metrics = exports.modelSelection = exports.dataset = exports.preprocessing = exports.dataFrame = void 0;
+exports.numberTypeCheckers = exports.coreBindings = exports.decomposition = exports.cluster = exports.pipeline = exports.metrics = exports.modelSelection = exports.dataset = exports.preprocessing = exports.linearModel = exports.utilities = exports.dataFrame = void 0;
 exports.asTypedY = asTypedY;
 const numberTypeCheckers = __importStar(require("./number_type_checkers.js"));
 exports.numberTypeCheckers = numberTypeCheckers;
 exports.dataFrame = __importStar(require("./data_frame.js"));
+exports.utilities = __importStar(require("./utilities/index.js"));
 __exportStar(require("./linalg/index.js"), exports);
-// export * as linearModel from './linear_model/index.js'
+exports.linearModel = __importStar(require("./linear_model/index.js"));
 // export * as ensemble from './ensemble/index.js'
 exports.preprocessing = __importStar(require("./preprocessing/index.js"));
 exports.dataset = __importStar(require("./dataset/index.js"));
@@ -50,7 +51,7 @@ exports.modelSelection = __importStar(require("./model_selection/index.js"));
 exports.metrics = __importStar(require("./metrics/index.js"));
 exports.pipeline = __importStar(require("./pipeline/index.js"));
 exports.cluster = __importStar(require("./cluster/index.js"));
-// export * as decomposition from './decomposition/index.js'
+exports.decomposition = __importStar(require("./decomposition/index.js"));
 // export * as naiveBayes from './naive_bayes/index.js'
 // export * as neighbors from './neighbors/index.js'
 exports.coreBindings = __importStar(require("./core-bindings/index.js"));
@@ -64,9 +65,9 @@ function asTypedY(y) {
     let hasFloat = false;
     for (let v of y) {
         if (v > largestNo)
-            largestNo = BigInt(v);
+            largestNo = v;
         if (v < smallestNo)
-            smallestNo = BigInt(v);
+            smallestNo = v;
         if (!Number.isInteger(v))
             hasFloat = true;
     }

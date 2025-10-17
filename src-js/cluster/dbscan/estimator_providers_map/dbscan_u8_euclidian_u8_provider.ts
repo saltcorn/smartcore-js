@@ -1,4 +1,4 @@
-import { type DenseMatrixRs, type InputType, type YType } from '../../../index.js'
+import { type DenseMatrixRs, type YType } from '../../../index.js'
 import { DenseMatrix } from '../../../linalg/dense-matrix/index.js'
 import { DBSCANU8I32EuclidianU8, DBSCANU8EuclidianU8Parameters, DenseMatrixU8 } from '../../../core-bindings/index.js'
 import { type IDBSCANBaseParameters, setDBSCANParametersValues } from '../parameters.js'
@@ -13,15 +13,13 @@ class DBSCANU8EuclidianU8Provider
     return parameters
   }
 
-  estimator(x: InputType, _y: YType, parameters: DBSCANU8EuclidianU8Parameters): DBSCANU8I32EuclidianU8 {
-    // TODO: Handle case where x is DataFrame
-    const xAsU8 = (x as DenseMatrix).asRsMatrix('u8') as DenseMatrixU8
+  estimator(x: DenseMatrix, _y: YType, parameters: DBSCANU8EuclidianU8Parameters): DBSCANU8I32EuclidianU8 {
+    const xAsU8 = x.asRsMatrix('u8') as DenseMatrixU8
     return DBSCANU8I32EuclidianU8.fit(xAsU8, parameters)
   }
 
-  toMatrix(x: InputType): DenseMatrixRs {
-    // TODO: Handle case where x is DataFrame
-    return (x as DenseMatrix).asRsMatrix('u8')
+  toMatrix(x: DenseMatrix): DenseMatrixRs {
+    return x.asRsMatrix('u8')
   }
 
   deserialize(data: Buffer): DBSCANU8I32EuclidianU8 {

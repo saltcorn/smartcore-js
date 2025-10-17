@@ -1,4 +1,4 @@
-import {} from '../../index.js';
+import { utilities } from '../../index.js';
 import {} from './parameters.js';
 import {} from '../../estimator.js';
 import { PredictorProvidersMap } from './estimator_providers_map/index.js';
@@ -24,7 +24,8 @@ class KMeans {
         this.parameters = parameters;
     }
     fit(x, y) {
-        this.estimator = this.estimatorProvider.estimator(x, y, this.parameters);
+        const matrix = utilities.inputTypeToDenseMatrix(x);
+        this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters);
         this._isFitted = true;
         return this;
     }
@@ -38,7 +39,7 @@ class KMeans {
     }
     predict(matrix) {
         this.ensureFitted('predict');
-        let denseMatrix = this.estimatorProvider.toMatrix(matrix);
+        let denseMatrix = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(matrix));
         return this.estimator.predict(denseMatrix);
     }
     serialize() {

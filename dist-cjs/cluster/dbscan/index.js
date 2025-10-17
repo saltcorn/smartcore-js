@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.DBSCAN = void 0;
-const index_js_1 = require("./estimator_providers_map/index.js");
+const index_js_1 = require("../../index.js");
+const index_js_2 = require("./estimator_providers_map/index.js");
 class DBSCAN {
     constructor(params) {
         this.name = DBSCAN.className;
@@ -11,7 +12,7 @@ class DBSCAN {
         this.config = config;
         this.config.numberType = this.config.numberType ?? 'f32';
         this.config.distanceType = this.config.distanceType ?? 'euclidian';
-        const distanceTypeMap = index_js_1.PredictorProvidersMap.get(this.config.numberType);
+        const distanceTypeMap = index_js_2.PredictorProvidersMap.get(this.config.numberType);
         if (!distanceTypeMap) {
             throw new Error(`Unknown number type '${this.config.numberType}'`);
         }
@@ -24,7 +25,8 @@ class DBSCAN {
         this.parameters = parameters;
     }
     fit(x, y) {
-        this.estimator = this.estimatorProvider.estimator(x, y, this.parameters);
+        const matrix = index_js_1.utilities.inputTypeToDenseMatrix(x);
+        this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters);
         this._isFitted = true;
         return this;
     }
@@ -38,7 +40,7 @@ class DBSCAN {
     }
     predict(matrix) {
         this.ensureFitted('predict');
-        let denseMatrix = this.estimatorProvider.toMatrix(matrix);
+        let denseMatrix = this.estimatorProvider.toMatrix(index_js_1.utilities.inputTypeToDenseMatrix(matrix));
         return this.estimator.predict(denseMatrix);
     }
     serialize() {

@@ -1,4 +1,4 @@
-import { type DenseMatrixRs, type InputType, type YType } from '../../../index.js'
+import { type DenseMatrixRs, type YType } from '../../../index.js'
 import { DenseMatrix } from '../../../linalg/dense-matrix/index.js'
 import {
   DBSCANU32I32ManhattanU32,
@@ -19,15 +19,13 @@ class DBSCANU32ManhattanU32Provider
     return parameters
   }
 
-  estimator(x: InputType, _y: YType, parameters: DBSCANU32ManhattanU32Parameters): DBSCANU32I32ManhattanU32 {
-    // TODO: Handle case where x is DataFrame
-    const xAsU32 = (x as DenseMatrix).asRsMatrix('u32') as DenseMatrixU32
+  estimator(x: DenseMatrix, _y: YType, parameters: DBSCANU32ManhattanU32Parameters): DBSCANU32I32ManhattanU32 {
+    const xAsU32 = x.asRsMatrix('u32') as DenseMatrixU32
     return DBSCANU32I32ManhattanU32.fit(xAsU32, parameters)
   }
 
-  toMatrix(x: InputType): DenseMatrixRs {
-    // TODO: Handle case where x is DataFrame
-    return (x as DenseMatrix).asRsMatrix('u32')
+  toMatrix(x: DenseMatrix): DenseMatrixRs {
+    return x.asRsMatrix('u32')
   }
 
   deserialize(data: Buffer): DBSCANU32I32ManhattanU32 {

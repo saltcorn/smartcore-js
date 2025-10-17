@@ -1,7 +1,8 @@
 import * as numberTypeCheckers from './number_type_checkers.js';
 export * as dataFrame from './data_frame.js';
+export * as utilities from './utilities/index.js';
 export * from './linalg/index.js';
-// export * as linearModel from './linear_model/index.js'
+export * as linearModel from './linear_model/index.js';
 // export * as ensemble from './ensemble/index.js'
 export * as preprocessing from './preprocessing/index.js';
 export * as dataset from './dataset/index.js';
@@ -9,7 +10,7 @@ export * as modelSelection from './model_selection/index.js';
 export * as metrics from './metrics/index.js';
 export * as pipeline from './pipeline/index.js';
 export * as cluster from './cluster/index.js';
-// export * as decomposition from './decomposition/index.js'
+export * as decomposition from './decomposition/index.js';
 // export * as naiveBayes from './naive_bayes/index.js'
 // export * as neighbors from './neighbors/index.js'
 export * as coreBindings from './core-bindings/index.js';
@@ -23,9 +24,9 @@ function asTypedY(y) {
     let hasFloat = false;
     for (let v of y) {
         if (v > largestNo)
-            largestNo = BigInt(v);
+            largestNo = v;
         if (v < smallestNo)
-            smallestNo = BigInt(v);
+            smallestNo = v;
         if (!Number.isInteger(v))
             hasFloat = true;
     }

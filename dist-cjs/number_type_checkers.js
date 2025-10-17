@@ -10,6 +10,7 @@ exports.isU64 = isU64;
 exports.isU8 = isU8;
 exports.bigintToNumber = bigintToNumber;
 exports.asF64 = asF64;
+exports.asF32 = asF32;
 function isU8(no) {
     return Number.isInteger(no) && no >= 0 && no <= 255;
 }
@@ -77,13 +78,13 @@ function bigintToNumber(no) {
         throw new Error(`Could not represent the value ${no} as a number.`);
     return regularNo;
 }
-// function asF32(no: number | bigint): number {
-//   let floatNo = bigintToNumber(no)
-//   if (!isF32(floatNo)) {
-//     throw new Error(`Expected a finite number within the F32 range. Found: ${no}.`)
-//   }
-//   return floatNo
-// }
+function asF32(no) {
+    let floatNo = bigintToNumber(no);
+    if (!isF32(floatNo)) {
+        throw new Error(`Expected a finite number within the F32 range. Found: ${no}.`);
+    }
+    return floatNo;
+}
 function isF64(no) {
     return typeof no === 'number' && isFinite(no);
 }

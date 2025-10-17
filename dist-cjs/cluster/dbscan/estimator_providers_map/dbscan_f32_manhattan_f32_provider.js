@@ -9,12 +9,10 @@ class DBSCANF32ManhattanF32Provider {
         return parameters;
     }
     estimator(x, _y, parameters) {
-        // TODO: Handle case where x is DataFrame
         const xAsF32 = x.asRsMatrix('f32');
         return index_js_1.DBSCANF32I32ManhattanF32.fit(xAsF32, parameters);
     }
     toMatrix(x) {
-        // TODO: Handle case where x is DataFrame
         return x.asRsMatrix('f32');
     }
     deserialize(data) {

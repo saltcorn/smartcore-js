@@ -1,4 +1,4 @@
-import { type DenseMatrixRs, type InputType, type YType } from '../../../index.js'
+import { type DenseMatrixRs, type YType } from '../../../index.js'
 import { DenseMatrix } from '../../../linalg/dense-matrix/index.js'
 import {
   DBSCANU64I32EuclidianU64,
@@ -17,15 +17,13 @@ class DBSCANU64EuclidianU64Provider
     return parameters
   }
 
-  estimator(x: InputType, _y: YType, parameters: DBSCANU64EuclidianU64Parameters): DBSCANU64I32EuclidianU64 {
-    // TODO: Handle case where x is DataFrame
-    const xAsU64 = (x as DenseMatrix).asRsMatrix('u64') as DenseMatrixU64
+  estimator(x: DenseMatrix, _y: YType, parameters: DBSCANU64EuclidianU64Parameters): DBSCANU64I32EuclidianU64 {
+    const xAsU64 = x.asRsMatrix('u64') as DenseMatrixU64
     return DBSCANU64I32EuclidianU64.fit(xAsU64, parameters)
   }
 
-  toMatrix(x: InputType): DenseMatrixRs {
-    // TODO: Handle case where x is DataFrame
-    return (x as DenseMatrix).asRsMatrix('u64')
+  toMatrix(x: DenseMatrix): DenseMatrixRs {
+    return x.asRsMatrix('u64')
   }
 
   deserialize(data: Buffer): DBSCANU64I32EuclidianU64 {

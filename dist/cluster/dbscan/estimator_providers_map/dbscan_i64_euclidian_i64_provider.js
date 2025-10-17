@@ -10,12 +10,10 @@ class DBSCANI64EuclidianI64Provider {
         return parameters;
     }
     estimator(x, _y, parameters) {
-        // TODO: Handle case where x is DataFrame
         const xAsI64 = x.asRsMatrix('i64');
         return DBSCANI64I32EuclidianI64.fit(xAsI64, parameters);
     }
     toMatrix(x) {
-        // TODO: Handle case where x is DataFrame
         return x.asRsMatrix('i64');
     }
     deserialize(data) {

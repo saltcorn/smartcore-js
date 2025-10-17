@@ -2142,6 +2142,13 @@ export declare class OneHotEncoderParameters {
   constructor(categoricalParams: BigUint64Array)
 }
 
+export declare class PCAF32 {
+  static fit(data: DenseMatrixF32, parameters: PCAParameters): PCAF32
+  transform(x: DenseMatrixF32): DenseMatrixF32
+  serialize(): Buffer
+  static deserialize(data: Buffer): PCAF32
+}
+
 export declare class PCAF64 {
   static fit(data: DenseMatrixF64, parameters: PCAParameters): PCAF64
   transform(x: DenseMatrixF64): DenseMatrixF64
@@ -2257,20 +2264,35 @@ export declare class RecallF64 {
 }
 export type Recallf64 = RecallF64
 
-export declare class RidgeRegressionF64BigI64 {
+export declare class RidgeRegressionF32F32 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: RidgeRegressionF64Parameters): RidgeRegressionF64BigI64
-  predict(x: DenseMatrixF64): BigInt64Array
+  static fit(x: DenseMatrixF32, y: Float32Array, parameters: RidgeRegressionF32Parameters): RidgeRegressionF32F32
+  predict(x: DenseMatrixF32): Float32Array
   serialize(): Buffer
-  static deserialize(data: Buffer): RidgeRegressionF64BigI64
+  static deserialize(data: Buffer): RidgeRegressionF32F32
 }
 
-export declare class RidgeRegressionF64BigU64 {
+export declare class RidgeRegressionF32F64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: RidgeRegressionF64Parameters): RidgeRegressionF64BigU64
-  predict(x: DenseMatrixF64): BigUint64Array
+  static fit(x: DenseMatrixF32, y: Float64Array, parameters: RidgeRegressionF32Parameters): RidgeRegressionF32F64
+  predict(x: DenseMatrixF32): Float64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): RidgeRegressionF64BigU64
+  static deserialize(data: Buffer): RidgeRegressionF32F64
+}
+
+export declare class RidgeRegressionF32Parameters {
+  constructor()
+  withAlpha(alpha: number): void
+  withNormalize(normalize: boolean): void
+  withSolver(solver: RidgeRegressionSolverName): void
+}
+
+export declare class RidgeRegressionF64F32 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: Float32Array, parameters: RidgeRegressionF64Parameters): RidgeRegressionF64F32
+  predict(x: DenseMatrixF64): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RidgeRegressionF64F32
 }
 
 export declare class RidgeRegressionF64F64 {
@@ -2279,14 +2301,6 @@ export declare class RidgeRegressionF64F64 {
   predict(x: DenseMatrixF64): Float64Array
   serialize(): Buffer
   static deserialize(data: Buffer): RidgeRegressionF64F64
-}
-
-export declare class RidgeRegressionF64I64 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: Array<number>, parameters: RidgeRegressionF64Parameters): RidgeRegressionF64I64
-  predict(x: DenseMatrixF64): Array<number>
-  serialize(): Buffer
-  static deserialize(data: Buffer): RidgeRegressionF64I64
 }
 
 export declare class RidgeRegressionF64Parameters {

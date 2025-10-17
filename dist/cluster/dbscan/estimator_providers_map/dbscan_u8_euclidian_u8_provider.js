@@ -10,12 +10,10 @@ class DBSCANU8EuclidianU8Provider {
         return parameters;
     }
     estimator(x, _y, parameters) {
-        // TODO: Handle case where x is DataFrame
         const xAsU8 = x.asRsMatrix('u8');
         return DBSCANU8I32EuclidianU8.fit(xAsU8, parameters);
     }
     toMatrix(x) {
-        // TODO: Handle case where x is DataFrame
         return x.asRsMatrix('u8');
     }
     deserialize(data) {

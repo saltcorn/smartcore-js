@@ -35,9 +35,9 @@ class BaseEstimator {
                     this.columns = x.columnNames;
                 }
             }
-            return DenseMatrix.f64(x.getNumericColumns(), true);
+            return new DenseMatrix(x.getNumericColumns(), { columnMajor: true });
         }
-        return DenseMatrix.f64(x);
+        return new DenseMatrix(x);
     }
     /**
      * Validates input data
@@ -102,34 +102,6 @@ class BaseEstimator {
         if (!this._isFitted || this.estimator === null) {
             throw new Error(`${this.name}: Cannot call '${methodName}' before calling 'fit'. Please fit the model first.`);
         }
-    }
-    /**
-     * Converts DenseMatrix to DataFrame
-     */
-    toDataFrame(matrix) {
-        const rows = matrix.nrows;
-        const cols = matrix.ncols;
-        const matrixData = matrix.asF64();
-        // Build records with component names
-        const records = [];
-        for (let i = 0; i < rows; i++) {
-            const record = {};
-            for (let j = 0; j < cols; j++) {
-                let columnName;
-                if (Array.isArray(this.columns) && this.columns.length !== 0) {
-                    if (j >= this.columns.length) {
-                        throw new Error(`${this.name}: Column names count mismatch. Expected: ${cols} Found: ${this.columns.length}`);
-                    }
-                    columnName = this.columns[j];
-                }
-                else {
-                    columnName = this.getComponentColumnName(j);
-                }
-                record[columnName] = matrixData.get([i, j]);
-            }
-            records.push(record);
-        }
-        return new DataFrame(records);
     }
     /**
      * Get column names used during fit

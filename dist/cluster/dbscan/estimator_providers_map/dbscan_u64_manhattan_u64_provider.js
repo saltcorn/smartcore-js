@@ -10,12 +10,10 @@ class DBSCANU64ManhattanU64Provider {
         return parameters;
     }
     estimator(x, _y, parameters) {
-        // TODO: Handle case where x is DataFrame
         const xAsU64 = x.asRsMatrix('u64');
         return DBSCANU64I32ManhattanU64.fit(xAsU64, parameters);
     }
     toMatrix(x) {
-        // TODO: Handle case where x is DataFrame
         return x.asRsMatrix('u64');
     }
     deserialize(data) {

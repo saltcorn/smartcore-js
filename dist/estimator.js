@@ -1,1 +1,1 @@
-import {} from './index.js';
+import { DenseMatrix } from './index.js';

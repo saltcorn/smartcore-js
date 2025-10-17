@@ -56,8 +56,8 @@ class DenseMatrix {
       this._smallestNo = data[0][0]
       this._hasFloat = false
       for (let v of valuesFlat) {
-        if (v > this._largestNo) this._largestNo = BigInt(v)
-        if (v < this._smallestNo) this._smallestNo = BigInt(v)
+        if (v > this._largestNo) this._largestNo = v
+        if (v < this._smallestNo) this._smallestNo = v
         if (!Number.isInteger(v)) this._hasFloat = true
       }
       // floating point types

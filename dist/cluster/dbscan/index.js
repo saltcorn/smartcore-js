@@ -1,4 +1,4 @@
-import {} from '../../index.js';
+import { utilities } from '../../index.js';
 import {} from './parameters.js';
 import {} from '../../estimator.js';
 import {} from '../../metrics/index.js';
@@ -25,7 +25,8 @@ class DBSCAN {
         this.parameters = parameters;
     }
     fit(x, y) {
-        this.estimator = this.estimatorProvider.estimator(x, y, this.parameters);
+        const matrix = utilities.inputTypeToDenseMatrix(x);
+        this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters);
         this._isFitted = true;
         return this;
     }
@@ -39,7 +40,7 @@ class DBSCAN {
     }
     predict(matrix) {
         this.ensureFitted('predict');
-        let denseMatrix = this.estimatorProvider.toMatrix(matrix);
+        let denseMatrix = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(matrix));
         return this.estimator.predict(denseMatrix);
     }
     serialize() {

@@ -21,9 +21,9 @@ class DenseMatrix {
             this._hasFloat = false;
             for (let v of valuesFlat) {
                 if (v > this._largestNo)
-                    this._largestNo = BigInt(v);
+                    this._largestNo = v;
                 if (v < this._smallestNo)
-                    this._smallestNo = BigInt(v);
+                    this._smallestNo = v;
                 if (!Number.isInteger(v))
                     this._hasFloat = true;
             }

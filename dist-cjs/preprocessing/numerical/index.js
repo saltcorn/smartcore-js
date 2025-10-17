@@ -20,7 +20,8 @@ class StandardScaler {
         this.parameters = parameters;
     }
     fit(x, y) {
-        this.estimator = this.estimatorProvider.estimator(x, y, this.parameters);
+        const matrix = index_js_1.utilities.inputTypeToDenseMatrix(x);
+        this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters);
         this._isFitted = true;
         return this;
     }
@@ -34,7 +35,7 @@ class StandardScaler {
     }
     transform(matrix) {
         this.ensureFitted('transform');
-        let denseMatrix = this.estimatorProvider.toMatrix(matrix);
+        let denseMatrix = this.estimatorProvider.toMatrix(index_js_1.utilities.inputTypeToDenseMatrix(matrix));
         return new index_js_1.DenseMatrix(this.estimator.transform(denseMatrix));
     }
     serialize() {

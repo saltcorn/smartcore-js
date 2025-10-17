@@ -13,12 +13,10 @@ class DBSCANI32MinkowskiI32Provider {
         return parameters;
     }
     estimator(x, _y, parameters) {
-        // TODO: Handle case where x is DataFrame
         const xAsI32 = x.asRsMatrix('i32');
         return DBSCANI32I32MinkowskiI32.fit(xAsI32, parameters);
     }
     toMatrix(x) {
-        // TODO: Handle case where x is DataFrame
         return x.asRsMatrix('i32');
     }
     deserialize(data) {

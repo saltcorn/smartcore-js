@@ -1,4 +1,4 @@
-import { type InputType, type YType } from '../../index.js'
+import { utilities, type InputType, type YType } from '../../index.js'
 import { type IKMeansBaseParameters, type NumberTypeRs } from './parameters.js'
 import { type PredictorProvider, type Predictor } from '../../estimator.js'
 import { PredictorProvidersMap, type PredictOutputType } from './estimator_providers_map/index.js'
@@ -44,7 +44,8 @@ class KMeans {
   }
 
   fit(x: InputType, y: YType): this {
-    this.estimator = this.estimatorProvider.estimator(x, y, this.parameters)
+    const matrix = utilities.inputTypeToDenseMatrix(x)
+    this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters)
     this._isFitted = true
     return this
   }
@@ -61,7 +62,7 @@ class KMeans {
 
   predict(matrix: InputType): YType {
     this.ensureFitted('predict')
-    let denseMatrix = this.estimatorProvider.toMatrix(matrix)
+    let denseMatrix = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(matrix))
     return this.estimator!.predict(denseMatrix)
   }
 

@@ -1,4 +1,4 @@
-import { type DenseMatrixRs, type InputType, type YType } from '../../../index.js'
+import { type DenseMatrixRs, type YType } from '../../../index.js'
 import { DenseMatrix } from '../../../linalg/dense-matrix/index.js'
 import {
   DBSCANF32I32MahalanobisF32,
@@ -23,15 +23,13 @@ class DBSCANF32MahalanobisF32Provider
     return parameters
   }
 
-  estimator(x: InputType, _y: YType, parameters: DBSCANF32MahalanobisF32Parameters): DBSCANF32I32MahalanobisF32 {
-    // TODO: Handle case where x is DataFrame
-    const xAsF32 = (x as DenseMatrix).asRsMatrix('f32') as DenseMatrixF32
+  estimator(x: DenseMatrix, _y: YType, parameters: DBSCANF32MahalanobisF32Parameters): DBSCANF32I32MahalanobisF32 {
+    const xAsF32 = x.asRsMatrix('f32') as DenseMatrixF32
     return DBSCANF32I32MahalanobisF32.fit(xAsF32, parameters)
   }
 
-  toMatrix(x: InputType): DenseMatrixRs {
-    // TODO: Handle case where x is DataFrame
-    return (x as DenseMatrix).asRsMatrix('f32')
+  toMatrix(x: DenseMatrix): DenseMatrixRs {
+    return x.asRsMatrix('f32')
   }
 
   deserialize(data: Buffer): DBSCANF32I32MahalanobisF32 {

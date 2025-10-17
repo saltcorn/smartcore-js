@@ -10,12 +10,10 @@ class DBSCANU16HammingU16Provider {
         return parameters;
     }
     estimator(x, _y, parameters) {
-        // TODO: Handle case where x is DataFrame
         const xAsU16 = x.asRsMatrix('u16');
         return DBSCANU16I32HammingU16.fit(xAsU16, parameters);
     }
     toMatrix(x) {
-        // TODO: Handle case where x is DataFrame
         return x.asRsMatrix('u16');
     }
     deserialize(data) {

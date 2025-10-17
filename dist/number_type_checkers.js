@@ -65,13 +65,13 @@ function bigintToNumber(no) {
         throw new Error(`Could not represent the value ${no} as a number.`);
     return regularNo;
 }
-// function asF32(no: number | bigint): number {
-//   let floatNo = bigintToNumber(no)
-//   if (!isF32(floatNo)) {
-//     throw new Error(`Expected a finite number within the F32 range. Found: ${no}.`)
-//   }
-//   return floatNo
-// }
+function asF32(no) {
+    let floatNo = bigintToNumber(no);
+    if (!isF32(floatNo)) {
+        throw new Error(`Expected a finite number within the F32 range. Found: ${no}.`);
+    }
+    return floatNo;
+}
 function isF64(no) {
     return typeof no === 'number' && isFinite(no);
 }
@@ -83,4 +83,4 @@ function asF64(no) {
     return floatNo;
 }
 export { isF32, isF64, isI32, isI64, isU16, isU32, isU64, isU8, bigintToNumber };
-export { asF64 };
+export { asF64, asF32 };

@@ -10,12 +10,10 @@ class DBSCANU32EuclidianU32Provider {
         return parameters;
     }
     estimator(x, _y, parameters) {
-        // TODO: Handle case where x is DataFrame
         const xAsU32 = x.asRsMatrix('u32');
         return DBSCANU32I32EuclidianU32.fit(xAsU32, parameters);
     }
     toMatrix(x) {
-        // TODO: Handle case where x is DataFrame
         return x.asRsMatrix('u32');
     }
     deserialize(data) {

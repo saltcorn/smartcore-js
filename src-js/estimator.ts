@@ -1,4 +1,4 @@
-import { type DenseMatrixRs, type InputType, type YType } from './index.js'
+import { DenseMatrix, type DenseMatrixRs, type YType } from './index.js'
 
 interface Estimator {
   serialize(): Buffer
@@ -14,8 +14,8 @@ interface Transformer extends Estimator {
 
 interface EstimatorProvider<C, P, E extends Estimator> {
   parameters(config: C): P
-  estimator(x: InputType, y: YType, parameters: P): E
-  toMatrix(x: InputType): DenseMatrixRs
+  estimator(x: DenseMatrix, y: YType, parameters: P): E
+  toMatrix(x: DenseMatrix): DenseMatrixRs
   deserialize(data: Buffer): E
 }
 

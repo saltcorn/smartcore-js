@@ -12,7 +12,7 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix,
 };
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 use parameters::PCAParameters;
 
 macro_rules! pca_struct {
@@ -64,3 +64,4 @@ macro_rules! pca_struct {
 }
 
 pca_struct! {f64}
+pca_struct! {f32}

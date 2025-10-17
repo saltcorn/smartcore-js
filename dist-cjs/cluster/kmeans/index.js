@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.KMeans = void 0;
-const index_js_1 = require("./estimator_providers_map/index.js");
+const index_js_1 = require("../../index.js");
+const index_js_2 = require("./estimator_providers_map/index.js");
 class KMeans {
     constructor(params) {
         this.name = KMeans.className;
@@ -11,7 +12,7 @@ class KMeans {
         this.config = config;
         this.config.targetType = this.config.targetType ?? 'f32';
         this.config.predictOutputType = this.config.predictOutputType ?? 'i32';
-        const distanceTypeMap = index_js_1.PredictorProvidersMap.get(this.config.targetType);
+        const distanceTypeMap = index_js_2.PredictorProvidersMap.get(this.config.targetType);
         if (!distanceTypeMap) {
             throw new Error(`Invalid value for target type '${this.config.targetType}'`);
         }
@@ -24,7 +25,8 @@ class KMeans {
         this.parameters = parameters;
     }
     fit(x, y) {
-        this.estimator = this.estimatorProvider.estimator(x, y, this.parameters);
+        const matrix = index_js_1.utilities.inputTypeToDenseMatrix(x);
+        this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters);
         this._isFitted = true;
         return this;
     }
@@ -38,7 +40,7 @@ class KMeans {
     }
     predict(matrix) {
         this.ensureFitted('predict');
-        let denseMatrix = this.estimatorProvider.toMatrix(matrix);
+        let denseMatrix = this.estimatorProvider.toMatrix(index_js_1.utilities.inputTypeToDenseMatrix(matrix));
         return this.estimator.predict(denseMatrix);
     }
     serialize() {

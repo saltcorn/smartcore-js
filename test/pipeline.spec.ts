@@ -1,6 +1,6 @@
 import assert from 'assert'
 import {
-  //   linearModel,
+  linearModel,
   preprocessing,
   dataset,
   //   ensemble,
@@ -8,7 +8,7 @@ import {
   metrics,
   pipeline,
   cluster,
-  //   decomposition,
+  decomposition,
   //   naiveBayes,
   //   neighbors,
   dataFrame,
@@ -16,14 +16,21 @@ import {
 import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-js/core-bindings/index.js'
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
-// let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
+let {
+  // LogisticRegression, LinearRegression,
+  RidgeRegression,
+  // Lasso, ElasticNet
+} = linearModel
 // let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
 let {
   StandardScaler,
   // OneHotEncoder
 } = preprocessing
 let { KMeans, DBSCAN } = cluster
-// let { PCA, SVD } = decomposition
+let {
+  PCA,
+  // SVD
+} = decomposition
 // let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
 // let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
@@ -100,8 +107,8 @@ describe('Pipelines', () => {
 
   it('StandardScaler + KMeans', () => {
     let pipe = makePipeline([
-      ['standardscaler', new StandardScaler({ targetType: 'f64' })],
-      ['kmeans', new KMeans({ targetType: 'f64' })],
+      ['standardscaler', new StandardScaler()],
+      ['kmeans', new KMeans()],
     ])
     let irisData = loadIris({ returnXY: true })
     let [x, y] = irisData instanceof Array ? irisData : []
@@ -130,20 +137,21 @@ describe('Pipelines', () => {
     assert(score >= 0)
   })
 
-  //   it('StandardScaler + PCA + LogisticRegression', () => {
-  //     let columns = df.columnNames.filter((column) => !column.startsWith('customer'))
-  //     // console.log('Selected: ', columns)
-  //     let pipe = makePipeline(
-  //       [new StandardScaler(), ['pca', new PCA({ nComponents: 14, columns })], new RidgeRegression()],
-  //       {
-  //         verbose: true,
-  //       },
-  //     )
-  //     const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
-  //     pipe.fit(df, y).transform(df)
-  //     const predictions = pipe.predict(df)
-  //     assert(predictions)
-  //   })
+  it('StandardScaler + PCA + LogisticRegression', () => {
+    let columns = df.columnNames.filter((column) => !column.startsWith('customer'))
+    // console.log('Selected: ', columns)
+    let pipe = makePipeline(
+      [new StandardScaler(), ['pca', new PCA({ nComponents: 14, columns })], new RidgeRegression()],
+      {
+        verbose: true,
+      },
+    )
+    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
+    pipe.fit(df, y).transform(df)
+    const predictions = pipe.predict(df)
+    assert(predictions)
+  })
+
   it('SVD + DBSCAN', () => {
     let pipe = makePipeline([
       //   ['svd', new SVD()],

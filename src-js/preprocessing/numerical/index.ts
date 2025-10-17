@@ -1,4 +1,4 @@
-import { DenseMatrix, type InputType, type YType } from '../../index.js'
+import { DenseMatrix, utilities, type InputType, type YType } from '../../index.js'
 import { type TransformerProvider, type Transformer } from '../../estimator.js'
 import { TransformerProvidersMap } from './estimator_providers_map/index.js'
 
@@ -39,7 +39,8 @@ class StandardScaler {
   }
 
   fit(x: InputType, y: YType): this {
-    this.estimator = this.estimatorProvider.estimator(x, y, this.parameters)
+    const matrix = utilities.inputTypeToDenseMatrix(x)
+    this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters)
     this._isFitted = true
     return this
   }
@@ -56,7 +57,7 @@ class StandardScaler {
 
   transform(matrix: InputType): DenseMatrix {
     this.ensureFitted('transform')
-    let denseMatrix = this.estimatorProvider.toMatrix(matrix)
+    let denseMatrix = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(matrix))
     return new DenseMatrix(this.estimator!.transform(denseMatrix))
   }
 
