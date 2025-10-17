@@ -14,5 +14,22 @@
     "outDir": "./dist"
   },
   "include": ["."],
-  "exclude": ["node_modules", "bench", "test/**/*", "dist/**/*", "dist-cjs/**/*"]
+  "exclude": [
+    "node_modules",
+    "bench",
+    "test/**/*",
+    "dist/**/*",
+    "dist-cjs/**/*",
+    "src-js/decomposition/**/*",
+    "src-js/ensemble/**/*",
+    "src-js/linear_model/**/*",
+    "src-js/model_selection/**/*",
+    "src-js/naive_bayes/**/*",
+    "src-js/neighbors/**/*",
+    "src-js/preprocessing/**/*",
+    "src-js/cluster/kmeans.ts",
+    "src-js/base_estimator.ts",
+    "src-js/base_predictor.ts",
+    "src-js/base_transformer.ts"
+  ]
 }

@@ -1,4 +1,7 @@
+import { PCA } from '../decomposition/index.js'
 import { type YType, type InputType, type OutputType, dataFrame } from '../index.js'
+import { RidgeRegression } from '../linear_model/index.js'
+import { StandardScaler } from '../preprocessing/index.js'
 import type { Estimator, Predictor, Transformer } from './index.js'
 import { StepAdapter } from './step_adapter.js'
 
@@ -334,6 +337,57 @@ class Pipeline {
 
     return adapter.predict(Xt)
   }
+
+  serialize(): SerializedPipeline {
+    const serializedSteps: SerializedEstimator[] = []
+    for (let [stepName, step] of this._steps) {
+      if (step !== null && step !== 'passthrough' && typeof step !== 'string') {
+        const typeKey = step.name
+        const name = stepName
+        const serializedData = step.serialize()
+        serializedSteps.push({ typeKey, name, serializedData })
+      }
+    }
+    return {
+      steps: serializedSteps,
+      config: this._config,
+    }
+  }
+
+  static deserialize(serializedData: SerializedPipeline): Pipeline {
+    let steps: Step[] = []
+    for (const step of serializedData.steps) {
+      const Deserializer = EstimatorsDeserializers.get(step.typeKey)
+      if (!Deserializer) {
+        throw new Error(`[Pipeline] Deserialization failed. No deserializer was found for ${step.typeKey}`)
+      }
+      const deserializedStep = Deserializer.deserialize(step.serializedData)
+      steps.push([step.name, deserializedStep as TransformerType])
+    }
+    const pipeline = new Pipeline(steps)
+    pipeline._isFitted = true
+    return pipeline
+  }
+}
+
+interface EstimatorDeserializer {
+  deserialize(serializedData: any): Estimator<any, any, any>
+}
+
+const EstimatorsDeserializers: Map<string, EstimatorDeserializer> = new Map()
+EstimatorsDeserializers.set(PCA.name, PCA)
+EstimatorsDeserializers.set(RidgeRegression.name, RidgeRegression)
+EstimatorsDeserializers.set(StandardScaler.name, StandardScaler)
+
+interface SerializedEstimator {
+  typeKey: string
+  name: string
+  serializedData: any
+}
+
+interface SerializedPipeline {
+  steps: SerializedEstimator[]
+  config: PipelineConfig
 }
 
 export type { Step, DefinedStepItem, InputType, OutputType, PipelineConfig, StepItem, NamedStep }

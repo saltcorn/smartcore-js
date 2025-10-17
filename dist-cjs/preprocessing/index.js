@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.OneHotEncoder = exports.StandardScaler = void 0;
-const numerical_js_1 = __importDefault(require("./numerical.js"));
-exports.StandardScaler = numerical_js_1.default;
-const categorical_js_1 = __importDefault(require("./categorical.js"));
-exports.OneHotEncoder = categorical_js_1.default;
+const index_js_1 = require("./numerical/index.js");
+Object.defineProperty(exports, "StandardScaler", { enumerable: true, get: function () { return index_js_1.StandardScaler; } });
+const index_js_2 = require("./categorical/index.js");
+Object.defineProperty(exports, "OneHotEncoder", { enumerable: true, get: function () { return index_js_2.OneHotEncoder; } });

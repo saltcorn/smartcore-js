@@ -87,7 +87,7 @@
     "@types/copyfiles": "^2",
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.3.1",
-    "chalk": "^5.4.1",
+    "chalk": "^5.6.2",
     "copyfiles": "^2.4.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.1.2",

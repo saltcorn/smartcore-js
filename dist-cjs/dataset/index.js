@@ -17,10 +17,6 @@ class Dataset {
 }
 function prepResponse(data, params) {
     if (params?.returnXY) {
-        if (params.unsigned && 'withTargetUnsigned' in data && typeof data.withTargetUnsigned === 'function') {
-            let irisDataUnsigned = data.withTargetUnsigned();
-            return [new index_js_2.DenseMatrix(data.denseMatrix()), irisDataUnsigned.target];
-        }
         return [new index_js_2.DenseMatrix(data.denseMatrix()), data.target];
     }
     return new Dataset(data);

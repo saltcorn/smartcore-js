@@ -12,19 +12,19 @@ use smartcore::{
   linear::ridge_regression::RidgeRegression as LibRidgeRegression,
 };
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
-pub use parameters::RidgeRegressionF64Parameters;
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+pub use parameters::{RidgeRegressionF32Parameters, RidgeRegressionF64Parameters};
 
 macro_rules! ridge_regression_struct {
-  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty ) => {
+  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
     paste! {
-        #[napi(js_name=""[<RidgeRegression $x:upper $y_mod $y:upper>]"")]
+        #[napi(js_name=""[<RidgeRegression $x:upper $y:upper>]"")]
         #[derive(Debug)]
-        pub struct [<RidgeRegression $x:upper $y_mod $y:upper>] {
+        pub struct [<RidgeRegression $x:upper $y:upper>] {
             inner: LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>,
         }
 
-        impl Default for [<RidgeRegression $x:upper $y_mod $y:upper>] {
+        impl Default for [<RidgeRegression $x:upper $y:upper>] {
             fn default() -> Self {
                 Self {
                     inner: LibRidgeRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
@@ -33,7 +33,7 @@ macro_rules! ridge_regression_struct {
         }
 
         #[napi]
-        impl [<RidgeRegression $x:upper $y_mod $y:upper>] {
+        impl [<RidgeRegression $x:upper $y:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self::default()
@@ -78,7 +78,7 @@ macro_rules! ridge_regression_struct {
             }
         }
 
-        impl AsRef<LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<RidgeRegression $x:upper $y_mod $y:upper>] {
+        impl AsRef<LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<RidgeRegression $x:upper $y:upper>] {
             fn as_ref(&self) -> &LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>> {
                 &self.inner
             }
@@ -87,7 +87,8 @@ macro_rules! ridge_regression_struct {
   };
 }
 
-ridge_regression_struct! {f64, f64, "", DenseMatrixF64, Float64Array}
-ridge_regression_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
-ridge_regression_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}
-ridge_regression_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}
+ridge_regression_struct! {f64, f64, DenseMatrixF64, Float64Array}
+ridge_regression_struct! {f64, f32, DenseMatrixF64, Float32Array}
+
+ridge_regression_struct! {f32, f64, DenseMatrixF32, Float64Array}
+ridge_regression_struct! {f32, f32, DenseMatrixF32, Float32Array}
