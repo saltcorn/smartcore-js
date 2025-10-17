@@ -1,7 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.StepAdapter = exports.Pipeline = void 0;
-const index_js_1 = require("../index.js");
+const index_js_1 = require("../decomposition/index.js");
+const index_js_2 = require("../index.js");
+const index_js_3 = require("../linear_model/index.js");
+const index_js_4 = require("../preprocessing/index.js");
 const step_adapter_js_1 = require("./step_adapter.js");
 Object.defineProperty(exports, "StepAdapter", { enumerable: true, get: function () { return step_adapter_js_1.StepAdapter; } });
 class Pipeline {
@@ -128,7 +131,7 @@ class Pipeline {
         if (!this._config.verbose) {
             return;
         }
-        if (data instanceof index_js_1.dataFrame.DataFrame) {
+        if (data instanceof index_js_2.dataFrame.DataFrame) {
             console.log(`\t${label}: Dataframe(${data.rowsCount} x ${data.columnsCount})`);
         }
         else if (Array.isArray(data)) {
@@ -253,5 +256,38 @@ class Pipeline {
         }
         return adapter.predict(Xt);
     }
+    serialize() {
+        const serializedSteps = [];
+        for (let [stepName, step] of this._steps) {
+            if (step !== null && step !== 'passthrough' && typeof step !== 'string') {
+                const typeKey = step.name;
+                const name = stepName;
+                const serializedData = step.serialize();
+                serializedSteps.push({ typeKey, name, serializedData });
+            }
+        }
+        return {
+            steps: serializedSteps,
+            config: this._config,
+        };
+    }
+    static deserialize(serializedData) {
+        let steps = [];
+        for (const step of serializedData.steps) {
+            const Deserializer = EstimatorsDeserializers.get(step.typeKey);
+            if (!Deserializer) {
+                throw new Error(`[Pipeline] Deserialization failed. No deserializer was found for ${step.typeKey}`);
+            }
+            const deserializedStep = Deserializer.deserialize(step.serializedData);
+            steps.push([step.name, deserializedStep]);
+        }
+        const pipeline = new Pipeline(steps);
+        pipeline._isFitted = true;
+        return pipeline;
+    }
 }
 exports.Pipeline = Pipeline;
+const EstimatorsDeserializers = new Map();
+EstimatorsDeserializers.set(index_js_1.PCA.name, index_js_1.PCA);
+EstimatorsDeserializers.set(index_js_3.RidgeRegression.name, index_js_3.RidgeRegression);
+EstimatorsDeserializers.set(index_js_4.StandardScaler.name, index_js_4.StandardScaler);

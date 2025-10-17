@@ -1,4 +1,7 @@
+import { PCA } from '../decomposition/index.js';
 import { dataFrame } from '../index.js';
+import { RidgeRegression } from '../linear_model/index.js';
+import { StandardScaler } from '../preprocessing/index.js';
 import { StepAdapter } from './step_adapter.js';
 class Pipeline {
     constructor(steps, config) {
@@ -249,5 +252,38 @@ class Pipeline {
         }
         return adapter.predict(Xt);
     }
+    serialize() {
+        const serializedSteps = [];
+        for (let [stepName, step] of this._steps) {
+            if (step !== null && step !== 'passthrough' && typeof step !== 'string') {
+                const typeKey = step.name;
+                const name = stepName;
+                const serializedData = step.serialize();
+                serializedSteps.push({ typeKey, name, serializedData });
+            }
+        }
+        return {
+            steps: serializedSteps,
+            config: this._config,
+        };
+    }
+    static deserialize(serializedData) {
+        let steps = [];
+        for (const step of serializedData.steps) {
+            const Deserializer = EstimatorsDeserializers.get(step.typeKey);
+            if (!Deserializer) {
+                throw new Error(`[Pipeline] Deserialization failed. No deserializer was found for ${step.typeKey}`);
+            }
+            const deserializedStep = Deserializer.deserialize(step.serializedData);
+            steps.push([step.name, deserializedStep]);
+        }
+        const pipeline = new Pipeline(steps);
+        pipeline._isFitted = true;
+        return pipeline;
+    }
 }
+const EstimatorsDeserializers = new Map();
+EstimatorsDeserializers.set(PCA.name, PCA);
+EstimatorsDeserializers.set(RidgeRegression.name, RidgeRegression);
+EstimatorsDeserializers.set(StandardScaler.name, StandardScaler);
 export { Pipeline, StepAdapter };

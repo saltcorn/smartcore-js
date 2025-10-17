@@ -4,6 +4,7 @@ import { Pipeline } from './pipeline.js'
 interface Estimator<X, Y, S> {
   name: string
   fit(x: X, y: Y): S
+  serialize(): any
 }
 
 interface Predictor<X, Y> {
@@ -23,5 +24,7 @@ function makePipeline(steps: Step[], config?: PipelineConfig) {
   return new Pipeline(steps, config)
 }
 
+const deserializePipeline = Pipeline.deserialize
+
 export type { Estimator, Predictor, Transformer, SerDe }
-export { makePipeline }
+export { makePipeline, deserializePipeline }

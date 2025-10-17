@@ -34,7 +34,7 @@ let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = datas
 let { trainTestSplit } = modelSelection
 let { accuracyScore } = metrics
 type DistanceType = metrics.DistanceType
-let { makePipeline } = pipeline
+let { makePipeline, deserializePipeline } = pipeline
 const { DataFrame } = dataFrame
 
 const parsedJson = readJSONFile('e-commerce-enhanced.json')
@@ -346,4 +346,22 @@ describe('Pipelines', () => {
   //     let score = accuracyScore(pipe.predict(xTest), yTest)
   //     assert.equal(typeof score, typeof 0)
   //   })
+
+  it('Serialize + Deserialize', () => {
+    let columns = df.columnNames.filter((column) => !column.startsWith('customer'))
+    // console.log('Selected: ', columns)
+    let pipe = makePipeline(
+      [new StandardScaler(), ['pca', new PCA({ nComponents: 14, columns })], new RidgeRegression()],
+      {
+        verbose: true,
+      },
+    )
+    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
+    pipe.fit(df, y).transform(df)
+    const predictions = pipe.predict(df)
+    assert(predictions)
+    let serializedPipe = pipe.serialize()
+    pipe = deserializePipeline(serializedPipe)
+    assert(pipe.predict(df))
+  })
 })

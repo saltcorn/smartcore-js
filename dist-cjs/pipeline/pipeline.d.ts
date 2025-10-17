@@ -60,6 +60,17 @@ declare class Pipeline {
      * Predicts using the final estimator
      */
     predict(x: InputType): YType;
+    serialize(): SerializedPipeline;
+    static deserialize(serializedData: SerializedPipeline): Pipeline;
+}
+interface SerializedEstimator {
+    typeKey: string;
+    name: string;
+    serializedData: any;
+}
+interface SerializedPipeline {
+    steps: SerializedEstimator[];
+    config: PipelineConfig;
 }
 export type { Step, DefinedStepItem, InputType, OutputType, PipelineConfig, StepItem, NamedStep };
 export { Pipeline, StepAdapter };
