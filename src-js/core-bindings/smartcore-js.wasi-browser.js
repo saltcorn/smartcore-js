@@ -355,6 +355,7 @@ export const StandardScalerF64 = __napiModule.exports.StandardScalerF64
 export const StandardScalerParameters = __napiModule.exports.StandardScalerParameters
 export const SVCF64I64 = __napiModule.exports.SVCF64I64
 export const SVCParametersF64I64 = __napiModule.exports.SVCParametersF64I64
+export const SVDF32 = __napiModule.exports.SVDF32
 export const SVDF64 = __napiModule.exports.SVDF64
 export const SVDF64DenseMatrixF64 = __napiModule.exports.SVDF64DenseMatrixF64
 export const SVDParameters = __napiModule.exports.SVDParameters

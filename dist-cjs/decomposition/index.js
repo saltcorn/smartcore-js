@@ -17,3 +17,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 // export { PCA } from './pca.js'
 // export { SVD } from './svd.js'
 __exportStar(require("./pca/index.js"), exports);
+__exportStar(require("./svd/index.js"), exports);

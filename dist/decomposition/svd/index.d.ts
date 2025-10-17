@@ -1,37 +1,37 @@
 import { DenseMatrix, type InputType, type YType } from '../../index.js';
 import { DataFrame } from '../../data_frame.js';
 import type { NumberTypeRs } from '../index.js';
-interface IPCABaseParameters {
+interface ISVDBaseParameters {
     nComponents?: number;
     correlationMatrix?: boolean;
 }
-interface IPCAParameters extends IPCABaseParameters {
+interface ISVDParameters extends ISVDBaseParameters {
     targetType?: NumberTypeRs;
     columns?: string[];
 }
-interface PCASerializedData {
-    config: IPCAParameters;
+interface SVDSerializedData {
+    config: ISVDParameters;
     data: Buffer;
 }
 interface HasColumns {
     columns: string[] | null;
 }
-declare class PCA implements HasColumns {
-    static readonly className = "PCA";
+declare class SVD implements HasColumns {
+    static readonly className = "SVD";
     readonly name: string;
-    readonly config: IPCAParameters;
+    readonly config: ISVDParameters;
     private _isFitted;
     private estimatorProvider;
     private parameters;
     private estimator;
-    constructor(params: IPCAParameters);
+    constructor(params?: ISVDParameters);
     get columns(): string[] | null;
     fit(x: InputType, y: YType): this;
     protected getComponentColumnName(index: number): string;
     protected ensureFitted(methodName: string): void;
     transform(x: InputType): DenseMatrix | DataFrame;
-    serialize(): PCASerializedData;
+    serialize(): SVDSerializedData;
     private _deserialize;
-    static deserialize(data: PCASerializedData): PCA;
+    static deserialize(data: SVDSerializedData): SVD;
 }
-export { PCA, type IPCABaseParameters };
+export { SVD, type ISVDBaseParameters };

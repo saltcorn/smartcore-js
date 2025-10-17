@@ -1,7 +1,8 @@
 import { type TransformerProvider } from '../../../estimator.js'
 import PCAF32Provider from './pca_f32_provider.js'
 import PCAF64Provider from './pca_f64_provider.js'
-import type { NumberTypeRs, IPCABaseParameters } from '../index.js'
+import type { IPCABaseParameters } from '../index.js'
+import type { NumberTypeRs } from '../../index.js'
 
 const TransformerProvidersMap: Map<NumberTypeRs, TransformerProvider<IPCABaseParameters, any, any>> = new Map()
 TransformerProvidersMap.set('f32', new PCAF32Provider())

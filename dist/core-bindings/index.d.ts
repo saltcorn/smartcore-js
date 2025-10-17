@@ -2344,6 +2344,13 @@ export declare class SVCParametersF64I64 {
   withSeed(seed?: bigint | undefined | null): void
 }
 
+export declare class SVDF32 {
+  static fit(data: DenseMatrixF32, parameters: SVDParameters): SVDF32
+  transform(x: DenseMatrixF32): DenseMatrixF32
+  serialize(): Buffer
+  static deserialize(data: Buffer): SVDF32
+}
+
 export declare class SVDF64 {
   static fit(data: DenseMatrixF64, parameters: SVDParameters): SVDF64
   transform(x: DenseMatrixF64): DenseMatrixF64

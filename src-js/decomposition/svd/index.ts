@@ -4,18 +4,18 @@ import { TransformerProvidersMap } from './estimator_providers_map/index.js'
 import { DataFrame } from '../../data_frame.js'
 import type { NumberTypeRs } from '../index.js'
 
-interface IPCABaseParameters {
+interface ISVDBaseParameters {
   nComponents?: number
   correlationMatrix?: boolean
 }
 
-interface IPCAParameters extends IPCABaseParameters {
+interface ISVDParameters extends ISVDBaseParameters {
   targetType?: NumberTypeRs
   columns?: string[]
 }
 
-interface PCASerializedData {
-  config: IPCAParameters
+interface SVDSerializedData {
+  config: ISVDParameters
   data: Buffer
 }
 
@@ -23,18 +23,18 @@ interface HasColumns {
   columns: string[] | null
 }
 
-class PCA implements HasColumns {
-  public static readonly className = 'PCA'
-  public readonly name: string = PCA.className
-  public readonly config: IPCAParameters
+class SVD implements HasColumns {
+  public static readonly className = 'SVD'
+  public readonly name: string = SVD.className
+  public readonly config: ISVDParameters
 
   private _isFitted: boolean = false
-  private estimatorProvider: TransformerProvider<IPCABaseParameters, any, any>
+  private estimatorProvider: TransformerProvider<ISVDBaseParameters, any, any>
   private parameters: any
   private estimator: Transformer | null = null
 
-  constructor(params: IPCAParameters) {
-    this.config = params
+  constructor(params?: ISVDParameters) {
+    this.config = params ?? {}
     this.config.targetType = this.config.targetType ?? 'f32'
     const estimatorProvider = TransformerProvidersMap.get(this.config.targetType)
     if (!estimatorProvider) {
@@ -60,7 +60,7 @@ class PCA implements HasColumns {
   }
 
   protected getComponentColumnName(index: number): string {
-    return `PCA${index + 1}`
+    return `SVD${index + 1}`
   }
 
   protected ensureFitted(methodName: string): void {
@@ -84,7 +84,7 @@ class PCA implements HasColumns {
     return new DenseMatrix(this.estimator!.transform(matrixRs))
   }
 
-  serialize(): PCASerializedData {
+  serialize(): SVDSerializedData {
     this.ensureFitted('serialize')
 
     return {
@@ -101,12 +101,12 @@ class PCA implements HasColumns {
     return this
   }
 
-  static deserialize(data: PCASerializedData): PCA {
-    let instance = new PCA(data.config)
+  static deserialize(data: SVDSerializedData): SVD {
+    let instance = new SVD(data.config)
     instance._deserialize(data.data)
     instance._isFitted = true
     return instance
   }
 }
 
-export { PCA, type IPCABaseParameters }
+export { SVD, type ISVDBaseParameters }

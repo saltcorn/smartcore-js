@@ -27,10 +27,7 @@ let {
   // OneHotEncoder
 } = preprocessing
 let { KMeans, DBSCAN } = cluster
-let {
-  PCA,
-  // SVD
-} = decomposition
+let { PCA, SVD } = decomposition
 // let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
 // let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
@@ -154,7 +151,7 @@ describe('Pipelines', () => {
 
   it('SVD + DBSCAN', () => {
     let pipe = makePipeline([
-      //   ['svd', new SVD()],
+      ['svd', new SVD()],
       ['kmeans', new DBSCAN({ numberType: 'f64' })],
     ])
     let irisData = loadIris({ returnXY: true })
@@ -167,6 +164,7 @@ describe('Pipelines', () => {
     let score = accuracyScore(pipe.predict(xTest), yTest)
     assert(score)
   })
+
   //   it('StandardScaler + LinearRegression', () => {
   //     let pipe = makePipeline([
   //       ['standardscaler', new StandardScaler()],

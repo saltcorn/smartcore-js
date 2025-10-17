@@ -1,6 +1,6 @@
 import { DenseMatrix, type InputType, type YType } from '../../index.js';
 import { DataFrame } from '../../data_frame.js';
-type NumberTypeRs = 'f32' | 'f64';
+import type { NumberTypeRs } from '../index.js';
 interface IPCABaseParameters {
     nComponents?: number;
     correlationMatrix?: boolean;
@@ -34,4 +34,4 @@ declare class PCA implements HasColumns {
     private _deserialize;
     static deserialize(data: PCASerializedData): PCA;
 }
-export { PCA, type IPCABaseParameters, type NumberTypeRs };
+export { PCA, type IPCABaseParameters };

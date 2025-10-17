@@ -407,6 +407,7 @@ module.exports.StandardScalerF64 = __napiModule.exports.StandardScalerF64
 module.exports.StandardScalerParameters = __napiModule.exports.StandardScalerParameters
 module.exports.SVCF64I64 = __napiModule.exports.SVCF64I64
 module.exports.SVCParametersF64I64 = __napiModule.exports.SVCParametersF64I64
+module.exports.SVDF32 = __napiModule.exports.SVDF32
 module.exports.SVDF64 = __napiModule.exports.SVDF64
 module.exports.SVDF64DenseMatrixF64 = __napiModule.exports.SVDF64DenseMatrixF64
 module.exports.SVDParameters = __napiModule.exports.SVDParameters
