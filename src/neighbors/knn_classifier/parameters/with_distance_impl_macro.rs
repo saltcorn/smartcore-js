@@ -1,5 +1,5 @@
 macro_rules! with_distance_impl {
-  ( 
+  (
     self_parameters_export_type: $self_napi:ty,
     other_parameters_export_type: $other_napi:ty,
     other_distance_export_type: $other_dist_napi:ty
