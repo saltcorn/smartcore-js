@@ -3,26 +3,22 @@ import RidgeRegressionF32F32Provider from './ridge_regression_f32_f32_provider.j
 import RidgeRegressionF32F64Provider from './ridge_regression_f32_f64_provider.js'
 import RidgeRegressionF64F32Provider from './ridge_regression_f64_f32_provider.js'
 import RidgeRegressionF64F64Provider from './ridge_regression_f64_f64_provider.js'
-import type { NumberTypeRs } from '../index.js'
 import type { RidgeRegressionSolverName } from '../../../core-bindings/index.js'
 
-const F32EstimatorProvidersMap: Map<
-  NumberTypeRs,
-  TransformerProvider<IRidgeRegressionBaseParameters, any, any>
-> = new Map()
+type XTypeStr = 'f32' | 'f64'
+type YTypeStr = 'f32' | 'f64'
+
+const F32EstimatorProvidersMap: Map<YTypeStr, TransformerProvider<IRidgeRegressionBaseParameters, any, any>> = new Map()
 F32EstimatorProvidersMap.set('f32', new RidgeRegressionF32F32Provider())
 F32EstimatorProvidersMap.set('f64', new RidgeRegressionF32F64Provider())
 
-const F64EstimatorProvidersMap: Map<
-  NumberTypeRs,
-  TransformerProvider<IRidgeRegressionBaseParameters, any, any>
-> = new Map()
+const F64EstimatorProvidersMap: Map<YTypeStr, TransformerProvider<IRidgeRegressionBaseParameters, any, any>> = new Map()
 F32EstimatorProvidersMap.set('f32', new RidgeRegressionF64F32Provider())
 F32EstimatorProvidersMap.set('f64', new RidgeRegressionF64F64Provider())
 
 const EstimatorProvidersMap: Map<
-  NumberTypeRs,
-  Map<NumberTypeRs, TransformerProvider<IRidgeRegressionBaseParameters, any, any>>
+  XTypeStr,
+  Map<XTypeStr, TransformerProvider<IRidgeRegressionBaseParameters, any, any>>
 > = new Map()
 EstimatorProvidersMap.set('f32', F32EstimatorProvidersMap)
 EstimatorProvidersMap.set('f64', F64EstimatorProvidersMap)
@@ -54,4 +50,5 @@ function setRidgeRegressionParametersValues(
   }
 }
 
-export { EstimatorProvidersMap, setRidgeRegressionParametersValues, type IRidgeRegressionBaseParameters }
+export { EstimatorProvidersMap, setRidgeRegressionParametersValues }
+export type { YTypeStr, XTypeStr, IRidgeRegressionBaseParameters }

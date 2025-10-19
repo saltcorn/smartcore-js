@@ -2,20 +2,20 @@ import { utilities, type InputType, type YType } from '../../index.js'
 import { type PredictorProvider, type Predictor } from '../../estimator.js'
 import {
   EstimatorProvidersMap,
-  type IRidgeRegressionBaseParameters,
+  type IElasticNetBaseParameters,
   type XTypeStr,
   type YTypeStr,
 } from './estimator_providers_map/index.js'
 import { DataFrame } from '../../data_frame.js'
 
-interface IRidgeRegressionParameters extends IRidgeRegressionBaseParameters {
+interface IElasticNetParameters extends IElasticNetBaseParameters {
   featureType?: XTypeStr
   targetType?: YTypeStr
   columns?: string[]
 }
 
-interface RidgeRegressionSerializedData {
-  config: IRidgeRegressionParameters
+interface ElasticNetSerializedData {
+  config: IElasticNetParameters
   data: Buffer
 }
 
@@ -23,17 +23,17 @@ interface HasColumns {
   columns: string[] | null
 }
 
-class RidgeRegression implements HasColumns {
-  public static readonly className = 'RidgeRegression'
-  public readonly name: string = RidgeRegression.className
-  public readonly config: IRidgeRegressionParameters = {}
+class ElasticNet implements HasColumns {
+  public static readonly className = 'ElasticNet'
+  public readonly name: string = ElasticNet.className
+  public readonly config: IElasticNetParameters = {}
 
   private _isFitted: boolean = false
-  private estimatorProvider: PredictorProvider<IRidgeRegressionBaseParameters, any, any>
+  private estimatorProvider: PredictorProvider<IElasticNetBaseParameters, any, any>
   private parameters: any
   private estimator: Predictor | null = null
 
-  constructor(params?: IRidgeRegressionParameters) {
+  constructor(params?: IElasticNetParameters) {
     this.config = params ?? {}
     this.config.featureType = this.config.featureType ?? 'f32'
     const estimatorProvidersMap = EstimatorProvidersMap.get(this.config.featureType)
@@ -65,7 +65,7 @@ class RidgeRegression implements HasColumns {
   }
 
   protected getComponentColumnName(index: number): string {
-    return `RidgeRegression${index + 1}`
+    return `ElasticNet${index + 1}`
   }
 
   protected ensureFitted(methodName: string): void {
@@ -86,7 +86,7 @@ class RidgeRegression implements HasColumns {
     return this.estimator!.predict(matrixRs)
   }
 
-  serialize(): RidgeRegressionSerializedData {
+  serialize(): ElasticNetSerializedData {
     this.ensureFitted('serialize')
 
     return {
@@ -103,12 +103,12 @@ class RidgeRegression implements HasColumns {
     return this
   }
 
-  static deserialize(data: RidgeRegressionSerializedData): RidgeRegression {
-    let instance = new RidgeRegression(data.config)
+  static deserialize(data: ElasticNetSerializedData): ElasticNet {
+    let instance = new ElasticNet(data.config)
     instance._deserialize(data.data)
     instance._isFitted = true
     return instance
   }
 }
 
-export { RidgeRegression, type IRidgeRegressionBaseParameters }
+export { ElasticNet, type IElasticNetBaseParameters }

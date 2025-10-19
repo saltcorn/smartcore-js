@@ -924,20 +924,52 @@ export declare class Digits {
   loadDataset(): DatasetF64F64
 }
 
-export declare class ElasticNetF64BigI64 {
+export declare class ElasticNetF32F32 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: ElasticNetParameters): ElasticNetF64BigI64
-  predict(x: DenseMatrixF64): BigInt64Array
+  static fit(x: DenseMatrixF32, y: Float32Array, parameters: ElasticNetParameters): ElasticNetF32F32
+  predict(x: DenseMatrixF32): Float32Array
   serialize(): Buffer
-  static deserialize(data: Buffer): ElasticNetF64BigI64
+  static deserialize(data: Buffer): ElasticNetF32F32
 }
 
-export declare class ElasticNetF64BigU64 {
+export declare class ElasticNetF32F64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: ElasticNetParameters): ElasticNetF64BigU64
-  predict(x: DenseMatrixF64): BigUint64Array
+  static fit(x: DenseMatrixF32, y: Float64Array, parameters: ElasticNetParameters): ElasticNetF32F64
+  predict(x: DenseMatrixF32): Float64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): ElasticNetF64BigU64
+  static deserialize(data: Buffer): ElasticNetF32F64
+}
+
+export declare class ElasticNetF32I32 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: Int32Array, parameters: ElasticNetParameters): ElasticNetF32I32
+  predict(x: DenseMatrixF32): Int32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ElasticNetF32I32
+}
+
+export declare class ElasticNetF32I64 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: BigInt64Array, parameters: ElasticNetParameters): ElasticNetF32I64
+  predict(x: DenseMatrixF32): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ElasticNetF32I64
+}
+
+export declare class ElasticNetF32U64 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: BigUint64Array, parameters: ElasticNetParameters): ElasticNetF32U64
+  predict(x: DenseMatrixF32): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ElasticNetF32U64
+}
+
+export declare class ElasticNetF64F32 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: Float32Array, parameters: ElasticNetParameters): ElasticNetF64F32
+  predict(x: DenseMatrixF64): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ElasticNetF64F32
 }
 
 export declare class ElasticNetF64F64 {
@@ -948,12 +980,28 @@ export declare class ElasticNetF64F64 {
   static deserialize(data: Buffer): ElasticNetF64F64
 }
 
+export declare class ElasticNetF64I32 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: Int32Array, parameters: ElasticNetParameters): ElasticNetF64I32
+  predict(x: DenseMatrixF64): Int32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ElasticNetF64I32
+}
+
 export declare class ElasticNetF64I64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: Array<number>, parameters: ElasticNetParameters): ElasticNetF64I64
-  predict(x: DenseMatrixF64): Array<number>
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: ElasticNetParameters): ElasticNetF64I64
+  predict(x: DenseMatrixF64): BigInt64Array
   serialize(): Buffer
   static deserialize(data: Buffer): ElasticNetF64I64
+}
+
+export declare class ElasticNetF64U64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: ElasticNetParameters): ElasticNetF64U64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): ElasticNetF64U64
 }
 
 export declare class ElasticNetParameters {
