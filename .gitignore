@@ -268,3 +268,4 @@ vite.config.ts.timestamp-*
 
 # Auto-generated build files
 dist/
+dist-cjs/

@@ -6,7 +6,7 @@ export * as dataFrame from './data_frame.js'
 export * as utilities from './utilities/index.js'
 export * from './linalg/index.js'
 export * as linearModel from './linear_model/index.js'
-// export * as ensemble from './ensemble/index.js'
+export * as ensemble from './ensemble/index.js'
 export * as preprocessing from './preprocessing/index.js'
 export * as dataset from './dataset/index.js'
 export * as modelSelection from './model_selection/index.js'
@@ -23,7 +23,7 @@ type YType = (number | bigint)[] | Float64Array | BigInt64Array | BigUint64Array
 type InputType = XType | DataFrame
 type OutputType = XType | DataFrame
 
-type YTyped = Float64Array | BigInt64Array | BigUint64Array | Int32Array
+type YTyped = Float64Array | Float32Array | BigInt64Array | BigUint64Array | Int32Array
 function asTypedY(y: YType): YTyped {
   if (y instanceof Float64Array || y instanceof BigInt64Array || y instanceof BigUint64Array || y instanceof Int32Array)
     return y

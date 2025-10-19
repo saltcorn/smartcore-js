@@ -3,7 +3,7 @@ import {
   linearModel,
   preprocessing,
   dataset,
-  //   ensemble,
+  ensemble,
   modelSelection,
   metrics,
   pipeline,
@@ -21,7 +21,10 @@ let {
   RidgeRegression,
   // Lasso, ElasticNet
 } = linearModel
-// let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
+let {
+  // RandomForestClassifier, RandomForestRegressor,
+  ExtraTreesRegressor,
+} = ensemble
 let {
   StandardScaler,
   // OneHotEncoder
@@ -86,21 +89,22 @@ describe('Pipelines', () => {
   //     let score = accuracyScore(pipe.predict(xTest), yTest)
   //     assert(score)
   //   })
-  //   it('StandardScaler + ExtraTreesRegressor', () => {
-  //     let pipe = makePipeline([
-  //       ['standardscaler', new StandardScaler()],
-  //       ['extratreesregressor', new ExtraTreesRegressor()],
-  //     ])
-  //     let irisData = loadIris({ returnXY: true })
-  //     let [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected both x and y to be defined')
-  //     }
-  //     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     pipe.fit(xTrain, yTrain)
-  //     let score = accuracyScore(pipe.predict(xTest), yTest)
-  //     assert(score)
-  //   })
+
+  it('StandardScaler + ExtraTreesRegressor', () => {
+    let pipe = makePipeline([
+      ['standardscaler', new StandardScaler()],
+      ['extratreesregressor', new ExtraTreesRegressor()],
+    ])
+    let irisData = loadIris({ returnXY: true })
+    let [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert(score)
+  })
 
   it('StandardScaler + KMeans', () => {
     let pipe = makePipeline([

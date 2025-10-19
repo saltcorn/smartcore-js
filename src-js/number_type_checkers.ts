@@ -24,12 +24,12 @@ function isI32(no: number | bigint): boolean {
   return Number.isInteger(no) && no >= -2147483648 && no <= 2147483647
 }
 
-// function asI32(no: number | bigint): number {
-//   if (!isI32(no)) {
-//     throw new Error(`Expected a signed 32-bit integer (-2147483648 - 2147483647). Found: ${no}.`)
-//   }
-//   return Number(no)
-// }
+function asI32(no: number | bigint): number {
+  if (!isI32(no)) {
+    throw new Error(`Expected a signed 32-bit integer (-2147483648 - 2147483647). Found: ${no}.`)
+  }
+  return Number(no)
+}
 
 function isU32(no: number | bigint): boolean {
   return Number.isInteger(no) && no >= 0 && no <= 4294967295
@@ -42,29 +42,28 @@ function isU32(no: number | bigint): boolean {
 //   return Number(no)
 // }
 
-function isI64(no: bigint): boolean {
-  return typeof no === 'bigint' && no >= -9223372036854775808n && no <= 9223372036854775807n
+function isI64(no: number | bigint): boolean {
+  return Number.isInteger(no) && no >= -9223372036854775808n && no <= 9223372036854775807n
 }
 
-// function asI64(no: number | bigint): bigint {
-//   let noBig = typeof no === 'number' ? BigInt(no) : no
-//   if (!isI64(noBig)) {
-//     throw new Error(`Expected a number between -2^63 and 2^63-1. Found: ${no}.`)
-//   }
-//   return noBig
-// }
-
-function isU64(no: bigint): boolean {
-  return typeof no === 'bigint' && no >= 0n && no <= 18446744073709551615n
+function asI64(no: number | bigint): bigint {
+  let noBig = typeof no === 'number' ? BigInt(no) : no
+  if (!isI64(noBig)) {
+    throw new Error(`Expected an integer between -2^63 and 2^63-1. Found: ${no}.`)
+  }
+  return noBig
 }
 
-// function asU64(no: number | bigint): bigint {
-//   let noBig = typeof no === 'number' ? BigInt(no) : no
-//   if (!isU64(noBig)) {
-//     throw new Error(`Expected a number between 0 an 2^64-1. Found: ${no}.`)
-//   }
-//   return noBig
-// }
+function isU64(no: number | bigint): boolean {
+  return Number.isInteger(no) && no >= 0n && no <= 18446744073709551615n
+}
+
+function asU64(no: number | bigint): bigint {
+  if (!isU64(no)) {
+    throw new Error(`Expected a number between 0 an 2^64-1. Found: ${no}.`)
+  }
+  return BigInt(no)
+}
 
 function isF32(no: number): boolean {
   return typeof no === 'number' && isFinite(no) && Math.abs(no) < 3.40282347e38
@@ -98,4 +97,4 @@ function asF64(no: number | bigint): number {
 }
 
 export { isF32, isF64, isI32, isI64, isU16, isU32, isU64, isU8, bigintToNumber }
-export { asF64, asF32 }
+export { asF64, asF32, asI32, asI64, asU64 }
