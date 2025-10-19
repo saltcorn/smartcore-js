@@ -9,7 +9,7 @@ import {
   pipeline,
   cluster,
   decomposition,
-  //   naiveBayes,
+  naiveBayes,
   //   neighbors,
   dataFrame,
 } from '../src-js/index.js'
@@ -21,7 +21,10 @@ let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ens
 let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
 let { PCA, SVD } = decomposition
-// let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
+let {
+  BernoulliNB,
+  // CategoricalNB, GaussianNB, MultinomialNB
+} = naiveBayes
 // let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
 let { trainTestSplit } = modelSelection
@@ -241,21 +244,22 @@ describe('Pipelines', () => {
     assert.equal(score, 0)
   })
 
-  //   it('OneHotEncoder + BernoulliNB', () => {
-  //     let pipe = makePipeline([
-  //       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
-  //       ['bernoullinb', new BernoulliNB()],
-  //     ])
-  //     let irisData = loadIris({ returnXY: true, unsigned: true })
-  //     let [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected both x and y to be defined')
-  //     }
-  //     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     pipe.fit(xTrain, yTrain)
-  //     let score = accuracyScore(pipe.predict(xTest), yTest)
-  //     assert(score)
-  //   })
+  it('OneHotEncoder + BernoulliNB', () => {
+    let pipe = makePipeline([
+      ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
+      ['bernoullinb', new BernoulliNB()],
+    ])
+    let irisData = loadIris({ returnXY: true })
+    let [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert(score)
+  })
+
   //   it.skip('OneHotEncoder + CategoricalNB', () => {
   //     let pipe = makePipeline([
   //       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],

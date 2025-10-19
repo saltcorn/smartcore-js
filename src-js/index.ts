@@ -14,7 +14,7 @@ export * as metrics from './metrics/index.js'
 export * as pipeline from './pipeline/index.js'
 export * as cluster from './cluster/index.js'
 export * as decomposition from './decomposition/index.js'
-// export * as naiveBayes from './naive_bayes/index.js'
+export * as naiveBayes from './naive_bayes/index.js'
 // export * as neighbors from './neighbors/index.js'
 export * as coreBindings from './core-bindings/index.js'
 
@@ -23,7 +23,7 @@ type YType = (number | bigint)[] | Float64Array | BigInt64Array | BigUint64Array
 type InputType = XType | DataFrame
 type OutputType = XType | DataFrame
 
-type YTyped = Float64Array | Float32Array | BigInt64Array | BigUint64Array | Int32Array
+type YTyped = Float64Array | Float32Array | BigInt64Array | BigUint64Array | Int32Array | Uint32Array
 function asTypedY(y: YType): YTyped {
   if (y instanceof Float64Array || y instanceof BigInt64Array || y instanceof BigUint64Array || y instanceof Int32Array)
     return y

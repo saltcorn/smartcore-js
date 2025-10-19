@@ -35,12 +35,12 @@ function isU32(no: number | bigint): boolean {
   return Number.isInteger(no) && no >= 0 && no <= 4294967295
 }
 
-// function asU32(no: number | bigint): number {
-//   if (!isU32(no)) {
-//     throw new Error(`Expected an unsigned 32-bit integer (0 - 4294967295). Found: ${no}.`)
-//   }
-//   return Number(no)
-// }
+function asU32(no: number | bigint): number {
+  if (!isU32(no)) {
+    throw new Error(`Expected an unsigned 32-bit integer (0 - 4294967295). Found: ${no}.`)
+  }
+  return Number(no)
+}
 
 function isI64(no: number | bigint): boolean {
   return Number.isInteger(no) && no >= -9223372036854775808n && no <= 9223372036854775807n
@@ -97,4 +97,4 @@ function asF64(no: number | bigint): number {
 }
 
 export { isF32, isF64, isI32, isI64, isU16, isU32, isU64, isU8, bigintToNumber }
-export { asF64, asF32, asI32, asI64, asU64 }
+export { asF64, asF32, asI32, asI64, asU64, asU32 }
