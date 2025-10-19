@@ -2022,20 +2022,52 @@ export declare class KNNRegressorU8I32HammingU8 {
   static deserialize(data: Buffer): KNNRegressorU8I32HammingU8
 }
 
-export declare class LassoF64BigI64 {
+export declare class LassoF32F32 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: LassoParameters): LassoF64BigI64
-  predict(x: DenseMatrixF64): BigInt64Array
+  static fit(x: DenseMatrixF32, y: Float32Array, parameters: LassoParameters): LassoF32F32
+  predict(x: DenseMatrixF32): Float32Array
   serialize(): Buffer
-  static deserialize(data: Buffer): LassoF64BigI64
+  static deserialize(data: Buffer): LassoF32F32
 }
 
-export declare class LassoF64BigU64 {
+export declare class LassoF32F64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: LassoParameters): LassoF64BigU64
-  predict(x: DenseMatrixF64): BigUint64Array
+  static fit(x: DenseMatrixF32, y: Float64Array, parameters: LassoParameters): LassoF32F64
+  predict(x: DenseMatrixF32): Float64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): LassoF64BigU64
+  static deserialize(data: Buffer): LassoF32F64
+}
+
+export declare class LassoF32I32 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: Int32Array, parameters: LassoParameters): LassoF32I32
+  predict(x: DenseMatrixF32): Int32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LassoF32I32
+}
+
+export declare class LassoF32I64 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: BigInt64Array, parameters: LassoParameters): LassoF32I64
+  predict(x: DenseMatrixF32): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LassoF32I64
+}
+
+export declare class LassoF32U64 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: BigUint64Array, parameters: LassoParameters): LassoF32U64
+  predict(x: DenseMatrixF32): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LassoF32U64
+}
+
+export declare class LassoF64F32 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: Float32Array, parameters: LassoParameters): LassoF64F32
+  predict(x: DenseMatrixF64): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LassoF64F32
 }
 
 export declare class LassoF64F64 {
@@ -2046,12 +2078,28 @@ export declare class LassoF64F64 {
   static deserialize(data: Buffer): LassoF64F64
 }
 
+export declare class LassoF64I32 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: Int32Array, parameters: LassoParameters): LassoF64I32
+  predict(x: DenseMatrixF64): Int32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LassoF64I32
+}
+
 export declare class LassoF64I64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: Array<number>, parameters: LassoParameters): LassoF64I64
-  predict(x: DenseMatrixF64): Array<number>
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: LassoParameters): LassoF64I64
+  predict(x: DenseMatrixF64): BigInt64Array
   serialize(): Buffer
   static deserialize(data: Buffer): LassoF64I64
+}
+
+export declare class LassoF64U64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: LassoParameters): LassoF64U64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LassoF64U64
 }
 
 export declare class LassoParameters {

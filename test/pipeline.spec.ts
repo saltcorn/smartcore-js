@@ -19,7 +19,7 @@ import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 let {
   // LogisticRegression, LinearRegression,
   RidgeRegression,
-  // Lasso,
+  Lasso,
   ElasticNet,
 } = linearModel
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
@@ -196,21 +196,22 @@ describe('Pipelines', () => {
   //     let score = accuracyScore(pipe.predict(xTest), yTest)
   //     assert.equal(score, 0)
   //   })
-  //   it('StandardScaler + Lasso', () => {
-  //     let pipe = makePipeline([
-  //       ['standardscaler', new StandardScaler()],
-  //       ['lasso', new Lasso()],
-  //     ])
-  //     let irisData = loadBoston({ returnXY: true })
-  //     let [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected both x and y to be defined')
-  //     }
-  //     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     pipe.fit(xTrain, yTrain)
-  //     let score = accuracyScore(pipe.predict(xTest), yTest)
-  //     assert.equal(score, 0)
-  //   })
+
+  it('StandardScaler + Lasso', () => {
+    let pipe = makePipeline([
+      ['standardscaler', new StandardScaler()],
+      ['lasso', new Lasso()],
+    ])
+    let irisData = loadBoston({ returnXY: true })
+    let [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert.equal(score, 0)
+  })
 
   it('StandardScaler + ElasticNet', () => {
     let pipe = makePipeline([
