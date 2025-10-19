@@ -17,7 +17,8 @@ import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-j
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 let {
-  // LogisticRegression, LinearRegression,
+  // LogisticRegression,
+  LinearRegression,
   RidgeRegression,
   Lasso,
   ElasticNet,
@@ -166,21 +167,22 @@ describe('Pipelines', () => {
     assert(score)
   })
 
-  //   it('StandardScaler + LinearRegression', () => {
-  //     let pipe = makePipeline([
-  //       ['standardscaler', new StandardScaler()],
-  //       ['linearregression', new LinearRegression()],
-  //     ])
-  //     let irisData = loadBoston({ returnXY: true })
-  //     let [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected both x and y to be defined')
-  //     }
-  //     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     pipe.fit(xTrain, yTrain)
-  //     let score = accuracyScore(pipe.predict(xTest), yTest)
-  //     assert.equal(score, 0)
-  //   })
+  it('StandardScaler + LinearRegression', () => {
+    let pipe = makePipeline([
+      ['standardscaler', new StandardScaler()],
+      ['linearregression', new LinearRegression()],
+    ])
+    let irisData = loadBoston({ returnXY: true })
+    let [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert.equal(score, 0)
+  })
+
   //   it('StandardScaler + RidgeRegression', () => {
   //     let pipe = makePipeline([
   //       ['standardscaler', new StandardScaler()],

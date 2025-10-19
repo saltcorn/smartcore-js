@@ -2110,20 +2110,52 @@ export declare class LassoParameters {
   withMaxIter(maxIter: number): void
 }
 
-export declare class LinearRegressionF64BigI64 {
+export declare class LinearRegressionF32F32 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: LinearRegressionParameters): LinearRegressionF64BigI64
-  predict(x: DenseMatrixF64): BigInt64Array
+  static fit(x: DenseMatrixF32, y: Float32Array, parameters: LinearRegressionParameters): LinearRegressionF32F32
+  predict(x: DenseMatrixF32): Float32Array
   serialize(): Buffer
-  static deserialize(data: Buffer): LinearRegressionF64BigI64
+  static deserialize(data: Buffer): LinearRegressionF32F32
 }
 
-export declare class LinearRegressionF64BigU64 {
+export declare class LinearRegressionF32F64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: LinearRegressionParameters): LinearRegressionF64BigU64
-  predict(x: DenseMatrixF64): BigUint64Array
+  static fit(x: DenseMatrixF32, y: Float64Array, parameters: LinearRegressionParameters): LinearRegressionF32F64
+  predict(x: DenseMatrixF32): Float64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): LinearRegressionF64BigU64
+  static deserialize(data: Buffer): LinearRegressionF32F64
+}
+
+export declare class LinearRegressionF32I32 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: Int32Array, parameters: LinearRegressionParameters): LinearRegressionF32I32
+  predict(x: DenseMatrixF32): Int32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LinearRegressionF32I32
+}
+
+export declare class LinearRegressionF32I64 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: BigInt64Array, parameters: LinearRegressionParameters): LinearRegressionF32I64
+  predict(x: DenseMatrixF32): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LinearRegressionF32I64
+}
+
+export declare class LinearRegressionF32U64 {
+  constructor()
+  static fit(x: DenseMatrixF32, y: BigUint64Array, parameters: LinearRegressionParameters): LinearRegressionF32U64
+  predict(x: DenseMatrixF32): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LinearRegressionF32U64
+}
+
+export declare class LinearRegressionF64F32 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: Float32Array, parameters: LinearRegressionParameters): LinearRegressionF64F32
+  predict(x: DenseMatrixF64): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LinearRegressionF64F32
 }
 
 export declare class LinearRegressionF64F64 {
@@ -2134,12 +2166,28 @@ export declare class LinearRegressionF64F64 {
   static deserialize(data: Buffer): LinearRegressionF64F64
 }
 
+export declare class LinearRegressionF64I32 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: Int32Array, parameters: LinearRegressionParameters): LinearRegressionF64I32
+  predict(x: DenseMatrixF64): Int32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LinearRegressionF64I32
+}
+
 export declare class LinearRegressionF64I64 {
   constructor()
-  static fit(x: DenseMatrixF64, y: Array<number>, parameters: LinearRegressionParameters): LinearRegressionF64I64
-  predict(x: DenseMatrixF64): Array<number>
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: LinearRegressionParameters): LinearRegressionF64I64
+  predict(x: DenseMatrixF64): BigInt64Array
   serialize(): Buffer
   static deserialize(data: Buffer): LinearRegressionF64I64
+}
+
+export declare class LinearRegressionF64U64 {
+  constructor()
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: LinearRegressionParameters): LinearRegressionF64U64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): LinearRegressionF64U64
 }
 
 export declare class LinearRegressionParameters {
