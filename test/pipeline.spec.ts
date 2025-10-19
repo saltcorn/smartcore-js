@@ -16,13 +16,7 @@ import {
 import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-js/core-bindings/index.js'
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
-let {
-  // LogisticRegression,
-  LinearRegression,
-  RidgeRegression,
-  Lasso,
-  ElasticNet,
-} = linearModel
+let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
 let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
@@ -40,21 +34,21 @@ const parsedJson = readJSONFile('e-commerce-enhanced.json')
 const df = new DataFrame(parsedJson, { exclude: ['transaction_id', 'customer_id', 'date', 'country', 'platform'] })
 
 describe('Pipelines', () => {
-  //   it('StandardScaler + LogisticRegression', () => {
-  //     let pipe = makePipeline([
-  //       ['standardscaler', new StandardScaler()],
-  //       ['logisticregression', new LogisticRegression({ alpha: 0.2 })],
-  //     ])
-  //     let irisData = loadIris({ returnXY: true })
-  //     let [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected both x and y to be defined')
-  //     }
-  //     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     pipe.fit(xTrain, yTrain)
-  //     let score = accuracyScore(pipe.predict(xTest), yTest)
-  //     assert(score)
-  //   })
+  it('StandardScaler + LogisticRegression', () => {
+    let pipe = makePipeline([
+      ['standardscaler', new StandardScaler()],
+      ['logisticregression', new LogisticRegression({ alpha: 0.2 })],
+    ])
+    let irisData = loadIris({ returnXY: true })
+    let [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert(score)
+  })
 
   it('StandardScaler + RandomForestClassifier', () => {
     let pipe = makePipeline([
@@ -136,7 +130,7 @@ describe('Pipelines', () => {
     assert(score >= 0)
   })
 
-  it('StandardScaler + PCA + LogisticRegression', () => {
+  it('StandardScaler + PCA + RidgeRegression', () => {
     let columns = df.columnNames.filter((column) => !column.startsWith('customer'))
     // console.log('Selected: ', columns)
     let pipe = makePipeline(
