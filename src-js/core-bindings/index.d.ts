@@ -2282,18 +2282,46 @@ export declare class RandomForestClassifierParameters {
   withSeed(seed: number): void
 }
 
-export declare class RandomForestRegressorF64BigI64 {
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64BigI64
-  predict(x: DenseMatrixF64): BigInt64Array
+export declare class RandomForestRegressorF32F32 {
+  static fit(x: DenseMatrixF32, y: Float32Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32F32
+  predict(x: DenseMatrixF32): Float32Array
   serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestRegressorF64BigI64
+  static deserialize(data: Buffer): RandomForestRegressorF32F32
 }
 
-export declare class RandomForestRegressorF64BigU64 {
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64BigU64
-  predict(x: DenseMatrixF64): BigUint64Array
+export declare class RandomForestRegressorF32F64 {
+  static fit(x: DenseMatrixF32, y: Float64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32F64
+  predict(x: DenseMatrixF32): Float64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestRegressorF64BigU64
+  static deserialize(data: Buffer): RandomForestRegressorF32F64
+}
+
+export declare class RandomForestRegressorF32I32 {
+  static fit(x: DenseMatrixF32, y: Int32Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32I32
+  predict(x: DenseMatrixF32): Int32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestRegressorF32I32
+}
+
+export declare class RandomForestRegressorF32I64 {
+  static fit(x: DenseMatrixF32, y: BigInt64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32I64
+  predict(x: DenseMatrixF32): BigInt64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestRegressorF32I64
+}
+
+export declare class RandomForestRegressorF32U64 {
+  static fit(x: DenseMatrixF32, y: BigUint64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32U64
+  predict(x: DenseMatrixF32): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestRegressorF32U64
+}
+
+export declare class RandomForestRegressorF64F32 {
+  static fit(x: DenseMatrixF64, y: Float32Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64F32
+  predict(x: DenseMatrixF64): Float32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestRegressorF64F32
 }
 
 export declare class RandomForestRegressorF64F64 {
@@ -2303,11 +2331,25 @@ export declare class RandomForestRegressorF64F64 {
   static deserialize(data: Buffer): RandomForestRegressorF64F64
 }
 
+export declare class RandomForestRegressorF64I32 {
+  static fit(x: DenseMatrixF64, y: Int32Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64I32
+  predict(x: DenseMatrixF64): Int32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestRegressorF64I32
+}
+
 export declare class RandomForestRegressorF64I64 {
-  static fit(x: DenseMatrixF64, y: Array<number>, parameters: RandomForestRegressorParameters): RandomForestRegressorF64I64
-  predict(x: DenseMatrixF64): Array<number>
+  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64I64
+  predict(x: DenseMatrixF64): BigInt64Array
   serialize(): Buffer
   static deserialize(data: Buffer): RandomForestRegressorF64I64
+}
+
+export declare class RandomForestRegressorF64U64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64U64
+  predict(x: DenseMatrixF64): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): RandomForestRegressorF64U64
 }
 
 export declare class RandomForestRegressorParameters {

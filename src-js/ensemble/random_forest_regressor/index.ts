@@ -2,10 +2,8 @@ import { utilities, type InputType, type YType } from '../../index.js'
 import { type PredictorProvider, type Predictor } from '../../estimator.js'
 import { PredictorProvidersMap, type XTypeStr, type YTypeStr } from './estimator_providers_map/index.js'
 import { DataFrame } from '../../data_frame.js'
-import type { SplitCriterion } from '../../core-bindings/index.js'
 
-interface IRandomForestClassifierBaseParameters {
-  splitCriterion?: SplitCriterion
+interface IRandomForestRegressorBaseParameters {
   maxDepth?: number
   minSamplesLeaf?: bigint | number
   minSamplesSplit?: bigint | number
@@ -15,14 +13,14 @@ interface IRandomForestClassifierBaseParameters {
   seed?: number
 }
 
-interface IRandomForestClassifierParameters extends IRandomForestClassifierBaseParameters {
+interface IRandomForestRegressorParameters extends IRandomForestRegressorBaseParameters {
   targetType?: XTypeStr
   featureType?: YTypeStr
   columns?: string[]
 }
 
-interface RandomForestClassifierSerializedData {
-  config: IRandomForestClassifierParameters
+interface RandomForestRegressorSerializedData {
+  config: IRandomForestRegressorParameters
   data: Buffer
 }
 
@@ -30,20 +28,20 @@ interface HasColumns {
   columns: string[] | null
 }
 
-class RandomForestClassifier implements HasColumns {
-  public static readonly className = 'RandomForestClassifier'
-  public readonly name: string = RandomForestClassifier.className
-  public readonly config: IRandomForestClassifierParameters
+class RandomForestRegressor implements HasColumns {
+  public static readonly className = 'RandomForestRegressor'
+  public readonly name: string = RandomForestRegressor.className
+  public readonly config: IRandomForestRegressorParameters
 
   private _isFitted: boolean = false
-  private estimatorProvider: PredictorProvider<IRandomForestClassifierBaseParameters, any, any>
+  private estimatorProvider: PredictorProvider<IRandomForestRegressorBaseParameters, any, any>
   private parameters: any
   private estimator: Predictor | null = null
 
-  constructor(params?: IRandomForestClassifierParameters) {
+  constructor(params?: IRandomForestRegressorParameters) {
     this.config = params || {}
     this.config.targetType = this.config.targetType ?? 'f32'
-    this.config.featureType = this.config.featureType ?? 'i32'
+    this.config.featureType = this.config.featureType ?? 'f32'
     const estimatorProviderMap = PredictorProvidersMap.get(this.config.targetType)
     if (!estimatorProviderMap) {
       throw new Error(`Invalid value for target type '${this.config.targetType}'`)
@@ -72,7 +70,7 @@ class RandomForestClassifier implements HasColumns {
   }
 
   protected getComponentColumnName(index: number): string {
-    return `RandomForestClassifier${index + 1}`
+    return `RandomForestRegressor${index + 1}`
   }
 
   protected ensureFitted(methodName: string): void {
@@ -93,7 +91,7 @@ class RandomForestClassifier implements HasColumns {
     return this.estimator!.predict(matrixRs)
   }
 
-  serialize(): RandomForestClassifierSerializedData {
+  serialize(): RandomForestRegressorSerializedData {
     this.ensureFitted('serialize')
 
     return {
@@ -110,12 +108,12 @@ class RandomForestClassifier implements HasColumns {
     return this
   }
 
-  static deserialize(data: RandomForestClassifierSerializedData): RandomForestClassifier {
-    let instance = new RandomForestClassifier(data.config)
+  static deserialize(data: RandomForestRegressorSerializedData): RandomForestRegressor {
+    let instance = new RandomForestRegressor(data.config)
     instance._deserialize(data.data)
     instance._isFitted = true
     return instance
   }
 }
 
-export { RandomForestClassifier, type IRandomForestClassifierBaseParameters }
+export { RandomForestRegressor, type IRandomForestRegressorBaseParameters }

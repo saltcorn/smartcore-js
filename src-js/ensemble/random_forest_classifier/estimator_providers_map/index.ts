@@ -6,6 +6,7 @@ import RandomForestClassifierF64I32Provider from './random_forest_classifier_f64
 import RandomForestClassifierF64I64Provider from './random_forest_classifier_f64_i64_provider.js'
 import RandomForestClassifierF64U64Provider from './random_forest_classifier_f64_u64_provider.js'
 import type { IRandomForestClassifierBaseParameters } from '../index.js'
+import type { SplitCriterion } from '../../../core-bindings/index.js'
 
 type XTypeStr = 'f32' | 'f64'
 type YTypeStr = 'i64' | 'u64' | 'i32'
@@ -34,6 +35,7 @@ PredictorProvidersMap.set('f32', F32PredictorProvidersMap)
 PredictorProvidersMap.set('f64', F64PredictorProvidersMap)
 
 interface IRandomForestClassifierParametersRs {
+  withCriterion(criterion: SplitCriterion): void
   withMaxDepth(maxDepth: number): void
   withMinSamplesLeaf(minSamplesLeaf: bigint): void
   withMinSamplesSplit(minSamplesSplit: bigint): void
@@ -47,6 +49,9 @@ function setRandomForestClassifierParametersValues(
   parameters: IRandomForestClassifierParametersRs,
   config: IRandomForestClassifierBaseParameters,
 ) {
+  if (config.splitCriterion !== undefined) {
+    parameters.withCriterion(config.splitCriterion)
+  }
   if (config.maxDepth !== undefined) {
     parameters.withMaxDepth(config.maxDepth)
   }
