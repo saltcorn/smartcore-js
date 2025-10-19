@@ -1,4 +1,4 @@
-import { type TransformerProvider } from '../../../estimator.js'
+import { type PredictorProvider } from '../../../estimator.js'
 import ExtraTreesRegressorF32F32Provider from './extra_trees_regressor_f32_f32_provider.js'
 import ExtraTreesRegressorF32F64Provider from './extra_trees_regressor_f32_f64_provider.js'
 import ExtraTreesRegressorF32I32Provider from './extra_trees_regressor_f32_i32_provider.js'
@@ -10,11 +10,13 @@ import ExtraTreesRegressorF64I32Provider from './extra_trees_regressor_f64_i32_p
 import ExtraTreesRegressorF64I64Provider from './extra_trees_regressor_f64_i64_provider.js'
 import ExtraTreesRegressorF64U64Provider from './extra_trees_regressor_f64_u64_provider.js'
 import type { IExtraTreesRegressorBaseParameters } from '../index.js'
-import type { XTypeStr, YTypeStr } from '../../index.js'
+
+type XTypeStr = 'f32' | 'f64'
+type YTypeStr = 'f64' | 'f32' | 'i64' | 'u64' | 'i32'
 
 const F32PredictorProvidersMap: Map<
   YTypeStr,
-  TransformerProvider<IExtraTreesRegressorBaseParameters, any, any>
+  PredictorProvider<IExtraTreesRegressorBaseParameters, any, any>
 > = new Map()
 F32PredictorProvidersMap.set('f32', new ExtraTreesRegressorF32F32Provider())
 F32PredictorProvidersMap.set('f64', new ExtraTreesRegressorF32F64Provider())
@@ -24,7 +26,7 @@ F32PredictorProvidersMap.set('u64', new ExtraTreesRegressorF32U64Provider())
 
 const F64PredictorProvidersMap: Map<
   YTypeStr,
-  TransformerProvider<IExtraTreesRegressorBaseParameters, any, any>
+  PredictorProvider<IExtraTreesRegressorBaseParameters, any, any>
 > = new Map()
 F64PredictorProvidersMap.set('f32', new ExtraTreesRegressorF64F32Provider())
 F64PredictorProvidersMap.set('f64', new ExtraTreesRegressorF64F64Provider())
@@ -34,7 +36,7 @@ F64PredictorProvidersMap.set('u64', new ExtraTreesRegressorF64U64Provider())
 
 const PredictorProvidersMap: Map<
   XTypeStr,
-  Map<YTypeStr, TransformerProvider<IExtraTreesRegressorBaseParameters, any, any>>
+  Map<YTypeStr, PredictorProvider<IExtraTreesRegressorBaseParameters, any, any>>
 > = new Map()
 PredictorProvidersMap.set('f32', F32PredictorProvidersMap)
 PredictorProvidersMap.set('f64', F64PredictorProvidersMap)
@@ -77,3 +79,4 @@ function setExtraTreesRegressorParametersValues(
 }
 
 export { PredictorProvidersMap, setExtraTreesRegressorParametersValues }
+export type { YTypeStr, XTypeStr }

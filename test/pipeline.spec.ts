@@ -22,7 +22,8 @@ let {
   // Lasso, ElasticNet
 } = linearModel
 let {
-  // RandomForestClassifier, RandomForestRegressor,
+  RandomForestClassifier,
+  // RandomForestRegressor,
   ExtraTreesRegressor,
 } = ensemble
 let {
@@ -59,21 +60,23 @@ describe('Pipelines', () => {
   //     let score = accuracyScore(pipe.predict(xTest), yTest)
   //     assert(score)
   //   })
-  //   it('StandardScaler + RandomForestClassifier', () => {
-  //     let pipe = makePipeline([
-  //       ['standardscaler', new StandardScaler()],
-  //       ['randomforestclassifier', new RandomForestClassifier()],
-  //     ])
-  //     let irisData = loadIris({ returnXY: true })
-  //     let [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected both x and y to be defined')
-  //     }
-  //     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     pipe.fit(xTrain, yTrain)
-  //     let score = accuracyScore(pipe.predict(xTest), yTest)
-  //     assert(score)
-  //   })
+
+  it('StandardScaler + RandomForestClassifier', () => {
+    let pipe = makePipeline([
+      ['standardscaler', new StandardScaler()],
+      ['randomforestclassifier', new RandomForestClassifier()],
+    ])
+    let irisData = loadIris({ returnXY: true })
+    let [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert(score)
+  })
+
   //   it('StandardScaler + RandomForestRegressor', () => {
   //     let pipe = makePipeline([
   //       ['standardscaler', new StandardScaler()],

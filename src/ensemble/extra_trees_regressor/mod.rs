@@ -23,7 +23,7 @@ macro_rules! extra_trees_regressor_nb_struct {
     predict_output_type: $id:ty,
     matrix_type: $matrix:ty,
     array_type: $array:ty
-  )=> {
+  ) => {
     paste! {
         #[napi(js_name=""[<ExtraTreesRegressor $feat:upper $id:upper>]"")]
         #[derive(Debug)]
