@@ -68,3 +68,4 @@ macro_rules! ridge_regression_parameters_struct {
 }
 
 ridge_regression_parameters_struct! {f64}
+ridge_regression_parameters_struct! {f32}

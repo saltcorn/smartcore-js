@@ -1,4 +1,6 @@
 mod parameters;
+#[macro_use]
+mod define_and_impl_macro;
 
 use bincode::{
   config::standard,
@@ -16,71 +18,251 @@ use smartcore::{
   neighbors::knn_classifier::KNNClassifier as LibKNNClassifier,
 };
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
+use crate::linalg::basic::matrix::{
+  DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32,
+  DenseMatrixU64, DenseMatrixU8,
+};
 use parameters::{
-  KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64HammingF64Parameters,
-  KNNClassifierF64MahalanobisF64Parameters, KNNClassifierF64ManhattanF64Parameters,
-  KNNClassifierF64MinkowskiF64Parameters,
+  KNNClassifierF32EuclidianF32Parameters, KNNClassifierF32MahalanobisF32Parameters,
+  KNNClassifierF32ManhattanF32Parameters, KNNClassifierF32MinkowskiF32Parameters,
+  KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64MahalanobisF64Parameters,
+  KNNClassifierF64ManhattanF64Parameters, KNNClassifierF64MinkowskiF64Parameters,
+  KNNClassifierI32EuclidianI32Parameters, KNNClassifierI32HammingI32Parameters,
+  KNNClassifierI32ManhattanI32Parameters, KNNClassifierI32MinkowskiI32Parameters,
+  KNNClassifierI64EuclidianI64Parameters, KNNClassifierI64ManhattanI64Parameters,
+  KNNClassifierI64MinkowskiI64Parameters, KNNClassifierU16EuclidianU16Parameters,
+  KNNClassifierU16HammingU16Parameters, KNNClassifierU32EuclidianU32Parameters,
+  KNNClassifierU32ManhattanU32Parameters, KNNClassifierU64EuclidianU64Parameters,
+  KNNClassifierU64ManhattanU64Parameters, KNNClassifierU8EuclidianU8Parameters,
+  KNNClassifierU8HammingU8Parameters,
 };
 
-macro_rules! knn_classifier_struct {
-  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty, $d:ty, $d_name:ty ) => {
-    paste! {
-        #[napi(js_name=""[<KNNClassifier $x:upper $y_mod $y:upper $d_name>]"")]
-        #[derive(Debug)]
-        pub struct [<KNNClassifier $x:upper $y_mod $y:upper $d_name>] {
-            inner: LibKNNClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>, $d>,
-        }
-
-        #[napi]
-        impl [<KNNClassifier $x:upper $y_mod $y:upper $d_name>] {
-            #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &[<KNNClassifier $x:upper $d_name Parameters>]) -> Result<Self> {
-                let inner = LibKNNClassifier::<$x, $y, DenseMatrix<$x>, Vec<$y>, $d>::fit(x, &y.to_vec(), parameters.as_ref().to_owned())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Self { inner })
-            }
-
-            #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
-                let predict_result = self.inner.predict(x).map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(predict_result.into())
-            }
-
-            #[napi]
-            pub fn serialize(&self) -> Result<Buffer> {
-                let encoded = encode_to_vec(&self.inner, standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Buffer::from(encoded))
-            }
-
-            #[napi(factory)]
-            pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibKNNClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>, $d>, _>(data.as_ref(), standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
-                Ok(Self { inner })
-            }
-        }
-    }
-  };
+define_and_impl! {
+    feature_type: f32,
+    target_type: i32,
+    matrix_type: DenseMatrixF32,
+    array_type: Int32Array,
+    distance_type: Euclidian<f32>,
+    parameters_type: KNNClassifierF32EuclidianF32Parameters,
+    distance_export_type: EuclidianF32
 }
 
-knn_classifier_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>, Euclidian<f64>, EuclidianF64}
-knn_classifier_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array, Euclidian<f64>, EuclidianF64}
-knn_classifier_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array, Euclidian<f64>, EuclidianF64}
+define_and_impl! {
+    feature_type: f32,
+    target_type: i32,
+    matrix_type: DenseMatrixF32,
+    array_type: Int32Array,
+    distance_type: Mahalanobis<f32, DenseMatrix<f64>>,
+    parameters_type: KNNClassifierF32MahalanobisF32Parameters,
+    distance_export_type: MahalanobisF32
+}
 
-knn_classifier_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>, Hamming<f64>, HammingF64}
-knn_classifier_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array, Hamming<f64>, HammingF64}
-knn_classifier_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array, Hamming<f64>, HammingF64}
+define_and_impl! {
+    feature_type: f32,
+    target_type: i32,
+    matrix_type: DenseMatrixF32,
+    array_type: Int32Array,
+    distance_type: Manhattan<f32>,
+    parameters_type: KNNClassifierF32ManhattanF32Parameters,
+    distance_export_type: ManhattanF32
+}
 
-knn_classifier_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>, Manhattan<f64>, ManhattanF64}
-knn_classifier_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array, Manhattan<f64>, ManhattanF64}
-knn_classifier_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array, Manhattan<f64>, ManhattanF64}
+define_and_impl! {
+    feature_type: f32,
+    target_type: i32,
+    matrix_type: DenseMatrixF32,
+    array_type: Int32Array,
+    distance_type: Minkowski<f32>,
+    parameters_type: KNNClassifierF32MinkowskiF32Parameters,
+    distance_export_type: MinkowskiF32
+}
 
-knn_classifier_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>, Minkowski<f64>, MinkowskiF64}
-knn_classifier_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array, Minkowski<f64>, MinkowskiF64}
-knn_classifier_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array, Minkowski<f64>, MinkowskiF64}
+define_and_impl! {
+    feature_type: f64,
+    target_type: i32,
+    matrix_type: DenseMatrixF64,
+    array_type: Int32Array,
+    distance_type: Euclidian<f64>,
+    parameters_type: KNNClassifierF64EuclidianF64Parameters,
+    distance_export_type: EuclidianF64
+}
 
-knn_classifier_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>, Mahalanobis<f64, DenseMatrix<f64>>, MahalanobisF64}
-knn_classifier_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array, Mahalanobis<f64, DenseMatrix<f64>>, MahalanobisF64}
-knn_classifier_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array, Mahalanobis<f64, DenseMatrix<f64>>, MahalanobisF64}
+define_and_impl! {
+    feature_type: f64,
+    target_type: i32,
+    matrix_type: DenseMatrixF64,
+    array_type: Int32Array,
+    distance_type: Mahalanobis<f64, DenseMatrix<f64>>,
+    parameters_type: KNNClassifierF64MahalanobisF64Parameters,
+    distance_export_type: MahalanobisF64
+}
+
+define_and_impl! {
+    feature_type: f64,
+    target_type: i32,
+    matrix_type: DenseMatrixF64,
+    array_type: Int32Array,
+    distance_type: Manhattan<f64>,
+    parameters_type: KNNClassifierF64ManhattanF64Parameters,
+    distance_export_type: ManhattanF64
+}
+
+define_and_impl! {
+    feature_type: f64,
+    target_type: i32,
+    matrix_type: DenseMatrixF64,
+    array_type: Int32Array,
+    distance_type: Minkowski<f64>,
+    parameters_type: KNNClassifierF64MinkowskiF64Parameters,
+    distance_export_type: MinkowskiF64
+}
+
+define_and_impl! {
+    feature_type: i32,
+    target_type: i32,
+    matrix_type: DenseMatrixI32,
+    array_type: Int32Array,
+    distance_type: Euclidian<i32>,
+    parameters_type: KNNClassifierI32EuclidianI32Parameters,
+    distance_export_type: EuclidianI32
+}
+
+define_and_impl! {
+    feature_type: i32,
+    target_type: i32,
+    matrix_type: DenseMatrixI32,
+    array_type: Int32Array,
+    distance_type: Hamming<i32>,
+    parameters_type: KNNClassifierI32HammingI32Parameters,
+    distance_export_type: HammingI32
+}
+
+define_and_impl! {
+    feature_type: i32,
+    target_type: i32,
+    matrix_type: DenseMatrixI32,
+    array_type: Int32Array,
+    distance_type: Manhattan<i32>,
+    parameters_type: KNNClassifierI32ManhattanI32Parameters,
+    distance_export_type: ManhattanI32
+}
+
+define_and_impl! {
+    feature_type: i32,
+    target_type: i32,
+    matrix_type: DenseMatrixI32,
+    array_type: Int32Array,
+    distance_type: Minkowski<i32>,
+    parameters_type: KNNClassifierI32MinkowskiI32Parameters,
+    distance_export_type: MinkowskiI32
+}
+
+define_and_impl! {
+    feature_type: i64,
+    target_type: i32,
+    matrix_type: DenseMatrixI64,
+    array_type: Int32Array,
+    distance_type: Euclidian<i64>,
+    parameters_type: KNNClassifierI64EuclidianI64Parameters,
+    distance_export_type: EuclidianI64
+}
+
+define_and_impl! {
+    feature_type: i64,
+    target_type: i32,
+    matrix_type: DenseMatrixI64,
+    array_type: Int32Array,
+    distance_type: Manhattan<i64>,
+    parameters_type: KNNClassifierI64ManhattanI64Parameters,
+    distance_export_type: ManhattanI64
+}
+
+define_and_impl! {
+    feature_type: i64,
+    target_type: i32,
+    matrix_type: DenseMatrixI64,
+    array_type: Int32Array,
+    distance_type: Minkowski<i64>,
+    parameters_type: KNNClassifierI64MinkowskiI64Parameters,
+    distance_export_type: MinkowskiI64
+}
+
+define_and_impl! {
+    feature_type: u16,
+    target_type: i32,
+    matrix_type: DenseMatrixU16,
+    array_type: Int32Array,
+    distance_type: Euclidian<u16>,
+    parameters_type: KNNClassifierU16EuclidianU16Parameters,
+    distance_export_type: EuclidianU16
+}
+
+define_and_impl! {
+    feature_type: u16,
+    target_type: i32,
+    matrix_type: DenseMatrixU16,
+    array_type: Int32Array,
+    distance_type: Hamming<u16>,
+    parameters_type: KNNClassifierU16HammingU16Parameters,
+    distance_export_type: HammingU16
+}
+
+define_and_impl! {
+    feature_type: u32,
+    target_type: i32,
+    matrix_type: DenseMatrixU32,
+    array_type: Int32Array,
+    distance_type: Euclidian<u32>,
+    parameters_type: KNNClassifierU32EuclidianU32Parameters,
+    distance_export_type: EuclidianU32
+}
+
+define_and_impl! {
+    feature_type: u32,
+    target_type: i32,
+    matrix_type: DenseMatrixU32,
+    array_type: Int32Array,
+    distance_type: Manhattan<u32>,
+    parameters_type: KNNClassifierU32ManhattanU32Parameters,
+    distance_export_type: ManhattanU32
+}
+
+define_and_impl! {
+    feature_type: u64,
+    target_type: i32,
+    matrix_type: DenseMatrixU64,
+    array_type: Int32Array,
+    distance_type: Euclidian<u64>,
+    parameters_type: KNNClassifierU64EuclidianU64Parameters,
+    distance_export_type: EuclidianU64
+}
+
+define_and_impl! {
+    feature_type: u64,
+    target_type: i32,
+    matrix_type: DenseMatrixU64,
+    array_type: Int32Array,
+    distance_type: Manhattan<u64>,
+    parameters_type: KNNClassifierU64ManhattanU64Parameters,
+    distance_export_type: ManhattanU64
+}
+
+define_and_impl! {
+    feature_type: u8,
+    target_type: i32,
+    matrix_type: DenseMatrixU8,
+    array_type: Int32Array,
+    distance_type: Euclidian<u8>,
+    parameters_type: KNNClassifierU8EuclidianU8Parameters,
+    distance_export_type: EuclidianU8
+}
+
+define_and_impl! {
+    feature_type: u8,
+    target_type: i32,
+    matrix_type: DenseMatrixU8,
+    array_type: Int32Array,
+    distance_type: Hamming<u8>,
+    parameters_type: KNNClassifierU8HammingU8Parameters,
+    distance_export_type: HammingU8
+}

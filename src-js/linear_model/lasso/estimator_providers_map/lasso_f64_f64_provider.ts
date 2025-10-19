@@ -1,0 +1,31 @@
+import { type DenseMatrixRs, type YType } from '../../../index.js'
+import { DenseMatrix } from '../../../linalg/dense-matrix/index.js'
+import { DenseMatrixF64, LassoF64F64, LassoParameters } from '../../../core-bindings/index.js'
+import { type ILassoBaseParameters } from '../index.js'
+import { type PredictorProvider } from '../../../estimator.js'
+import { setLassoParametersValues } from './index.js'
+import { yAsFloat64Array } from '../../../utilities/index.js'
+
+class LassoF64F64Provider implements PredictorProvider<ILassoBaseParameters, LassoParameters, LassoF64F64> {
+  parameters(config: ILassoBaseParameters): LassoParameters {
+    const parameters = new LassoParameters()
+    setLassoParametersValues(parameters, config)
+    return parameters
+  }
+
+  estimator(x: DenseMatrix, y: YType, parameters: LassoParameters): LassoF64F64 {
+    const xAsF64 = x.asRsMatrix('f64') as DenseMatrixF64
+    const yAsF64 = yAsFloat64Array(y)
+    return LassoF64F64.fit(xAsF64, yAsF64, parameters)
+  }
+
+  toMatrix(x: DenseMatrix): DenseMatrixRs {
+    return x.asRsMatrix('f32')
+  }
+
+  deserialize(data: Buffer): LassoF64F64 {
+    return LassoF64F64.deserialize(data)
+  }
+}
+
+export default LassoF64F64Provider

@@ -1,7 +1,5 @@
-import LinearRegression from './linear_regression.js'
-import LogisticRegression from './logistic_regression.js'
-import RidgeRegression from './ridge_regression.js'
-import Lasso from './lasso.js'
-import ElasticNet from './elastic_net.js'
-
-export { LinearRegression, LogisticRegression, RidgeRegression, Lasso, ElasticNet }
+export { LinearRegression } from './linear_regression/index.js'
+export { LogisticRegression } from './logistic_regression/index.js'
+export { RidgeRegression } from './ridge_regression/index.js'
+export { Lasso } from './lasso/index.js'
+export { ElasticNet } from './elastic_net/index.js'
