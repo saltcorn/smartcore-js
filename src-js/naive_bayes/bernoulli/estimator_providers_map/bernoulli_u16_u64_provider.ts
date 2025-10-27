@@ -22,7 +22,7 @@ class BernoulliNBU16U64Provider
   }
 
   toMatrix(x: DenseMatrix): DenseMatrixRs {
-    return x.asRsMatrix('f32')
+    return x.asRsMatrix('u16')
   }
 
   deserialize(data: Buffer): BernoulliNBU16U64 {
