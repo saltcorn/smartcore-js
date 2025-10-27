@@ -19,13 +19,43 @@ export * as naiveBayes from './naive_bayes/index.js'
 export * as coreBindings from './core-bindings/index.js'
 
 type XType = DenseMatrix | number[][]
-type YType = (number | bigint)[] | Float64Array | BigInt64Array | BigUint64Array | Int32Array
+type YType =
+  | (number | bigint)[]
+  | Float64Array
+  | Float32Array
+  | BigInt64Array
+  | BigUint64Array
+  | Int32Array
+  | Uint16Array
+  | Uint8Array
+  | Uint32Array
+  | BigUint64Array
 type InputType = XType | DataFrame
 type OutputType = XType | DataFrame
 
-type YTyped = Float64Array | Float32Array | BigInt64Array | BigUint64Array | Int32Array | Uint32Array
+type YTyped =
+  | Float64Array
+  | Float32Array
+  | BigInt64Array
+  | BigUint64Array
+  | Int32Array
+  | Uint16Array
+  | Uint8Array
+  | Uint32Array
+  | BigUint64Array
+
 function asTypedY(y: YType): YTyped {
-  if (y instanceof Float64Array || y instanceof BigInt64Array || y instanceof BigUint64Array || y instanceof Int32Array)
+  if (
+    y instanceof Float64Array ||
+    y instanceof Float32Array ||
+    y instanceof BigInt64Array ||
+    y instanceof BigUint64Array ||
+    y instanceof Int32Array ||
+    y instanceof Uint16Array ||
+    y instanceof Uint8Array ||
+    y instanceof Uint32Array ||
+    y instanceof BigUint64Array
+  )
     return y
   if (y.length === 0) return new Float64Array()
   let largestNo = y[0]

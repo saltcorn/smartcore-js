@@ -2,23 +2,23 @@ function isU8(no: number | bigint): boolean {
   return Number.isInteger(no) && no >= 0 && no <= 255
 }
 
-// function asU8(no: number | bigint): number {
-//   if (!isU8(no)) {
-//     throw new Error(`Expected an unsigned 8-bit integer (0 - 255). Found: ${no}.`)
-//   }
-//   return Number(no)
-// }
+function asU8(no: number | bigint): number {
+  if (!isU8(no)) {
+    throw new Error(`Expected an unsigned 8-bit integer (0 - 255). Found: ${no}.`)
+  }
+  return Number(no)
+}
 
 function isU16(no: number | bigint): boolean {
   return Number.isInteger(no) && no >= 0 && no <= 65535
 }
 
-// function asU16(no: number | bigint): number {
-//   if (!isU16(no)) {
-//     throw new Error(`Expected an unsigned 16-bit integer (0 - 65535): Found: ${no}.`)
-//   }
-//   return Number(no)
-// }
+function asU16(no: number | bigint): number {
+  if (!isU16(no)) {
+    throw new Error(`Expected an unsigned 16-bit integer (0 - 65535): Found: ${no}.`)
+  }
+  return Number(no)
+}
 
 function isI32(no: number | bigint): boolean {
   return Number.isInteger(no) && no >= -2147483648 && no <= 2147483647
@@ -97,4 +97,4 @@ function asF64(no: number | bigint): number {
 }
 
 export { isF32, isF64, isI32, isI64, isU16, isU32, isU64, isU8, bigintToNumber }
-export { asF64, asF32, asI32, asI64, asU64, asU32 }
+export { asF64, asF32, asI32, asI64, asU64, asU32, asU8, asU16 }
