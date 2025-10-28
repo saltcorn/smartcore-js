@@ -122,8 +122,8 @@ describe('Pipelines', () => {
       ['standardscaler', new StandardScaler()],
       ['dbscan', new DBSCAN()],
     ])
-    let irisData = loadBoston({ returnXY: true })
-    let [x, y] = irisData instanceof Array ? irisData : []
+    let bostonData = loadBoston({ returnXY: true })
+    let [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
@@ -169,8 +169,8 @@ describe('Pipelines', () => {
       ['standardscaler', new StandardScaler()],
       ['linearregression', new LinearRegression()],
     ])
-    let irisData = loadBoston({ returnXY: true })
-    let [x, y] = irisData instanceof Array ? irisData : []
+    let bostonData = loadBoston({ returnXY: true })
+    let [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
@@ -180,29 +180,29 @@ describe('Pipelines', () => {
     assert.equal(score, 0)
   })
 
-  //   it('StandardScaler + RidgeRegression', () => {
-  //     let pipe = makePipeline([
-  //       ['standardscaler', new StandardScaler()],
-  //       ['ridgeregression', new RidgeRegression()],
-  //     ])
-  //     let irisData = loadBoston({ returnXY: true })
-  //     let [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected both x and y to be defined')
-  //     }
-  //     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     pipe.fit(xTrain, yTrain)
-  //     let score = accuracyScore(pipe.predict(xTest), yTest)
-  //     assert.equal(score, 0)
-  //   })
+  it('StandardScaler + RidgeRegression', () => {
+    let pipe = makePipeline([
+      ['standardscaler', new StandardScaler()],
+      ['ridgeregression', new RidgeRegression()],
+    ])
+    let irisData = loadIris({ returnXY: true })
+    let [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert(typeof score === 'number')
+  })
 
   it('StandardScaler + Lasso', () => {
     let pipe = makePipeline([
       ['standardscaler', new StandardScaler()],
       ['lasso', new Lasso()],
     ])
-    let irisData = loadBoston({ returnXY: true })
-    let [x, y] = irisData instanceof Array ? irisData : []
+    let bostonData = loadBoston({ returnXY: true })
+    let [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
@@ -217,8 +217,8 @@ describe('Pipelines', () => {
       ['standardscaler', new StandardScaler()],
       ['elasticnet', new ElasticNet()],
     ])
-    let irisData = loadBoston({ returnXY: true })
-    let [x, y] = irisData instanceof Array ? irisData : []
+    let bostonData = loadBoston({ returnXY: true })
+    let [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
@@ -233,8 +233,8 @@ describe('Pipelines', () => {
       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
       ['elasticnet', new ElasticNet()],
     ])
-    let irisData = loadBoston({ returnXY: true })
-    let [x, y] = irisData instanceof Array ? irisData : []
+    let bostonData = loadBoston({ returnXY: true })
+    let [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
