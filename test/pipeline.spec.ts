@@ -24,7 +24,8 @@ let { PCA, SVD } = decomposition
 let {
   BernoulliNB,
   CategoricalNB,
-  // GaussianNB, MultinomialNB
+  GaussianNB,
+  //   MultinomialNB
 } = naiveBayes
 // let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
@@ -288,21 +289,22 @@ describe('Pipelines', () => {
     assert(predictions)
   })
 
-  //   it('OneHotEncoder + GaussianNB', () => {
-  //     let pipe = makePipeline([
-  //       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
-  //       ['gaussiannb', new GaussianNB()],
-  //     ])
-  //     let irisData = loadIris({ returnXY: true, unsigned: true })
-  //     let [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected both x and y to be defined')
-  //     }
-  //     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     pipe.fit(xTrain, yTrain)
-  //     let score = accuracyScore(pipe.predict(xTest), yTest)
-  //     assert(score)
-  //   })
+  it('OneHotEncoder + GaussianNB', () => {
+    let pipe = makePipeline([
+      ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
+      ['gaussiannb', new GaussianNB()],
+    ])
+    let irisData = loadIris({ returnXY: true })
+    let [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert(score)
+  })
+
   //   it.skip('StandardScaler + MultinomialNB', () => {
   //     // fails on 32-bit systems and the WASI targets
   //     let pipe = makePipeline([

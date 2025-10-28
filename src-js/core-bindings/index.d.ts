@@ -1315,11 +1315,60 @@ export declare class F1F64 {
 }
 export type F1f64 = F1F64
 
-export declare class GaussianNBF64BigU64 {
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: GaussianNBParameters): GaussianNBF64BigU64
+export declare class GaussianNBF32U16 {
+  static fit(x: DenseMatrixF32, y: Uint16Array, parameters: GaussianNBParameters): GaussianNBF32U16
+  predict(x: DenseMatrixF32): Uint16Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): GaussianNBF32U16
+}
+
+export declare class GaussianNBF32U32 {
+  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: GaussianNBParameters): GaussianNBF32U32
+  predict(x: DenseMatrixF32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): GaussianNBF32U32
+}
+
+export declare class GaussianNBF32U64 {
+  static fit(x: DenseMatrixF32, y: BigUint64Array, parameters: GaussianNBParameters): GaussianNBF32U64
+  predict(x: DenseMatrixF32): BigUint64Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): GaussianNBF32U64
+}
+
+export declare class GaussianNBF32U8 {
+  static fit(x: DenseMatrixF32, y: Uint8Array, parameters: GaussianNBParameters): GaussianNBF32U8
+  predict(x: DenseMatrixF32): Uint8Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): GaussianNBF32U8
+}
+
+export declare class GaussianNBF64U16 {
+  static fit(x: DenseMatrixF64, y: Uint16Array, parameters: GaussianNBParameters): GaussianNBF64U16
+  predict(x: DenseMatrixF64): Uint16Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): GaussianNBF64U16
+}
+
+export declare class GaussianNBF64U32 {
+  static fit(x: DenseMatrixF64, y: Uint32Array, parameters: GaussianNBParameters): GaussianNBF64U32
+  predict(x: DenseMatrixF64): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): GaussianNBF64U32
+}
+
+export declare class GaussianNBF64U64 {
+  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: GaussianNBParameters): GaussianNBF64U64
   predict(x: DenseMatrixF64): BigUint64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): GaussianNBF64BigU64
+  static deserialize(data: Buffer): GaussianNBF64U64
+}
+
+export declare class GaussianNBF64U8 {
+  static fit(x: DenseMatrixF64, y: Uint8Array, parameters: GaussianNBParameters): GaussianNBF64U8
+  predict(x: DenseMatrixF64): Uint8Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): GaussianNBF64U8
 }
 
 export declare class GaussianNBParameters {

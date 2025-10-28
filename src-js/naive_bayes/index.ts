@@ -1,4 +1,4 @@
 export { BernoulliNB } from './bernoulli/index.js'
 export { CategoricalNB } from './categorical/index.js'
-// import GaussianNB from './gaussian.js'
+export { GaussianNB } from './gaussian/index.js'
 // import MultinomialNB from './multinomial.js'

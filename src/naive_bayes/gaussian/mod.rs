@@ -13,25 +13,30 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix, naive_bayes::gaussian::GaussianNB as LibGaussianNB,
 };
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 use parameters::GaussianNBParameters;
 
 macro_rules! gaussian_nb_struct {
-  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty ) => {
+  (
+    feature_type: $feat:ty,
+    predict_output_type: $id:ty,
+    matrix_type: $matrix:ty,
+    array_type: $array:ty
+  ) => {
     paste! {
-        #[napi(js_name=""[<GaussianNB $x:upper $y_mod $y:upper>]"")]
+        #[napi(js_name=""[<GaussianNB $feat:upper $id:upper>]"")]
         #[derive(Debug)]
-        pub struct [<GaussianNB $x:upper $y_mod $y:upper>] {
-            inner: LibGaussianNB<$x, $y, DenseMatrix<$x>, Vec<$y>>,
+        pub struct [<GaussianNB $feat:upper $id:upper>] {
+            inner: LibGaussianNB<$feat, $id, DenseMatrix<$feat>, Vec<$id>>,
         }
 
         #[napi]
-        impl [<GaussianNB $x:upper $y_mod $y:upper>] {
+        impl [<GaussianNB $feat:upper $id:upper>] {
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &GaussianNBParameters) -> Result<Self> {
+            pub fn fit(x: &$matrix, y: $array, parameters: &GaussianNBParameters) -> Result<Self> {
                 let y = y.to_vec();
                 let inner = LibGaussianNB::fit(
-                    x as &DenseMatrix<$x>,
+                    x as &DenseMatrix<$feat>,
                     &y,
                     parameters.owned_inner(),
                 )
@@ -40,12 +45,12 @@ macro_rules! gaussian_nb_struct {
             }
 
             #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
+            pub fn predict(&self, x: &$matrix) -> Result<$array> {
                 let prediction_result = self
                 .inner
-                .predict(x as &DenseMatrix<$x>)
+                .predict(x as &DenseMatrix<$feat>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
+                Ok($array::new(prediction_result))
             }
 
             #[napi]
@@ -57,14 +62,14 @@ macro_rules! gaussian_nb_struct {
 
             #[napi(factory)]
             pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibGaussianNB<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
+                let inner = decode_from_slice::<LibGaussianNB<$feat, $id, DenseMatrix<$feat>, Vec<$id>>, _>(data.as_ref(), standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
                 Ok(Self { inner })
             }
         }
 
-        impl Deref for [<GaussianNB $x:upper $y_mod $y:upper>] {
-            type Target = LibGaussianNB<$x, $y, DenseMatrix<$x>, Vec<$y>>;
+        impl Deref for [<GaussianNB $feat:upper $id:upper>] {
+            type Target = LibGaussianNB<$feat, $id, DenseMatrix<$feat>, Vec<$id>>;
 
             fn deref(&self) -> &Self::Target {
                 &self.inner
@@ -74,4 +79,62 @@ macro_rules! gaussian_nb_struct {
   };
 }
 
-gaussian_nb_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}
+// [u64]
+gaussian_nb_struct! {
+    feature_type: f64,
+    predict_output_type: u64,
+    matrix_type: DenseMatrixF64,
+    array_type: BigUint64Array
+}
+
+gaussian_nb_struct! {
+    feature_type: f32,
+    predict_output_type: u64,
+    matrix_type: DenseMatrixF32,
+    array_type: BigUint64Array
+}
+
+// [u32]
+gaussian_nb_struct! {
+    feature_type: f64,
+    predict_output_type: u32,
+    matrix_type: DenseMatrixF64,
+    array_type: Uint32Array
+}
+
+gaussian_nb_struct! {
+    feature_type: f32,
+    predict_output_type: u32,
+    matrix_type: DenseMatrixF32,
+    array_type: Uint32Array
+}
+
+// [u16]
+gaussian_nb_struct! {
+    feature_type: f64,
+    predict_output_type: u16,
+    matrix_type: DenseMatrixF64,
+    array_type: Uint16Array
+}
+
+gaussian_nb_struct! {
+    feature_type: f32,
+    predict_output_type: u16,
+    matrix_type: DenseMatrixF32,
+    array_type: Uint16Array
+}
+
+// [u8]
+gaussian_nb_struct! {
+    feature_type: f64,
+    predict_output_type: u8,
+    matrix_type: DenseMatrixF64,
+    array_type: Uint8Array
+}
+
+gaussian_nb_struct! {
+    feature_type: f32,
+    predict_output_type: u8,
+    matrix_type: DenseMatrixF32,
+    array_type: Uint8Array
+}
