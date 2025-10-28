@@ -2557,11 +2557,74 @@ export declare class MultinomialNBParameters {
   withPriors(priors: Float64Array): void
 }
 
-export declare class MultinomialNBU64BigU64 {
-  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: MultinomialNBParameters): MultinomialNBU64BigU64
+export declare class MultinomialNBU16U16 {
+  static fit(x: DenseMatrixU16, y: Uint16Array, parameters: MultinomialNBParameters): MultinomialNBU16U16
+  predict(x: DenseMatrixU16): Uint16Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU16U16
+}
+
+export declare class MultinomialNBU16U8 {
+  static fit(x: DenseMatrixU16, y: Uint8Array, parameters: MultinomialNBParameters): MultinomialNBU16U8
+  predict(x: DenseMatrixU16): Uint8Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU16U8
+}
+
+export declare class MultinomialNBU32U16 {
+  static fit(x: DenseMatrixU32, y: Uint16Array, parameters: MultinomialNBParameters): MultinomialNBU32U16
+  predict(x: DenseMatrixU32): Uint16Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU32U16
+}
+
+export declare class MultinomialNBU32U32 {
+  static fit(x: DenseMatrixU32, y: Uint32Array, parameters: MultinomialNBParameters): MultinomialNBU32U32
+  predict(x: DenseMatrixU32): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU32U32
+}
+
+export declare class MultinomialNBU32U8 {
+  static fit(x: DenseMatrixU32, y: Uint8Array, parameters: MultinomialNBParameters): MultinomialNBU32U8
+  predict(x: DenseMatrixU32): Uint8Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU32U8
+}
+
+export declare class MultinomialNBU64U16 {
+  static fit(x: DenseMatrixU64, y: Uint16Array, parameters: MultinomialNBParameters): MultinomialNBU64U16
+  predict(x: DenseMatrixU64): Uint16Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU64U16
+}
+
+export declare class MultinomialNBU64U32 {
+  static fit(x: DenseMatrixU64, y: Uint32Array, parameters: MultinomialNBParameters): MultinomialNBU64U32
+  predict(x: DenseMatrixU64): Uint32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU64U32
+}
+
+export declare class MultinomialNBU64U64 {
+  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: MultinomialNBParameters): MultinomialNBU64U64
   predict(x: DenseMatrixU64): BigUint64Array
   serialize(): Buffer
-  static deserialize(data: Buffer): MultinomialNBU64BigU64
+  static deserialize(data: Buffer): MultinomialNBU64U64
+}
+
+export declare class MultinomialNBU64U8 {
+  static fit(x: DenseMatrixU64, y: Uint8Array, parameters: MultinomialNBParameters): MultinomialNBU64U8
+  predict(x: DenseMatrixU64): Uint8Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU64U8
+}
+
+export declare class MultinomialNBU8U8 {
+  static fit(x: DenseMatrixU8, y: Uint8Array, parameters: MultinomialNBParameters): MultinomialNBU8U8
+  predict(x: DenseMatrixU8): Uint8Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): MultinomialNBU8U8
 }
 
 export declare class OneHotEncoderF32 {

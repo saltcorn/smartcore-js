@@ -21,12 +21,7 @@ let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ens
 let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
 let { PCA, SVD } = decomposition
-let {
-  BernoulliNB,
-  CategoricalNB,
-  GaussianNB,
-  //   MultinomialNB
-} = naiveBayes
+let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
 // let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
 let { trainTestSplit } = modelSelection
@@ -305,22 +300,34 @@ describe('Pipelines', () => {
     assert(score)
   })
 
-  //   it.skip('StandardScaler + MultinomialNB', () => {
-  //     // fails on 32-bit systems and the WASI targets
-  //     let pipe = makePipeline([
-  //       // ['standardscaler', new StandardScaler()],
-  //       ['multinomialnb', new MultinomialNB()],
-  //     ])
-  //     let breastCancerData = loadBreastCancer({ returnXY: true, unsigned: true })
-  //     let [x, y] = breastCancerData instanceof Array ? breastCancerData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected both x and y to be defined')
-  //     }
-  //     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     pipe.fit(xTrain, yTrain)
-  //     let score = accuracyScore(pipe.predict(xTest), yTest)
-  //     assert(score)
-  //   })
+  it('StandardScaler + MultinomialNB', () => {
+    const df = new DataFrame(parsedJson, {
+      include: [
+        'product_views',
+        'cart_additions',
+        'cart_removals',
+        'wishlist_additions',
+        'search_queries',
+        'page_scrolls',
+        'click_count',
+        'discount_used',
+        'customer_age',
+        'previous_purchases',
+        'days_since_last_purchase',
+        'email_opens_last_month',
+        'reviews_written',
+        'metrics.items_purchased',
+        'metrics.purchases',
+      ],
+    })
+
+    let pipe = makePipeline([['multinomialnb', new MultinomialNB()]])
+    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
+    pipe.fit(df, y).transform(df)
+    const predictions = pipe.predict(df)
+    assert(predictions)
+  })
+
   //   it('OneHotEncoder + KNNClassifier', () => {
   //     let pipe = makePipeline([
   //       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
