@@ -10,7 +10,7 @@ import {
   cluster,
   decomposition,
   naiveBayes,
-  //   neighbors,
+  neighbors,
   dataFrame,
 } from '../src-js/index.js'
 import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-js/core-bindings/index.js'
@@ -22,7 +22,10 @@ let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
 let { PCA, SVD } = decomposition
 let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
-// let { KNNClassifier, KNNRegressor } = neighbors
+let {
+  KNNClassifier,
+  // KNNRegressor
+} = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
 let { trainTestSplit } = modelSelection
 let { accuracyScore } = metrics
@@ -328,21 +331,22 @@ describe('Pipelines', () => {
     assert(predictions)
   })
 
-  //   it('OneHotEncoder + KNNClassifier', () => {
-  //     let pipe = makePipeline([
-  //       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
-  //       ['knnclassifier', new KNNClassifier({ distance: DistanceType.HAMMING })],
-  //     ])
-  //     let irisData = loadIris({ returnXY: true, unsigned: true })
-  //     let [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected both x and y to be defined')
-  //     }
-  //     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     pipe.fit(xTrain, yTrain)
-  //     let score = accuracyScore(pipe.predict(xTest), yTest)
-  //     assert(score)
-  //   })
+  it('OneHotEncoder + KNNClassifier', () => {
+    let pipe = makePipeline([
+      ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
+      ['knnclassifier', new KNNClassifier({ distanceType: 'manhattan' })],
+    ])
+    let irisData = loadIris({ returnXY: true })
+    let [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    pipe.fit(xTrain, yTrain)
+    let score = accuracyScore(pipe.predict(xTest), yTest)
+    assert(score)
+  })
+
   //   it('OneHotEncoder + KNNRegressor', () => {
   //     let pipe = makePipeline([
   //       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
