@@ -3,6 +3,7 @@ import { mkdirSync } from 'fs'
 
 try {
   mkdirSync('./dist-cjs', { recursive: true })
+  mkdirSync('./dist/core-bindings', { recursive: true })
 } catch (e) {
   // Don't throw if the directory already exists
 }
