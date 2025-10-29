@@ -8,4 +8,5 @@ try {
 }
 
 writeFileSync('./dist-cjs/package.json', JSON.stringify({ type: 'commonjs' }, null, 2))
+writeFileSync('./dist/core-bindings/package.json', JSON.stringify({ type: 'commonjs' }, null, 2))
 console.log('Created dist-cjs/package.json')
