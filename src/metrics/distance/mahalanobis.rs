@@ -6,41 +6,36 @@ use smartcore::{
   metrics::distance::{mahalanobis::Mahalanobis as LibMahalanobis, Distance},
 };
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 
 macro_rules! mahalanobis_struct {
-  ( $ty:ty ) => {
+  (
+    feature_type: $feat:ty,
+    matrix_type: $matrix:ty,
+    array_type: $array_napi:ty
+  ) => {
     paste! {
-        #[napi(js_name=""[<Mahalanobis $ty:upper>]"")]
+        #[napi(js_name=""[<Mahalanobis $feat:upper>]"")]
         #[derive(Debug, Clone)]
-        pub struct [<Mahalanobis $ty:upper>] {
-            inner: LibMahalanobis<$ty, DenseMatrix<f64>>,
+        pub struct [<Mahalanobis $feat:upper>] {
+            inner: LibMahalanobis<$feat, DenseMatrix<f64>>,
         }
 
         #[napi]
-        impl [<Mahalanobis $ty:upper>] {
+        impl [<Mahalanobis $feat:upper>] {
             #[napi(constructor)]
-            pub fn new(data: &DenseMatrixF64) -> Self {
+            pub fn new(data: &$matrix) -> Self {
                 Self {
-                    inner: LibMahalanobis::<$ty, DenseMatrix<f64>>::new(data as &DenseMatrix<f64>)
+                    inner: LibMahalanobis::<$feat, DenseMatrix<f64>>::new(data as &DenseMatrix<$feat>)
                 }
             }
 
-            pub fn owned_inner(&self) -> LibMahalanobis<$ty, DenseMatrix<f64>> {
+            pub fn owned_inner(&self) -> LibMahalanobis<$feat, DenseMatrix<f64>> {
                 self.inner.to_owned()
             }
-        }
-    }
-  };
-}
 
-macro_rules! mahalanobis_distance_impl {
-  ( $ty:ty, $x:ty, $y:ty ) => {
-    paste! {
-        #[napi]
-        impl [<Mahalanobis $ty:upper>] {
             #[napi]
-            pub fn distance(&self, x: $x, y: $y) -> f64 {
+            pub fn distance(&self, x: $array_napi, y: $array_napi) -> f64 {
                 let x = x.to_vec();
                 let y = y.to_vec();
                 self.inner.distance(&x, &y)
@@ -50,5 +45,6 @@ macro_rules! mahalanobis_distance_impl {
   };
 }
 
-mahalanobis_struct! {f64}
-mahalanobis_distance_impl! {f64, Float64Array, Float64Array}
+// Only works with floating point values
+mahalanobis_struct! { feature_type: f32, matrix_type: DenseMatrixF32, array_type: Float32Array}
+mahalanobis_struct! { feature_type: f64, matrix_type: DenseMatrixF64, array_type: Float64Array}

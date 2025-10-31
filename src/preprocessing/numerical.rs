@@ -15,7 +15,7 @@ use smartcore::{
   },
 };
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 
 #[derive(Debug, Default, Clone)]
 #[napi]
@@ -48,7 +48,7 @@ macro_rules! standard_scaler_struct {
 
         #[napi]
         impl [<StandardScaler $ty:upper>] {
-            #[napi(constructor)]
+            #[napi]
             pub fn fit(data: &[<DenseMatrix $ty:upper>], parameters: &StandardScalerParameters) -> Result<Self> {
                 let pca = LibStandardScaler::fit(
                     data as &DenseMatrix<$ty>,
@@ -86,3 +86,4 @@ macro_rules! standard_scaler_struct {
 }
 
 standard_scaler_struct! {f64}
+standard_scaler_struct! {f32}

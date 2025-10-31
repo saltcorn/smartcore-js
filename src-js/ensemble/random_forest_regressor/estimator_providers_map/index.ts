@@ -1,0 +1,82 @@
+import { type PredictorProvider } from '../../../estimator.js'
+import RandomForestRegressorF32F32Provider from './random_forest_regressor_f32_f32_provider.js'
+import RandomForestRegressorF32F64Provider from './random_forest_regressor_f32_f64_provider.js'
+import RandomForestRegressorF32I32Provider from './random_forest_regressor_f32_i32_provider.js'
+import RandomForestRegressorF32I64Provider from './random_forest_regressor_f32_i64_provider.js'
+import RandomForestRegressorF32U64Provider from './random_forest_regressor_f32_u64_provider.js'
+import RandomForestRegressorF64F32Provider from './random_forest_regressor_f64_f32_provider.js'
+import RandomForestRegressorF64F64Provider from './random_forest_regressor_f64_f64_provider.js'
+import RandomForestRegressorF64I32Provider from './random_forest_regressor_f64_i32_provider.js'
+import RandomForestRegressorF64I64Provider from './random_forest_regressor_f64_i64_provider.js'
+import RandomForestRegressorF64U64Provider from './random_forest_regressor_f64_u64_provider.js'
+import type { IRandomForestRegressorBaseParameters } from '../index.js'
+
+type XTypeStr = 'f32' | 'f64'
+type YTypeStr = 'f64' | 'f32' | 'i64' | 'u64' | 'i32'
+
+const F32PredictorProvidersMap: Map<
+  YTypeStr,
+  PredictorProvider<IRandomForestRegressorBaseParameters, any, any>
+> = new Map()
+F32PredictorProvidersMap.set('f32', new RandomForestRegressorF32F32Provider())
+F32PredictorProvidersMap.set('f64', new RandomForestRegressorF32F64Provider())
+F32PredictorProvidersMap.set('i32', new RandomForestRegressorF32I32Provider())
+F32PredictorProvidersMap.set('i64', new RandomForestRegressorF32I64Provider())
+F32PredictorProvidersMap.set('u64', new RandomForestRegressorF32U64Provider())
+
+const F64PredictorProvidersMap: Map<
+  YTypeStr,
+  PredictorProvider<IRandomForestRegressorBaseParameters, any, any>
+> = new Map()
+F64PredictorProvidersMap.set('f32', new RandomForestRegressorF64F32Provider())
+F64PredictorProvidersMap.set('f64', new RandomForestRegressorF64F64Provider())
+F64PredictorProvidersMap.set('i32', new RandomForestRegressorF64I32Provider())
+F64PredictorProvidersMap.set('i64', new RandomForestRegressorF64I64Provider())
+F64PredictorProvidersMap.set('u64', new RandomForestRegressorF64U64Provider())
+
+const PredictorProvidersMap: Map<
+  XTypeStr,
+  Map<YTypeStr, PredictorProvider<IRandomForestRegressorBaseParameters, any, any>>
+> = new Map()
+PredictorProvidersMap.set('f32', F32PredictorProvidersMap)
+PredictorProvidersMap.set('f64', F64PredictorProvidersMap)
+
+interface IRandomForestRegressorParametersRs {
+  withMaxDepth(maxDepth: number): void
+  withMinSamplesLeaf(minSamplesLeaf: bigint): void
+  withMinSamplesSplit(minSamplesSplit: bigint): void
+  withNTrees(nTrees: number): void
+  withM(m: number): void
+  withKeepSamples(keepSamples: boolean): void
+  withSeed(seed: number): void
+}
+
+function setRandomForestRegressorParametersValues(
+  parameters: IRandomForestRegressorParametersRs,
+  config: IRandomForestRegressorBaseParameters,
+) {
+  if (config.maxDepth !== undefined) {
+    parameters.withMaxDepth(config.maxDepth)
+  }
+  if (config.minSamplesLeaf !== undefined) {
+    parameters.withMinSamplesLeaf(BigInt(config.minSamplesLeaf))
+  }
+  if (config.minSamplesSplit !== undefined) {
+    parameters.withMinSamplesSplit(BigInt(config.minSamplesSplit))
+  }
+  if (config.nTrees !== undefined) {
+    parameters.withNTrees(config.nTrees)
+  }
+  if (config.m !== undefined) {
+    parameters.withM(config.m)
+  }
+  if (config.keepSamples !== undefined) {
+    parameters.withKeepSamples(config.keepSamples)
+  }
+  if (config.seed !== undefined) {
+    parameters.withSeed(config.seed)
+  }
+}
+
+export { PredictorProvidersMap, setRandomForestRegressorParametersValues }
+export type { YTypeStr, XTypeStr }

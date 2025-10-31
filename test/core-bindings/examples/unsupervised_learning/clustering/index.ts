@@ -3,7 +3,7 @@ import dbscan from './dbscan.ts'
 
 export default () => {
   describe('Clustering', () => {
-    it.skip('KMeans', k_means)
-    it.skip('DBSCAN', dbscan)
+    it('KMeans', k_means)
+    it('DBSCAN', dbscan)
   })
 }

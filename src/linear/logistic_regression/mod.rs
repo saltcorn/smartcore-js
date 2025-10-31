@@ -12,41 +12,46 @@ use smartcore::{
   linear::logistic_regression::LogisticRegression as LibLogisticRegression,
 };
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
-pub use parameters::LogisticRegressionParametersF64;
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
+pub use parameters::{LogisticRegressionParametersF32, LogisticRegressionParametersF64};
 
 macro_rules! logistic_regression_struct {
-  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty ) => {
+  (
+    feature_type: $feat:ty,
+    predict_output_type: $id:ty,
+    matrix_type: $matrix:ty,
+    array_type: $array:ty
+  ) => {
     paste! {
-        #[napi(js_name=""[<LogisticRegression $x:upper $y_mod $y:upper>]"")]
+        #[napi(js_name=""[<LogisticRegression $feat:upper $id:upper>]"")]
         #[derive(Debug)]
-        pub struct [<LogisticRegression $x:upper $y_mod $y:upper>] {
-            inner: LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>,
+        pub struct [<LogisticRegression $feat:upper $id:upper>] {
+            inner: LibLogisticRegression<$feat, $id, DenseMatrix<$feat>, Vec<$id>>,
         }
 
-        impl Default for [<LogisticRegression $x:upper $y_mod $y:upper>] {
+        impl Default for [<LogisticRegression $feat:upper $id:upper>] {
             fn default() -> Self {
                 Self {
-                    inner: LibLogisticRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
+                    inner: LibLogisticRegression::<$feat, $id, DenseMatrix<$feat>, Vec<$id>>::new(),
                 }
             }
         }
 
         #[napi]
-        impl [<LogisticRegression $x:upper $y_mod $y:upper>] {
+        impl [<LogisticRegression $feat:upper $id:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self::default()
             }
 
-            pub fn new_inner() -> LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>> {
-                LibLogisticRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new()
+            pub fn new_inner() -> LibLogisticRegression<$feat, $id, DenseMatrix<$feat>, Vec<$id>> {
+                LibLogisticRegression::<$feat, $id, DenseMatrix<$feat>, Vec<$id>>::new()
             }
 
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &[<LogisticRegressionParameters $x:upper>]) -> Result<Self> {
+            pub fn fit(x: &$matrix, y: $array, parameters: &[<LogisticRegressionParameters $feat:upper>]) -> Result<Self> {
                 let inner = LibLogisticRegression::fit(
-                    x as &DenseMatrix<$x>,
+                    x as &DenseMatrix<$feat>,
                     &y.to_vec(),
                     parameters.as_ref().to_owned(),
                 )
@@ -55,9 +60,9 @@ macro_rules! logistic_regression_struct {
             }
 
             #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
+            pub fn predict(&self, x: &$matrix) -> Result<$array> {
                 let prediction = self.inner.predict(
-                    x as &DenseMatrix<$x>
+                    x as &DenseMatrix<$feat>
                 )
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok(prediction.into())
@@ -72,14 +77,14 @@ macro_rules! logistic_regression_struct {
 
             #[napi(factory)]
             pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
+                let inner = decode_from_slice::<LibLogisticRegression<$feat, $id, DenseMatrix<$feat>, Vec<$id>>, _>(data.as_ref(), standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
                 Ok(Self { inner })
             }
         }
 
-        impl AsRef<LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<LogisticRegression $x:upper $y_mod $y:upper>] {
-            fn as_ref(&self) -> &LibLogisticRegression<$x, $y, DenseMatrix<$x>, Vec<$y>> {
+        impl AsRef<LibLogisticRegression<$feat, $id, DenseMatrix<$feat>, Vec<$id>>> for [<LogisticRegression $feat:upper $id:upper>] {
+            fn as_ref(&self) -> &LibLogisticRegression<$feat, $id, DenseMatrix<$feat>, Vec<$id>> {
                 &self.inner
             }
         }
@@ -87,6 +92,50 @@ macro_rules! logistic_regression_struct {
   };
 }
 
-logistic_regression_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
-logistic_regression_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}
-logistic_regression_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}
+// [f32, i64]
+logistic_regression_struct! {
+    feature_type: f32,
+    predict_output_type: i64,
+    matrix_type: DenseMatrixF32,
+    array_type: BigInt64Array
+}
+
+// [f32, u64]
+logistic_regression_struct! {
+    feature_type: f32,
+    predict_output_type: u64,
+    matrix_type: DenseMatrixF32,
+    array_type: BigUint64Array
+}
+
+// [f32, i32]
+logistic_regression_struct! {
+    feature_type: f32,
+    predict_output_type: i32,
+    matrix_type: DenseMatrixF32,
+    array_type: Int32Array
+}
+
+// [f64, i64]
+logistic_regression_struct! {
+    feature_type: f64,
+    predict_output_type: i64,
+    matrix_type: DenseMatrixF64,
+    array_type: BigInt64Array
+}
+
+// [f64, u64]
+logistic_regression_struct! {
+    feature_type: f64,
+    predict_output_type: u64,
+    matrix_type: DenseMatrixF64,
+    array_type: BigUint64Array
+}
+
+// [f64, i32]
+logistic_regression_struct! {
+    feature_type: f64,
+    predict_output_type: i32,
+    matrix_type: DenseMatrixF64,
+    array_type: Int32Array
+}
