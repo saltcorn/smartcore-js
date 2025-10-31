@@ -148,7 +148,7 @@ describe('Pipelines', () => {
   it('SVD + DBSCAN', () => {
     let pipe = makePipeline([
       ['svd', new SVD()],
-      ['kmeans', new DBSCAN({ numberType: 'f64' })],
+      ['dbscan', new DBSCAN({ numberType: 'f64' })],
     ])
     let irisData = loadIris({ returnXY: true })
     let [x, y] = irisData instanceof Array ? irisData : []
@@ -347,7 +347,7 @@ describe('Pipelines', () => {
   it('OneHotEncoder + KNNRegressor', () => {
     let pipe = makePipeline([
       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
-      ['knnclassifier', new KNNRegressor({ distanceType: 'minkowski', p: 10 })],
+      ['knnregressor', new KNNRegressor({ distanceType: 'minkowski', p: 10 })],
     ])
     let bostonData = loadBoston({ returnXY: true })
     let [x, y] = bostonData instanceof Array ? bostonData : []
