@@ -530,15 +530,12 @@ function requireNative() {
 nativeBinding = requireNative()
 
 if (!nativeBinding || process.env.NAPI_RS_FORCE_WASI) {
-    console.log("NATIVE BINDING: ", nativeBinding)
-    console.log("NAPI_RS_FORCE_WASI: ", process.env.NAPI_RS_FORCE_WASI)
   let wasiBinding = null
   let wasiBindingError = null
   try {
     wasiBinding = require('./smartcore-js.wasi.cjs')
     nativeBinding = wasiBinding
   } catch (err) {
-    console.log("Error loading WASM File: ", err)
     if (process.env.NAPI_RS_FORCE_WASI) {
       wasiBindingError = err
     }
