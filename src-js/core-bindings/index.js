@@ -530,6 +530,8 @@ function requireNative() {
 nativeBinding = requireNative()
 
 if (!nativeBinding || process.env.NAPI_RS_FORCE_WASI) {
+    console.log("NATIVE BINDING: ", nativeBinding)
+    console.log("NAPI_RS_FORCE_WASI: ", NAPI_RS_FORCE_WASI)
   let wasiBinding = null
   let wasiBindingError = null
   try {
