@@ -35,11 +35,13 @@ const __sharedMemory = new WebAssembly.Memory({
 let __wasmFilePath = __nodePath.join(__dirname, 'smartcore-js.wasm32-wasi.wasm')
 console.log('WASM File Path: ', __wasmFilePath)
 const __wasmDebugFilePath = __nodePath.join(__dirname, 'smartcore-js.wasm32-wasi.debug.wasm')
+console.log('WASM Debug File Path: ', __wasmDebugFilePath)
 
 if (__nodeFs.existsSync(__wasmDebugFilePath)) {
-  console.log('Could not find WASM File.')
+  console.log('Found WASM Debug File.')
   __wasmFilePath = __wasmDebugFilePath
 } else if (!__nodeFs.existsSync(__wasmFilePath)) {
+  console.log('Could not find WASM File.')
   try {
     __wasmFilePath = __nodePath.resolve('@saltcorn/smartcore-js-wasm32-wasi')
   } catch {
