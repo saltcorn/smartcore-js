@@ -65,7 +65,7 @@
     "copy:bindings": "copyfiles -u 1 \"src-js/core-bindings/**/*\" dist/",
     "build:js:esm": "tsc -p ./tsconfig.json",
     "build:js:cjs": "tsc -p ./tsconfig.cjs.json && node scripts/create-cjs-package.js",
-    "build:js": "",
+    "build:js": "build",
     "build:debug": "napi build --platform --esm --output-dir ./core-bindings",
     "format": "run-p format:prettier format:rs format:toml",
     "format:prettier": "prettier . -w",
