@@ -75,7 +75,8 @@
     "prepublishOnly": "napi prepublish -t npm",
     "test": "tsx node_modules/mocha/bin/mocha.js",
     "version": "napi version",
-    "prepare": "husky"
+    "prepare": "husky",
+    "clean": "rm -rf ./node_modules ./src-js/core-bindings ./dist-cjs/core-bindings && cargo clean"
   },
   "devDependencies": {
     "@emnapi/core": "^1.6.0",
