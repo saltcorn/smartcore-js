@@ -65,7 +65,7 @@
     "copy:bindings": "copyfiles -u 1 \"src-js/core-bindings/**/*\" dist/",
     "build:js:esm": "tsc -p ./tsconfig.json",
     "build:js:cjs": "tsc -p ./tsconfig.cjs.json && node scripts/create-cjs-package.js",
-    "build:js": "build",
+    "build:js": "",
     "build:debug": "napi build --platform --esm --output-dir ./core-bindings",
     "format": "run-p format:prettier format:rs format:toml",
     "format:prettier": "prettier . -w",
@@ -73,7 +73,7 @@
     "format:rs": "cargo fmt",
     "lint": "oxlint .",
     "prepublishOnly": "napi prepublish -t npm",
-    "test": "tsx node_modules/mocha/bin/mocha.js",
+    "test": "yarn build --target wasm32-wasip1-threads && tsx node_modules/mocha/bin/mocha.js",
     "version": "napi version",
     "prepare": "husky"
   },
