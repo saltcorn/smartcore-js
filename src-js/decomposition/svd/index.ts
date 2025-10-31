@@ -1,4 +1,4 @@
-import { DenseMatrix, utilities, type InputType, type YType } from '../../index.js'
+import { DenseMatrix, utilities, type InputType } from '../../index.js'
 import { type TransformerProvider, type Transformer } from '../../estimator.js'
 import { TransformerProvidersMap } from './estimator_providers_map/index.js'
 import { DataFrame } from '../../data_frame.js'
@@ -49,12 +49,12 @@ class SVD implements HasColumns {
     return this.config.columns ?? null
   }
 
-  fit(x: InputType, y: YType): this {
+  fit(x: InputType): this {
     let matrix
     if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
       matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
     else matrix = utilities.inputTypeToDenseMatrix(x)
-    this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters)
+    this.estimator = this.estimatorProvider.estimator(matrix, [], this.parameters)
     this._isFitted = true
     return this
   }

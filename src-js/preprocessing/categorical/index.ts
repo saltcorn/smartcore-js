@@ -1,4 +1,4 @@
-import { DenseMatrix, utilities, type InputType, type YType } from '../../index.js'
+import { DenseMatrix, utilities, type InputType } from '../../index.js'
 import { type TransformerProvider, type Transformer } from '../../estimator.js'
 import { TransformerProvidersMap } from './estimator_providers_map/index.js'
 
@@ -39,9 +39,9 @@ class OneHotEncoder {
     this.parameters = parameters
   }
 
-  fit(x: InputType, y: YType): this {
+  fit(x: InputType): this {
     const matrix = utilities.inputTypeToDenseMatrix(x)
-    this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters)
+    this.estimator = this.estimatorProvider.estimator(matrix, [], this.parameters)
     this._isFitted = true
     return this
   }
