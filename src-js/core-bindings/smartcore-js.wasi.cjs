@@ -95,12 +95,14 @@ const {
     return worker
   },
   overwriteImports(importObject) {
+    console.log('Original Imports Object: ', importObject)
     importObject.env = {
       ...importObject.env,
       ...importObject.napi,
       ...importObject.emnapi,
       memory: __sharedMemory,
     }
+    console.log('Modified Imports Object: ', importObject)
     return importObject
   },
   beforeInit({ instance }) {
