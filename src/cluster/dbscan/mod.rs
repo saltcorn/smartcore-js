@@ -1,4 +1,5 @@
 pub mod parameters;
+pub mod thin;
 #[macro_use]
 mod define_and_impl_macro;
 

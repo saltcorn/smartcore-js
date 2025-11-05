@@ -286,6 +286,11 @@ export declare class DatasetF64I32JsVecRef {
   asArray(): BigInt64Array
 }
 
+export declare class DBSCAN {
+  static create(params: DbscanParams): DBSCAN
+}
+export type DBSCANWrapper = DBSCAN
+
 export declare class DBSCANF32EuclidianF32Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
@@ -510,6 +515,16 @@ export declare class DBSCANI64MinkowskiI64Parameters {
   withEps(eps: number): void
   serialize(): Buffer
 }
+
+export declare class DbscanParams {
+  constructor(xData: MatrixTypeFactory)
+  set eps(eps: number)
+  set minSamples(minSamples: bigint)
+  set algorithm(algorithm: KNNAlgorithmName)
+  set data(data: MatrixTypeFactory)
+  set p(p: number)
+}
+export type DBSCANParams = DbscanParams
 
 export declare class DBSCANU16EuclidianU16Parameters {
   withMinSamples(minSamples: number): void
@@ -2517,6 +2532,17 @@ export declare class ManhattanU32 {
 export declare class ManhattanU64 {
   constructor()
   distance(x: BigUint64Array, y: BigUint64Array): number
+}
+
+export declare class MatrixTypeFactory {
+  static f64(x: DenseMatrixF64): MatrixTypeFactory
+  static f32(x: DenseMatrixF32): MatrixTypeFactory
+  static u64(x: DenseMatrixU64): MatrixTypeFactory
+  static u32(x: DenseMatrixU32): MatrixTypeFactory
+  static u16(x: DenseMatrixU16): MatrixTypeFactory
+  static u8(x: DenseMatrixU8): MatrixTypeFactory
+  static i64(x: DenseMatrixI64): MatrixTypeFactory
+  static i32(x: DenseMatrixI32): MatrixTypeFactory
 }
 
 export declare class MeanAbsoluteErrorF64 {
