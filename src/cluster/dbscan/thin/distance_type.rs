@@ -4,6 +4,10 @@ use bincode::{Decode, Encode};
 use napi_derive::napi;
 
 #[derive(Debug, Decode, Encode, Clone, Copy)]
+use bincode::{Decode, Encode};
+use napi_derive::napi;
+
+#[derive(Debug, Decode, Encode)]
 #[napi]
 pub enum DistanceName {
   Euclidian,
