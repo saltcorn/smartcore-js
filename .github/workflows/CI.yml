@@ -345,6 +345,7 @@ jobs:
         run: |
           yarn config set supportedArchitectures.cpu "wasm32"
           yarn install
+          yarn dedupe
       - name: Download artifacts
         uses: actions/download-artifact@v5
         with:

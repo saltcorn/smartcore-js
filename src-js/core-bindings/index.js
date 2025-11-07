@@ -536,7 +536,6 @@ if (!nativeBinding || process.env.NAPI_RS_FORCE_WASI) {
     wasiBinding = require('./smartcore-js.wasi.cjs')
     nativeBinding = wasiBinding
   } catch (err) {
-    console.log("Error requiring 'smartcore-js.wasi.cjs': ", err)
     if (process.env.NAPI_RS_FORCE_WASI) {
       wasiBindingError = err
     }

@@ -14,17 +14,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emnapi/core@npm:^1.4.5":
-  version: 1.4.5
-  resolution: "@emnapi/core@npm:1.4.5"
-  dependencies:
-    "@emnapi/wasi-threads": "npm:1.0.4"
-    tslib: "npm:^2.4.0"
-  checksum: 10c0/da4a57f65f325d720d0e0d1a9c6618b90c4c43a5027834a110476984e1d47c95ebaed4d316b5dddb9c0ed9a493ffeb97d1934f9677035f336d8a36c1f3b2818f
-  languageName: node
-  linkType: hard
-
-"@emnapi/core@npm:^1.6.0":
+"@emnapi/core@npm:^1.4.5, @emnapi/core@npm:^1.6.0":
   version: 1.6.0
   resolution: "@emnapi/core@npm:1.6.0"
   dependencies:
@@ -34,30 +24,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emnapi/runtime@npm:^1.4.5":
-  version: 1.4.5
-  resolution: "@emnapi/runtime@npm:1.4.5"
-  dependencies:
-    tslib: "npm:^2.4.0"
-  checksum: 10c0/37a0278be5ac81e918efe36f1449875cbafba947039c53c65a1f8fc238001b866446fc66041513b286baaff5d6f9bec667f5164b3ca481373a8d9cb65bfc984b
-  languageName: node
-  linkType: hard
-
-"@emnapi/runtime@npm:^1.6.0":
+"@emnapi/runtime@npm:^1.4.5, @emnapi/runtime@npm:^1.6.0":
   version: 1.6.0
   resolution: "@emnapi/runtime@npm:1.6.0"
   dependencies:
     tslib: "npm:^2.4.0"
   checksum: 10c0/e3d2452a8fb83bb59fe60dfcf4cff99f9680c13c07dff8ad28639ccc8790151841ef626a67014bde132939bad73dfacc440ade8c3db2ab12693ea9c8ba4d37fb
-  languageName: node
-  linkType: hard
-
-"@emnapi/wasi-threads@npm:1.0.4":
-  version: 1.0.4
-  resolution: "@emnapi/wasi-threads@npm:1.0.4"
-  dependencies:
-    tslib: "npm:^2.4.0"
-  checksum: 10c0/2c91a53e62f875800baf035c4d42c9c0d18e5afd9a31ca2aac8b435aeaeaeaac386b5b3d0d0e70aa7a5a9852bbe05106b1f680cd82cce03145c703b423d41313
   languageName: node
   linkType: hard
 
@@ -1579,16 +1551,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tybys/wasm-util@npm:^0.10.0":
-  version: 0.10.0
-  resolution: "@tybys/wasm-util@npm:0.10.0"
-  dependencies:
-    tslib: "npm:^2.4.0"
-  checksum: 10c0/044feba55c1e2af703aa4946139969badb183ce1a659a75ed60bc195a90e73a3f3fc53bcd643497c9954597763ddb051fec62f80962b2ca6fc716ba897dc696e
-  languageName: node
-  linkType: hard
-
-"@tybys/wasm-util@npm:^0.10.1":
+"@tybys/wasm-util@npm:^0.10.0, @tybys/wasm-util@npm:^0.10.1":
   version: 0.10.1
   resolution: "@tybys/wasm-util@npm:0.10.1"
   dependencies:
@@ -1960,7 +1923,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4, debug@npm:^4.3.4":
+"debug@npm:4, debug@npm:^4.3.4, debug@npm:^4.3.5, debug@npm:^4.4.1":
   version: 4.4.3
   resolution: "debug@npm:4.4.3"
   dependencies:
@@ -1969,18 +1932,6 @@ __metadata:
     supports-color:
       optional: true
   checksum: 10c0/d79136ec6c83ecbefd0f6a5593da6a9c91ec4d7ddc4b54c883d6e71ec9accb5f67a1a5e96d00a328196b5b5c86d365e98d8a3a70856aaf16b4e7b1985e67f5a6
-  languageName: node
-  linkType: hard
-
-"debug@npm:^4.3.5, debug@npm:^4.4.1":
-  version: 4.4.1
-  resolution: "debug@npm:4.4.1"
-  dependencies:
-    ms: "npm:^2.1.3"
-  peerDependenciesMeta:
-    supports-color:
-      optional: true
-  checksum: 10c0/d2b44bc1afd912b49bb7ebb0d50a860dc93a4dd7d946e8de94abc957bb63726b7dd5aa48c18c2386c379ec024c46692e15ed3ed97d481729f929201e671fcd55
   languageName: node
   linkType: hard
 
@@ -2303,14 +2254,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-east-asian-width@npm:^1.0.0":
-  version: 1.3.0
-  resolution: "get-east-asian-width@npm:1.3.0"
-  checksum: 10c0/1a049ba697e0f9a4d5514c4623781c5246982bdb61082da6b5ae6c33d838e52ce6726407df285cdbb27ec1908b333cf2820989bd3e986e37bb20979437fdf34b
-  languageName: node
-  linkType: hard
-
-"get-east-asian-width@npm:^1.3.0":
+"get-east-asian-width@npm:^1.0.0, get-east-asian-width@npm:^1.3.0":
   version: 1.4.0
   resolution: "get-east-asian-width@npm:1.4.0"
   checksum: 10c0/4e481d418e5a32061c36fbb90d1b225a254cc5b2df5f0b25da215dcd335a3c111f0c2023ffda43140727a9cafb62dac41d022da82c08f31083ee89f714ee3b83
