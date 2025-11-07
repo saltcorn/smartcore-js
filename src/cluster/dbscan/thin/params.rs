@@ -3,7 +3,7 @@ use std::ops::Deref;
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 
-use super::dense_matrix::{factory::DenseMatrix, MatrixType};
+use super::dense_matrix::{DenseMatrix, DenseMatrixType};
 use super::distance_type::DistanceName;
 use crate::algorithm::neighbor::KNNAlgorithmName;
 
@@ -39,6 +39,11 @@ impl DBSCANParams {
   }
 
   #[napi(setter)]
+  pub fn distance_type(&mut self, distance_type: DistanceName) {
+    self.distance_type = Some(distance_type)
+  }
+
+  #[napi(setter)]
   pub fn min_samples(&mut self, min_samples: BigInt) -> Result<()> {
     let (sign_bit, min_samples, ..) = min_samples.get_u64();
     if sign_bit {
@@ -60,8 +65,8 @@ impl DBSCANParams {
   pub fn data(&mut self, data: Reference<DenseMatrix>, env: Env) -> Result<()> {
     let data = data.share_with(env, Ok)?;
     match (self.x_data.deref().inner(), data.deref().inner()) {
-      (MatrixType::F32(_), MatrixType::F32(_)) => (),
-      (MatrixType::F64(_), MatrixType::F64(_)) => (),
+      (DenseMatrixType::F32(_), DenseMatrixType::F32(_)) => (),
+      (DenseMatrixType::F64(_), DenseMatrixType::F64(_)) => (),
       _ => unimplemented!(),
     }
     self.data = Some(data);

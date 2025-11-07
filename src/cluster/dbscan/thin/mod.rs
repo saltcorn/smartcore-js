@@ -1,17 +1,19 @@
 mod dense_matrix;
 mod distance_type;
 mod params;
-mod typed_array;
+mod serialize_data;
 mod variants;
 
 use std::ops::Deref;
 
+use bincode::{config::standard, decode_from_slice, encode_to_vec, Decode, Encode};
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 
-use dense_matrix::{DenseMatrix, DenseMatrixType};
+use dense_matrix::{DenseMatrix, DenseMatrixType, DenseMatrixTypeVariantName};
 use distance_type::DistanceName;
 use params::DBSCANParams;
+use serialize_data::DBSCANSerializeData;
 use smartcore::{
   cluster::dbscan::{DBSCANParameters, DBSCAN},
   metrics::distance::{
@@ -21,7 +23,7 @@ use smartcore::{
 };
 use variants::DBSCANVariants;
 
-#[napi(js_name = "DBSCAN")]
+#[napi(js_name = "DBSCANV2")]
 #[derive(Debug)]
 pub struct DBSCANWrapper {
   inner: DBSCANVariants,
@@ -29,8 +31,8 @@ pub struct DBSCANWrapper {
 
 #[napi]
 impl DBSCANWrapper {
-  #[napi]
-  pub fn create(params: &DBSCANParams) -> Result<Self> {
+  #[napi(constructor)]
+  pub fn new(params: &DBSCANParams) -> Result<Self> {
     let distance_type = params
       .distance_type
       .as_ref()
@@ -144,31 +146,167 @@ impl DBSCANWrapper {
   }
 
   #[napi]
-  pub fn predict(&self, x: &DenseMatrix) -> Result<Float32Array> {
-    let x = x.as(self.inner.x_variant_name())
-    let predict_result = self
-      .inner
-      .predict(x)
-      .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-    Ok(Float32Array::new(predict_result))
+  pub fn predict(&self, x: &DenseMatrix) -> Result<Int32Array> {
+    match &self.inner {
+      DBSCANVariants::F32I32Euclidian(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::F32I32Mahalanobis(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::F32I32Manhattan(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::F32I32Minkowski(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::F64I32Euclidian(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::F64I32Mahalanobis(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::F64I32Manhattan(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::F64I32Minkowski(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::I32I32Euclidian(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::I32I32Hamming(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::I32I32Manhattan(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::I32I32Minkowski(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::I64I32Euclidian(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::I64I32Manhattan(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::I64I32Minkowski(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::U16I32Euclidian(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::U16I32Hamming(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::U32I32Euclidian(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::U32I32Manhattan(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::U64I32Euclidian(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::U64I32Manhattan(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::U8I32Euclidian(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+      DBSCANVariants::U8I32Hamming(dbscan) => {
+        let predict_result = dbscan
+          .predict(x.try_into()?)
+          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+        Ok(Int32Array::new(predict_result))
+      }
+    }
   }
 
   #[napi]
   pub fn serialize(&self) -> Result<Buffer> {
-    let encoded = encode_to_vec(&self.inner, standard())
+    let serialize_data = DBSCANSerializeData {
+      x_type_name: self.inner.x_variant_name(),
+      distance_type: self.inner.distance_type(),
+      dbscan: self.inner.serialize()?,
+    };
+    let encoded = encode_to_vec(serialize_data, standard())
       .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
     Ok(Buffer::from(encoded))
   }
 
   #[napi(factory)]
   pub fn deserialize(data: Buffer) -> Result<Self> {
-    let inner =
-      decode_from_slice::<DBSCAN<f32, i32, DenseMatrix<f32>, Vec<i32>, Euclidian<f32>>, _>(
-        data.as_ref(),
-        standard(),
-      )
+    let serialize_data: DBSCANSerializeData = decode_from_slice(data.as_ref(), standard())
       .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?
       .0;
-    Ok(Self { inner })
+    let variant: DBSCANVariants = serialize_data.try_into()?;
+    Ok(Self { inner: variant })
   }
 }

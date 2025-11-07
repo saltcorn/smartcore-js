@@ -2,6 +2,8 @@ mod dense_matrix_type;
 
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
+use paste::paste;
+use smartcore::linalg::basic::matrix::DenseMatrix as LibDenseMatrix;
 
 use crate::linalg::basic::matrix::{
   DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32,
@@ -80,3 +82,26 @@ impl DenseMatrix {
     self.inner().variant_is_same(other.inner())
   }
 }
+
+macro_rules! dense_matrix_try_from_impl {
+  (x_type: $x:ty) => {
+    paste! {
+        impl<'a> TryFrom<&'a DenseMatrix> for &'a LibDenseMatrix<$x> {
+            type Error = Error;
+
+            fn try_from(value: &'a DenseMatrix) -> std::result::Result<Self, Self::Error> {
+                value.inner().try_into()
+            }
+        }
+    }
+  };
+}
+
+dense_matrix_try_from_impl! {x_type: f32}
+dense_matrix_try_from_impl! {x_type: f64}
+dense_matrix_try_from_impl! {x_type: u64}
+dense_matrix_try_from_impl! {x_type: u32}
+dense_matrix_try_from_impl! {x_type: u16}
+dense_matrix_try_from_impl! {x_type: u8}
+dense_matrix_try_from_impl! {x_type: i64}
+dense_matrix_try_from_impl! {x_type: i32}

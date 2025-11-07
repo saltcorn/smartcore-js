@@ -1,11 +1,13 @@
+use bincode::{Decode, Encode};
 use napi::bindgen_prelude::*;
+use smartcore::linalg::basic::matrix::DenseMatrix as LibDenseMatrix;
 
 use crate::linalg::basic::matrix::{
   DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32,
   DenseMatrixU64, DenseMatrixU8,
 };
 
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Encode, Decode)]
 pub enum DenseMatrixTypeVariantName {
   F64,
   F32,
@@ -53,6 +55,94 @@ impl DenseMatrixType {
       &DenseMatrixType::U8(_) => DenseMatrixTypeVariantName::U8,
       &DenseMatrixType::I64(_) => DenseMatrixTypeVariantName::I64,
       &DenseMatrixType::I32(_) => DenseMatrixTypeVariantName::I32,
+    }
+  }
+}
+
+impl<'a> TryFrom<&'a DenseMatrixType> for &'a LibDenseMatrix<f64> {
+  type Error = napi::Error;
+
+  fn try_from(value: &'a DenseMatrixType) -> std::result::Result<Self, Self::Error> {
+    match value {
+      DenseMatrixType::F64(v) => Ok(v.inner()),
+      _ => unimplemented!(),
+    }
+  }
+}
+
+impl<'a> TryFrom<&'a DenseMatrixType> for &'a LibDenseMatrix<f32> {
+  type Error = napi::Error;
+
+  fn try_from(value: &'a DenseMatrixType) -> std::result::Result<Self, Self::Error> {
+    match value {
+      DenseMatrixType::F32(v) => Ok(v.inner()),
+      _ => unimplemented!(),
+    }
+  }
+}
+
+impl<'a> TryFrom<&'a DenseMatrixType> for &'a LibDenseMatrix<u64> {
+  type Error = napi::Error;
+
+  fn try_from(value: &'a DenseMatrixType) -> std::result::Result<Self, Self::Error> {
+    match value {
+      DenseMatrixType::U64(v) => Ok(v.inner()),
+      _ => unimplemented!(),
+    }
+  }
+}
+
+impl<'a> TryFrom<&'a DenseMatrixType> for &'a LibDenseMatrix<u32> {
+  type Error = napi::Error;
+
+  fn try_from(value: &'a DenseMatrixType) -> std::result::Result<Self, Self::Error> {
+    match value {
+      DenseMatrixType::U32(v) => Ok(v.inner()),
+      _ => unimplemented!(),
+    }
+  }
+}
+
+impl<'a> TryFrom<&'a DenseMatrixType> for &'a LibDenseMatrix<u16> {
+  type Error = napi::Error;
+
+  fn try_from(value: &'a DenseMatrixType) -> std::result::Result<Self, Self::Error> {
+    match value {
+      DenseMatrixType::U16(v) => Ok(v.inner()),
+      _ => unimplemented!(),
+    }
+  }
+}
+
+impl<'a> TryFrom<&'a DenseMatrixType> for &'a LibDenseMatrix<u8> {
+  type Error = napi::Error;
+
+  fn try_from(value: &'a DenseMatrixType) -> std::result::Result<Self, Self::Error> {
+    match value {
+      DenseMatrixType::U8(v) => Ok(v.inner()),
+      _ => unimplemented!(),
+    }
+  }
+}
+
+impl<'a> TryFrom<&'a DenseMatrixType> for &'a LibDenseMatrix<i64> {
+  type Error = napi::Error;
+
+  fn try_from(value: &'a DenseMatrixType) -> std::result::Result<Self, Self::Error> {
+    match value {
+      DenseMatrixType::I64(v) => Ok(v.inner()),
+      _ => unimplemented!(),
+    }
+  }
+}
+
+impl<'a> TryFrom<&'a DenseMatrixType> for &'a LibDenseMatrix<i32> {
+  type Error = napi::Error;
+
+  fn try_from(value: &'a DenseMatrixType) -> std::result::Result<Self, Self::Error> {
+    match value {
+      DenseMatrixType::I32(v) => Ok(v.inner()),
+      _ => unimplemented!(),
     }
   }
 }
