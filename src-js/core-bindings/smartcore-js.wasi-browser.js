@@ -104,6 +104,7 @@ export const DatasetF64F64 = __napiModule.exports.DatasetF64F64
 export const DatasetF64F64JsVecRef = __napiModule.exports.DatasetF64F64JsVecRef
 export const DatasetF64I32 = __napiModule.exports.DatasetF64I32
 export const DatasetF64I32JsVecRef = __napiModule.exports.DatasetF64I32JsVecRef
+export const DatasetI32I32 = __napiModule.exports.DatasetI32I32
 export const DBSCANF32EuclidianF32Parameters = __napiModule.exports.DBSCANF32EuclidianF32Parameters
 export const DBSCANF32I32EuclidianF32 = __napiModule.exports.DBSCANF32I32EuclidianF32
 export const DBSCANF32I32MahalanobisF32 = __napiModule.exports.DBSCANF32I32MahalanobisF32

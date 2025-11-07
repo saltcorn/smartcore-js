@@ -286,6 +286,17 @@ export declare class DatasetF64I32JsVecRef {
   asArray(): BigInt64Array
 }
 
+export declare class DatasetI32I32 {
+  get data(): Int32Array
+  get target(): Int32Array
+  get numSamples(): number
+  get numFeatures(): number
+  get featureNames(): Array<string>
+  get targetNames(): Array<string>
+  get description(): string
+  denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixI32
+}
+
 export declare class DBSCANF32EuclidianF32Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
@@ -1127,6 +1138,7 @@ export declare class Diabetes {
 
 export declare class Digits {
   loadDataset(): DatasetF64F64
+  loadDatasetI32(): DatasetI32I32
 }
 
 export declare class ElasticNetF32F32 {

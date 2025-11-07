@@ -91,6 +91,83 @@ impl DBSCANVariants {
     }
   }
 
+  pub fn supported_distances_for(x_variant_name: DenseMatrixTypeVariantName) -> Vec<String> {
+    match x_variant_name {
+      DenseMatrixTypeVariantName::F64 => vec![
+        DistanceName::Euclidian.to_string(),
+        DistanceName::Mahalanobis.to_string(),
+        DistanceName::Manhattan.to_string(),
+        DistanceName::Minkowski.to_string(),
+      ],
+      DenseMatrixTypeVariantName::F32 => vec![
+        DistanceName::Euclidian.to_string(),
+        DistanceName::Mahalanobis.to_string(),
+        DistanceName::Manhattan.to_string(),
+        DistanceName::Minkowski.to_string(),
+      ],
+      DenseMatrixTypeVariantName::U64 => vec![
+        DistanceName::Euclidian.to_string(),
+        DistanceName::Manhattan.to_string(),
+      ],
+      DenseMatrixTypeVariantName::U32 => vec![
+        DistanceName::Euclidian.to_string(),
+        DistanceName::Manhattan.to_string(),
+      ],
+      DenseMatrixTypeVariantName::U16 => vec![
+        DistanceName::Euclidian.to_string(),
+        DistanceName::Hamming.to_string(),
+      ],
+      DenseMatrixTypeVariantName::U8 => vec![
+        DistanceName::Euclidian.to_string(),
+        DistanceName::Hamming.to_string(),
+      ],
+      DenseMatrixTypeVariantName::I64 => vec![
+        DistanceName::Euclidian.to_string(),
+        DistanceName::Manhattan.to_string(),
+        DistanceName::Minkowski.to_string(),
+      ],
+      DenseMatrixTypeVariantName::I32 => vec![
+        DistanceName::Euclidian.to_string(),
+        DistanceName::Hamming.to_string(),
+        DistanceName::Manhattan.to_string(),
+        DistanceName::Minkowski.to_string(),
+      ],
+    }
+  }
+
+  pub fn supported_matrix_data_types_for(distance_type: DistanceName) -> Vec<String> {
+    use DenseMatrixTypeVariantName::*;
+    use DistanceName::*;
+    match distance_type {
+      Euclidian => vec![
+        F32.to_string(),
+        F64.to_string(),
+        I32.to_string(),
+        I64.to_string(),
+        U16.to_string(),
+        U32.to_string(),
+        U64.to_string(),
+        U8.to_string(),
+      ],
+      Hamming => vec![I32.to_string(), U16.to_string(), U8.to_string()],
+      Mahalanobis => vec![F32.to_string(), F64.to_string()],
+      Manhattan => vec![
+        F32.to_string(),
+        F64.to_string(),
+        I32.to_string(),
+        I64.to_string(),
+        U64.to_string(),
+        U32.to_string(),
+      ],
+      Minkowski => vec![
+        F32.to_string(),
+        F64.to_string(),
+        I32.to_string(),
+        I64.to_string(),
+      ],
+    }
+  }
+
   pub fn distance_type(&self) -> DistanceName {
     match &self {
       Self::F32I32Euclidian(_)

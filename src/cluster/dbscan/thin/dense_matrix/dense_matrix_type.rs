@@ -1,3 +1,5 @@
+use std::fmt::Display;
+
 use bincode::{Decode, Encode};
 use napi::bindgen_prelude::*;
 use smartcore::linalg::basic::matrix::DenseMatrix as LibDenseMatrix;
@@ -7,7 +9,7 @@ use crate::linalg::basic::matrix::{
   DenseMatrixU64, DenseMatrixU8,
 };
 
-#[derive(Debug, Clone, PartialEq, Eq, Encode, Decode)]
+#[derive(Debug, Clone, PartialEq, Eq, Encode, Decode, Copy)]
 pub enum DenseMatrixTypeVariantName {
   F64,
   F32,
@@ -17,6 +19,21 @@ pub enum DenseMatrixTypeVariantName {
   U8,
   I64,
   I32,
+}
+
+impl Display for DenseMatrixTypeVariantName {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    match &self {
+      Self::F64 => f.write_str("f64"),
+      Self::F32 => f.write_str("f32"),
+      Self::U64 => f.write_str("u64"),
+      Self::U32 => f.write_str("u32"),
+      Self::U16 => f.write_str("u16"),
+      Self::U8 => f.write_str("u8"),
+      Self::I64 => f.write_str("i64"),
+      Self::I32 => f.write_str("i32"),
+    }
+  }
 }
 
 pub enum DenseMatrixType {
@@ -32,29 +49,29 @@ pub enum DenseMatrixType {
 
 impl DenseMatrixType {
   pub fn variant_is_same(&self, other: &DenseMatrixType) -> bool {
-    match (self, other) {
-      (&DenseMatrixType::F64(_), &DenseMatrixType::F64(_)) => true,
-      (&DenseMatrixType::F32(_), &DenseMatrixType::F32(_)) => true,
-      (&DenseMatrixType::U64(_), &DenseMatrixType::U64(_)) => true,
-      (&DenseMatrixType::U32(_), &DenseMatrixType::U32(_)) => true,
-      (&DenseMatrixType::U16(_), &DenseMatrixType::U16(_)) => true,
-      (&DenseMatrixType::U8(_), &DenseMatrixType::U8(_)) => true,
-      (&DenseMatrixType::I64(_), &DenseMatrixType::I64(_)) => true,
-      (&DenseMatrixType::I32(_), &DenseMatrixType::I32(_)) => true,
-      _ => false,
-    }
+    matches!(
+      (self, other),
+      (&DenseMatrixType::F64(_), &DenseMatrixType::F64(_))
+        | (&DenseMatrixType::F32(_), &DenseMatrixType::F32(_))
+        | (&DenseMatrixType::U64(_), &DenseMatrixType::U64(_))
+        | (&DenseMatrixType::U32(_), &DenseMatrixType::U32(_))
+        | (&DenseMatrixType::U16(_), &DenseMatrixType::U16(_))
+        | (&DenseMatrixType::U8(_), &DenseMatrixType::U8(_))
+        | (&DenseMatrixType::I64(_), &DenseMatrixType::I64(_))
+        | (&DenseMatrixType::I32(_), &DenseMatrixType::I32(_))
+    )
   }
 
   pub fn variant_name(&self) -> DenseMatrixTypeVariantName {
     match self {
-      &DenseMatrixType::F64(_) => DenseMatrixTypeVariantName::F64,
-      &DenseMatrixType::F32(_) => DenseMatrixTypeVariantName::F32,
-      &DenseMatrixType::U64(_) => DenseMatrixTypeVariantName::U64,
-      &DenseMatrixType::U32(_) => DenseMatrixTypeVariantName::U32,
-      &DenseMatrixType::U16(_) => DenseMatrixTypeVariantName::U16,
-      &DenseMatrixType::U8(_) => DenseMatrixTypeVariantName::U8,
-      &DenseMatrixType::I64(_) => DenseMatrixTypeVariantName::I64,
-      &DenseMatrixType::I32(_) => DenseMatrixTypeVariantName::I32,
+      DenseMatrixType::F64(_) => DenseMatrixTypeVariantName::F64,
+      DenseMatrixType::F32(_) => DenseMatrixTypeVariantName::F32,
+      DenseMatrixType::U64(_) => DenseMatrixTypeVariantName::U64,
+      DenseMatrixType::U32(_) => DenseMatrixTypeVariantName::U32,
+      DenseMatrixType::U16(_) => DenseMatrixTypeVariantName::U16,
+      DenseMatrixType::U8(_) => DenseMatrixTypeVariantName::U8,
+      DenseMatrixType::I64(_) => DenseMatrixTypeVariantName::I64,
+      DenseMatrixType::I32(_) => DenseMatrixTypeVariantName::I32,
     }
   }
 }

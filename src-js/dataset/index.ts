@@ -1,8 +1,8 @@
-import { dataset, DatasetF64I32, DatasetF64F64 } from '../core-bindings/index.js'
+import { dataset, DatasetF64I32, DatasetF64F64, DatasetI32I32 } from '../core-bindings/index.js'
 import type { YType } from '../index.js'
 import { DenseMatrix } from '../linalg/index.js'
 
-type DatasetRs = DatasetF64F64 | DatasetF64I32
+type DatasetRs = DatasetF64F64 | DatasetF64I32 | DatasetI32I32
 
 class Dataset {
   inner: DatasetRs
@@ -44,6 +44,10 @@ function loadDigits(params?: LoadParams): Dataset | [DenseMatrix, YType] {
   return prepResponse(dataset.digits().loadDataset(), params)
 }
 
+function loadDigitsI32(params?: LoadParams): Dataset | [DenseMatrix, YType] {
+  return prepResponse(dataset.digits().loadDatasetI32(), params)
+}
+
 interface IMakeCircles extends LoadParams {
   numSamples: number
   factor: number
@@ -73,4 +77,14 @@ function makeMoons(params: IMakeMoons): Dataset | [DenseMatrix, YType] {
   return prepResponse(dataset.generator().makeMoons(params.numSamples, params.noise), params)
 }
 
-export { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits, makeCircles, makeBlobs, makeMoons }
+export {
+  loadIris,
+  loadBoston,
+  loadBreastCancer,
+  loadDiabetes,
+  loadDigits,
+  makeCircles,
+  makeBlobs,
+  makeMoons,
+  loadDigitsI32,
+}

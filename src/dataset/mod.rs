@@ -10,7 +10,7 @@ use napi_derive::napi;
 use paste::paste;
 use smartcore::dataset::Dataset as LibDataset;
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
+use crate::linalg::basic::matrix::{DenseMatrixF64, DenseMatrixI32};
 
 macro_rules! dataset_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -85,6 +85,7 @@ macro_rules! dataset_struct {
 
 dataset_struct! {f64, f64, Float64Array, Float64Array}
 dataset_struct! {f64, i32, Float64Array, Int32Array}
+dataset_struct! {i32, i32, Int32Array, Int32Array}
 
 impl From<LibDataset<f32, f32>> for DatasetF64F64 {
   fn from(value: LibDataset<f32, f32>) -> Self {
@@ -107,6 +108,22 @@ impl From<LibDataset<f32, u32>> for DatasetF64I32 {
     Self {
       inner: LibDataset {
         data: value.data.into_iter().map(|x| x as f64).collect(),
+        target: value.target.into_iter().map(|y| y as i32).collect(),
+        num_samples: value.num_samples,
+        num_features: value.num_features,
+        feature_names: value.feature_names,
+        target_names: value.target_names,
+        description: value.description,
+      },
+    }
+  }
+}
+
+impl From<LibDataset<f32, f32>> for DatasetI32I32 {
+  fn from(value: LibDataset<f32, f32>) -> Self {
+    Self {
+      inner: LibDataset {
+        data: value.data.into_iter().map(|x| x as i32).collect(),
         target: value.target.into_iter().map(|y| y as i32).collect(),
         num_samples: value.num_samples,
         num_features: value.num_features,

@@ -156,6 +156,7 @@ module.exports.DatasetF64F64 = __napiModule.exports.DatasetF64F64
 module.exports.DatasetF64F64JsVecRef = __napiModule.exports.DatasetF64F64JsVecRef
 module.exports.DatasetF64I32 = __napiModule.exports.DatasetF64I32
 module.exports.DatasetF64I32JsVecRef = __napiModule.exports.DatasetF64I32JsVecRef
+module.exports.DatasetI32I32 = __napiModule.exports.DatasetI32I32
 module.exports.DBSCANF32EuclidianF32Parameters = __napiModule.exports.DBSCANF32EuclidianF32Parameters
 module.exports.DBSCANF32I32EuclidianF32 = __napiModule.exports.DBSCANF32I32EuclidianF32
 module.exports.DBSCANF32I32MahalanobisF32 = __napiModule.exports.DBSCANF32I32MahalanobisF32

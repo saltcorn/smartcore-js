@@ -129,9 +129,9 @@ class DenseMatrix {
   //     return [nrows, ncols, valuesFlat]
   //   }
 
-  //   get matrix(): DenseMatrixRs {
-  //     return this.inner
-  //   }
+  get matrix(): DenseMatrixRs {
+    return this.inner
+  }
 
   //   static f64(data: (number | bigint)[][], columnMajor?: boolean): DenseMatrix {
   //     let [nrows, ncols, valuesFlat] = DenseMatrix.prepData(data, columnMajor)

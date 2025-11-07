@@ -1,5 +1,12 @@
-import { DbscanParams, DBSCANV2, DenseMatrix, DenseMatrixF64, DistanceName } from '../dist/core-bindings/index.js'
-import { loadBoston } from '../dist/dataset/index.js'
+import {
+  DbscanParams,
+  DBSCANV2,
+  DenseMatrix,
+  DenseMatrixF64,
+  DistanceName,
+  DenseMatrixI32,
+} from '../dist/core-bindings/index.js'
+import { loadBoston, loadDigits, loadDigitsI32 } from '../dist/dataset/index.js'
 import assert from 'assert'
 import { trainTestSplit } from '../dist/model_selection/index.js'
 import { DenseMatrix as DenseMatrixOl } from '../dist/index.js'
@@ -26,25 +33,34 @@ describe('DBSCANV2', () => {
     let xData = DenseMatrix.f64(x.asRsMatrix('f64') as DenseMatrixF64)
 
     // Euclidian
-    let dbscan_params = new DbscanParams(xData)
-    dbscan_params.distanceType = DistanceName.Euclidian
-    new DBSCANV2(dbscan_params)
+    let dbscanParams = new DbscanParams(xData)
+    dbscanParams.distanceType = DistanceName.Euclidian
+    new DBSCANV2(dbscanParams)
 
     // Hamming
-    dbscan_params.distanceType = DistanceName.Hamming
-    new DBSCANV2(dbscan_params)
+    let digitsData = loadDigitsI32({ returnXY: true })
+    let [xH, yH] = digitsData instanceof Array ? digitsData : []
+    if (!(xH && yH)) {
+      assert.fail('Expected both xH and yH to be defined')
+    }
+    let xDataH = DenseMatrix.i32(xH.asRsMatrix('i32') as DenseMatrixI32)
+    let dbscanParamsH = new DbscanParams(xDataH)
+    dbscanParamsH.distanceType = DistanceName.Hamming
+    let dbscan = new DBSCANV2(dbscanParamsH)
 
     // Manhattan
-    dbscan_params.distanceType = DistanceName.Manhattan
-    new DBSCANV2(dbscan_params)
+    dbscanParams.distanceType = DistanceName.Manhattan
+    new DBSCANV2(dbscanParams)
 
     // Mahalanobis
-    dbscan_params.distanceType = DistanceName.Mahalanobis
-    new DBSCANV2(dbscan_params)
+    dbscanParams.distanceType = DistanceName.Mahalanobis
+    dbscanParams.data = xData
+    new DBSCANV2(dbscanParams)
 
     // Minkowski
-    dbscan_params.distanceType = DistanceName.Minkowski
-    new DBSCANV2(dbscan_params)
+    dbscanParams.distanceType = DistanceName.Minkowski
+    dbscanParams.p = 1
+    new DBSCANV2(dbscanParams)
   })
 
   it('predict', () => {
