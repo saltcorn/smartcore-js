@@ -1,5 +1,6 @@
 mod dense_matrix;
 mod distance_type;
+mod factory;
 mod params;
 mod serialize_data;
 mod variants;
@@ -13,14 +14,9 @@ use napi_derive::napi;
 use dense_matrix::{DenseMatrix, DenseMatrixType};
 
 use distance_type::DistanceName;
+use factory::DBSCANFactory;
 use params::{set_parameters, DBSCANParams};
 use serialize_data::DBSCANSerializeData;
-use smartcore::{
-  cluster::dbscan::{DBSCANParameters, DBSCAN},
-  metrics::distance::{
-    hamming::Hamming, mahalanobis::Mahalanobis, manhattan::Manhattan, minkowski::Minkowski,
-  },
-};
 use variants::DBSCANVariants;
 
 #[napi(js_name = "DBSCANV2")]
@@ -38,258 +34,95 @@ impl DBSCANWrapper {
     let dbscan_variant = match (x_data, distance_type) {
       // F32I32Euclidian
       (DenseMatrixType::F32(data), DistanceName::Euclidian) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default();
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-        DBSCANVariants::F32I32Euclidian(dbscan_instance)
+        DBSCANFactory::f32_i32_euclidian(data.inner(), params)?
       }
       // F32I32Mahalanobis
       (DenseMatrixType::F32(data), DistanceName::Mahalanobis) => {
-        let x = data.inner();
-        let Some(ref p_data) = params.data else {
-          return Err(Error::new(
-            Status::GenericFailure,
-            "'data' must be specified for 'Mahalanobis' distance type",
-          ));
-        };
-        let parameters = match p_data.deref().inner() {
-          DenseMatrixType::F32(p_data) => {
-            let p_data = p_data.deref().inner();
-            DBSCANParameters::default().with_distance(Mahalanobis::new(p_data))
-          }
-          _ => unimplemented!(),
-        };
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-        DBSCANVariants::F32I32Mahalanobis(dbscan_instance)
+        DBSCANFactory::f32_i32_mahalanobis(data.inner(), params)?
       }
       // F32I32Manhattan
       (DenseMatrixType::F32(data), DistanceName::Manhattan) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default().with_distance(Manhattan::default());
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::F32I32Manhattan(dbscan_instance)
+        DBSCANFactory::f32_i32_manhattan(data.inner(), params)?
       }
       // F32I32Minkowski
       (DenseMatrixType::F32(data), DistanceName::Minkowski) => {
-        let x = data.inner();
-        let Some(p) = params.p else {
-          return Err(Error::new(
-            Status::GenericFailure,
-            "'p' must be specified for 'Minkowski' distance type",
-          ));
-        };
-        let parameters = DBSCANParameters::default().with_distance(Minkowski::new(p));
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::F32I32Minkowski(dbscan_instance)
+        DBSCANFactory::f32_i32_minkowski(data.inner(), params)?
       }
       // F64I32Euclidian
       (DenseMatrixType::F64(data), DistanceName::Euclidian) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default();
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-        DBSCANVariants::F64I32Euclidian(dbscan_instance)
+        DBSCANFactory::f64_i32_euclidian(data.inner(), params)?
       }
       // F64I32Mahalanobis
       (DenseMatrixType::F64(data), DistanceName::Mahalanobis) => {
-        let x = data.inner();
-        let Some(ref p_data) = params.data else {
-          return Err(Error::new(
-            Status::GenericFailure,
-            "'data' must be specified for 'Mahalanobis' distance type",
-          ));
-        };
-        let parameters = match p_data.deref().inner() {
-          DenseMatrixType::F64(p_data) => {
-            let p_data = p_data.deref().inner();
-            DBSCANParameters::default().with_distance(Mahalanobis::new(p_data))
-          }
-          _ => unimplemented!(),
-        };
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-        DBSCANVariants::F64I32Mahalanobis(dbscan_instance)
+        DBSCANFactory::f64_i32_mahalanobis(data.inner(), params)?
       }
       // F64I32Manhattan
       (DenseMatrixType::F64(data), DistanceName::Manhattan) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default().with_distance(Manhattan::default());
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::F64I32Manhattan(dbscan_instance)
+        DBSCANFactory::f64_i32_manhattan(data.inner(), params)?
       }
       // F64I32Minkowski
       (DenseMatrixType::F64(data), DistanceName::Minkowski) => {
-        let x = data.inner();
-        let Some(p) = params.p else {
-          return Err(Error::new(
-            Status::GenericFailure,
-            "'p' must be specified for 'Minkowski' distance type.",
-          ));
-        };
-        let parameters = DBSCANParameters::default().with_distance(Minkowski::new(p));
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::F64I32Minkowski(dbscan_instance)
+        DBSCANFactory::f64_i32_minkowski(data.inner(), params)?
       }
       //   I32I32Euclidian
       (DenseMatrixType::I32(data), DistanceName::Euclidian) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default();
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::I32I32Euclidian(dbscan_instance)
+        DBSCANFactory::i32_i32_euclidian(data.inner(), params)?
       }
       //   I32I32Hamming
       (DenseMatrixType::I32(data), DistanceName::Hamming) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default().with_distance(Hamming::new());
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::I32I32Hamming(dbscan_instance)
+        DBSCANFactory::i32_i32_hamming(data.inner(), params)?
       }
       //   I32I32Manhattan
       (DenseMatrixType::I32(data), DistanceName::Manhattan) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default().with_distance(Manhattan::new());
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::I32I32Manhattan(dbscan_instance)
+        DBSCANFactory::i32_i32_manhattan(data.inner(), params)?
       }
       //   I32I32Minkowski
       (DenseMatrixType::I32(data), DistanceName::Minkowski) => {
-        let x = data.inner();
-        let Some(p) = params.p else {
-          return Err(Error::new(
-            Status::GenericFailure,
-            "'p' must be specified for 'Minkowski' distance type.",
-          ));
-        };
-        let parameters = DBSCANParameters::default().with_distance(Minkowski::new(p));
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::I32I32Minkowski(dbscan_instance)
+        DBSCANFactory::i32_i32_minkowski(data.inner(), params)?
       }
       //   I64I32Euclidian
       (DenseMatrixType::I64(data), DistanceName::Euclidian) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default();
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::I64I32Euclidian(dbscan_instance)
+        DBSCANFactory::i64_i32_euclidian(data.inner(), params)?
       }
       //   I64I32Manhattan
       (DenseMatrixType::I64(data), DistanceName::Manhattan) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default().with_distance(Manhattan::new());
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::I64I32Manhattan(dbscan_instance)
+        DBSCANFactory::i64_i32_manhattan(data.inner(), params)?
       }
       //   I64I32Minkowski
       (DenseMatrixType::I64(data), DistanceName::Minkowski) => {
-        let x = data.inner();
-        let Some(p) = params.p else {
-          return Err(Error::new(
-            Status::GenericFailure,
-            "'p' must be specified for 'Minkowski' distance type.",
-          ));
-        };
-        let parameters = DBSCANParameters::default().with_distance(Minkowski::new(p));
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::I64I32Minkowski(dbscan_instance)
+        DBSCANFactory::i64_i32_minkowski(data.inner(), params)?
       }
       //   U16I32Euclidian
       (DenseMatrixType::U16(data), DistanceName::Euclidian) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default();
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::U16I32Euclidian(dbscan_instance)
+        DBSCANFactory::u16_i32_euclidian(data.inner(), params)?
       }
       //   U16I32Hamming
       (DenseMatrixType::U16(data), DistanceName::Hamming) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default().with_distance(Hamming::new());
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::U16I32Hamming(dbscan_instance)
+        DBSCANFactory::u16_i32_hamming(data.inner(), params)?
       }
       //   U32I32Euclidian
       (DenseMatrixType::U32(data), DistanceName::Euclidian) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default();
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::U32I32Euclidian(dbscan_instance)
+        DBSCANFactory::u32_i32_euclidian(data.inner(), params)?
       }
       //   U32I32Manhattan
       (DenseMatrixType::U32(data), DistanceName::Manhattan) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default().with_distance(Manhattan::new());
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::U32I32Manhattan(dbscan_instance)
+        DBSCANFactory::u32_i32_manhattan(data.inner(), params)?
       }
       //   U64I32Euclidian
       (DenseMatrixType::U64(data), DistanceName::Euclidian) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default();
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::U64I32Euclidian(dbscan_instance)
+        DBSCANFactory::u64_i32_euclidian(data.inner(), params)?
       }
       //   U64I32Manhattan
       (DenseMatrixType::U64(data), DistanceName::Manhattan) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default().with_distance(Manhattan::new());
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::U64I32Manhattan(dbscan_instance)
+        DBSCANFactory::u64_i32_manhattan(data.inner(), params)?
       }
       //   U8I32Euclidian
       (DenseMatrixType::U8(data), DistanceName::Euclidian) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default();
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::U8I32Euclidian(dbscan_instance)
+        DBSCANFactory::u8_i32_euclidian(data.inner(), params)?
       }
       //   U8I32Hamming
       (DenseMatrixType::U8(data), DistanceName::Hamming) => {
-        let x = data.inner();
-        let parameters = DBSCANParameters::default().with_distance(Hamming::new());
-        let parameters = set_parameters(params, parameters)?;
-        let dbscan_instance = DBSCAN::fit(x, parameters)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        DBSCANVariants::U8I32Hamming(dbscan_instance)
+        DBSCANFactory::u8_i32_hamming(data.inner(), params)?
       }
       _ => {
         return Err(Error::new(
@@ -311,146 +144,7 @@ impl DBSCANWrapper {
 
   #[napi]
   pub fn predict(&self, x: &DenseMatrix) -> Result<Int32Array> {
-    match &self.inner {
-      DBSCANVariants::F32I32Euclidian(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::F32I32Mahalanobis(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::F32I32Manhattan(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::F32I32Minkowski(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::F64I32Euclidian(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::F64I32Mahalanobis(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::F64I32Manhattan(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::F64I32Minkowski(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::I32I32Euclidian(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::I32I32Hamming(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::I32I32Manhattan(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::I32I32Minkowski(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::I64I32Euclidian(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::I64I32Manhattan(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::I64I32Minkowski(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::U16I32Euclidian(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::U16I32Hamming(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::U32I32Euclidian(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::U32I32Manhattan(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::U64I32Euclidian(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::U64I32Manhattan(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::U8I32Euclidian(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-      DBSCANVariants::U8I32Hamming(dbscan) => {
-        let predict_result = dbscan
-          .predict(x.try_into()?)
-          .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
-        Ok(Int32Array::new(predict_result))
-      }
-    }
+    self.inner.predict(x)
   }
 
   #[napi]

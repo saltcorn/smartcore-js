@@ -1,43 +1,45 @@
 use bincode::{config::standard, serde::encode_to_vec};
 use napi::bindgen_prelude::*;
+use paste::paste;
 use smartcore::{
   cluster::dbscan::DBSCAN,
-  linalg::basic::matrix::DenseMatrix,
+  linalg::basic::matrix::DenseMatrix as LibDenseMatrix,
   metrics::distance::{
     euclidian::Euclidian, hamming::Hamming, mahalanobis::Mahalanobis, manhattan::Manhattan,
     minkowski::Minkowski,
   },
 };
 
+use super::dense_matrix::DenseMatrix;
 use crate::cluster::dbscan::thin::{
   dense_matrix::DenseMatrixTypeVariantName, distance_type::DistanceName,
 };
 
-type MahalanobisF32 = Mahalanobis<f32, DenseMatrix<f64>>;
-type MahalanobisF64 = Mahalanobis<f64, DenseMatrix<f64>>;
-pub type DBSCANF32Euclidian = DBSCAN<f32, i32, DenseMatrix<f32>, Vec<i32>, Euclidian<f32>>;
-pub type DBSCANF32Mahalanobis = DBSCAN<f32, i32, DenseMatrix<f32>, Vec<i32>, MahalanobisF32>;
-pub type DBSCANF32Manhattan = DBSCAN<f32, i32, DenseMatrix<f32>, Vec<i32>, Manhattan<f32>>;
-pub type DBSCANF32Minkowski = DBSCAN<f32, i32, DenseMatrix<f32>, Vec<i32>, Minkowski<f32>>;
-pub type DBSCANF64Euclidian = DBSCAN<f64, i32, DenseMatrix<f64>, Vec<i32>, Euclidian<f64>>;
-pub type DBSCANF64Mahalanobis = DBSCAN<f64, i32, DenseMatrix<f64>, Vec<i32>, MahalanobisF64>;
-pub type DBSCANF64Manhattan = DBSCAN<f64, i32, DenseMatrix<f64>, Vec<i32>, Manhattan<f64>>;
-pub type DBSCANF64Minkowski = DBSCAN<f64, i32, DenseMatrix<f64>, Vec<i32>, Minkowski<f64>>;
-pub type DBSCANI32Euclidian = DBSCAN<i32, i32, DenseMatrix<i32>, Vec<i32>, Euclidian<i32>>;
-pub type DBSCANI32Hamming = DBSCAN<i32, i32, DenseMatrix<i32>, Vec<i32>, Hamming<i32>>;
-pub type DBSCANI32Manhattan = DBSCAN<i32, i32, DenseMatrix<i32>, Vec<i32>, Manhattan<i32>>;
-pub type DBSCANI32Minkowski = DBSCAN<i32, i32, DenseMatrix<i32>, Vec<i32>, Minkowski<i32>>;
-pub type DBSCANI64Euclidian = DBSCAN<i64, i32, DenseMatrix<i64>, Vec<i32>, Euclidian<i64>>;
-pub type DBSCANI64Manhattan = DBSCAN<i64, i32, DenseMatrix<i64>, Vec<i32>, Manhattan<i64>>;
-pub type DBSCANI64Minkowski = DBSCAN<i64, i32, DenseMatrix<i64>, Vec<i32>, Minkowski<i64>>;
-pub type DBSCANU16Euclidian = DBSCAN<u16, i32, DenseMatrix<u16>, Vec<i32>, Euclidian<u16>>;
-pub type DBSCANU16Hamming = DBSCAN<u16, i32, DenseMatrix<u16>, Vec<i32>, Hamming<u16>>;
-pub type DBSCANU32Euclidian = DBSCAN<u32, i32, DenseMatrix<u32>, Vec<i32>, Euclidian<u32>>;
-pub type DBSCANU32Manhattan = DBSCAN<u32, i32, DenseMatrix<u32>, Vec<i32>, Manhattan<u32>>;
-pub type DBSCANU64Euclidian = DBSCAN<u64, i32, DenseMatrix<u64>, Vec<i32>, Euclidian<u64>>;
-pub type DBSCANU64Manhattan = DBSCAN<u64, i32, DenseMatrix<u64>, Vec<i32>, Manhattan<u64>>;
-pub type DBSCANU8Euclidian = DBSCAN<u8, i32, DenseMatrix<u8>, Vec<i32>, Euclidian<u8>>;
-pub type DBSCANU8Hamming = DBSCAN<u8, i32, DenseMatrix<u8>, Vec<i32>, Hamming<u8>>;
+type MahalanobisF32 = Mahalanobis<f32, LibDenseMatrix<f64>>;
+type MahalanobisF64 = Mahalanobis<f64, LibDenseMatrix<f64>>;
+pub type DBSCANF32Euclidian = DBSCAN<f32, i32, LibDenseMatrix<f32>, Vec<i32>, Euclidian<f32>>;
+pub type DBSCANF32Mahalanobis = DBSCAN<f32, i32, LibDenseMatrix<f32>, Vec<i32>, MahalanobisF32>;
+pub type DBSCANF32Manhattan = DBSCAN<f32, i32, LibDenseMatrix<f32>, Vec<i32>, Manhattan<f32>>;
+pub type DBSCANF32Minkowski = DBSCAN<f32, i32, LibDenseMatrix<f32>, Vec<i32>, Minkowski<f32>>;
+pub type DBSCANF64Euclidian = DBSCAN<f64, i32, LibDenseMatrix<f64>, Vec<i32>, Euclidian<f64>>;
+pub type DBSCANF64Mahalanobis = DBSCAN<f64, i32, LibDenseMatrix<f64>, Vec<i32>, MahalanobisF64>;
+pub type DBSCANF64Manhattan = DBSCAN<f64, i32, LibDenseMatrix<f64>, Vec<i32>, Manhattan<f64>>;
+pub type DBSCANF64Minkowski = DBSCAN<f64, i32, LibDenseMatrix<f64>, Vec<i32>, Minkowski<f64>>;
+pub type DBSCANI32Euclidian = DBSCAN<i32, i32, LibDenseMatrix<i32>, Vec<i32>, Euclidian<i32>>;
+pub type DBSCANI32Hamming = DBSCAN<i32, i32, LibDenseMatrix<i32>, Vec<i32>, Hamming<i32>>;
+pub type DBSCANI32Manhattan = DBSCAN<i32, i32, LibDenseMatrix<i32>, Vec<i32>, Manhattan<i32>>;
+pub type DBSCANI32Minkowski = DBSCAN<i32, i32, LibDenseMatrix<i32>, Vec<i32>, Minkowski<i32>>;
+pub type DBSCANI64Euclidian = DBSCAN<i64, i32, LibDenseMatrix<i64>, Vec<i32>, Euclidian<i64>>;
+pub type DBSCANI64Manhattan = DBSCAN<i64, i32, LibDenseMatrix<i64>, Vec<i32>, Manhattan<i64>>;
+pub type DBSCANI64Minkowski = DBSCAN<i64, i32, LibDenseMatrix<i64>, Vec<i32>, Minkowski<i64>>;
+pub type DBSCANU16Euclidian = DBSCAN<u16, i32, LibDenseMatrix<u16>, Vec<i32>, Euclidian<u16>>;
+pub type DBSCANU16Hamming = DBSCAN<u16, i32, LibDenseMatrix<u16>, Vec<i32>, Hamming<u16>>;
+pub type DBSCANU32Euclidian = DBSCAN<u32, i32, LibDenseMatrix<u32>, Vec<i32>, Euclidian<u32>>;
+pub type DBSCANU32Manhattan = DBSCAN<u32, i32, LibDenseMatrix<u32>, Vec<i32>, Manhattan<u32>>;
+pub type DBSCANU64Euclidian = DBSCAN<u64, i32, LibDenseMatrix<u64>, Vec<i32>, Euclidian<u64>>;
+pub type DBSCANU64Manhattan = DBSCAN<u64, i32, LibDenseMatrix<u64>, Vec<i32>, Manhattan<u64>>;
+pub type DBSCANU8Euclidian = DBSCAN<u8, i32, LibDenseMatrix<u8>, Vec<i32>, Euclidian<u8>>;
+pub type DBSCANU8Hamming = DBSCAN<u8, i32, LibDenseMatrix<u8>, Vec<i32>, Hamming<u8>>;
 
 #[derive(Debug)]
 pub enum DBSCANVariants {
@@ -64,6 +66,19 @@ pub enum DBSCANVariants {
   U64I32Manhattan(DBSCANU64Manhattan),
   U8I32Euclidian(DBSCANU8Euclidian),
   U8I32Hamming(DBSCANU8Hamming),
+}
+
+macro_rules! predict_impl {
+  ($dbscan:ident, $x:ident) => {
+    paste! {
+        {
+            let predict_result = $dbscan
+                .predict($x.try_into()?)
+                .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
+            Ok(Int32Array::new(predict_result))
+        }
+    }
+  };
 }
 
 impl DBSCANVariants {
@@ -222,5 +237,33 @@ impl DBSCANVariants {
       Self::U8I32Hamming(dbscan) => encode_to_vec(dbscan, standard()),
     }
     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))
+  }
+
+  pub fn predict(&self, x: &DenseMatrix) -> Result<Int32Array> {
+    match &self {
+      DBSCANVariants::F32I32Euclidian(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::F32I32Mahalanobis(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::F32I32Manhattan(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::F32I32Minkowski(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::F64I32Euclidian(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::F64I32Mahalanobis(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::F64I32Manhattan(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::F64I32Minkowski(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::I32I32Euclidian(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::I32I32Hamming(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::I32I32Manhattan(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::I32I32Minkowski(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::I64I32Euclidian(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::I64I32Manhattan(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::I64I32Minkowski(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::U16I32Euclidian(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::U16I32Hamming(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::U32I32Euclidian(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::U32I32Manhattan(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::U64I32Euclidian(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::U64I32Manhattan(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::U8I32Euclidian(dbscan) => predict_impl! { dbscan, x },
+      DBSCANVariants::U8I32Hamming(dbscan) => predict_impl! { dbscan, x },
+    }
   }
 }
