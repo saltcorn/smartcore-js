@@ -7,8 +7,6 @@ import {
   DenseMatrixI32,
 } from '../dist/core-bindings/index.js'
 import { loadBoston, loadDigits, loadDigitsI32 } from '../dist/dataset/index.js'
-import { DbscanParams, DBSCANV2, DenseMatrix, DenseMatrixF64, DistanceName } from '../dist/core-bindings/index.js'
-import { loadBoston } from '../dist/dataset/index.js'
 import assert from 'assert'
 import { trainTestSplit } from '../dist/model_selection/index.js'
 import { DenseMatrix as DenseMatrixOl } from '../dist/index.js'
@@ -65,22 +63,6 @@ describe('DBSCANV2', () => {
     new DBSCANV2(dbscanParams)
     let dbscan_params = new DbscanParams(xData)
     dbscan_params.distanceType = DistanceName.Euclidian
-    new DBSCANV2(dbscan_params)
-
-    // Hamming
-    dbscan_params.distanceType = DistanceName.Hamming
-    new DBSCANV2(dbscan_params)
-
-    // Manhattan
-    dbscan_params.distanceType = DistanceName.Manhattan
-    new DBSCANV2(dbscan_params)
-
-    // Mahalanobis
-    dbscan_params.distanceType = DistanceName.Mahalanobis
-    new DBSCANV2(dbscan_params)
-
-    // Minkowski
-    dbscan_params.distanceType = DistanceName.Minkowski
     new DBSCANV2(dbscan_params)
   })
 

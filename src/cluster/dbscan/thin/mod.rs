@@ -11,11 +11,7 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 
 use dense_matrix::{DenseMatrix, DenseMatrixType};
-use bincode::{config::standard, decode_from_slice, encode_to_vec, Decode, Encode};
-use napi::bindgen_prelude::*;
-use napi_derive::napi;
 
-use dense_matrix::{DenseMatrix, DenseMatrixType, DenseMatrixTypeVariantName};
 use distance_type::DistanceName;
 use params::DBSCANParams;
 use serialize_data::DBSCANSerializeData;
@@ -23,8 +19,6 @@ use smartcore::{
   cluster::dbscan::{DBSCANParameters, DBSCAN},
   metrics::distance::{
     hamming::Hamming, mahalanobis::Mahalanobis, manhattan::Manhattan, minkowski::Minkowski,
-    euclidian::Euclidian, hamming::Hamming, mahalanobis::Mahalanobis, manhattan::Manhattan,
-    minkowski::Minkowski,
   },
 };
 use variants::DBSCANVariants;
@@ -43,12 +37,6 @@ impl DBSCANWrapper {
     let x_data = params.x_data.deref().inner();
     let dbscan_variant = match (x_data, distance_type) {
       // F32I32Euclidian
-    let distance_type = params
-      .distance_type
-      .as_ref()
-      .unwrap_or(&DistanceName::Euclidian);
-    let x_data = params.x_data.deref().inner();
-    let dbscan_variant = match (x_data, distance_type) {
       (DenseMatrixType::F32(data), DistanceName::Euclidian) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default();
@@ -57,7 +45,6 @@ impl DBSCANWrapper {
         DBSCANVariants::F32I32Euclidian(dbscan_instance)
       }
       // F32I32Mahalanobis
-
       (DenseMatrixType::F32(data), DistanceName::Mahalanobis) => {
         let x = data.inner();
         let Some(ref p_data) = params.data else {
@@ -78,7 +65,6 @@ impl DBSCANWrapper {
         DBSCANVariants::F32I32Mahalanobis(dbscan_instance)
       }
       // F32I32Manhattan
-
       (DenseMatrixType::F32(data), DistanceName::Manhattan) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default().with_distance(Manhattan::default());
@@ -87,7 +73,6 @@ impl DBSCANWrapper {
         DBSCANVariants::F32I32Manhattan(dbscan_instance)
       }
       // F32I32Minkowski
-
       (DenseMatrixType::F32(data), DistanceName::Minkowski) => {
         let x = data.inner();
         let Some(p) = params.p else {
@@ -102,7 +87,6 @@ impl DBSCANWrapper {
         DBSCANVariants::F32I32Minkowski(dbscan_instance)
       }
       // F64I32Euclidian
-
       (DenseMatrixType::F64(data), DistanceName::Euclidian) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default();
@@ -111,7 +95,6 @@ impl DBSCANWrapper {
         DBSCANVariants::F64I32Euclidian(dbscan_instance)
       }
       // F64I32Mahalanobis
-
       (DenseMatrixType::F64(data), DistanceName::Mahalanobis) => {
         let x = data.inner();
         let Some(ref p_data) = params.data else {
@@ -132,7 +115,6 @@ impl DBSCANWrapper {
         DBSCANVariants::F64I32Mahalanobis(dbscan_instance)
       }
       // F64I32Manhattan
-
       (DenseMatrixType::F64(data), DistanceName::Manhattan) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default().with_distance(Manhattan::default());
@@ -141,14 +123,12 @@ impl DBSCANWrapper {
         DBSCANVariants::F64I32Manhattan(dbscan_instance)
       }
       // F64I32Minkowski
-
       (DenseMatrixType::F64(data), DistanceName::Minkowski) => {
         let x = data.inner();
         let Some(p) = params.p else {
           return Err(Error::new(
             Status::GenericFailure,
             "'p' must be specified for 'Minkowski' distance type.",
-            "'p' must be specified for 'Minkowski' distance type",
           ));
         };
         let parameters = DBSCANParameters::default().with_distance(Minkowski::new(p));
@@ -300,7 +280,6 @@ impl DBSCANWrapper {
           ),
         ))
       }
-      _ => unimplemented!(),
     };
     Ok(Self {
       inner: dbscan_variant,
