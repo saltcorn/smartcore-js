@@ -286,11 +286,6 @@ export declare class DatasetF64I32JsVecRef {
   asArray(): BigInt64Array
 }
 
-export declare class DBSCAN {
-  static create(params: DbscanParams): DBSCAN
-}
-export type DBSCANWrapper = DBSCAN
-
 export declare class DBSCANF32EuclidianF32Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
@@ -517,11 +512,12 @@ export declare class DBSCANI64MinkowskiI64Parameters {
 }
 
 export declare class DbscanParams {
-  constructor(xData: MatrixTypeFactory)
+  constructor(xData: DenseMatrix)
   set eps(eps: number)
+  set distanceType(distanceType: DistanceName)
   set minSamples(minSamples: bigint)
   set algorithm(algorithm: KNNAlgorithmName)
-  set data(data: MatrixTypeFactory)
+  set data(data: DenseMatrix)
   set p(p: number)
 }
 export type DBSCANParams = DbscanParams
@@ -646,6 +642,14 @@ export declare class DBSCANU8I32HammingU8 {
   static deserialize(data: Buffer): DBSCANU8I32HammingU8
 }
 
+export declare class DBSCANV2 {
+  constructor(params: DbscanParams)
+  predict(x: DenseMatrix): Int32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DBSCANV2
+}
+export type DBSCANWrapper = DBSCANV2
+
 export declare class DecisionTreeClassifierI64I64 {
   static fit(x: DenseMatrixI64, y: BigInt64Array, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierI64I64
   predict(x: DenseMatrixI64): BigInt64Array
@@ -673,6 +677,17 @@ export declare class DecisionTreeRegressorParameters {
   withMaxDepth(maxDepth: number): void
   withMinSamplesLeaf(minSamplesLeaf: bigint): void
   withMinSamplesSplit(minSamplesSplit: bigint): void
+}
+
+export declare class DenseMatrix {
+  static f64(x: DenseMatrixF64): DenseMatrix
+  static f32(x: DenseMatrixF32): DenseMatrix
+  static u64(x: DenseMatrixU64): DenseMatrix
+  static u32(x: DenseMatrixU32): DenseMatrix
+  static u16(x: DenseMatrixU16): DenseMatrix
+  static u8(x: DenseMatrixU8): DenseMatrix
+  static i64(x: DenseMatrixI64): DenseMatrix
+  static i32(x: DenseMatrixI32): DenseMatrix
 }
 
 export declare class DenseMatrixF32 {
@@ -2534,17 +2549,6 @@ export declare class ManhattanU64 {
   distance(x: BigUint64Array, y: BigUint64Array): number
 }
 
-export declare class MatrixTypeFactory {
-  static f64(x: DenseMatrixF64): MatrixTypeFactory
-  static f32(x: DenseMatrixF32): MatrixTypeFactory
-  static u64(x: DenseMatrixU64): MatrixTypeFactory
-  static u32(x: DenseMatrixU32): MatrixTypeFactory
-  static u16(x: DenseMatrixU16): MatrixTypeFactory
-  static u8(x: DenseMatrixU8): MatrixTypeFactory
-  static i64(x: DenseMatrixI64): MatrixTypeFactory
-  static i32(x: DenseMatrixI32): MatrixTypeFactory
-}
-
 export declare class MeanAbsoluteErrorF64 {
   constructor()
   getScore(yTrue: Float64Array, yPred: Float64Array): number
@@ -2990,6 +2994,14 @@ export declare function crossValidateElasticNetF64F64(xs: DenseMatrixF64, ys: Fl
 export declare function crossValidateElasticNetF64I64(xs: DenseMatrixF64, ys: BigInt64Array, parameters: ElasticNetParameters, cv: KFold, score: (arg0: BigInt64Array, arg1: BigInt64Array) => number): CrossValidationResult
 
 export declare function crossValidateLogisticRegressionF64I64(xs: DenseMatrixF64, ys: BigInt64Array, parameters: LogisticRegressionParametersF64, cv: KFold, score: (arg0: BigInt64Array, arg1: BigInt64Array) => number): CrossValidationResult
+
+export declare const enum DistanceName {
+  Euclidian = 0,
+  Hamming = 1,
+  Mahalanobis = 2,
+  Manhattan = 3,
+  Minkowski = 4
+}
 
 export declare const enum KNNAlgorithmName {
   LinearSearch = 0,
