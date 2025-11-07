@@ -13,7 +13,7 @@ use napi_derive::napi;
 use dense_matrix::{DenseMatrix, DenseMatrixType};
 
 use distance_type::DistanceName;
-use params::DBSCANParams;
+use params::{set_parameters, DBSCANParams};
 use serialize_data::DBSCANSerializeData;
 use smartcore::{
   cluster::dbscan::{DBSCANParameters, DBSCAN},
@@ -40,6 +40,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::F32(data), DistanceName::Euclidian) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default();
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
         DBSCANVariants::F32I32Euclidian(dbscan_instance)
@@ -60,6 +61,7 @@ impl DBSCANWrapper {
           }
           _ => unimplemented!(),
         };
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
         DBSCANVariants::F32I32Mahalanobis(dbscan_instance)
@@ -68,6 +70,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::F32(data), DistanceName::Manhattan) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default().with_distance(Manhattan::default());
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::F32I32Manhattan(dbscan_instance)
@@ -82,6 +85,7 @@ impl DBSCANWrapper {
           ));
         };
         let parameters = DBSCANParameters::default().with_distance(Minkowski::new(p));
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::F32I32Minkowski(dbscan_instance)
@@ -90,6 +94,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::F64(data), DistanceName::Euclidian) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default();
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
         DBSCANVariants::F64I32Euclidian(dbscan_instance)
@@ -110,6 +115,7 @@ impl DBSCANWrapper {
           }
           _ => unimplemented!(),
         };
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
         DBSCANVariants::F64I32Mahalanobis(dbscan_instance)
@@ -118,6 +124,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::F64(data), DistanceName::Manhattan) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default().with_distance(Manhattan::default());
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::F64I32Manhattan(dbscan_instance)
@@ -132,6 +139,7 @@ impl DBSCANWrapper {
           ));
         };
         let parameters = DBSCANParameters::default().with_distance(Minkowski::new(p));
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::F64I32Minkowski(dbscan_instance)
@@ -140,6 +148,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::I32(data), DistanceName::Euclidian) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default();
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::I32I32Euclidian(dbscan_instance)
@@ -148,6 +157,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::I32(data), DistanceName::Hamming) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default().with_distance(Hamming::new());
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::I32I32Hamming(dbscan_instance)
@@ -156,6 +166,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::I32(data), DistanceName::Manhattan) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default().with_distance(Manhattan::new());
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::I32I32Manhattan(dbscan_instance)
@@ -170,6 +181,7 @@ impl DBSCANWrapper {
           ));
         };
         let parameters = DBSCANParameters::default().with_distance(Minkowski::new(p));
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::I32I32Minkowski(dbscan_instance)
@@ -178,6 +190,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::I64(data), DistanceName::Euclidian) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default();
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::I64I32Euclidian(dbscan_instance)
@@ -186,6 +199,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::I64(data), DistanceName::Manhattan) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default().with_distance(Manhattan::new());
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::I64I32Manhattan(dbscan_instance)
@@ -200,6 +214,7 @@ impl DBSCANWrapper {
           ));
         };
         let parameters = DBSCANParameters::default().with_distance(Minkowski::new(p));
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::I64I32Minkowski(dbscan_instance)
@@ -208,6 +223,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::U16(data), DistanceName::Euclidian) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default();
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::U16I32Euclidian(dbscan_instance)
@@ -216,6 +232,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::U16(data), DistanceName::Hamming) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default().with_distance(Hamming::new());
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::U16I32Hamming(dbscan_instance)
@@ -224,6 +241,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::U32(data), DistanceName::Euclidian) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default();
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::U32I32Euclidian(dbscan_instance)
@@ -232,6 +250,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::U32(data), DistanceName::Manhattan) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default().with_distance(Manhattan::new());
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::U32I32Manhattan(dbscan_instance)
@@ -240,6 +259,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::U64(data), DistanceName::Euclidian) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default();
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::U64I32Euclidian(dbscan_instance)
@@ -248,6 +268,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::U64(data), DistanceName::Manhattan) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default().with_distance(Manhattan::new());
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::U64I32Manhattan(dbscan_instance)
@@ -256,6 +277,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::U8(data), DistanceName::Euclidian) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default();
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::U8I32Euclidian(dbscan_instance)
@@ -264,6 +286,7 @@ impl DBSCANWrapper {
       (DenseMatrixType::U8(data), DistanceName::Hamming) => {
         let x = data.inner();
         let parameters = DBSCANParameters::default().with_distance(Hamming::new());
+        let parameters = set_parameters(params, parameters)?;
         let dbscan_instance = DBSCAN::fit(x, parameters)
           .map_err(|e| Error::new(Status::GenericFailure, format!("{e}")))?;
         DBSCANVariants::U8I32Hamming(dbscan_instance)

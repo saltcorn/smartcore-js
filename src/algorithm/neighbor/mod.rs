@@ -2,6 +2,7 @@ use napi_derive::napi;
 
 use smartcore::algorithm::neighbour::KNNAlgorithmName as LibKNNAlgorithmName;
 
+#[derive(Debug, Clone)]
 #[napi]
 pub enum KNNAlgorithmName {
   LinearSearch,
