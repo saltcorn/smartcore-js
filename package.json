@@ -64,7 +64,7 @@
     "build:cjs": "napi build --platform --release --output-dir ./dist-cjs/core-bindings",
     "copy:bindings": "copyfiles -u 1 \"src-js/core-bindings/**/*\" dist/",
     "build:js:esm": "tsc -p ./tsconfig.json",
-    "build:js:cjs": "yarn run build:js:esm && yarn run build:js:cjs && yarn run copy:bindings",
+    "build:js:cjs": "tsc -p ./tsconfig.cjs.json && node scripts/create-cjs-package.js",
     "build:js": "yarn run build:js:esm && yarn run build:js:cjs && yarn run copy:bindings",
     "build:debug": "napi build --platform --esm --output-dir ./core-bindings",
     "format": "run-p format:prettier format:rs format:toml",
@@ -76,7 +76,7 @@
     "test": "tsx node_modules/mocha/bin/mocha.js",
     "version": "napi version",
     "prepare": "husky",
-    "clean": "rm -rf ./node_modules ./src-js/core-bindings ./dist-cjs/core-bindings && cargo clean"
+    "clean": "rm -rf ./node_modules ./src-js/core-bindings ./dist-cjs/core-bindings Cargo.lock yarn.lock && cargo clean"
   },
   "devDependencies": {
     "@emnapi/core": "^1.6.0",
