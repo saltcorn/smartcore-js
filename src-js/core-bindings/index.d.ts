@@ -297,6 +297,21 @@ export declare class DatasetI32I32 {
   denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixI32
 }
 
+/**
+ * DBSCANBuilder allows you to set the parameters to be used to initialize a new DBSCAN instance when you call
+ * .build() on it.
+ */
+export declare class DBSCANBuilder {
+  constructor(fitData: DenseMatrix)
+  set eps(eps: number)
+  set distanceType(distanceType: DistanceName)
+  set minSamples(minSamples: bigint)
+  set algorithm(algorithm: KNNAlgorithmName)
+  set data(data: DenseMatrix)
+  set p(p: number)
+  build(): DBSCANV2
+}
+
 export declare class DBSCANF32EuclidianF32Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
@@ -522,17 +537,6 @@ export declare class DBSCANI64MinkowskiI64Parameters {
   serialize(): Buffer
 }
 
-export declare class DbscanParams {
-  constructor(xData: DenseMatrix)
-  set eps(eps: number)
-  set distanceType(distanceType: DistanceName)
-  set minSamples(minSamples: bigint)
-  set algorithm(algorithm: KNNAlgorithmName)
-  set data(data: DenseMatrix)
-  set p(p: number)
-}
-export type DBSCANParams = DbscanParams
-
 export declare class DBSCANU16EuclidianU16Parameters {
   withMinSamples(minSamples: number): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
@@ -654,12 +658,10 @@ export declare class DBSCANU8I32HammingU8 {
 }
 
 export declare class DBSCANV2 {
-  constructor(params: DbscanParams)
   predict(x: DenseMatrix): Int32Array
   serialize(): Buffer
   static deserialize(data: Buffer): DBSCANV2
 }
-export type DBSCANWrapper = DBSCANV2
 
 export declare class DecisionTreeClassifierI64I64 {
   static fit(x: DenseMatrixI64, y: BigInt64Array, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierI64I64
