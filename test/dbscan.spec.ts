@@ -3,7 +3,7 @@ import {
   DBSCANV2,
   DenseMatrix,
   DenseMatrixF64,
-  DistanceName,
+  DistanceVariantType,
   DenseMatrixI32,
 } from '../dist/core-bindings/index.js'
 import { loadBoston, loadDigits, loadDigitsI32 } from '../dist/dataset/index.js'
@@ -33,7 +33,7 @@ describe('DBSCANV2', () => {
 
     it('Euclidian', () => {
       let dbscanBuilder = new DBSCANBuilder(xData)
-      dbscanBuilder.distanceType = DistanceName.Euclidian
+      dbscanBuilder.distanceType = DistanceVariantType.Euclidian
       dbscanBuilder.build()
     })
 
@@ -45,26 +45,26 @@ describe('DBSCANV2', () => {
       }
       let xDataH = DenseMatrix.i32(xH.asRsMatrix('i32') as DenseMatrixI32)
       let dbscanBuilderH = new DBSCANBuilder(xDataH)
-      dbscanBuilderH.distanceType = DistanceName.Hamming
+      dbscanBuilderH.distanceType = DistanceVariantType.Hamming
       dbscanBuilderH.build()
     })
 
     it('Manhattan', () => {
       let dbscanBuilder = new DBSCANBuilder(xData)
-      dbscanBuilder.distanceType = DistanceName.Manhattan
+      dbscanBuilder.distanceType = DistanceVariantType.Manhattan
       dbscanBuilder.build()
     })
 
     it('Mahalanobis', () => {
       let dbscanBuilder = new DBSCANBuilder(xData)
-      dbscanBuilder.distanceType = DistanceName.Mahalanobis
+      dbscanBuilder.distanceType = DistanceVariantType.Mahalanobis
       dbscanBuilder.data = xData
       dbscanBuilder.build()
     })
 
     it('Minkowski', () => {
       let dbscanBuilder = new DBSCANBuilder(xData)
-      dbscanBuilder.distanceType = DistanceName.Minkowski
+      dbscanBuilder.distanceType = DistanceVariantType.Minkowski
       dbscanBuilder.p = 1
       dbscanBuilder.build()
     })

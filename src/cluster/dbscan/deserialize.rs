@@ -1,9 +1,9 @@
 use bincode::{config::standard, serde::decode_from_slice};
 
-use crate::cluster::dbscan::thin::predictor_estimator::PredictorEstimator;
+use crate::cluster::dbscan::predictor_estimator::PredictorEstimator;
 
 use super::{
-  dense_matrix::DenseMatrixTypeVariantName, distance_type::DistanceName,
+  dense_matrix::DenseMatrixTypeVariantName, distance_type::DistanceVariantType,
   serialize_data::DBSCANSerializeData, variants::*, DBSCANV2,
 };
 
@@ -22,16 +22,16 @@ impl TryFrom<DBSCANSerializeData> for DBSCANV2 {
   fn try_from(value: DBSCANSerializeData) -> Result<Self, Self::Error> {
     let predictor_estimator: Box<dyn PredictorEstimator> = match value.fit_data_variant_type {
       DenseMatrixTypeVariantName::F64 => match value.distance_type {
-        DistanceName::Euclidian => {
+        DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANF64Euclidian>(&value.dbscan)?)
         }
-        DistanceName::Mahalanobis => {
+        DistanceVariantType::Mahalanobis => {
           Box::new(deserialize_variant::<DBSCANF64Mahalanobis>(&value.dbscan)?)
         }
-        DistanceName::Manhattan => {
+        DistanceVariantType::Manhattan => {
           Box::new(deserialize_variant::<DBSCANF64Manhattan>(&value.dbscan)?)
         }
-        DistanceName::Minkowski => {
+        DistanceVariantType::Minkowski => {
           Box::new(deserialize_variant::<DBSCANF64Minkowski>(&value.dbscan)?)
         }
         _ => {
@@ -42,16 +42,16 @@ impl TryFrom<DBSCANSerializeData> for DBSCANV2 {
         }
       },
       DenseMatrixTypeVariantName::F32 => match value.distance_type {
-        DistanceName::Euclidian => {
+        DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANF32Euclidian>(&value.dbscan)?)
         }
-        DistanceName::Mahalanobis => {
+        DistanceVariantType::Mahalanobis => {
           Box::new(deserialize_variant::<DBSCANF32Mahalanobis>(&value.dbscan)?)
         }
-        DistanceName::Manhattan => {
+        DistanceVariantType::Manhattan => {
           Box::new(deserialize_variant::<DBSCANF32Manhattan>(&value.dbscan)?)
         }
-        DistanceName::Minkowski => {
+        DistanceVariantType::Minkowski => {
           Box::new(deserialize_variant::<DBSCANF32Minkowski>(&value.dbscan)?)
         }
         _ => {
@@ -62,10 +62,10 @@ impl TryFrom<DBSCANSerializeData> for DBSCANV2 {
         }
       },
       DenseMatrixTypeVariantName::U64 => match value.distance_type {
-        DistanceName::Euclidian => {
+        DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANU64Euclidian>(&value.dbscan)?)
         }
-        DistanceName::Manhattan => {
+        DistanceVariantType::Manhattan => {
           Box::new(deserialize_variant::<DBSCANU64Manhattan>(&value.dbscan)?)
         }
         _ => {
@@ -76,10 +76,10 @@ impl TryFrom<DBSCANSerializeData> for DBSCANV2 {
         }
       },
       DenseMatrixTypeVariantName::U32 => match value.distance_type {
-        DistanceName::Euclidian => {
+        DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANU32Euclidian>(&value.dbscan)?)
         }
-        DistanceName::Manhattan => {
+        DistanceVariantType::Manhattan => {
           Box::new(deserialize_variant::<DBSCANU32Manhattan>(&value.dbscan)?)
         }
         _ => {
@@ -90,10 +90,12 @@ impl TryFrom<DBSCANSerializeData> for DBSCANV2 {
         }
       },
       DenseMatrixTypeVariantName::U16 => match value.distance_type {
-        DistanceName::Euclidian => {
+        DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANU16Euclidian>(&value.dbscan)?)
         }
-        DistanceName::Hamming => Box::new(deserialize_variant::<DBSCANU16Hamming>(&value.dbscan)?),
+        DistanceVariantType::Hamming => {
+          Box::new(deserialize_variant::<DBSCANU16Hamming>(&value.dbscan)?)
+        }
         _ => {
           return Err(napi::Error::new(
             napi::Status::GenericFailure,
@@ -102,10 +104,12 @@ impl TryFrom<DBSCANSerializeData> for DBSCANV2 {
         }
       },
       DenseMatrixTypeVariantName::U8 => match value.distance_type {
-        DistanceName::Euclidian => {
+        DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANU8Euclidian>(&value.dbscan)?)
         }
-        DistanceName::Hamming => Box::new(deserialize_variant::<DBSCANU8Hamming>(&value.dbscan)?),
+        DistanceVariantType::Hamming => {
+          Box::new(deserialize_variant::<DBSCANU8Hamming>(&value.dbscan)?)
+        }
         _ => {
           return Err(napi::Error::new(
             napi::Status::GenericFailure,
@@ -114,13 +118,13 @@ impl TryFrom<DBSCANSerializeData> for DBSCANV2 {
         }
       },
       DenseMatrixTypeVariantName::I64 => match value.distance_type {
-        DistanceName::Euclidian => {
+        DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANI64Euclidian>(&value.dbscan)?)
         }
-        DistanceName::Manhattan => {
+        DistanceVariantType::Manhattan => {
           Box::new(deserialize_variant::<DBSCANI64Manhattan>(&value.dbscan)?)
         }
-        DistanceName::Minkowski => {
+        DistanceVariantType::Minkowski => {
           Box::new(deserialize_variant::<DBSCANI64Minkowski>(&value.dbscan)?)
         }
         _ => {
@@ -131,14 +135,16 @@ impl TryFrom<DBSCANSerializeData> for DBSCANV2 {
         }
       },
       DenseMatrixTypeVariantName::I32 => match value.distance_type {
-        DistanceName::Euclidian => {
+        DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANI32Euclidian>(&value.dbscan)?)
         }
-        DistanceName::Hamming => Box::new(deserialize_variant::<DBSCANI32Hamming>(&value.dbscan)?),
-        DistanceName::Manhattan => {
+        DistanceVariantType::Hamming => {
+          Box::new(deserialize_variant::<DBSCANI32Hamming>(&value.dbscan)?)
+        }
+        DistanceVariantType::Manhattan => {
           Box::new(deserialize_variant::<DBSCANI32Manhattan>(&value.dbscan)?)
         }
-        DistanceName::Minkowski => {
+        DistanceVariantType::Minkowski => {
           Box::new(deserialize_variant::<DBSCANI32Minkowski>(&value.dbscan)?)
         }
         _ => {

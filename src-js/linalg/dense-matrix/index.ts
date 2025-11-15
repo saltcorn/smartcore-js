@@ -7,6 +7,7 @@ import {
   DenseMatrixU32,
   DenseMatrixU64,
   DenseMatrixU8,
+  DenseMatrix as DenseMatrixV2,
 } from '../../core-bindings/index.js'
 import { numberTypeCheckers } from '../../index.js'
 
@@ -266,6 +267,18 @@ class DenseMatrix {
           `[DenseMatrix] Unexpected dataTypeValue '${dataType}'. Valid values are: f64, f32, i32, u32, u8, u16, i64, u64.`,
         )
     }
+  }
+
+  asDenseMatrixV2(): DenseMatrixV2 {
+    if (this.inner instanceof DenseMatrixF32) return DenseMatrixV2.f32(this.inner)
+    if (this.inner instanceof DenseMatrixF64) return DenseMatrixV2.f64(this.inner)
+    if (this.inner instanceof DenseMatrixI32) return DenseMatrixV2.i32(this.inner)
+    if (this.inner instanceof DenseMatrixI64) return DenseMatrixV2.i64(this.inner)
+    if (this.inner instanceof DenseMatrixU16) return DenseMatrixV2.u16(this.inner)
+    if (this.inner instanceof DenseMatrixU32) return DenseMatrixV2.u32(this.inner)
+    if (this.inner instanceof DenseMatrixU64) return DenseMatrixV2.u64(this.inner)
+    if (this.inner instanceof DenseMatrixU8) return DenseMatrixV2.u8(this.inner)
+    throw new Error(`[DenseMatrix] asDenseMatrixV2: Unknown inner type '${typeof this.inner}'`)
   }
 }
 

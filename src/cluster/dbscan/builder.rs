@@ -5,7 +5,7 @@ use napi_derive::napi;
 
 use super::{
   dense_matrix::{DenseMatrix, DenseMatrixType},
-  distance_type::DistanceName,
+  distance_type::DistanceVariantType,
   factory::{self, DBSCANFactory},
   set_parameters::SetParametersParams,
   DBSCANV2,
@@ -17,7 +17,7 @@ use crate::algorithm::neighbor::KNNAlgorithmName;
 #[napi(js_name = "DBSCANBuilder")]
 pub struct DBSCANBuilder {
   pub(super) fit_data: SharedReference<DenseMatrix, &'static mut DenseMatrix>,
-  pub(super) distance_type: Option<DistanceName>,
+  pub(super) distance_type: Option<DistanceVariantType>,
   pub(super) min_samples: Option<usize>,
   pub(super) eps: Option<f64>,
   pub(super) algorithm: Option<KNNAlgorithmName>,
@@ -46,7 +46,7 @@ impl DBSCANBuilder {
   }
 
   #[napi(setter)]
-  pub fn distance_type(&mut self, distance_type: DistanceName) {
+  pub fn distance_type(&mut self, distance_type: DistanceVariantType) {
     self.distance_type = Some(distance_type)
   }
 

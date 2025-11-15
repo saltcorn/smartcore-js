@@ -1,12 +1,10 @@
 import { utilities, type InputType, type YType } from '../../index.js'
-import { type IDBSCANBaseParameters, type NumberTypeRs } from './parameters.js'
-import { type PredictorProvider, type Predictor } from '../../estimator.js'
-import { type DistanceType } from '../../metrics/index.js'
-import { PredictorProvidersMap } from './estimator_providers_map/index.js'
+import { type IDBSCANBaseParameters } from './parameters.js'
+import { type PredictorV2 } from '../../estimator.js'
+import { DBSCANBuilder, DBSCANV2, type DistanceVariantType } from '../../core-bindings/index.js'
 
 interface IDBSCANParameters extends IDBSCANBaseParameters {
-  numberType?: NumberTypeRs
-  distanceType?: DistanceType
+  distanceType?: DistanceVariantType
 }
 
 interface DBSCANSerializedData {
@@ -20,31 +18,28 @@ class DBSCAN {
   public readonly config: IDBSCANParameters
 
   private _isFitted: boolean = false
-  private estimatorProvider: PredictorProvider<IDBSCANBaseParameters, any, any>
-  private parameters: any
-  private estimator: Predictor | null = null
+  private estimator: PredictorV2 | null = null
 
-  constructor(params?: IDBSCANParameters) {
-    const config = params || {}
-    this.config = config
-    this.config.numberType = this.config.numberType ?? 'f32'
-    this.config.distanceType = this.config.distanceType ?? 'euclidian'
-    const distanceTypeMap = PredictorProvidersMap.get(this.config.numberType)
-    if (!distanceTypeMap) {
-      throw new Error(`Unknown number type '${this.config.numberType}'`)
-    }
-    const estimatorProvider = distanceTypeMap.get(this.config.distanceType)
-    if (!estimatorProvider) {
-      throw new Error(`Unknown distance type '${this.config.distanceType}' for '${this.config.numberType}'`)
-    }
-    const parameters = estimatorProvider.parameters(this.config)
-    this.estimatorProvider = estimatorProvider
-    this.parameters = parameters
+  constructor(config?: IDBSCANParameters) {
+    this.config = config ?? {}
   }
 
-  fit(x: InputType, y: YType): this {
-    const matrix = utilities.inputTypeToDenseMatrix(x)
-    this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters)
+  fit(x: InputType): this {
+    const matrix = utilities.inputTypeToDenseMatrix(x).asDenseMatrixV2()
+    let builder = new DBSCANBuilder(matrix)
+    if (this.config.algorithm) {
+      builder.algorithm = this.config.algorithm
+    }
+    if (this.config.eps) {
+      builder.eps = this.config.eps
+    }
+    if (this.config.minSamples) {
+      builder.minSamples = this.config.minSamples
+    }
+    if (this.config.distanceType) {
+      builder.distanceType = this.config.distanceType
+    }
+    this.estimator = builder.build()
     this._isFitted = true
     return this
   }
@@ -61,7 +56,7 @@ class DBSCAN {
 
   predict(matrix: InputType): YType {
     this.ensureFitted('predict')
-    let denseMatrix = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(matrix))
+    let denseMatrix = utilities.inputTypeToDenseMatrix(matrix).asDenseMatrixV2()
     return this.estimator!.predict(denseMatrix)
   }
 
@@ -78,7 +73,7 @@ class DBSCAN {
     if (this._isFitted) {
       throw new Error("Cannot call 'deserialize' on a fitted instance!")
     }
-    this.estimator = this.estimatorProvider.deserialize(data)
+    this.estimator = DBSCANV2.deserialize(data)
     return this
   }
 

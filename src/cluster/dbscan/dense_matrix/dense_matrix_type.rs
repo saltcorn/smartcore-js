@@ -2,10 +2,11 @@ use std::fmt::Display;
 
 use bincode::{Decode, Encode};
 use napi::bindgen_prelude::*;
+use napi_derive::napi;
 use smartcore::linalg::basic::matrix::DenseMatrix as LibDenseMatrix;
 
 use crate::{
-  cluster::dbscan::thin::distance_type::DistanceName,
+  cluster::dbscan::distance_type::DistanceVariantType,
   linalg::basic::matrix::{
     DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32,
     DenseMatrixU64, DenseMatrixU8,
@@ -13,6 +14,7 @@ use crate::{
 };
 
 #[derive(Debug, Clone, PartialEq, Eq, Encode, Decode, Copy)]
+#[napi]
 pub enum DenseMatrixTypeVariantName {
   F64,
   F32,
@@ -42,8 +44,8 @@ impl Display for DenseMatrixTypeVariantName {
 impl DenseMatrixTypeVariantName {
   pub fn supported_distances(&self) -> Vec<String> {
     use DenseMatrixTypeVariantName::*;
-    use DistanceName::*;
-    const DISTANCE_SUPPORT: &[(DenseMatrixTypeVariantName, &[DistanceName])] = &[
+    use DistanceVariantType::*;
+    const DISTANCE_SUPPORT: &[(DenseMatrixTypeVariantName, &[DistanceVariantType])] = &[
       (F64, &[Euclidian, Mahalanobis, Manhattan, Minkowski]),
       (F32, &[Euclidian, Mahalanobis, Manhattan, Minkowski]),
       (U64, &[Euclidian, Manhattan]),

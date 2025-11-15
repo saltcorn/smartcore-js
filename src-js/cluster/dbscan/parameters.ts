@@ -3,7 +3,7 @@ import { type KNNAlgorithmName } from '../../core-bindings/index.js'
 import { type NumberTypeRs } from '../../linalg/dense-matrix/index.js'
 
 interface IDBSCANBaseParameters {
-  minSamples?: number
+  minSamples?: bigint
   algorithm?: KNNAlgorithmName
   eps?: number
   data?: InputType
@@ -11,7 +11,7 @@ interface IDBSCANBaseParameters {
 }
 
 interface IDBSCANParameters {
-  withMinSamples(samples: number): void
+  withMinSamples(samples: bigint): void
   withAlgorithm(algorithm: KNNAlgorithmName): void
   withEps(eps: number): void
 }
