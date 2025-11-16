@@ -8,7 +8,7 @@ use super::{
   distance_type::DistanceVariantType,
   factory::{self, DBSCANFactory},
   set_parameters::SetParametersParams,
-  DBSCANV2,
+  DBSCAN,
 };
 use crate::algorithm::neighbor::KNNAlgorithmName;
 
@@ -93,7 +93,7 @@ impl DBSCANBuilder {
   }
 
   #[napi]
-  pub fn build(&mut self) -> Result<DBSCANV2> {
+  pub fn build(&mut self) -> Result<DBSCAN> {
     let fit_data_variant_type = self.fit_data.inner().variant_name();
     let params = factory::NewParameters {
       distance_variant_type: self.distance_type,
@@ -106,7 +106,7 @@ impl DBSCANBuilder {
       data: self.data.as_deref(),
       p: self.p,
     };
-    Ok(DBSCANV2 {
+    Ok(DBSCAN {
       inner: DBSCANFactory::create(params)?,
       fit_data_variant_type,
       distance_type: self.distance_type.unwrap_or_default(),

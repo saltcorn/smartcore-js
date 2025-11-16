@@ -1,6 +1,6 @@
 import {
   DBSCANBuilder,
-  DBSCANV2,
+  DBSCAN,
   DenseMatrix,
   DenseMatrixF64,
   DistanceVariantType,
@@ -12,7 +12,7 @@ import { trainTestSplit } from '../dist/model_selection/index.js'
 import { DenseMatrix as DenseMatrixOl } from '../dist/index.js'
 import { accuracyScore } from '../dist/metrics/index.js'
 
-describe('DBSCANV2', () => {
+describe('DBSCAN', () => {
   it('create', () => {
     let bostonData = loadBoston({ returnXY: true })
     let [x, y] = bostonData instanceof Array ? bostonData : []
@@ -100,7 +100,7 @@ describe('DBSCANV2', () => {
     let xTestData = DenseMatrix.f64((xTest as DenseMatrixOl).asRsMatrix('f64') as DenseMatrixF64)
     let score1 = accuracyScore(dbscan.predict(xTestData), yTest)
     let serializedDBSCAN = dbscan.serialize()
-    let deserializedDBSCAN = DBSCANV2.deserialize(serializedDBSCAN)
+    let deserializedDBSCAN = DBSCAN.deserialize(serializedDBSCAN)
     let score2 = accuracyScore(deserializedDBSCAN.predict(xTestData), yTest)
     assert.equal(score1, score2)
   })

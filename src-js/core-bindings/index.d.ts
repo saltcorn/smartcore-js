@@ -297,6 +297,12 @@ export declare class DatasetI32I32 {
   denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixI32
 }
 
+export declare class DBSCAN {
+  predict(x: DenseMatrix): Int32Array
+  serialize(): Buffer
+  static deserialize(data: Buffer): DBSCAN
+}
+
 /**
  * DBSCANBuilder allows you to set the parameters to be used to initialize a new DBSCAN instance when you call
  * .build() on it.
@@ -309,13 +315,7 @@ export declare class DBSCANBuilder {
   set algorithm(algorithm: KNNAlgorithmName)
   set data(data: DenseMatrix)
   set p(p: number)
-  build(): DBSCANV2
-}
-
-export declare class DBSCANV2 {
-  predict(x: DenseMatrix): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): DBSCANV2
+  build(): DBSCAN
 }
 
 export declare class DecisionTreeClassifierI64I64 {

@@ -21,16 +21,16 @@ use distance_type::DistanceVariantType;
 use predictor_estimator::{Estimator, Predictor, PredictorEstimator};
 use serialize_data::DBSCANSerializeData;
 
-#[napi(js_name = "DBSCANV2")]
+#[napi(js_name = "DBSCAN")]
 #[derive(Debug)]
-pub struct DBSCANV2 {
+pub struct DBSCAN {
   inner: Box<dyn PredictorEstimator>,
   fit_data_variant_type: DenseMatrixTypeVariantName,
   distance_type: DistanceVariantType,
 }
 
 #[napi]
-impl DBSCANV2 {
+impl DBSCAN {
   #[napi]
   pub fn predict(&self, x: &DenseMatrix) -> Result<Int32Array> {
     self.inner.predict(x)
@@ -51,13 +51,13 @@ impl DBSCANV2 {
   }
 }
 
-impl Predictor for DBSCANV2 {
+impl Predictor for DBSCAN {
   fn predict(&self, x: &DenseMatrix) -> Result<Int32Array> {
     self.inner.predict(x)
   }
 }
 
-impl Estimator for DBSCANV2 {
+impl Estimator for DBSCAN {
   fn serialize(&self) -> Result<Vec<u8>> {
     let serialize_data = DBSCANSerializeData {
       fit_data_variant_type: self.fit_data_variant_type,

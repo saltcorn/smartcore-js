@@ -1,7 +1,7 @@
 import { utilities, type InputType, type YType } from '../../index.js'
 import { type IDBSCANBaseParameters } from './parameters.js'
 import { type PredictorV2 } from '../../estimator.js'
-import { DBSCANBuilder, DBSCANV2, type DistanceVariantType } from '../../core-bindings/index.js'
+import { DBSCANBuilder, DBSCAN as DBSCANV2, type DistanceVariantType } from '../../core-bindings/index.js'
 
 interface IDBSCANParameters extends IDBSCANBaseParameters {
   distanceType?: DistanceVariantType

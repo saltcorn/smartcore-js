@@ -4,7 +4,7 @@ use crate::cluster::dbscan::predictor_estimator::PredictorEstimator;
 
 use super::{
   dense_matrix::DenseMatrixTypeVariantName, distance_type::DistanceVariantType,
-  serialize_data::DBSCANSerializeData, variants::*, DBSCANV2,
+  serialize_data::DBSCANSerializeData, variants::*, DBSCAN,
 };
 
 fn deserialize_variant<T>(data: &[u8]) -> Result<T, napi::Error>
@@ -16,7 +16,7 @@ where
     .map(|(v, _)| v)
 }
 
-impl TryFrom<DBSCANSerializeData> for DBSCANV2 {
+impl TryFrom<DBSCANSerializeData> for DBSCAN {
   type Error = napi::Error;
 
   fn try_from(value: DBSCANSerializeData) -> Result<Self, Self::Error> {
@@ -156,7 +156,7 @@ impl TryFrom<DBSCANSerializeData> for DBSCANV2 {
       },
     };
 
-    Ok(DBSCANV2 {
+    Ok(DBSCAN {
       inner: predictor_estimator,
       fit_data_variant_type: value.fit_data_variant_type,
       distance_type: value.distance_type,
