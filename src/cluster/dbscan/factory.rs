@@ -1,10 +1,14 @@
 use napi::bindgen_prelude::*;
 
 use super::{
-  dense_matrix::{DenseMatrix, DenseMatrixTypeVariantName},
   lib_dbscan_factory::{DBSCANParametersDto, LibDBSCANFactory},
   set_parameters::SetParametersParams,
-  DistanceVariantType, PredictorEstimator,
+  supported_distances::SupportedDistances,
+  DistanceVariantType,
+};
+use crate::{
+  dense_matrix::{DenseMatrix, DenseMatrixTypeVariantName},
+  traits::PredictorEstimator,
 };
 
 pub struct DBSCANFactory {}

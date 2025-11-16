@@ -3,7 +3,7 @@ use std::fmt::Display;
 use bincode::{Decode, Encode};
 use napi_derive::napi;
 
-use crate::cluster::dbscan::dense_matrix::DenseMatrixTypeVariantName;
+use crate::dense_matrix::DenseMatrixTypeVariantName;
 
 #[derive(Debug, Decode, Encode, Clone, Copy, PartialEq, Eq, Default)]
 #[napi]

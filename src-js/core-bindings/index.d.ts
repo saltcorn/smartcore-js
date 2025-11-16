@@ -1165,6 +1165,14 @@ export declare class KFold {
   withNSplits(nSplits: number): void
 }
 
+export declare class KMeansBuilder {
+  constructor(fitData: DenseMatrix)
+  withMaxIter(maxIter: bigint): void
+  withK(k: bigint): void
+  withPredictOutputType(predictOutputType: PredictOutputType): void
+  build(): KMeansV2
+}
+
 export declare class KMeansF32I32 {
   static fit(x: DenseMatrixF32, parameters: KMeansParameters): KMeansF32I32
   predict(x: DenseMatrixF32): Int32Array
@@ -1253,6 +1261,10 @@ export declare class KMeansU64I64 {
   predict(x: DenseMatrixU64): BigInt64Array
   serialize(): Buffer
   static deserialize(data: Buffer): KMeansU64I64
+}
+
+export declare class KMeansV2 {
+
 }
 
 export declare class KNNClassifierF32EuclidianF32Parameters {
@@ -2700,6 +2712,15 @@ export declare const enum LinearRegressionSolverName {
 
 export declare const enum LogisticRegressionSolverName {
   LBFGS = 'LBFGS'
+}
+
+export type PredictOutput =
+  | { type: 'Int32Array', field0: Int32Array }
+  | { type: 'BigInt64Array', field0: BigInt64Array }
+
+export declare const enum PredictOutputType {
+  I32 = 0,
+  I64 = 1
 }
 
 export declare const enum RidgeRegressionSolverName {

@@ -1,20 +1,10 @@
-use bincode::{config::standard, serde::decode_from_slice};
-
-use crate::cluster::dbscan::predictor_estimator::PredictorEstimator;
-
 use super::{
-  dense_matrix::DenseMatrixTypeVariantName, distance_type::DistanceVariantType,
-  serialize_data::DBSCANSerializeData, variants::*, DBSCAN,
+  distance_type::DistanceVariantType, serialize_data::DBSCANSerializeData, variants::*, DBSCAN,
 };
-
-fn deserialize_variant<T>(data: &[u8]) -> Result<T, napi::Error>
-where
-  T: serde::de::DeserializeOwned,
-{
-  decode_from_slice(data, standard())
-    .map_err(|e| napi::Error::new(napi::Status::GenericFailure, e.to_string()))
-    .map(|(v, _)| v)
-}
+use crate::{
+  dense_matrix::DenseMatrixTypeVariantName, deserialize_variant::deserialize_variant,
+  traits::PredictorEstimator,
+};
 
 impl TryFrom<DBSCANSerializeData> for DBSCAN {
   type Error = napi::Error;

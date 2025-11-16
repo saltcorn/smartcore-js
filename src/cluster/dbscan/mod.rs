@@ -1,6 +1,5 @@
 mod builder;
 mod dbscan_parameters;
-mod dense_matrix;
 mod deserialize;
 mod distance_type;
 mod factory;
@@ -8,17 +7,20 @@ mod lib_dbscan_factory;
 mod predictor_estimator;
 mod serialize_data;
 mod set_parameters;
+mod supported_distances;
 mod variants;
 
 use bincode::{config::standard, decode_from_slice, encode_to_vec};
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 
-use dense_matrix::{DenseMatrix, DenseMatrixType};
+use crate::{
+  dense_matrix::{DenseMatrix, DenseMatrixType, DenseMatrixTypeVariantName},
+  predict_output::PredictOutput,
+  traits::{Estimator, Predictor, PredictorEstimator},
+};
 
-use dense_matrix::DenseMatrixTypeVariantName;
 use distance_type::DistanceVariantType;
-use predictor_estimator::{Estimator, Predictor, PredictorEstimator};
 use serialize_data::DBSCANSerializeData;
 
 #[napi(js_name = "DBSCAN")]
@@ -33,7 +35,7 @@ pub struct DBSCAN {
 impl DBSCAN {
   #[napi]
   pub fn predict(&self, x: &DenseMatrix) -> Result<Int32Array> {
-    self.inner.predict(x)
+    self.inner.predict(x).and_then(|e| e.try_into())
   }
 
   #[napi]
@@ -52,7 +54,7 @@ impl DBSCAN {
 }
 
 impl Predictor for DBSCAN {
-  fn predict(&self, x: &DenseMatrix) -> Result<Int32Array> {
+  fn predict(&self, x: &DenseMatrix) -> Result<PredictOutput> {
     self.inner.predict(x)
   }
 }

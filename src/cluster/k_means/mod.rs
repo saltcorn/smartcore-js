@@ -1,4 +1,13 @@
+mod builder;
+mod deserialize;
+mod factory;
+mod lib_kmeans_factory;
 mod parameters;
+mod predict_output_type;
+mod predictor_estimator;
+mod serialize_data;
+mod v2;
+mod variants;
 
 use std::ops::Deref;
 

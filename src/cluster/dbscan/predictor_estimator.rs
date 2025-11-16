@@ -2,23 +2,18 @@ use bincode::{config::standard, serde::encode_to_vec};
 use napi::bindgen_prelude::*;
 use paste::paste;
 
-use super::{dense_matrix::DenseMatrix, variants::*};
-
-pub trait Estimator {
-  fn serialize(&self) -> Result<Vec<u8>>;
-}
-
-pub trait Predictor: std::fmt::Debug {
-  fn predict(&self, x: &DenseMatrix) -> Result<Int32Array>;
-}
-
-pub trait PredictorEstimator: Estimator + Predictor {}
+use super::variants::*;
+use crate::{
+  dense_matrix::DenseMatrix,
+  predict_output::PredictOutput,
+  traits::{Estimator, Predictor, PredictorEstimator},
+};
 
 macro_rules! predictor_estimator_impl {
   ($variant:ty) => {
     paste! {
         impl Predictor for $variant {
-            fn predict(&self, x: &DenseMatrix) -> Result<Int32Array> {
+            fn predict(&self, x: &DenseMatrix) -> Result<PredictOutput> {
                 self
                     .predict(x.try_into()?)
                     .map(|e| e.into())

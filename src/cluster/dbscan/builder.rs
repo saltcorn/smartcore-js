@@ -4,13 +4,15 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 
 use super::{
-  dense_matrix::{DenseMatrix, DenseMatrixType},
   distance_type::DistanceVariantType,
   factory::{self, DBSCANFactory},
   set_parameters::SetParametersParams,
   DBSCAN,
 };
-use crate::algorithm::neighbor::KNNAlgorithmName;
+use crate::{
+  algorithm::neighbor::KNNAlgorithmName,
+  dense_matrix::{DenseMatrix, DenseMatrixType},
+};
 
 /// DBSCANBuilder allows you to set the parameters to be used to initialize a new DBSCAN instance when you call
 /// .build() on it.

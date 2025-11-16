@@ -12,10 +12,10 @@ use smartcore::{
 };
 
 use super::{
-  dense_matrix::DenseMatrix,
   set_parameters::{set_parameters, SetParametersParams},
-  DenseMatrixType, PredictorEstimator,
+  DenseMatrixType,
 };
+use crate::{dense_matrix::DenseMatrix, traits::PredictorEstimator};
 
 pub struct DBSCANParametersDto<'a> {
   pub fit_data: &'a DenseMatrix,

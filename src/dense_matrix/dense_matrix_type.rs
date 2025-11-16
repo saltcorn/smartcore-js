@@ -5,12 +5,9 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use smartcore::linalg::basic::matrix::DenseMatrix as LibDenseMatrix;
 
-use crate::{
-  cluster::dbscan::distance_type::DistanceVariantType,
-  linalg::basic::matrix::{
-    DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32,
-    DenseMatrixU64, DenseMatrixU8,
-  },
+use crate::linalg::basic::matrix::{
+  DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32,
+  DenseMatrixU64, DenseMatrixU8,
 };
 
 #[derive(Debug, Clone, PartialEq, Eq, Encode, Decode, Copy)]
@@ -38,28 +35,6 @@ impl Display for DenseMatrixTypeVariantName {
       Self::I64 => f.write_str("i64"),
       Self::I32 => f.write_str("i32"),
     }
-  }
-}
-
-impl DenseMatrixTypeVariantName {
-  pub fn supported_distances(&self) -> Vec<String> {
-    use DenseMatrixTypeVariantName::*;
-    use DistanceVariantType::*;
-    const DISTANCE_SUPPORT: &[(DenseMatrixTypeVariantName, &[DistanceVariantType])] = &[
-      (F64, &[Euclidian, Mahalanobis, Manhattan, Minkowski]),
-      (F32, &[Euclidian, Mahalanobis, Manhattan, Minkowski]),
-      (U64, &[Euclidian, Manhattan]),
-      (U32, &[Euclidian, Manhattan]),
-      (U16, &[Euclidian, Hamming]),
-      (U8, &[Euclidian, Hamming]),
-      (I64, &[Euclidian, Manhattan, Minkowski]),
-      (I32, &[Euclidian, Hamming, Manhattan, Minkowski]),
-    ];
-    DISTANCE_SUPPORT
-      .iter()
-      .find(|(t, _)| t == self)
-      .map(|(_, dists)| dists.iter().map(|d| d.to_string()).collect())
-      .unwrap_or_default()
   }
 }
 

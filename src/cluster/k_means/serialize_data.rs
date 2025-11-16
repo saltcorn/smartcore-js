@@ -1,11 +1,11 @@
 use bincode::{Decode, Encode};
 
-use super::distance_type::DistanceVariantType;
+use super::predict_output_type::PredictOutputType;
 use crate::dense_matrix::DenseMatrixTypeVariantName;
 
 #[derive(Encode, Decode)]
-pub struct DBSCANSerializeData {
+pub struct KMeansSerializeData {
   pub fit_data_variant_type: DenseMatrixTypeVariantName,
-  pub distance_type: DistanceVariantType,
-  pub dbscan: Vec<u8>,
+  pub predict_output_type: PredictOutputType,
+  pub kmeans: Vec<u8>,
 }
