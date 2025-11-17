@@ -1,9 +1,9 @@
 use napi::{Error, Status};
 
-use super::{serialize_data::KMeansSerializeData, v2::KMeansV2, variants::*};
+use super::{serialize_data::KMeansSerializeData, variants::*, KMeans};
 use crate::{deserialize_variant::deserialize_variant, traits::PredictorEstimator};
 
-impl TryFrom<KMeansSerializeData> for KMeansV2 {
+impl TryFrom<KMeansSerializeData> for KMeans {
   type Error = Error;
 
   fn try_from(value: KMeansSerializeData) -> std::result::Result<Self, Self::Error> {
@@ -74,7 +74,7 @@ impl TryFrom<KMeansSerializeData> for KMeansV2 {
           super::predict_output_type::PredictOutputType::I64,
         ) => return Err(Error::new(Status::GenericFailure, "TODO")),
       };
-    Ok(KMeansV2 {
+    Ok(KMeans {
       inner: predictor_estimator,
       fit_data_variant_type: value.fit_data_variant_type,
       predict_output_type: value.predict_output_type,

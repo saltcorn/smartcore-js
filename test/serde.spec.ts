@@ -125,7 +125,7 @@ describe('Serialize + Deserialize', () => {
       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-    km.fit(xTrain, yTrain)
+    km.fit(xTrain)
     const score1 = accuracyScore(km.predict(xTest), yTest)
     const kmSerialized = km.serialize()
     const kmDeserialized = KMeans.deserialize(kmSerialized)
@@ -141,7 +141,7 @@ describe('Serialize + Deserialize', () => {
       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-    dbscan.fit(xTrain, yTrain)
+    dbscan.fit(xTrain)
     const score1 = accuracyScore(dbscan.predict(xTest), yTest)
     const dbscanSerialized = dbscan.serialize()
     const dbscanDeserialized = DBSCAN.deserialize(dbscanSerialized)
@@ -153,7 +153,7 @@ describe('Serialize + Deserialize', () => {
     const columns = df.columnNames.filter((column) => !column.startsWith('customer'))
     const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
     const pca = new PCA({ nComponents: 24, columns })
-    const transformedColumns1 = pca.fit(df, y).transform(df)
+    const transformedColumns1 = pca.fit(df).transform(df)
     const pcaSerialized = pca.serialize()
     const pcaDeserialized = PCA.deserialize(pcaSerialized)
     const transformedColumns2 = pcaDeserialized.transform(df)
@@ -192,7 +192,7 @@ describe('Serialize + Deserialize', () => {
     if (!(x && y)) {
       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
     }
-    svd.fit(x, [])
+    svd.fit(x)
     const xTransformed1 = svd.transform(x)
     const svdSerialized = svd.serialize()
     const svdDeserialized = SVD.deserialize(svdSerialized)
@@ -255,7 +255,7 @@ describe('Serialize + Deserialize', () => {
     if (!(x && y)) {
       assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
     }
-    ohe.fit(x, [])
+    ohe.fit(x)
     const xTransformed1 = ohe.transform(x)
     const oheSerialized = ohe.serialize()
     const oheDeserialized = OneHotEncoder.deserialize(oheSerialized)

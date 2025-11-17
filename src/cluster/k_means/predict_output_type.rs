@@ -2,7 +2,7 @@ use bincode::{Decode, Encode};
 use napi_derive::napi;
 
 #[derive(Debug, Clone, PartialEq, Eq, Copy, Default, Encode, Decode)]
-#[napi]
+#[napi(string_enum)]
 pub enum PredictOutputType {
   #[default]
   I32,

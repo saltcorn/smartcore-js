@@ -34,8 +34,8 @@ pub struct DBSCAN {
 #[napi]
 impl DBSCAN {
   #[napi]
-  pub fn predict(&self, x: &DenseMatrix) -> Result<Int32Array> {
-    self.inner.predict(x).and_then(|e| e.try_into())
+  pub fn predict(&self, x: &DenseMatrix) -> Result<PredictOutput> {
+    self.inner.predict(x)
   }
 
   #[napi]

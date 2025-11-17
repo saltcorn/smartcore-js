@@ -148,7 +148,7 @@ describe('Pipelines', () => {
   it('SVD + DBSCAN', () => {
     let pipe = makePipeline([
       ['svd', new SVD()],
-      ['dbscan', new DBSCAN({ numberType: 'f64' })],
+      ['dbscan', new DBSCAN()],
     ])
     let irisData = loadIris({ returnXY: true })
     let [x, y] = irisData instanceof Array ? irisData : []

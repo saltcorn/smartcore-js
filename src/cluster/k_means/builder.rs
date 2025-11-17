@@ -6,7 +6,7 @@ use napi_derive::napi;
 use super::{
   factory::{self, KMeansFactory, KMeansParameters},
   predict_output_type::PredictOutputType,
-  v2::KMeansV2,
+  KMeans,
 };
 use crate::dense_matrix::DenseMatrix;
 
@@ -48,7 +48,7 @@ impl KMeansBuilder {
   }
 
   #[napi]
-  pub fn build(&mut self) -> Result<KMeansV2> {
+  pub fn build(&mut self) -> Result<KMeans> {
     let fit_data_variant_type = self.fit_data.inner().variant_name();
     let params = factory::NewParameters {
       fit_data: self.fit_data.deref(),
@@ -58,7 +58,7 @@ impl KMeansBuilder {
         k: self.k,
       },
     };
-    Ok(KMeansV2 {
+    Ok(KMeans {
       inner: KMeansFactory::create(params)?,
       fit_data_variant_type,
       predict_output_type: self.predict_output_type,

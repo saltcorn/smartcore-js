@@ -298,7 +298,7 @@ export declare class DatasetI32I32 {
 }
 
 export declare class DBSCAN {
-  predict(x: DenseMatrix): Int32Array
+  predict(x: DenseMatrix): PredictOutput
   serialize(): Buffer
   static deserialize(data: Buffer): DBSCAN
 }
@@ -1165,106 +1165,18 @@ export declare class KFold {
   withNSplits(nSplits: number): void
 }
 
+export declare class KMeans {
+  predict(x: DenseMatrix): PredictOutput
+  serialize(): Buffer
+  static deserialize(data: Buffer): KMeans
+}
+
 export declare class KMeansBuilder {
   constructor(fitData: DenseMatrix)
   withMaxIter(maxIter: bigint): void
   withK(k: bigint): void
   withPredictOutputType(predictOutputType: PredictOutputType): void
-  build(): KMeansV2
-}
-
-export declare class KMeansF32I32 {
-  static fit(x: DenseMatrixF32, parameters: KMeansParameters): KMeansF32I32
-  predict(x: DenseMatrixF32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KMeansF32I32
-}
-
-export declare class KMeansF32I64 {
-  static fit(x: DenseMatrixF32, parameters: KMeansParameters): KMeansF32I64
-  predict(x: DenseMatrixF32): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KMeansF32I64
-}
-
-export declare class KMeansF64I32 {
-  static fit(x: DenseMatrixF64, parameters: KMeansParameters): KMeansF64I32
-  predict(x: DenseMatrixF64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KMeansF64I32
-}
-
-export declare class KMeansF64I64 {
-  static fit(x: DenseMatrixF64, parameters: KMeansParameters): KMeansF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KMeansF64I64
-}
-
-export declare class KMeansI32I32 {
-  static fit(x: DenseMatrixI32, parameters: KMeansParameters): KMeansI32I32
-  predict(x: DenseMatrixI32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KMeansI32I32
-}
-
-export declare class KMeansI32I64 {
-  static fit(x: DenseMatrixI32, parameters: KMeansParameters): KMeansI32I64
-  predict(x: DenseMatrixI32): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KMeansI32I64
-}
-
-export declare class KMeansI64I32 {
-  static fit(x: DenseMatrixI64, parameters: KMeansParameters): KMeansI64I32
-  predict(x: DenseMatrixI64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KMeansI64I32
-}
-
-export declare class KMeansI64I64 {
-  static fit(x: DenseMatrixI64, parameters: KMeansParameters): KMeansI64I64
-  predict(x: DenseMatrixI64): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KMeansI64I64
-}
-
-export declare class KMeansParameters {
-  constructor()
-  withMaxIter(maxIter: bigint): void
-  withK(k: bigint): void
-}
-
-export declare class KMeansU32I32 {
-  static fit(x: DenseMatrixU32, parameters: KMeansParameters): KMeansU32I32
-  predict(x: DenseMatrixU32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KMeansU32I32
-}
-
-export declare class KMeansU32I64 {
-  static fit(x: DenseMatrixU32, parameters: KMeansParameters): KMeansU32I64
-  predict(x: DenseMatrixU32): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KMeansU32I64
-}
-
-export declare class KMeansU64I32 {
-  static fit(x: DenseMatrixU64, parameters: KMeansParameters): KMeansU64I32
-  predict(x: DenseMatrixU64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KMeansU64I32
-}
-
-export declare class KMeansU64I64 {
-  static fit(x: DenseMatrixU64, parameters: KMeansParameters): KMeansU64I64
-  predict(x: DenseMatrixU64): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KMeansU64I64
-}
-
-export declare class KMeansV2 {
-
+  build(): KMeans
 }
 
 export declare class KNNClassifierF32EuclidianF32Parameters {
@@ -2719,8 +2631,8 @@ export type PredictOutput =
   | { type: 'BigInt64Array', field0: BigInt64Array }
 
 export declare const enum PredictOutputType {
-  I32 = 0,
-  I64 = 1
+  I32 = 'I32',
+  I64 = 'I64'
 }
 
 export declare const enum RidgeRegressionSolverName {

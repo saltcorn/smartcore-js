@@ -57,7 +57,7 @@ class DBSCAN {
   predict(matrix: InputType): YType {
     this.ensureFitted('predict')
     let denseMatrix = utilities.inputTypeToDenseMatrix(matrix).asDenseMatrixV2()
-    return this.estimator!.predict(denseMatrix)
+    return this.estimator!.predict(denseMatrix).field0
   }
 
   serialize(): DBSCANSerializedData {
