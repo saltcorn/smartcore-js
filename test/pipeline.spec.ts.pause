@@ -6,7 +6,7 @@ import {
   //   ensemble,
   //   modelSelection,
   //   metrics,
-  //   pipeline,
+  pipeline,
   cluster,
   //   decomposition,
   //   naiveBayes,
@@ -27,7 +27,7 @@ let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = datas
 // let { trainTestSplit } = modelSelection
 // let { accuracyScore } = metrics
 // type DistanceType = metrics.DistanceType
-// let { makePipeline, deserializePipeline } = pipeline
+let { makePipeline, deserializePipeline } = pipeline
 const { DataFrame } = dataFrame
 
 const parsedJson = readJSONFile('e-commerce-enhanced.json')

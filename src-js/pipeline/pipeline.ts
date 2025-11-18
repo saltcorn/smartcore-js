@@ -1,7 +1,7 @@
-import { PCA } from '../decomposition/index.js'
+// import { PCA } from '../decomposition/index.js'
 import { type YType, type InputType, type OutputType, dataFrame } from '../index.js'
-import { RidgeRegression } from '../linear_model/index.js'
-import { StandardScaler } from '../preprocessing/index.js'
+// import { RidgeRegression } from '../linear_model/index.js'
+// import { StandardScaler } from '../preprocessing/index.js'
 import type { Estimator, Predictor, Transformer } from './index.js'
 import { StepAdapter } from './step_adapter.js'
 
@@ -375,9 +375,9 @@ interface EstimatorDeserializer {
 }
 
 const EstimatorsDeserializers: Map<string, EstimatorDeserializer> = new Map()
-EstimatorsDeserializers.set(PCA.name, PCA)
-EstimatorsDeserializers.set(RidgeRegression.name, RidgeRegression)
-EstimatorsDeserializers.set(StandardScaler.name, StandardScaler)
+// EstimatorsDeserializers.set(PCA.name, PCA)
+// EstimatorsDeserializers.set(RidgeRegression.name, RidgeRegression)
+// EstimatorsDeserializers.set(StandardScaler.name, StandardScaler)
 
 interface SerializedEstimator {
   typeKey: string
