@@ -12,7 +12,7 @@ use napi::{bindgen_prelude::Buffer, Error, Result, Status};
 use napi_derive::napi;
 
 use crate::{
-  dense_matrix::{DenseMatrix, DenseMatrixTypeVariantName},
+  dense_matrix::{DenseMatrix, DenseMatrixType},
   predict_output::PredictOutput,
   traits::{Estimator, Predictor, PredictorEstimator},
 };
@@ -23,7 +23,7 @@ use serialize_data::KMeansSerializeData;
 #[derive(Debug)]
 pub struct KMeans {
   pub(super) inner: Box<dyn PredictorEstimator>,
-  pub(super) fit_data_variant_type: DenseMatrixTypeVariantName,
+  pub(super) fit_data_variant_type: DenseMatrixType,
   pub(super) predict_output_type: PredictOutputType,
 }
 

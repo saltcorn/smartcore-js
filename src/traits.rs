@@ -9,4 +9,10 @@ pub trait Predictor: std::fmt::Debug {
   fn predict(&self, x: &DenseMatrix) -> Result<PredictOutput>;
 }
 
+pub trait Transformer: std::fmt::Debug {
+  fn transform(&self, x: &DenseMatrix) -> Result<DenseMatrix>;
+}
+
 pub trait PredictorEstimator: Estimator + Predictor {}
+
+pub trait TransformerEstimator: Estimator + Transformer {}

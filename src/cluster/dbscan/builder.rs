@@ -73,9 +73,9 @@ impl DBSCANBuilder {
   #[napi(setter)]
   pub fn data(&mut self, data: Reference<DenseMatrix>, env: Env) -> Result<()> {
     let data = data.share_with(env, Ok)?;
-    match (self.fit_data.deref().inner(), data.deref().inner()) {
-      (DenseMatrixType::F32(_), DenseMatrixType::F32(_)) => (),
-      (DenseMatrixType::F64(_), DenseMatrixType::F64(_)) => (),
+    match (self.fit_data.r#type(), data.r#type()) {
+      (DenseMatrixType::F32, DenseMatrixType::F32) => (),
+      (DenseMatrixType::F64, DenseMatrixType::F64) => (),
       _ => unimplemented!(),
     }
     self.data = Some(data);
@@ -96,7 +96,7 @@ impl DBSCANBuilder {
 
   #[napi]
   pub fn build(&mut self) -> Result<DBSCAN> {
-    let fit_data_variant_type = self.fit_data.inner().variant_name();
+    let fit_data_variant_type = self.fit_data.r#type();
     let params = factory::NewParameters {
       distance_variant_type: self.distance_type,
       fit_data: self.fit_data.deref(),

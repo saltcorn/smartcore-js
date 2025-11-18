@@ -2,7 +2,7 @@ use super::{
   distance_type::DistanceVariantType, serialize_data::DBSCANSerializeData, variants::*, DBSCAN,
 };
 use crate::{
-  dense_matrix::DenseMatrixTypeVariantName, deserialize_variant::deserialize_variant,
+  dense_matrix::DenseMatrixType, deserialize_variant::deserialize_variant,
   traits::PredictorEstimator,
 };
 
@@ -11,7 +11,7 @@ impl TryFrom<DBSCANSerializeData> for DBSCAN {
 
   fn try_from(value: DBSCANSerializeData) -> Result<Self, Self::Error> {
     let predictor_estimator: Box<dyn PredictorEstimator> = match value.fit_data_variant_type {
-      DenseMatrixTypeVariantName::F64 => match value.distance_type {
+      DenseMatrixType::F64 => match value.distance_type {
         DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANF64Euclidian>(&value.dbscan)?)
         }
@@ -31,7 +31,7 @@ impl TryFrom<DBSCANSerializeData> for DBSCAN {
           ))
         }
       },
-      DenseMatrixTypeVariantName::F32 => match value.distance_type {
+      DenseMatrixType::F32 => match value.distance_type {
         DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANF32Euclidian>(&value.dbscan)?)
         }
@@ -51,7 +51,7 @@ impl TryFrom<DBSCANSerializeData> for DBSCAN {
           ))
         }
       },
-      DenseMatrixTypeVariantName::U64 => match value.distance_type {
+      DenseMatrixType::U64 => match value.distance_type {
         DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANU64Euclidian>(&value.dbscan)?)
         }
@@ -65,7 +65,7 @@ impl TryFrom<DBSCANSerializeData> for DBSCAN {
           ))
         }
       },
-      DenseMatrixTypeVariantName::U32 => match value.distance_type {
+      DenseMatrixType::U32 => match value.distance_type {
         DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANU32Euclidian>(&value.dbscan)?)
         }
@@ -79,7 +79,7 @@ impl TryFrom<DBSCANSerializeData> for DBSCAN {
           ))
         }
       },
-      DenseMatrixTypeVariantName::U16 => match value.distance_type {
+      DenseMatrixType::U16 => match value.distance_type {
         DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANU16Euclidian>(&value.dbscan)?)
         }
@@ -93,7 +93,7 @@ impl TryFrom<DBSCANSerializeData> for DBSCAN {
           ))
         }
       },
-      DenseMatrixTypeVariantName::U8 => match value.distance_type {
+      DenseMatrixType::U8 => match value.distance_type {
         DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANU8Euclidian>(&value.dbscan)?)
         }
@@ -107,7 +107,7 @@ impl TryFrom<DBSCANSerializeData> for DBSCAN {
           ))
         }
       },
-      DenseMatrixTypeVariantName::I64 => match value.distance_type {
+      DenseMatrixType::I64 => match value.distance_type {
         DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANI64Euclidian>(&value.dbscan)?)
         }
@@ -124,7 +124,7 @@ impl TryFrom<DBSCANSerializeData> for DBSCAN {
           ))
         }
       },
-      DenseMatrixTypeVariantName::I32 => match value.distance_type {
+      DenseMatrixType::I32 => match value.distance_type {
         DistanceVariantType::Euclidian => {
           Box::new(deserialize_variant::<DBSCANI32Euclidian>(&value.dbscan)?)
         }

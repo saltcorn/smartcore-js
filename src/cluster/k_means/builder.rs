@@ -49,7 +49,7 @@ impl KMeansBuilder {
 
   #[napi]
   pub fn build(&mut self) -> Result<KMeans> {
-    let fit_data_variant_type = self.fit_data.inner().variant_name();
+    let fit_data_variant_type = self.fit_data.r#type();
     let params = factory::NewParameters {
       fit_data: self.fit_data.deref(),
       predict_output_type: self.predict_output_type,

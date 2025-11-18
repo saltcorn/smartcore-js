@@ -348,14 +348,7 @@ export declare class DecisionTreeRegressorParameters {
 }
 
 export declare class DenseMatrix {
-  static f64(x: DenseMatrixF64): DenseMatrix
-  static f32(x: DenseMatrixF32): DenseMatrix
-  static u64(x: DenseMatrixU64): DenseMatrix
-  static u32(x: DenseMatrixU32): DenseMatrix
-  static u16(x: DenseMatrixU16): DenseMatrix
-  static u8(x: DenseMatrixU8): DenseMatrix
-  static i64(x: DenseMatrixI64): DenseMatrix
-  static i32(x: DenseMatrixI32): DenseMatrix
+
 }
 
 export declare class DenseMatrixF32 {
@@ -2268,6 +2261,13 @@ export declare class OneHotEncoderParameters {
   constructor(categoricalParams: BigUint64Array)
 }
 
+export declare class PCABuilder {
+  constructor(fitData: DenseMatrix)
+  withNComponents(nComponents: bigint): void
+  useCorrelationMatrix(useCorrelationMatrix: boolean): void
+  build(): PCAV2
+}
+
 export declare class PCAF32 {
   static fit(data: DenseMatrixF32, parameters: PCAParameters): PCAF32
   transform(x: DenseMatrixF32): DenseMatrixF32
@@ -2286,6 +2286,11 @@ export declare class PCAParameters {
   constructor()
   withNComponents(nComponents: number): void
   useCorrelationMatrix(useCorrelationMatrix: boolean): void
+}
+
+export declare class PCAV2 {
+  transform(x: DenseMatrix): DenseMatrix
+  serialize(): Buffer
 }
 
 export declare class PrecisionF64 {
@@ -2588,7 +2593,7 @@ export declare function crossValidateElasticNetF64I64(xs: DenseMatrixF64, ys: Bi
 
 export declare function crossValidateLogisticRegressionF64I64(xs: DenseMatrixF64, ys: BigInt64Array, parameters: LogisticRegressionParametersF64, cv: KFold, score: (arg0: BigInt64Array, arg1: BigInt64Array) => number): CrossValidationResult
 
-export declare const enum DenseMatrixTypeVariantName {
+export declare const enum DenseMatrixType {
   F64 = 0,
   F32 = 1,
   U64 = 2,

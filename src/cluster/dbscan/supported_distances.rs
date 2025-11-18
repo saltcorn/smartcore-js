@@ -1,15 +1,15 @@
 use super::distance_type::DistanceVariantType;
-use crate::dense_matrix::DenseMatrixTypeVariantName;
+use crate::dense_matrix::DenseMatrixType;
 
 pub trait SupportedDistances {
   fn supported_distances(&self) -> Vec<String>;
 }
 
-impl SupportedDistances for DenseMatrixTypeVariantName {
+impl SupportedDistances for DenseMatrixType {
   fn supported_distances(&self) -> Vec<String> {
-    use DenseMatrixTypeVariantName::*;
+    use DenseMatrixType::*;
     use DistanceVariantType::*;
-    const DISTANCE_SUPPORT: &[(DenseMatrixTypeVariantName, &[DistanceVariantType])] = &[
+    const DISTANCE_SUPPORT: &[(DenseMatrixType, &[DistanceVariantType])] = &[
       (F64, &[Euclidian, Mahalanobis, Manhattan, Minkowski]),
       (F32, &[Euclidian, Mahalanobis, Manhattan, Minkowski]),
       (U64, &[Euclidian, Manhattan]),

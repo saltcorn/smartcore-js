@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 use napi::bindgen_prelude::*;
 use paste::paste;
 use smartcore::{
@@ -55,16 +53,16 @@ macro_rules! create_impl_mahalanobis {
     paste! {
         impl LibDBSCANFactory {
             pub fn [<$x _i32_mahalanobis>](params: DBSCANParametersDto) -> Result<Box<dyn PredictorEstimator>> {
-                let Some(ref p_data) = params.data else {
+                let Some(p_data) = params.data else {
                     return Err(Error::new(
                         Status::GenericFailure,
                         "'data' must be specified for 'Mahalanobis' distance type",
                     ));
                 };
                 let x: &LibDenseMatrix<$x> = params.fit_data.try_into()?;
-                let parameters = match p_data.deref().inner() {
-                    DenseMatrixType::[<$x:upper>](p_data) => {
-                        let p_data = p_data.deref().inner();
+                let parameters = match p_data.r#type() {
+                    DenseMatrixType::[<$x:upper>] => {
+                        let p_data: &LibDenseMatrix<$x> = (&**p_data).try_into()?;
                         DBSCANParameters::default().with_distance(Mahalanobis::new(p_data))
                     }
                     _ => unimplemented!(),

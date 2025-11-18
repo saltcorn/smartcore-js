@@ -3,7 +3,7 @@ use std::fmt::Display;
 use bincode::{Decode, Encode};
 use napi_derive::napi;
 
-use crate::dense_matrix::DenseMatrixTypeVariantName;
+use crate::dense_matrix::DenseMatrixType;
 
 #[derive(Debug, Decode, Encode, Clone, Copy, PartialEq, Eq, Default)]
 #[napi]
@@ -30,9 +30,9 @@ impl Display for DistanceVariantType {
 
 impl DistanceVariantType {
   pub fn supported_data_types(&self) -> Vec<String> {
-    use DenseMatrixTypeVariantName::*;
+    use DenseMatrixType::*;
     use DistanceVariantType::*;
-    const MATRIX_TYPE_SUPPORT: &[(DistanceVariantType, &[DenseMatrixTypeVariantName])] = &[
+    const MATRIX_TYPE_SUPPORT: &[(DistanceVariantType, &[DenseMatrixType])] = &[
       (Euclidian, &[F32, F64, I32, I64, U16, U32, U64, U8]),
       (Hamming, &[I32, U16, U8]),
       (Mahalanobis, &[F32, F64]),

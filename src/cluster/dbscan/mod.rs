@@ -15,7 +15,7 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 
 use crate::{
-  dense_matrix::{DenseMatrix, DenseMatrixType, DenseMatrixTypeVariantName},
+  dense_matrix::{DenseMatrix, DenseMatrixType},
   predict_output::PredictOutput,
   traits::{Estimator, Predictor, PredictorEstimator},
 };
@@ -27,7 +27,7 @@ use serialize_data::DBSCANSerializeData;
 #[derive(Debug)]
 pub struct DBSCAN {
   inner: Box<dyn PredictorEstimator>,
-  fit_data_variant_type: DenseMatrixTypeVariantName,
+  fit_data_variant_type: DenseMatrixType,
   distance_type: DistanceVariantType,
 }
 

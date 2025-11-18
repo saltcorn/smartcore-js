@@ -92,6 +92,12 @@ macro_rules! dense_matrix_struct {
             }
         }
 
+        impl From<LibDenseMatrix<$ty>> for [<DenseMatrix $ty:upper>] {
+            fn from(value: LibDenseMatrix<$ty>) -> Self {
+                Self { inner: value }
+            }
+        }
+
         impl Deref for [<DenseMatrix $ty:upper>] {
             type Target = LibDenseMatrix<$ty>;
 

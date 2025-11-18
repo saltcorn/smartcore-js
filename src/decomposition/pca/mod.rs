@@ -1,4 +1,10 @@
+mod builder;
+mod factory;
+mod lib_pca_factory;
 mod parameters;
+mod serialize_data;
+mod transformer_estimator;
+mod v2;
 
 use bincode::{
   config::standard,

@@ -10,67 +10,67 @@ impl TryFrom<KMeansSerializeData> for KMeans {
     let predictor_estimator: Box<dyn PredictorEstimator> =
       match (value.fit_data_variant_type, value.predict_output_type) {
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::F64,
+          crate::dense_matrix::DenseMatrixType::F64,
           super::predict_output_type::PredictOutputType::I32,
         ) => Box::new(deserialize_variant::<KMeansF64I32>(&value.kmeans)?),
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::F64,
+          crate::dense_matrix::DenseMatrixType::F64,
           super::predict_output_type::PredictOutputType::I64,
         ) => Box::new(deserialize_variant::<KMeansF64I64>(&value.kmeans)?),
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::F32,
+          crate::dense_matrix::DenseMatrixType::F32,
           super::predict_output_type::PredictOutputType::I32,
         ) => Box::new(deserialize_variant::<KMeansF32I32>(&value.kmeans)?),
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::F32,
+          crate::dense_matrix::DenseMatrixType::F32,
           super::predict_output_type::PredictOutputType::I64,
         ) => Box::new(deserialize_variant::<KMeansF32I64>(&value.kmeans)?),
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::U64,
+          crate::dense_matrix::DenseMatrixType::U64,
           super::predict_output_type::PredictOutputType::I32,
         ) => Box::new(deserialize_variant::<KMeansU64I32>(&value.kmeans)?),
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::U64,
+          crate::dense_matrix::DenseMatrixType::U64,
           super::predict_output_type::PredictOutputType::I64,
         ) => Box::new(deserialize_variant::<KMeansU64I64>(&value.kmeans)?),
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::U32,
+          crate::dense_matrix::DenseMatrixType::U32,
           super::predict_output_type::PredictOutputType::I32,
         ) => Box::new(deserialize_variant::<KMeansU32I32>(&value.kmeans)?),
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::U32,
+          crate::dense_matrix::DenseMatrixType::U32,
           super::predict_output_type::PredictOutputType::I64,
         ) => Box::new(deserialize_variant::<KMeansU32I64>(&value.kmeans)?),
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::I64,
+          crate::dense_matrix::DenseMatrixType::I64,
           super::predict_output_type::PredictOutputType::I32,
         ) => Box::new(deserialize_variant::<KMeansI64I32>(&value.kmeans)?),
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::I64,
+          crate::dense_matrix::DenseMatrixType::I64,
           super::predict_output_type::PredictOutputType::I64,
         ) => Box::new(deserialize_variant::<KMeansI64I64>(&value.kmeans)?),
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::I32,
+          crate::dense_matrix::DenseMatrixType::I32,
           super::predict_output_type::PredictOutputType::I32,
         ) => Box::new(deserialize_variant::<KMeansI32I32>(&value.kmeans)?),
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::I32,
+          crate::dense_matrix::DenseMatrixType::I32,
           super::predict_output_type::PredictOutputType::I64,
         ) => Box::new(deserialize_variant::<KMeansI32I64>(&value.kmeans)?),
         (
-          crate::dense_matrix::DenseMatrixTypeVariantName::U16,
+          crate::dense_matrix::DenseMatrixType::U16,
           super::predict_output_type::PredictOutputType::I32,
         )
         | (
-          crate::dense_matrix::DenseMatrixTypeVariantName::U16,
+          crate::dense_matrix::DenseMatrixType::U16,
           super::predict_output_type::PredictOutputType::I64,
         )
         | (
-          crate::dense_matrix::DenseMatrixTypeVariantName::U8,
+          crate::dense_matrix::DenseMatrixType::U8,
           super::predict_output_type::PredictOutputType::I32,
         )
         | (
-          crate::dense_matrix::DenseMatrixTypeVariantName::U8,
+          crate::dense_matrix::DenseMatrixType::U8,
           super::predict_output_type::PredictOutputType::I64,
         ) => return Err(Error::new(Status::GenericFailure, "TODO")),
       };
