@@ -20,16 +20,25 @@
     "test/**/*",
     "dist/**/*",
     "dist-cjs/**/*",
+    "src-js/cluster/**/*",
+    "src-js/core-bindings/**/*",
+    "src-js/dataset/**/*",
     "src-js/decomposition/**/*",
     "src-js/ensemble/**/*",
+    "src-js/linalg/**/*",
     "src-js/linear_model/**/*",
+    "src-js/metrics/**/*",
     "src-js/model_selection/**/*",
     "src-js/naive_bayes/**/*",
     "src-js/neighbors/**/*",
+    "src-js/pipeline/**/*",
     "src-js/preprocessing/**/*",
-    "src-js/cluster/kmeans.ts",
+    "src-js/utilities/**/*",
     "src-js/base_estimator.ts",
     "src-js/base_predictor.ts",
-    "src-js/base_transformer.ts"
+    "src-js/base_transformer.ts",
+    "src-js/data_frame.ts",
+    "src-js/estimator.ts",
+    "src-js/number_type_checkers.ts"
   ]
 }

@@ -1,26 +1,22 @@
-import { DenseMatrix, type DenseMatrixRs, type YType } from './index.js'
-import { DenseMatrix as DenseMatrixV2, type PredictOutput } from './core-bindings/index.js'
+import { type YType } from './index.js'
+import { DenseMatrix, type PredictOutput } from './core-bindings/index.js'
 
 interface Estimator {
   serialize(): Buffer
 }
 
 interface Predictor extends Estimator {
-  predict(x: DenseMatrixRs): any
-}
-
-interface PredictorV2 extends Estimator {
-  predict(x: DenseMatrixV2): PredictOutput
+  predict(x: DenseMatrix): PredictOutput
 }
 
 interface Transformer extends Estimator {
-  transform(x: DenseMatrixRs): DenseMatrixRs
+  transform(x: DenseMatrix): DenseMatrix
 }
 
 interface EstimatorProvider<C, P, E extends Estimator> {
   parameters(config: C): P
   estimator(x: DenseMatrix, y: YType, parameters: P): E
-  toMatrix(x: DenseMatrix): DenseMatrixRs
+  toMatrix(x: DenseMatrix): DenseMatrix
   deserialize(data: Buffer): E
 }
 
@@ -28,12 +24,4 @@ interface PredictorProvider<C, P, E extends Predictor> extends EstimatorProvider
 
 interface TransformerProvider<C, P, E extends Transformer> extends EstimatorProvider<C, P, E> {}
 
-export type {
-  Predictor,
-  Estimator,
-  Transformer,
-  EstimatorProvider,
-  PredictorProvider,
-  TransformerProvider,
-  PredictorV2,
-}
+export type { Predictor, Estimator, Transformer, EstimatorProvider, PredictorProvider, TransformerProvider }

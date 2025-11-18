@@ -10,7 +10,10 @@ use napi_derive::napi;
 use paste::paste;
 use smartcore::dataset::Dataset as LibDataset;
 
-use crate::linalg::basic::matrix::{DenseMatrixF64, DenseMatrixI32};
+use crate::{
+  dense_matrix::DenseMatrix,
+  linalg::basic::matrix::{DenseMatrixF64, DenseMatrixI32},
+};
 
 macro_rules! dataset_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -33,13 +36,13 @@ macro_rules! dataset_struct {
             }
 
             #[napi(getter)]
-            pub fn num_samples(&self) -> u32 {
-                self.inner.num_samples as u32
+            pub fn num_samples(&self) -> BigInt {
+                (self.inner.num_samples as u128).into()
             }
 
             #[napi(getter)]
-            pub fn num_features(&self) -> u32 {
-                self.inner.num_features as u32
+            pub fn num_features(&self) -> BigInt {
+                (self.inner.num_features as u128).into()
             }
 
             #[napi(getter)]
@@ -65,6 +68,11 @@ macro_rules! dataset_struct {
                     self.data(),
                     column_major,
                 )
+            }
+
+            #[napi]
+            pub fn dense_matrix_v2(&self, column_major: Option<bool>) -> Result<DenseMatrix> {
+                self.dense_matrix(column_major).map(|m| m.into())
             }
         }
 

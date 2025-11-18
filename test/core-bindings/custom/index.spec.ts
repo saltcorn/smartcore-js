@@ -1,4 +1,4 @@
-import { DenseMatrixF64, trainTestSplitF64F64 } from '../../../src-js/core-bindings/index.js'
+import { DenseMatrix, trainTestSplitF64F64 } from '../../../src-js/core-bindings/index.js'
 
 describe('Custom', () => {
   it('Simple Array', () => {
@@ -14,7 +14,7 @@ describe('Custom', () => {
       [7, 8, 9],
     ]
     const jsmFlat = new Float64Array(arrays.flat())
-    const x = new DenseMatrixF64(arrays.length, arrays[0].length, jsmFlat)
+    const x = DenseMatrix.f64(BigInt(arrays.length), BigInt(arrays[0].length), jsmFlat)
     const y = new Float64Array([7, 8, 9, 7, 8, 9, 7, 8, 9])
     let [, , ,] = trainTestSplitF64F64(x, y, 0.2, true)
   })

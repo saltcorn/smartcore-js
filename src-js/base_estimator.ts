@@ -1,6 +1,7 @@
-import { DenseMatrix, type InputType, type YType } from './index.js'
+import { type InputType, type YType } from './index.js'
 import { DataFrame } from './data_frame.js'
 import type { Estimator } from './pipeline/index.js'
+import { DenseMatrix } from './core-bindings/index.js'
 
 type YTypeKey = 'bigI64' | 'bigU64' | 'i64' | 'f64'
 

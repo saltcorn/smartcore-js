@@ -15,7 +15,16 @@ pub struct DenseMatrix {
   inner: DenseMatrixInner,
 }
 
+// Comes after DenseMatrix napi's macro is expanded
+mod factory;
+
+#[napi]
 impl DenseMatrix {
+  #[napi(js_name = "type")]
+  pub fn _type(&mut self) -> DenseMatrixType {
+    self.r#type()
+  }
+
   pub fn r#type(&self) -> DenseMatrixType {
     self.inner.r#type()
   }

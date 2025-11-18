@@ -1439,58 +1439,58 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@oxlint/darwin-arm64@npm:1.28.0":
-  version: 1.28.0
-  resolution: "@oxlint/darwin-arm64@npm:1.28.0"
+"@oxlint/darwin-arm64@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@oxlint/darwin-arm64@npm:1.29.0"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@oxlint/darwin-x64@npm:1.28.0":
-  version: 1.28.0
-  resolution: "@oxlint/darwin-x64@npm:1.28.0"
+"@oxlint/darwin-x64@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@oxlint/darwin-x64@npm:1.29.0"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@oxlint/linux-arm64-gnu@npm:1.28.0":
-  version: 1.28.0
-  resolution: "@oxlint/linux-arm64-gnu@npm:1.28.0"
+"@oxlint/linux-arm64-gnu@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@oxlint/linux-arm64-gnu@npm:1.29.0"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@oxlint/linux-arm64-musl@npm:1.28.0":
-  version: 1.28.0
-  resolution: "@oxlint/linux-arm64-musl@npm:1.28.0"
+"@oxlint/linux-arm64-musl@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@oxlint/linux-arm64-musl@npm:1.29.0"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@oxlint/linux-x64-gnu@npm:1.28.0":
-  version: 1.28.0
-  resolution: "@oxlint/linux-x64-gnu@npm:1.28.0"
+"@oxlint/linux-x64-gnu@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@oxlint/linux-x64-gnu@npm:1.29.0"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@oxlint/linux-x64-musl@npm:1.28.0":
-  version: 1.28.0
-  resolution: "@oxlint/linux-x64-musl@npm:1.28.0"
+"@oxlint/linux-x64-musl@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@oxlint/linux-x64-musl@npm:1.29.0"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@oxlint/win32-arm64@npm:1.28.0":
-  version: 1.28.0
-  resolution: "@oxlint/win32-arm64@npm:1.28.0"
+"@oxlint/win32-arm64@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@oxlint/win32-arm64@npm:1.29.0"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@oxlint/win32-x64@npm:1.28.0":
-  version: 1.28.0
-  resolution: "@oxlint/win32-x64@npm:1.28.0"
+"@oxlint/win32-x64@npm:1.29.0":
+  version: 1.29.0
+  resolution: "@oxlint/win32-x64@npm:1.29.0"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -1734,8 +1734,8 @@ __metadata:
   linkType: hard
 
 "cacache@npm:^20.0.1":
-  version: 20.0.1
-  resolution: "cacache@npm:20.0.1"
+  version: 20.0.2
+  resolution: "cacache@npm:20.0.2"
   dependencies:
     "@npmcli/fs": "npm:^4.0.0"
     fs-minipass: "npm:^3.0.0"
@@ -1746,9 +1746,9 @@ __metadata:
     minipass-flush: "npm:^1.0.5"
     minipass-pipeline: "npm:^1.2.4"
     p-map: "npm:^7.0.2"
-    ssri: "npm:^12.0.0"
+    ssri: "npm:^13.0.0"
     unique-filename: "npm:^4.0.0"
-  checksum: 10c0/e3efcf3af1c984e6e59e03372d9289861736a572e6e05b620606b87a67e71d04cff6dbc99607801cb21bcaae1fb4fb84d4cc8e3fda725e95881329ef03dac602
+  checksum: 10c0/11db56f35167f66661e63901427a198775ecf431583c7bfef1dd2fcb970ac826d7cec725ba39b7f389bf8fd3d8ea3290b22c14630e875df913d36e35cdd99df6
   languageName: node
   linkType: hard
 
@@ -2042,14 +2042,14 @@ __metadata:
   linkType: hard
 
 "es-toolkit@npm:^1.39.10":
-  version: 1.41.0
-  resolution: "es-toolkit@npm:1.41.0"
+  version: 1.42.0
+  resolution: "es-toolkit@npm:1.42.0"
   dependenciesMeta:
     "@trivago/prettier-plugin-sort-imports@4.3.0":
       unplugged: true
     prettier-plugin-sort-re-exports@0.0.1:
       unplugged: true
-  checksum: 10c0/4edcc19984df0e521d222082d055f131233cada9277de3f427311ecd43dc99442dc66a39f86b1b10c298c5a72133231928eb91668c0bff4f11e12af8b6d758a3
+  checksum: 10c0/ee577b23336296116be423a5d01a6af827c80a10971507ae26cdb146b60ce0a930bf7bdb719ac0dc4f962ec74542a2423b934e24eb47efe1bc911862b12da109
   languageName: node
   linkType: hard
 
@@ -2286,8 +2286,8 @@ __metadata:
   linkType: hard
 
 "glob@npm:^10.4.5":
-  version: 10.4.5
-  resolution: "glob@npm:10.4.5"
+  version: 10.5.0
+  resolution: "glob@npm:10.5.0"
   dependencies:
     foreground-child: "npm:^3.1.0"
     jackspeak: "npm:^3.1.2"
@@ -2297,23 +2297,23 @@ __metadata:
     path-scurry: "npm:^1.11.1"
   bin:
     glob: dist/esm/bin.mjs
-  checksum: 10c0/19a9759ea77b8e3ca0a43c2f07ecddc2ad46216b786bb8f993c445aee80d345925a21e5280c7b7c6c59e860a0154b84e4b2b60321fea92cd3c56b4a7489f160e
+  checksum: 10c0/100705eddbde6323e7b35e1d1ac28bcb58322095bd8e63a7d0bef1a2cdafe0d0f7922a981b2b48369a4f8c1b077be5c171804534c3509dfe950dde15fbe6d828
   languageName: node
   linkType: hard
 
 "glob@npm:^11.0.3":
-  version: 11.0.3
-  resolution: "glob@npm:11.0.3"
+  version: 11.1.0
+  resolution: "glob@npm:11.1.0"
   dependencies:
     foreground-child: "npm:^3.3.1"
     jackspeak: "npm:^4.1.1"
-    minimatch: "npm:^10.0.3"
+    minimatch: "npm:^10.1.1"
     minipass: "npm:^7.1.2"
     package-json-from-dist: "npm:^1.0.0"
     path-scurry: "npm:^2.0.0"
   bin:
     glob: dist/esm/bin.mjs
-  checksum: 10c0/7d24457549ec2903920dfa3d8e76850e7c02aa709122f0164b240c712f5455c0b457e6f2a1eee39344c6148e39895be8094ae8cfef7ccc3296ed30bce250c661
+  checksum: 10c0/1ceae07f23e316a6fa74581d9a74be6e8c2e590d2f7205034dd5c0435c53f5f7b712c2be00c3b65bf0a49294a1c6f4b98cd84c7637e29453b5aa13b79f1763a2
   languageName: node
   linkType: hard
 
@@ -2678,7 +2678,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"minimatch@npm:^10.0.3":
+"minimatch@npm:^10.1.1":
   version: 10.1.1
   resolution: "minimatch@npm:10.1.1"
   dependencies:
@@ -2938,19 +2938,19 @@ __metadata:
   linkType: hard
 
 "oxlint@npm:^1.24.0":
-  version: 1.28.0
-  resolution: "oxlint@npm:1.28.0"
+  version: 1.29.0
+  resolution: "oxlint@npm:1.29.0"
   dependencies:
-    "@oxlint/darwin-arm64": "npm:1.28.0"
-    "@oxlint/darwin-x64": "npm:1.28.0"
-    "@oxlint/linux-arm64-gnu": "npm:1.28.0"
-    "@oxlint/linux-arm64-musl": "npm:1.28.0"
-    "@oxlint/linux-x64-gnu": "npm:1.28.0"
-    "@oxlint/linux-x64-musl": "npm:1.28.0"
-    "@oxlint/win32-arm64": "npm:1.28.0"
-    "@oxlint/win32-x64": "npm:1.28.0"
+    "@oxlint/darwin-arm64": "npm:1.29.0"
+    "@oxlint/darwin-x64": "npm:1.29.0"
+    "@oxlint/linux-arm64-gnu": "npm:1.29.0"
+    "@oxlint/linux-arm64-musl": "npm:1.29.0"
+    "@oxlint/linux-x64-gnu": "npm:1.29.0"
+    "@oxlint/linux-x64-musl": "npm:1.29.0"
+    "@oxlint/win32-arm64": "npm:1.29.0"
+    "@oxlint/win32-x64": "npm:1.29.0"
   peerDependencies:
-    oxlint-tsgolint: ">=0.4.0"
+    oxlint-tsgolint: ">=0.7.1"
   dependenciesMeta:
     "@oxlint/darwin-arm64":
       optional: true
@@ -2974,7 +2974,7 @@ __metadata:
   bin:
     oxc_language_server: bin/oxc_language_server
     oxlint: bin/oxlint
-  checksum: 10c0/a61223638ddd962772d49b0ccaed76de99042af968b71d67d761e422751db5106200ff4709148e495532711649f47a4f53780e04b7307e19531db3ebceb1fd98
+  checksum: 10c0/eb208779d4706da795e3545ad98493aeeda898c831df2e1abe474199c1401387e5865f7094ce87119aa77a0fb5d46f8d53a3058b7f1f7cfbdbe3790b262cdf79
   languageName: node
   linkType: hard
 
@@ -3316,15 +3316,6 @@ __metadata:
     ip-address: "npm:^10.0.1"
     smart-buffer: "npm:^4.2.0"
   checksum: 10c0/2805a43a1c4bcf9ebf6e018268d87b32b32b06fbbc1f9282573583acc155860dc361500f89c73bfbb157caa1b4ac78059eac0ef15d1811eb0ca75e0bdadbc9d2
-  languageName: node
-  linkType: hard
-
-"ssri@npm:^12.0.0":
-  version: 12.0.0
-  resolution: "ssri@npm:12.0.0"
-  dependencies:
-    minipass: "npm:^7.0.3"
-  checksum: 10c0/caddd5f544b2006e88fa6b0124d8d7b28208b83c72d7672d5ade44d794525d23b540f3396108c4eb9280dcb7c01f0bef50682f5b4b2c34291f7c5e211fd1417d
   languageName: node
   linkType: hard
 

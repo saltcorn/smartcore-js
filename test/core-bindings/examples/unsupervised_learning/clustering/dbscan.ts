@@ -4,7 +4,7 @@ import { DenseMatrix, dataset, DBSCANBuilder, DistanceVariantType } from '../../
 
 export default () => {
   let circles = dataset.generator().makeCircles(1000, 0.5, 0.05)
-  let x = DenseMatrix.f64(circles.denseMatrix())
+  let x = circles.denseMatrixV2()
   let trueLabels = circles.target
   let builder = new DBSCANBuilder(x)
   builder.distanceType = DistanceVariantType.Euclidian

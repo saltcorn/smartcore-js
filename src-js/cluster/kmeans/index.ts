@@ -1,6 +1,6 @@
 import { utilities, type InputType, type YType } from '../../index.js'
 import { type IKMeansBaseParameters } from './parameters.js'
-import { type PredictorV2 } from '../../estimator.js'
+import { type Predictor } from '../../estimator.js'
 import { KMeans as KMeansV2, KMeansBuilder, type PredictOutputType } from '../../core-bindings/index.js'
 
 interface IKMeansParameters extends IKMeansBaseParameters {
@@ -18,7 +18,7 @@ class KMeans {
   public readonly config: IKMeansParameters
 
   private _isFitted: boolean = false
-  private estimator: PredictorV2 | null = null
+  private estimator: Predictor | null = null
 
   constructor(params?: IKMeansParameters) {
     const config = params || {}
@@ -26,7 +26,7 @@ class KMeans {
   }
 
   fit(x: InputType): this {
-    const matrix = utilities.inputTypeToDenseMatrix(x).asDenseMatrixV2()
+    const matrix = utilities.inputTypeToDenseMatrix(x)
     const builder = new KMeansBuilder(matrix)
     if (this.config.maxIter) {
       builder.withMaxIter(BigInt(this.config.maxIter))
@@ -54,7 +54,7 @@ class KMeans {
 
   predict(matrix: InputType): YType {
     this.ensureFitted('predict')
-    let denseMatrix = utilities.inputTypeToDenseMatrix(matrix).asDenseMatrixV2()
+    let denseMatrix = utilities.inputTypeToDenseMatrix(matrix)
     return this.estimator!.predict(denseMatrix).field0
   }
 

@@ -1,6 +1,7 @@
 import * as coreBindings from '../core-bindings/index.js'
+import { DenseMatrix } from '../core-bindings/index.js'
 import { asTypedY, type XType, type YType } from '../index.js'
-import { DenseMatrix } from '../linalg/index.js'
+import { utilities } from '../index.js'
 
 interface TrainTestSplitParams {
   testSize: number
@@ -8,8 +9,8 @@ interface TrainTestSplitParams {
   seed?: bigint
 }
 
-function trainTestSplit(x: XType, y: YType, params: TrainTestSplitParams): [XType, XType, YType, YType] {
-  x = x instanceof DenseMatrix ? x : new DenseMatrix(x)
+function trainTestSplit(x: XType, y: YType, params: TrainTestSplitParams): [DenseMatrix, DenseMatrix, YType, YType] {
+  x = x instanceof DenseMatrix ? x : utilities.arrayToDenseMatrix(x)
   let shuffle = params?.shuffle === undefined ? true : params?.shuffle
   let yTyped = asTypedY(y)
   let yType = 'I32'
@@ -17,21 +18,15 @@ function trainTestSplit(x: XType, y: YType, params: TrainTestSplitParams): [XTyp
   if (yTyped instanceof BigInt64Array) yType = 'I64'
   if (yTyped instanceof BigUint64Array) yType = 'U64'
   if (yTyped instanceof Int32Array) yType = 'I32'
-  let fnName = `trainTestSplit${x.numberType.toUpperCase()}${yType}`
+  let fnName = `trainTestSplit${x.type().toUpperCase()}${yType}`
   const trainTestSplitFn = coreBindings[fnName as keyof typeof coreBindings]
   if (typeof trainTestSplitFn !== 'function') {
     throw new Error(
-      `[trainTestSplit] Type combination (feature: ${x.numberType}, target: ${yType}) is not a callable function`,
+      `[trainTestSplit] Type combination (feature: ${x.type()}, target: ${yType}) is not a callable function`,
     )
   }
-  let [xTrain, xTest, yTrain, yTest] = (trainTestSplitFn as Function)(
-    x.asRsMatrix(),
-    y,
-    params.testSize,
-    shuffle,
-    params.seed,
-  )
-  return [new DenseMatrix(xTrain), new DenseMatrix(xTest), yTrain, yTest]
+  return (trainTestSplitFn as Function)(x, y, params.testSize, shuffle, params.seed)
+  //   return [new DenseMatrix(xTrain), new DenseMatrix(xTest), yTrain, yTest]
   //   if (yTyped instanceof Float64Array) {
   //     switch (x.numberType) {
   //       case 'f32':

@@ -9,7 +9,7 @@ export default function (this: Mocha.Context) {
   this.timeout(TIMEOUT)
 
   let digitsData = dataset.digits().loadDataset()
-  let x = DenseMatrix.f64(digitsData.denseMatrix())
+  let x = digitsData.denseMatrixV2()
   let trueLabels = digitsData.target
   let builder = new KMeansBuilder(x)
   builder.withK(10n)

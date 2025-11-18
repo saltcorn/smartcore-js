@@ -6,10 +6,9 @@ import {
   DistanceVariantType,
   DenseMatrixI32,
 } from '../dist/core-bindings/index.js'
-import { loadBoston, loadDigits, loadDigitsI32 } from '../dist/dataset/index.js'
+import { loadBoston, loadDigits, loadDigitsI32 } from '../dist/dataset/v2.js'
 import assert from 'assert'
 import { trainTestSplit } from '../dist/model_selection/index.js'
-import { DenseMatrix as DenseMatrixOl } from '../dist/index.js'
 import { accuracyScore } from '../dist/metrics/index.js'
 
 describe('DBSCAN', () => {
@@ -19,8 +18,7 @@ describe('DBSCAN', () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    let xData = DenseMatrix.f64(x.asRsMatrix('f64') as DenseMatrixF64)
-    let dbscan = new DBSCANBuilder(xData).build()
+    let dbscan = new DBSCANBuilder(x).build()
   })
 
   describe('variants', () => {
@@ -29,10 +27,9 @@ describe('DBSCAN', () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    let xData = DenseMatrix.f64(x.asRsMatrix('f64') as DenseMatrixF64)
 
     it('Euclidian', () => {
-      let dbscanBuilder = new DBSCANBuilder(xData)
+      let dbscanBuilder = new DBSCANBuilder(x)
       dbscanBuilder.distanceType = DistanceVariantType.Euclidian
       dbscanBuilder.build()
     })
@@ -43,27 +40,26 @@ describe('DBSCAN', () => {
       if (!(xH && yH)) {
         assert.fail('Expected both xH and yH to be defined')
       }
-      let xDataH = DenseMatrix.i32(xH.asRsMatrix('i32') as DenseMatrixI32)
-      let dbscanBuilderH = new DBSCANBuilder(xDataH)
+      let dbscanBuilderH = new DBSCANBuilder(xH)
       dbscanBuilderH.distanceType = DistanceVariantType.Hamming
       dbscanBuilderH.build()
     })
 
     it('Manhattan', () => {
-      let dbscanBuilder = new DBSCANBuilder(xData)
+      let dbscanBuilder = new DBSCANBuilder(x)
       dbscanBuilder.distanceType = DistanceVariantType.Manhattan
       dbscanBuilder.build()
     })
 
     it('Mahalanobis', () => {
-      let dbscanBuilder = new DBSCANBuilder(xData)
+      let dbscanBuilder = new DBSCANBuilder(x)
       dbscanBuilder.distanceType = DistanceVariantType.Mahalanobis
-      dbscanBuilder.data = xData
+      dbscanBuilder.data = x
       dbscanBuilder.build()
     })
 
     it('Minkowski', () => {
-      let dbscanBuilder = new DBSCANBuilder(xData)
+      let dbscanBuilder = new DBSCANBuilder(x)
       dbscanBuilder.distanceType = DistanceVariantType.Minkowski
       dbscanBuilder.p = 1
       dbscanBuilder.build()
@@ -78,11 +74,9 @@ describe('DBSCAN', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
-    let xData = DenseMatrix.f64((xTrain as DenseMatrixOl).asRsMatrix('f64') as DenseMatrixF64)
-    let dbscanBuilder = new DBSCANBuilder(xData)
+    let dbscanBuilder = new DBSCANBuilder(x)
     let dbscan = dbscanBuilder.build()
-    let xTestData = DenseMatrix.f64((xTest as DenseMatrixOl).asRsMatrix('f64') as DenseMatrixF64)
-    let score = accuracyScore(dbscan.predict(xTestData).field0, yTest)
+    let score = accuracyScore(dbscan.predict(xTest).field0, yTest)
     assert(score >= 0)
   })
 
@@ -94,14 +88,12 @@ describe('DBSCAN', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
-    let xData = DenseMatrix.f64((xTrain as DenseMatrixOl).asRsMatrix('f64') as DenseMatrixF64)
-    let dbscanBuilder = new DBSCANBuilder(xData)
+    let dbscanBuilder = new DBSCANBuilder(x)
     let dbscan = dbscanBuilder.build()
-    let xTestData = DenseMatrix.f64((xTest as DenseMatrixOl).asRsMatrix('f64') as DenseMatrixF64)
-    let score1 = accuracyScore(dbscan.predict(xTestData).field0, yTest)
+    let score1 = accuracyScore(dbscan.predict(xTest).field0, yTest)
     let serializedDBSCAN = dbscan.serialize()
     let deserializedDBSCAN = DBSCAN.deserialize(serializedDBSCAN)
-    let score2 = accuracyScore(deserializedDBSCAN.predict(xTestData).field0, yTest)
+    let score2 = accuracyScore(deserializedDBSCAN.predict(xTest).field0, yTest)
     assert.equal(score1, score2)
   })
 })

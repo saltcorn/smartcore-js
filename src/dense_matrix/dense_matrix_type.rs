@@ -4,7 +4,7 @@ use bincode::{Decode, Encode};
 use napi_derive::napi;
 
 #[derive(Debug, Clone, PartialEq, Eq, Encode, Decode, Copy)]
-#[napi]
+#[napi(string_enum)]
 pub enum DenseMatrixType {
   F64,
   F32,

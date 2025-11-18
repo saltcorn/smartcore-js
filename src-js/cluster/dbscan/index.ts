@@ -1,6 +1,6 @@
 import { utilities, type InputType, type YType } from '../../index.js'
 import { type IDBSCANBaseParameters } from './parameters.js'
-import { type PredictorV2 } from '../../estimator.js'
+import { type Predictor } from '../../estimator.js'
 import { DBSCANBuilder, DBSCAN as DBSCANV2, type DistanceVariantType } from '../../core-bindings/index.js'
 
 interface IDBSCANParameters extends IDBSCANBaseParameters {
@@ -18,14 +18,14 @@ class DBSCAN {
   public readonly config: IDBSCANParameters
 
   private _isFitted: boolean = false
-  private estimator: PredictorV2 | null = null
+  private estimator: Predictor | null = null
 
   constructor(config?: IDBSCANParameters) {
     this.config = config ?? {}
   }
 
   fit(x: InputType): this {
-    const matrix = utilities.inputTypeToDenseMatrix(x).asDenseMatrixV2()
+    const matrix = utilities.inputTypeToDenseMatrix(x)
     let builder = new DBSCANBuilder(matrix)
     if (this.config.algorithm) {
       builder.algorithm = this.config.algorithm
@@ -56,7 +56,7 @@ class DBSCAN {
 
   predict(matrix: InputType): YType {
     this.ensureFitted('predict')
-    let denseMatrix = utilities.inputTypeToDenseMatrix(matrix).asDenseMatrixV2()
+    let denseMatrix = utilities.inputTypeToDenseMatrix(matrix)
     return this.estimator!.predict(denseMatrix).field0
   }
 

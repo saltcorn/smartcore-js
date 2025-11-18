@@ -7,7 +7,6 @@ import {
   DenseMatrixU32,
   DenseMatrixU64,
   DenseMatrixU8,
-  DenseMatrix as DenseMatrixV2,
 } from '../../core-bindings/index.js'
 import { numberTypeCheckers } from '../../index.js'
 
@@ -32,8 +31,8 @@ interface IDenseMatrixParams {
 
 class DenseMatrix {
   private inner: DenseMatrixRs
-  private _ncols: number
-  private _nrows: number
+  private _ncols: bigint
+  private _nrows: bigint
   private _largestNo: bigint | number
   private _smallestNo: bigint | number
   private _hasFloat: boolean
@@ -50,8 +49,8 @@ class DenseMatrix {
       if (data[0].length === 0) {
         throw new Error(`[DenseMatrix] Arrays nested in 'data' cannot be an empty`)
       }
-      const nrows = params?.columnMajor ? data[0].length : data.length
-      const ncols = params?.columnMajor ? data.length : data[0].length
+      const nrows = BigInt(params?.columnMajor ? data[0].length : data.length)
+      const ncols = BigInt(params?.columnMajor ? data.length : data[0].length)
       const valuesFlat = data.flat()
       this._largestNo = data[0][0]
       this._smallestNo = data[0][0]
@@ -112,11 +111,11 @@ class DenseMatrix {
     return this.inner.numberType as NumberTypeRs
   }
 
-  get ncols(): number {
+  get ncols(): bigint {
     return this._ncols
   }
 
-  get nrows(): number {
+  get nrows(): bigint {
     return this._nrows
   }
 
@@ -267,18 +266,6 @@ class DenseMatrix {
           `[DenseMatrix] Unexpected dataTypeValue '${dataType}'. Valid values are: f64, f32, i32, u32, u8, u16, i64, u64.`,
         )
     }
-  }
-
-  asDenseMatrixV2(): DenseMatrixV2 {
-    if (this.inner instanceof DenseMatrixF32) return DenseMatrixV2.f32(this.inner)
-    if (this.inner instanceof DenseMatrixF64) return DenseMatrixV2.f64(this.inner)
-    if (this.inner instanceof DenseMatrixI32) return DenseMatrixV2.i32(this.inner)
-    if (this.inner instanceof DenseMatrixI64) return DenseMatrixV2.i64(this.inner)
-    if (this.inner instanceof DenseMatrixU16) return DenseMatrixV2.u16(this.inner)
-    if (this.inner instanceof DenseMatrixU32) return DenseMatrixV2.u32(this.inner)
-    if (this.inner instanceof DenseMatrixU64) return DenseMatrixV2.u64(this.inner)
-    if (this.inner instanceof DenseMatrixU8) return DenseMatrixV2.u8(this.inner)
-    throw new Error(`[DenseMatrix] asDenseMatrixV2: Unknown inner type '${typeof this.inner}'`)
   }
 }
 

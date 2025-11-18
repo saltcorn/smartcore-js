@@ -1,33 +1,33 @@
 import assert from 'assert'
 import {
-  linearModel,
-  preprocessing,
+  //   linearModel,
+  //   preprocessing,
   dataset,
-  ensemble,
-  modelSelection,
-  metrics,
-  pipeline,
+  //   ensemble,
+  //   modelSelection,
+  //   metrics,
+  //   pipeline,
   cluster,
-  decomposition,
-  naiveBayes,
-  neighbors,
+  //   decomposition,
+  //   naiveBayes,
+  //   neighbors,
   dataFrame,
 } from '../src-js/index.js'
 import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-js/core-bindings/index.js'
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
-let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
-let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
-let { StandardScaler, OneHotEncoder } = preprocessing
+// let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
+// let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
+// let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
-let { PCA, SVD } = decomposition
-let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
-let { KNNClassifier, KNNRegressor } = neighbors
+// let { PCA, SVD } = decomposition
+// let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
+// let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
-let { trainTestSplit } = modelSelection
-let { accuracyScore } = metrics
-type DistanceType = metrics.DistanceType
-let { makePipeline, deserializePipeline } = pipeline
+// let { trainTestSplit } = modelSelection
+// let { accuracyScore } = metrics
+// type DistanceType = metrics.DistanceType
+// let { makePipeline, deserializePipeline } = pipeline
 const { DataFrame } = dataFrame
 
 const parsedJson = readJSONFile('e-commerce-enhanced.json')

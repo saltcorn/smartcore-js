@@ -259,12 +259,13 @@ export type Dataset = dataset
 export declare class DatasetF64F64 {
   get data(): Float64Array
   get target(): Float64Array
-  get numSamples(): number
-  get numFeatures(): number
+  get numSamples(): bigint
+  get numFeatures(): bigint
   get featureNames(): Array<string>
   get targetNames(): Array<string>
   get description(): string
   denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF64
+  denseMatrixV2(columnMajor?: boolean | undefined | null): DenseMatrix
 }
 
 export declare class DatasetF64F64JsVecRef {
@@ -274,12 +275,13 @@ export declare class DatasetF64F64JsVecRef {
 export declare class DatasetF64I32 {
   get data(): Float64Array
   get target(): Int32Array
-  get numSamples(): number
-  get numFeatures(): number
+  get numSamples(): bigint
+  get numFeatures(): bigint
   get featureNames(): Array<string>
   get targetNames(): Array<string>
   get description(): string
   denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF64
+  denseMatrixV2(columnMajor?: boolean | undefined | null): DenseMatrix
 }
 
 export declare class DatasetF64I32JsVecRef {
@@ -289,12 +291,13 @@ export declare class DatasetF64I32JsVecRef {
 export declare class DatasetI32I32 {
   get data(): Int32Array
   get target(): Int32Array
-  get numSamples(): number
-  get numFeatures(): number
+  get numSamples(): bigint
+  get numFeatures(): bigint
   get featureNames(): Array<string>
   get targetNames(): Array<string>
   get description(): string
   denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixI32
+  denseMatrixV2(columnMajor?: boolean | undefined | null): DenseMatrix
 }
 
 export declare class DBSCAN {
@@ -348,11 +351,19 @@ export declare class DecisionTreeRegressorParameters {
 }
 
 export declare class DenseMatrix {
-
+  static f64(numSamples: bigint, numFeatures: bigint, data: Float64Array, columnMajor?: boolean | undefined | null): DenseMatrix
+  static f32(numSamples: bigint, numFeatures: bigint, data: Float32Array, columnMajor?: boolean | undefined | null): DenseMatrix
+  static u64(numSamples: bigint, numFeatures: bigint, data: BigUint64Array, columnMajor?: boolean | undefined | null): DenseMatrix
+  static u32(numSamples: bigint, numFeatures: bigint, data: Uint32Array, columnMajor?: boolean | undefined | null): DenseMatrix
+  static u16(numSamples: bigint, numFeatures: bigint, data: Uint16Array, columnMajor?: boolean | undefined | null): DenseMatrix
+  static u8(numSamples: bigint, numFeatures: bigint, data: Uint8Array, columnMajor?: boolean | undefined | null): DenseMatrix
+  static i64(numSamples: bigint, numFeatures: bigint, data: BigInt64Array, columnMajor?: boolean | undefined | null): DenseMatrix
+  static i32(numSamples: bigint, numFeatures: bigint, data: Int32Array, columnMajor?: boolean | undefined | null): DenseMatrix
+  type(): DenseMatrixType
 }
 
 export declare class DenseMatrixF32 {
-  constructor(nrows: number, ncols: number, values: Float32Array, columnMajor?: boolean | undefined | null)
+  constructor(nrows: bigint, ncols: bigint, values: Float32Array, columnMajor?: boolean | undefined | null)
   get numberType(): string
   satisfies(predicate: (arg: number) => boolean): boolean
   values(): Float32Array
@@ -362,7 +373,7 @@ export declare class DenseMatrixF32 {
   min(): number
   asF64(): DenseMatrixF64
   get(pos: [number, number]): number
-  shape(): [number, number]
+  shape(): [bigint, bigint]
   isEmpty(): boolean
   static fill(nrows: number, ncols: number, value: number): DenseMatrixF32
   slice(): DenseMatrixF32
@@ -409,7 +420,7 @@ export declare class DenseMatrixF32 {
 }
 
 export declare class DenseMatrixF64 {
-  constructor(nrows: number, ncols: number, values: Float64Array, columnMajor?: boolean | undefined | null)
+  constructor(nrows: bigint, ncols: bigint, values: Float64Array, columnMajor?: boolean | undefined | null)
   get numberType(): string
   satisfies(predicate: (arg: number) => boolean): boolean
   values(): Float64Array
@@ -419,7 +430,7 @@ export declare class DenseMatrixF64 {
   min(): number
   asF32(): DenseMatrixF32
   get(pos: [number, number]): number
-  shape(): [number, number]
+  shape(): [bigint, bigint]
   isEmpty(): boolean
   static fill(nrows: number, ncols: number, value: number): DenseMatrixF64
   slice(): DenseMatrixF64
@@ -468,7 +479,7 @@ export declare class DenseMatrixF64 {
 }
 
 export declare class DenseMatrixI32 {
-  constructor(nrows: number, ncols: number, values: Int32Array, columnMajor?: boolean | undefined | null)
+  constructor(nrows: bigint, ncols: bigint, values: Int32Array, columnMajor?: boolean | undefined | null)
   get numberType(): string
   satisfies(predicate: (arg: number) => boolean): boolean
   values(): Int32Array
@@ -484,7 +495,7 @@ export declare class DenseMatrixI32 {
   asF32(): DenseMatrixF32
   asF64(): DenseMatrixF64
   get(pos: [number, number]): number
-  shape(): [number, number]
+  shape(): [bigint, bigint]
   isEmpty(): boolean
   static fill(nrows: number, ncols: number, value: number): DenseMatrixI32
   slice(): DenseMatrixI32
@@ -528,7 +539,7 @@ export declare class DenseMatrixI32 {
 }
 
 export declare class DenseMatrixI64 {
-  constructor(nrows: number, ncols: number, values: BigInt64Array, columnMajor?: boolean | undefined | null)
+  constructor(nrows: bigint, ncols: bigint, values: BigInt64Array, columnMajor?: boolean | undefined | null)
   get numberType(): string
   satisfies(predicate: (arg: number) => boolean): boolean
   values(): BigInt64Array
@@ -544,7 +555,7 @@ export declare class DenseMatrixI64 {
   asF32(): DenseMatrixF32
   asF64(): DenseMatrixF64
   get(pos: [number, number]): number
-  shape(): [number, number]
+  shape(): [bigint, bigint]
   isEmpty(): boolean
   static fill(nrows: number, ncols: number, value: number): DenseMatrixI64
   slice(): DenseMatrixI64
@@ -588,7 +599,7 @@ export declare class DenseMatrixI64 {
 }
 
 export declare class DenseMatrixU16 {
-  constructor(nrows: number, ncols: number, values: Uint16Array, columnMajor?: boolean | undefined | null)
+  constructor(nrows: bigint, ncols: bigint, values: Uint16Array, columnMajor?: boolean | undefined | null)
   get numberType(): string
   satisfies(predicate: (arg: number) => boolean): boolean
   values(): Uint16Array
@@ -604,7 +615,7 @@ export declare class DenseMatrixU16 {
   asF32(): DenseMatrixF32
   asF64(): DenseMatrixF64
   get(pos: [number, number]): number
-  shape(): [number, number]
+  shape(): [bigint, bigint]
   isEmpty(): boolean
   static fill(nrows: number, ncols: number, value: number): DenseMatrixU16
   slice(): DenseMatrixU16
@@ -646,7 +657,7 @@ export declare class DenseMatrixU16 {
 }
 
 export declare class DenseMatrixU32 {
-  constructor(nrows: number, ncols: number, values: Uint32Array, columnMajor?: boolean | undefined | null)
+  constructor(nrows: bigint, ncols: bigint, values: Uint32Array, columnMajor?: boolean | undefined | null)
   get numberType(): string
   satisfies(predicate: (arg: number) => boolean): boolean
   values(): Uint32Array
@@ -662,7 +673,7 @@ export declare class DenseMatrixU32 {
   asF32(): DenseMatrixF32
   asF64(): DenseMatrixF64
   get(pos: [number, number]): number
-  shape(): [number, number]
+  shape(): [bigint, bigint]
   isEmpty(): boolean
   static fill(nrows: number, ncols: number, value: number): DenseMatrixU32
   slice(): DenseMatrixU32
@@ -704,7 +715,7 @@ export declare class DenseMatrixU32 {
 }
 
 export declare class DenseMatrixU64 {
-  constructor(nrows: number, ncols: number, values: BigUint64Array, columnMajor?: boolean | undefined | null)
+  constructor(nrows: bigint, ncols: bigint, values: BigUint64Array, columnMajor?: boolean | undefined | null)
   get numberType(): string
   satisfies(predicate: (arg: bigint) => boolean): boolean
   values(): BigUint64Array
@@ -720,12 +731,12 @@ export declare class DenseMatrixU64 {
   asF32(): DenseMatrixF32
   asF64(): DenseMatrixF64
   get(pos: [number, number]): bigint
-  shape(): [number, number]
+  shape(): [bigint, bigint]
   isEmpty(): boolean
 }
 
 export declare class DenseMatrixU8 {
-  constructor(nrows: number, ncols: number, values: Uint8Array, columnMajor?: boolean | undefined | null)
+  constructor(nrows: bigint, ncols: bigint, values: Uint8Array, columnMajor?: boolean | undefined | null)
   get numberType(): string
   satisfies(predicate: (arg: number) => boolean): boolean
   values(): Uint8Array
@@ -741,7 +752,7 @@ export declare class DenseMatrixU8 {
   asF32(): DenseMatrixF32
   asF64(): DenseMatrixF64
   get(pos: [number, number]): number
-  shape(): [number, number]
+  shape(): [bigint, bigint]
   isEmpty(): boolean
   static fill(nrows: number, ncols: number, value: number): DenseMatrixU8
   slice(): DenseMatrixU8
@@ -2594,14 +2605,14 @@ export declare function crossValidateElasticNetF64I64(xs: DenseMatrixF64, ys: Bi
 export declare function crossValidateLogisticRegressionF64I64(xs: DenseMatrixF64, ys: BigInt64Array, parameters: LogisticRegressionParametersF64, cv: KFold, score: (arg0: BigInt64Array, arg1: BigInt64Array) => number): CrossValidationResult
 
 export declare const enum DenseMatrixType {
-  F64 = 0,
-  F32 = 1,
-  U64 = 2,
-  U32 = 3,
-  U16 = 4,
-  U8 = 5,
-  I64 = 6,
-  I32 = 7
+  F64 = 'F64',
+  F32 = 'F32',
+  U64 = 'U64',
+  U32 = 'U32',
+  U16 = 'U16',
+  U8 = 'U8',
+  I64 = 'I64',
+  I32 = 'I32'
 }
 
 export declare const enum DistanceVariantType {
@@ -2651,82 +2662,82 @@ export declare const enum SplitCriterion {
   ClassificationError = 2
 }
 
-export declare function trainTestSplitF32F32(x: DenseMatrixF32, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF32, DenseMatrixF32, Float32Array, Float32Array]
+export declare function trainTestSplitF32F32(x: DenseMatrix, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float32Array, Float32Array]
 
-export declare function trainTestSplitF32F64(x: DenseMatrixF32, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF32, DenseMatrixF32, Float64Array, Float64Array]
+export declare function trainTestSplitF32F64(x: DenseMatrix, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float64Array, Float64Array]
 
-export declare function trainTestSplitF32I32(x: DenseMatrixF32, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF32, DenseMatrixF32, Int32Array, Int32Array]
+export declare function trainTestSplitF32I32(x: DenseMatrix, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Int32Array, Int32Array]
 
-export declare function trainTestSplitF32I64(x: DenseMatrixF32, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF32, DenseMatrixF32, BigInt64Array, BigInt64Array]
+export declare function trainTestSplitF32I64(x: DenseMatrix, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigInt64Array, BigInt64Array]
 
-export declare function trainTestSplitF32U64(x: DenseMatrixF32, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF32, DenseMatrixF32, BigUint64Array, BigUint64Array]
+export declare function trainTestSplitF32U64(x: DenseMatrix, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigUint64Array, BigUint64Array]
 
-export declare function trainTestSplitF64F32(x: DenseMatrixF64, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, Float32Array, Float32Array]
+export declare function trainTestSplitF64F32(x: DenseMatrix, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float32Array, Float32Array]
 
-export declare function trainTestSplitF64F64(x: DenseMatrixF64, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, Float64Array, Float64Array]
+export declare function trainTestSplitF64F64(x: DenseMatrix, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float64Array, Float64Array]
 
-export declare function trainTestSplitF64I32(x: DenseMatrixF64, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, Int32Array, Int32Array]
+export declare function trainTestSplitF64I32(x: DenseMatrix, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Int32Array, Int32Array]
 
-export declare function trainTestSplitF64I64(x: DenseMatrixF64, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, BigInt64Array, BigInt64Array]
+export declare function trainTestSplitF64I64(x: DenseMatrix, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigInt64Array, BigInt64Array]
 
-export declare function trainTestSplitF64U64(x: DenseMatrixF64, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixF64, DenseMatrixF64, BigUint64Array, BigUint64Array]
+export declare function trainTestSplitF64U64(x: DenseMatrix, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigUint64Array, BigUint64Array]
 
-export declare function trainTestSplitI32F32(x: DenseMatrixI32, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixI32, DenseMatrixI32, Float32Array, Float32Array]
+export declare function trainTestSplitI32F32(x: DenseMatrix, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float32Array, Float32Array]
 
-export declare function trainTestSplitI32F64(x: DenseMatrixI32, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixI32, DenseMatrixI32, Float64Array, Float64Array]
+export declare function trainTestSplitI32F64(x: DenseMatrix, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float64Array, Float64Array]
 
-export declare function trainTestSplitI32I32(x: DenseMatrixI32, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixI32, DenseMatrixI32, Int32Array, Int32Array]
+export declare function trainTestSplitI32I32(x: DenseMatrix, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Int32Array, Int32Array]
 
-export declare function trainTestSplitI32I64(x: DenseMatrixI32, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixI32, DenseMatrixI32, BigInt64Array, BigInt64Array]
+export declare function trainTestSplitI32I64(x: DenseMatrix, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigInt64Array, BigInt64Array]
 
-export declare function trainTestSplitI32U64(x: DenseMatrixI32, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixI32, DenseMatrixI32, BigUint64Array, BigUint64Array]
+export declare function trainTestSplitI32U64(x: DenseMatrix, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigUint64Array, BigUint64Array]
 
-export declare function trainTestSplitI64F32(x: DenseMatrixI64, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixI64, DenseMatrixI64, Float32Array, Float32Array]
+export declare function trainTestSplitI64F32(x: DenseMatrix, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float32Array, Float32Array]
 
-export declare function trainTestSplitI64F64(x: DenseMatrixI64, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixI64, DenseMatrixI64, Float64Array, Float64Array]
+export declare function trainTestSplitI64F64(x: DenseMatrix, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float64Array, Float64Array]
 
-export declare function trainTestSplitI64I32(x: DenseMatrixI64, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixI64, DenseMatrixI64, Int32Array, Int32Array]
+export declare function trainTestSplitI64I32(x: DenseMatrix, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Int32Array, Int32Array]
 
-export declare function trainTestSplitI64I64(x: DenseMatrixI64, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixI64, DenseMatrixI64, BigInt64Array, BigInt64Array]
+export declare function trainTestSplitI64I64(x: DenseMatrix, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigInt64Array, BigInt64Array]
 
-export declare function trainTestSplitI64U64(x: DenseMatrixI64, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixI64, DenseMatrixI64, BigUint64Array, BigUint64Array]
+export declare function trainTestSplitI64U64(x: DenseMatrix, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigUint64Array, BigUint64Array]
 
-export declare function trainTestSplitU16F32(x: DenseMatrixU16, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU16, DenseMatrixU16, Float32Array, Float32Array]
+export declare function trainTestSplitU16F32(x: DenseMatrix, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float32Array, Float32Array]
 
-export declare function trainTestSplitU16F64(x: DenseMatrixU16, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU16, DenseMatrixU16, Float64Array, Float64Array]
+export declare function trainTestSplitU16F64(x: DenseMatrix, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float64Array, Float64Array]
 
-export declare function trainTestSplitU16I32(x: DenseMatrixU16, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU16, DenseMatrixU16, Int32Array, Int32Array]
+export declare function trainTestSplitU16I32(x: DenseMatrix, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Int32Array, Int32Array]
 
-export declare function trainTestSplitU16I64(x: DenseMatrixU16, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU16, DenseMatrixU16, BigInt64Array, BigInt64Array]
+export declare function trainTestSplitU16I64(x: DenseMatrix, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigInt64Array, BigInt64Array]
 
-export declare function trainTestSplitU16U64(x: DenseMatrixU16, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU16, DenseMatrixU16, BigUint64Array, BigUint64Array]
+export declare function trainTestSplitU16U64(x: DenseMatrix, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigUint64Array, BigUint64Array]
 
-export declare function trainTestSplitU32F32(x: DenseMatrixU32, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU32, DenseMatrixU32, Float32Array, Float32Array]
+export declare function trainTestSplitU32F32(x: DenseMatrix, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float32Array, Float32Array]
 
-export declare function trainTestSplitU32F64(x: DenseMatrixU32, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU32, DenseMatrixU32, Float64Array, Float64Array]
+export declare function trainTestSplitU32F64(x: DenseMatrix, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float64Array, Float64Array]
 
-export declare function trainTestSplitU32I32(x: DenseMatrixU32, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU32, DenseMatrixU32, Int32Array, Int32Array]
+export declare function trainTestSplitU32I32(x: DenseMatrix, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Int32Array, Int32Array]
 
-export declare function trainTestSplitU32I64(x: DenseMatrixU32, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU32, DenseMatrixU32, BigInt64Array, BigInt64Array]
+export declare function trainTestSplitU32I64(x: DenseMatrix, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigInt64Array, BigInt64Array]
 
-export declare function trainTestSplitU32U64(x: DenseMatrixU32, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU32, DenseMatrixU32, BigUint64Array, BigUint64Array]
+export declare function trainTestSplitU32U64(x: DenseMatrix, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigUint64Array, BigUint64Array]
 
-export declare function trainTestSplitU64F32(x: DenseMatrixU64, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU64, DenseMatrixU64, Float32Array, Float32Array]
+export declare function trainTestSplitU64F32(x: DenseMatrix, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float32Array, Float32Array]
 
-export declare function trainTestSplitU64F64(x: DenseMatrixU64, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU64, DenseMatrixU64, Float64Array, Float64Array]
+export declare function trainTestSplitU64F64(x: DenseMatrix, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float64Array, Float64Array]
 
-export declare function trainTestSplitU64I32(x: DenseMatrixU64, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU64, DenseMatrixU64, Int32Array, Int32Array]
+export declare function trainTestSplitU64I32(x: DenseMatrix, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Int32Array, Int32Array]
 
-export declare function trainTestSplitU64I64(x: DenseMatrixU64, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU64, DenseMatrixU64, BigInt64Array, BigInt64Array]
+export declare function trainTestSplitU64I64(x: DenseMatrix, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigInt64Array, BigInt64Array]
 
-export declare function trainTestSplitU64U64(x: DenseMatrixU64, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU64, DenseMatrixU64, BigUint64Array, BigUint64Array]
+export declare function trainTestSplitU64U64(x: DenseMatrix, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigUint64Array, BigUint64Array]
 
-export declare function trainTestSplitU8F32(x: DenseMatrixU8, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU8, DenseMatrixU8, Float32Array, Float32Array]
+export declare function trainTestSplitU8F32(x: DenseMatrix, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float32Array, Float32Array]
 
-export declare function trainTestSplitU8F64(x: DenseMatrixU8, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU8, DenseMatrixU8, Float64Array, Float64Array]
+export declare function trainTestSplitU8F64(x: DenseMatrix, y: Float64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float64Array, Float64Array]
 
-export declare function trainTestSplitU8I32(x: DenseMatrixU8, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU8, DenseMatrixU8, Int32Array, Int32Array]
+export declare function trainTestSplitU8I32(x: DenseMatrix, y: Int32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Int32Array, Int32Array]
 
-export declare function trainTestSplitU8I64(x: DenseMatrixU8, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU8, DenseMatrixU8, BigInt64Array, BigInt64Array]
+export declare function trainTestSplitU8I64(x: DenseMatrix, y: BigInt64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigInt64Array, BigInt64Array]
 
-export declare function trainTestSplitU8U64(x: DenseMatrixU8, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrixU8, DenseMatrixU8, BigUint64Array, BigUint64Array]
+export declare function trainTestSplitU8U64(x: DenseMatrix, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigUint64Array, BigUint64Array]
