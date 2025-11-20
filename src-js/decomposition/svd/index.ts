@@ -1,12 +1,11 @@
-import { DenseMatrix, utilities, type InputType } from '../../index.js'
-import { type TransformerProvider, type Transformer } from '../../estimator.js'
-import { TransformerProvidersMap } from './estimator_providers_map/index.js'
+import { utilities, type InputType } from '../../index.js'
+import { type Transformer } from '../../estimator.js'
 import { DataFrame } from '../../data_frame.js'
 import type { NumberTypeRs } from '../index.js'
+import { SVD as LibSVD, SVDBuilder, DenseMatrix } from '../../core-bindings/index.js'
 
 interface ISVDBaseParameters {
-  nComponents?: number
-  correlationMatrix?: boolean
+  nComponents?: bigint
 }
 
 interface ISVDParameters extends ISVDBaseParameters {
@@ -29,20 +28,11 @@ class SVD implements HasColumns {
   public readonly config: ISVDParameters
 
   private _isFitted: boolean = false
-  private estimatorProvider: TransformerProvider<ISVDBaseParameters, any, any>
-  private parameters: any
   private estimator: Transformer | null = null
 
   constructor(params?: ISVDParameters) {
     this.config = params ?? {}
     this.config.targetType = this.config.targetType ?? 'f32'
-    const estimatorProvider = TransformerProvidersMap.get(this.config.targetType)
-    if (!estimatorProvider) {
-      throw new Error(`Invalid value for target type '${this.config.targetType}'`)
-    }
-    const parameters = estimatorProvider.parameters(this.config)
-    this.estimatorProvider = estimatorProvider
-    this.parameters = parameters
   }
 
   get columns(): string[] | null {
@@ -54,7 +44,11 @@ class SVD implements HasColumns {
     if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
       matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
     else matrix = utilities.inputTypeToDenseMatrix(x)
-    this.estimator = this.estimatorProvider.estimator(matrix, [], this.parameters)
+    const builder = new SVDBuilder(matrix)
+    if (this.config.nComponents) {
+      builder.withNComponents(this.config.nComponents)
+    }
+    this.estimator = builder.build()
     this._isFitted = true
     return this
   }
@@ -74,14 +68,13 @@ class SVD implements HasColumns {
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
       const matrix = utilities.dataFrameToDenseMatrix(x, columns)
-      const matrixRs = this.estimatorProvider.toMatrix(matrix)
-      const transformedMatrix = this.estimator!.transform(matrixRs)
-      const transformed = utilities.denseMatrixToDataFrame(new DenseMatrix(transformedMatrix), columns)
+      const transformedMatrix = this.estimator!.transform(matrix)
+      const transformed = utilities.denseMatrixToDataFrame(transformedMatrix, columns)
       const remaining = utilities.getRemainingColumns(x, columns)
       return utilities.combineDataFrames(transformed, remaining)
     }
-    const matrixRs = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(x))
-    return new DenseMatrix(this.estimator!.transform(matrixRs))
+    const matrixRs = utilities.inputTypeToDenseMatrix(x)
+    return this.estimator!.transform(matrixRs)
   }
 
   serialize(): SVDSerializedData {
@@ -97,7 +90,7 @@ class SVD implements HasColumns {
     if (this._isFitted) {
       throw new Error("Cannot call 'deserialize' on a fitted instance!")
     }
-    this.estimator = this.estimatorProvider.deserialize(data)
+    this.estimator = LibSVD.deserialize(data)
     return this
   }
 
