@@ -7,7 +7,7 @@ impl<'a> TryFrom<&'a DenseMatrix> for &'a LibDenseMatrix<f64> {
 
   fn try_from(value: &'a DenseMatrix) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
-      DenseMatrixInner::F64(v) => Ok(v.inner()),
+      DenseMatrixInner::F64(v) => Ok(v),
       _ => unimplemented!(),
     }
   }
@@ -18,7 +18,7 @@ impl<'a> TryFrom<&'a DenseMatrix> for &'a LibDenseMatrix<f32> {
 
   fn try_from(value: &'a DenseMatrix) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
-      DenseMatrixInner::F32(v) => Ok(v.inner()),
+      DenseMatrixInner::F32(v) => Ok(v),
       _ => unimplemented!(),
     }
   }
@@ -29,7 +29,7 @@ impl<'a> TryFrom<&'a DenseMatrix> for &'a LibDenseMatrix<u64> {
 
   fn try_from(value: &'a DenseMatrix) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
-      DenseMatrixInner::U64(v) => Ok(v.inner()),
+      DenseMatrixInner::U64(v) => Ok(v),
       _ => unimplemented!(),
     }
   }
@@ -40,7 +40,7 @@ impl<'a> TryFrom<&'a DenseMatrix> for &'a LibDenseMatrix<u32> {
 
   fn try_from(value: &'a DenseMatrix) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
-      DenseMatrixInner::U32(v) => Ok(v.inner()),
+      DenseMatrixInner::U32(v) => Ok(v),
       _ => unimplemented!(),
     }
   }
@@ -51,7 +51,7 @@ impl<'a> TryFrom<&'a DenseMatrix> for &'a LibDenseMatrix<u16> {
 
   fn try_from(value: &'a DenseMatrix) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
-      DenseMatrixInner::U16(v) => Ok(v.inner()),
+      DenseMatrixInner::U16(v) => Ok(v),
       _ => unimplemented!(),
     }
   }
@@ -62,7 +62,7 @@ impl<'a> TryFrom<&'a DenseMatrix> for &'a LibDenseMatrix<u8> {
 
   fn try_from(value: &'a DenseMatrix) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
-      DenseMatrixInner::U8(v) => Ok(v.inner()),
+      DenseMatrixInner::U8(v) => Ok(v),
       _ => unimplemented!(),
     }
   }
@@ -73,7 +73,7 @@ impl<'a> TryFrom<&'a DenseMatrix> for &'a LibDenseMatrix<i64> {
 
   fn try_from(value: &'a DenseMatrix) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
-      DenseMatrixInner::I64(v) => Ok(v.inner()),
+      DenseMatrixInner::I64(v) => Ok(v),
       _ => unimplemented!(),
     }
   }
@@ -84,7 +84,7 @@ impl<'a> TryFrom<&'a DenseMatrix> for &'a LibDenseMatrix<i32> {
 
   fn try_from(value: &'a DenseMatrix) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
-      DenseMatrixInner::I32(v) => Ok(v.inner()),
+      DenseMatrixInner::I32(v) => Ok(v),
       _ => unimplemented!(),
     }
   }

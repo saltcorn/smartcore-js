@@ -2,10 +2,12 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 
-use super::DenseMatrix;
-use crate::linalg::basic::matrix::{
-  DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32,
-  DenseMatrixU64, DenseMatrixU8,
+use super::{
+  variants::{
+    DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32,
+    DenseMatrixU64, DenseMatrixU8,
+  },
+  DenseMatrix,
 };
 
 macro_rules! create_impl {
@@ -23,7 +25,17 @@ macro_rules! create_impl {
                 data: $xs,
                 column_major: Option<bool>,
             ) -> Result<Self> {
-                [<DenseMatrix $x:upper>]::new(num_samples, num_features, data, column_major).map(DenseMatrix::from)
+                let num_samples = num_samples.get_u64().1 as usize;
+                let num_features = num_features.get_u64().1 as usize;
+                let column_major = column_major.unwrap_or(true);
+                [<DenseMatrix $x:upper>]::new(
+                    num_samples,
+                    num_features,
+                    data.to_vec(),
+                    column_major,
+                )
+                    .map(DenseMatrix::from)
+                    .map_err(|e| Error::new(Status::InvalidArg, e.to_string()))
             }
         }
     }
