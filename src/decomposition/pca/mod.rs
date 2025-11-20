@@ -2,73 +2,63 @@ mod builder;
 mod deserialize;
 mod factory;
 mod lib_pca_factory;
-mod parameters;
 mod serialize_data;
 mod transformer_estimator;
-mod v2;
 
-use bincode::{
-  config::standard,
-  serde::{decode_from_slice, encode_to_vec},
-};
-use napi::bindgen_prelude::*;
+use bincode::{config::standard, decode_from_slice, encode_to_vec};
+use napi::{bindgen_prelude::Buffer, Error, Result, Status};
 use napi_derive::napi;
-use paste::paste;
-use smartcore::{
-  decomposition::pca::{PCAParameters as LibPCAParameters, PCA as LibPCA},
-  linalg::basic::matrix::DenseMatrix,
+
+use crate::{
+  dense_matrix::{DenseMatrix, DenseMatrixType},
+  traits::{Estimator, Transformer, TransformerEstimator},
 };
+use serialize_data::PCASerializeData;
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-use parameters::PCAParameters;
-
-macro_rules! pca_struct {
-  ($ty:ty) => {
-    paste! {
-        #[napi(js_name=""[<PCA $ty:upper>]"")]
-        #[derive(Debug)]
-        pub struct [<PCA $ty:upper>] {
-            inner: LibPCA<$ty, DenseMatrix<$ty>>,
-        }
-
-        #[napi]
-        impl [<PCA $ty:upper>] {
-            #[napi]
-            pub fn fit(data: &[<DenseMatrix $ty:upper>], parameters: &PCAParameters) -> Result<Self> {
-                let pca = LibPCA::fit(
-                    data as &DenseMatrix<$ty>,
-                    (parameters as &LibPCAParameters).to_owned(),
-                )
-                .unwrap();
-                Ok(Self { inner: pca })
-            }
-
-            #[napi]
-            pub fn transform(&self, x: &[<DenseMatrix $ty:upper>]) -> Result<[<DenseMatrix $ty:upper>]> {
-                let matrix = self
-                    .inner
-                    .transform(x)
-                    .map_err(|e| Error::new(Status::InvalidArg, format!("{}", e)))?;
-                Ok([<DenseMatrix $ty:upper>]::from_inner(matrix))
-            }
-
-            #[napi]
-            pub fn serialize(&self) -> Result<Buffer> {
-                let encoded = encode_to_vec(&self.inner, standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Buffer::from(encoded))
-            }
-
-            #[napi(factory)]
-            pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibPCA<$ty, DenseMatrix<$ty>>, _>(data.as_ref(), standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
-                Ok(Self { inner })
-            }
-        }
-    }
-  };
+#[napi(js_name = "PCA")]
+#[derive(Debug)]
+pub struct PCA {
+  pub(super) inner: Box<dyn TransformerEstimator>,
+  pub(super) fit_data_type: DenseMatrixType,
 }
 
-pca_struct! {f64}
-pca_struct! {f32}
+#[napi]
+impl PCA {
+  #[napi]
+  pub fn transform(&self, x: &DenseMatrix) -> Result<DenseMatrix> {
+    self.inner.transform(x)
+  }
+
+  #[napi]
+  pub fn serialize(&self) -> Result<Buffer> {
+    let buffer_data = Estimator::serialize(self)?;
+    Ok(Buffer::from(buffer_data))
+  }
+
+  #[napi(factory)]
+  pub fn deserialize(data: Buffer) -> Result<Self> {
+    let serialize_data: PCASerializeData = decode_from_slice(data.as_ref(), standard())
+      .map_err(|e| Error::new(Status::GenericFailure, e.to_string()))?
+      .0;
+    serialize_data.try_into()
+  }
+}
+
+impl Estimator for PCA {
+  fn serialize(&self) -> Result<Vec<u8>> {
+    let serialize_data = PCASerializeData {
+      fit_data_type: self.fit_data_type,
+      pca: self.inner.serialize()?,
+    };
+    encode_to_vec(serialize_data, standard())
+      .map_err(|e| Error::new(Status::GenericFailure, e.to_string()))
+  }
+}
+
+impl Transformer for PCA {
+  fn transform(&self, x: &DenseMatrix) -> Result<DenseMatrix> {
+    self.inner.transform(x)
+  }
+}
+
+impl TransformerEstimator for PCA {}

@@ -5,7 +5,7 @@ use napi_derive::napi;
 
 use super::{
   factory::{self, PCAFactory, PCAParameters},
-  v2::PCAV2,
+  PCA,
 };
 use crate::dense_matrix::DenseMatrix;
 
@@ -39,7 +39,7 @@ impl PCABuilder {
   }
 
   #[napi]
-  pub fn build(&mut self) -> Result<PCAV2> {
+  pub fn build(&mut self) -> Result<PCA> {
     let fit_data_type = self.fit_data.r#type();
     let params = factory::NewParameters {
       fit_data: self.fit_data.deref(),
@@ -48,7 +48,7 @@ impl PCABuilder {
         use_correlation_matrix: self.use_correlation_matrix,
       },
     };
-    Ok(PCAV2 {
+    Ok(PCA {
       inner: PCAFactory::create(params)?,
       fit_data_type,
     })

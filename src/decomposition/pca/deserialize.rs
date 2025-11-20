@@ -3,13 +3,14 @@ use napi::{Error, Status};
 use super::{
   serialize_data::PCASerializeData,
   transformer_estimator::{PCAF32, PCAF64},
+  PCA,
 };
 use crate::{
-  decomposition::pca::v2::PCAV2, dense_matrix::DenseMatrixType,
-  deserialize_variant::deserialize_variant, traits::TransformerEstimator,
+  dense_matrix::DenseMatrixType, deserialize_variant::deserialize_variant,
+  traits::TransformerEstimator,
 };
 
-impl TryFrom<PCASerializeData> for PCAV2 {
+impl TryFrom<PCASerializeData> for PCA {
   type Error = Error;
 
   fn try_from(value: PCASerializeData) -> Result<Self, Self::Error> {
@@ -23,7 +24,7 @@ impl TryFrom<PCASerializeData> for PCAV2 {
       | DenseMatrixType::I64
       | DenseMatrixType::I32 => return Err(Error::new(Status::GenericFailure, "TODO")),
     };
-    Ok(PCAV2 {
+    Ok(PCA {
       inner: transformer_estimator,
       fit_data_type: value.fit_data_type,
     })

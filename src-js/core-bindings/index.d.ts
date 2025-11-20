@@ -2274,37 +2274,17 @@ export declare class OneHotEncoderParameters {
   constructor(categoricalParams: BigUint64Array)
 }
 
+export declare class PCA {
+  transform(x: DenseMatrix): DenseMatrix
+  serialize(): Buffer
+  static deserialize(data: Buffer): PCA
+}
+
 export declare class PCABuilder {
   constructor(fitData: DenseMatrix)
   withNComponents(nComponents: bigint): void
   useCorrelationMatrix(useCorrelationMatrix: boolean): void
-  build(): PCAV2
-}
-
-export declare class PCAF32 {
-  static fit(data: DenseMatrixF32, parameters: PCAParameters): PCAF32
-  transform(x: DenseMatrixF32): DenseMatrixF32
-  serialize(): Buffer
-  static deserialize(data: Buffer): PCAF32
-}
-
-export declare class PCAF64 {
-  static fit(data: DenseMatrixF64, parameters: PCAParameters): PCAF64
-  transform(x: DenseMatrixF64): DenseMatrixF64
-  serialize(): Buffer
-  static deserialize(data: Buffer): PCAF64
-}
-
-export declare class PCAParameters {
-  constructor()
-  withNComponents(nComponents: number): void
-  useCorrelationMatrix(useCorrelationMatrix: boolean): void
-}
-
-export declare class PCAV2 {
-  transform(x: DenseMatrix): DenseMatrix
-  serialize(): Buffer
-  static deserialize(data: Buffer): PCAV2
+  build(): PCA
 }
 
 export declare class PrecisionF64 {

@@ -1,7 +1,7 @@
 import { utilities, type InputType } from '../../index.js'
 import { type Transformer } from '../../estimator.js'
 import { DataFrame } from '../../data_frame.js'
-import { DenseMatrix, PCABuilder, PCAV2, type DenseMatrixType } from '../../core-bindings/index.js'
+import { DenseMatrix, PCABuilder, PCA as LibPCA, type DenseMatrixType } from '../../core-bindings/index.js'
 
 interface IPCABaseParameters {
   nComponents?: bigint
@@ -93,7 +93,7 @@ class PCA implements HasColumns {
     if (this._isFitted) {
       throw new Error("Cannot call 'deserialize' on a fitted instance!")
     }
-    this.estimator = PCAV2.deserialize(data)
+    this.estimator = LibPCA.deserialize(data)
     return this
   }
 
