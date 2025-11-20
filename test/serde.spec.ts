@@ -21,10 +21,7 @@ import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 // let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
 // let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
-let {
-  PCA,
-  // SVD
-} = decomposition
+let { PCA, SVD } = decomposition
 // let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
 // let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
@@ -188,20 +185,20 @@ describe('Serialize + Deserialize', () => {
   //     )
   //   })
 
-  //   it('SVD', () => {
-  //     const svd = new SVD()
-  //     const irisData = loadIris({ returnXY: true })
-  //     const [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
-  //     }
-  //     svd.fit(x)
-  //     const xTransformed1 = svd.transform(x)
-  //     const svdSerialized = svd.serialize()
-  //     const svdDeserialized = SVD.deserialize(svdSerialized)
-  //     const xTransformed2 = svdDeserialized.transform(x)
-  //     assert.deepEqual(xTransformed1, xTransformed2)
-  //   })
+  it('SVD', () => {
+    const svd = new SVD()
+    const irisData = loadIris({ returnXY: true })
+    const [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadIris" to return an Array containing 2 items.')
+    }
+    svd.fit(x)
+    const xTransformed1 = svd.transform(x)
+    const svdSerialized = svd.serialize()
+    const svdDeserialized = SVD.deserialize(svdSerialized)
+    const xTransformed2 = svdDeserialized.transform(x)
+    assert.deepEqual(xTransformed1, xTransformed2)
+  })
 
   //   it('LinearRegression', () => {
   //     const lr = new LinearRegression()

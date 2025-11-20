@@ -1,67 +1,64 @@
-mod parameters;
+mod builder;
+mod deserialize;
+mod factory;
+mod lib_svd_factory;
+mod serialize_data;
+mod transformer_estimator;
 
-use bincode::{
-  config::standard,
-  serde::{decode_from_slice, encode_to_vec},
-};
-use napi::bindgen_prelude::*;
+use bincode::{config::standard, decode_from_slice, encode_to_vec};
+use napi::{bindgen_prelude::Buffer, Error, Result, Status};
 use napi_derive::napi;
-use paste::paste;
-use smartcore::{
-  decomposition::svd::{SVDParameters as LibSVDParameters, SVD as LibSVD},
-  linalg::basic::matrix::DenseMatrix,
+
+use crate::{
+  dense_matrix::{DenseMatrix, DenseMatrixType},
+  traits::{Estimator, Transformer, TransformerEstimator},
 };
+use serialize_data::SVDSerializeData;
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-use parameters::SVDParameters;
-
-macro_rules! svd_struct {
-  ($ty:ty) => {
-    paste! {
-        #[napi(js_name=""[<SVD $ty:upper>]"")]
-        #[derive(Debug)]
-        pub struct [<SVD $ty:upper>] {
-            inner: LibSVD<$ty, DenseMatrix<$ty>>,
-        }
-
-        #[napi]
-        impl [<SVD $ty:upper>] {
-            #[napi]
-            pub fn fit(data: &[<DenseMatrix $ty:upper>], parameters: &SVDParameters) -> Result<Self> {
-                let svd = LibSVD::fit(
-                    data as &DenseMatrix<$ty>,
-                    (parameters as &LibSVDParameters).to_owned(),
-                )
-                .unwrap();
-                Ok(Self { inner: svd })
-            }
-
-            #[napi]
-            pub fn transform(&self, x: &[<DenseMatrix $ty:upper>]) -> Result<[<DenseMatrix $ty:upper>]> {
-                let matrix = self
-                    .inner
-                    .transform(x)
-                    .map_err(|e| Error::new(Status::InvalidArg, format!("{}", e)))?;
-                Ok([<DenseMatrix $ty:upper>]::from_inner(matrix))
-            }
-
-            #[napi]
-            pub fn serialize(&self) -> Result<Buffer> {
-                let encoded = encode_to_vec(&self.inner, standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Buffer::from(encoded))
-            }
-
-            #[napi(factory)]
-            pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibSVD<$ty, DenseMatrix<$ty>>, _>(data.as_ref(), standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
-                Ok(Self { inner })
-            }
-        }
-    }
-  };
+#[napi(js_name = "SVD")]
+#[derive(Debug)]
+pub struct SVD {
+  pub(super) inner: Box<dyn TransformerEstimator>,
+  pub(super) fit_data_type: DenseMatrixType,
 }
 
-svd_struct! {f64}
-svd_struct! {f32}
+#[napi]
+impl SVD {
+  #[napi]
+  pub fn transform(&self, x: &DenseMatrix) -> Result<DenseMatrix> {
+    self.inner.transform(x)
+  }
+
+  #[napi]
+  pub fn serialize(&self) -> Result<Buffer> {
+    let buffer_data = Estimator::serialize(self)?;
+    Ok(Buffer::from(buffer_data))
+  }
+
+  #[napi(factory)]
+  pub fn deserialize(data: Buffer) -> Result<Self> {
+    let serialize_data: SVDSerializeData = decode_from_slice(data.as_ref(), standard())
+      .map_err(|e| Error::new(Status::GenericFailure, e.to_string()))?
+      .0;
+    serialize_data.try_into()
+  }
+}
+
+impl Estimator for SVD {
+  fn serialize(&self) -> Result<Vec<u8>> {
+    let serialize_data = SVDSerializeData {
+      fit_data_type: self.fit_data_type,
+      svd: self.inner.serialize()?,
+    };
+    encode_to_vec(serialize_data, standard())
+      .map_err(|e| Error::new(Status::GenericFailure, e.to_string()))
+  }
+}
+
+impl Transformer for SVD {
+  fn transform(&self, x: &DenseMatrix) -> Result<DenseMatrix> {
+    self.inner.transform(x)
+  }
+}
+
+impl TransformerEstimator for SVD {}

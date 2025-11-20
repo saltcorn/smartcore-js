@@ -2532,29 +2532,22 @@ export declare class SVCParametersF64I64 {
   withSeed(seed?: bigint | undefined | null): void
 }
 
-export declare class SVDF32 {
-  static fit(data: DenseMatrixF32, parameters: SVDParameters): SVDF32
-  transform(x: DenseMatrixF32): DenseMatrixF32
+export declare class SVD {
+  transform(x: DenseMatrix): DenseMatrix
   serialize(): Buffer
-  static deserialize(data: Buffer): SVDF32
+  static deserialize(data: Buffer): SVD
 }
 
-export declare class SVDF64 {
-  static fit(data: DenseMatrixF64, parameters: SVDParameters): SVDF64
-  transform(x: DenseMatrixF64): DenseMatrixF64
-  serialize(): Buffer
-  static deserialize(data: Buffer): SVDF64
+export declare class SVDBuilder {
+  constructor(fitData: DenseMatrix)
+  withNComponents(nComponents: bigint): void
+  build(): SVD
 }
 
 export declare class SVDF64DenseMatrixF64 {
   U(): JsDenseMatrixF64Ref
   V(): JsDenseMatrixF64Ref
   S(): DenseMatrixF64
-}
-
-export declare class SVDParameters {
-  constructor()
-  withNComponents(nComponents: number): void
 }
 
 export declare class SVRF64 {
