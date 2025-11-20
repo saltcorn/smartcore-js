@@ -360,6 +360,8 @@ export declare class DenseMatrix {
   static i64(numSamples: bigint, numFeatures: bigint, data: BigInt64Array, columnMajor?: boolean | undefined | null): DenseMatrix
   static i32(numSamples: bigint, numFeatures: bigint, data: Int32Array, columnMajor?: boolean | undefined | null): DenseMatrix
   type(): DenseMatrixType
+  shape(): [bigint, bigint]
+  get(pos: [bigint, bigint]): DenseMatrixValue
 }
 
 export declare class DenseMatrixF32 {
@@ -2302,6 +2304,7 @@ export declare class PCAParameters {
 export declare class PCAV2 {
   transform(x: DenseMatrix): DenseMatrix
   serialize(): Buffer
+  static deserialize(data: Buffer): PCAV2
 }
 
 export declare class PrecisionF64 {
@@ -2614,6 +2617,12 @@ export declare const enum DenseMatrixType {
   I64 = 'I64',
   I32 = 'I32'
 }
+
+export type DenseMatrixValue =
+  | { type: 'F64', field0: number }
+  | { type: 'Big', field0: bigint }
+  | { type: 'U32', field0: number }
+  | { type: 'I32', field0: number }
 
 export declare const enum DistanceVariantType {
   Euclidian = 0,

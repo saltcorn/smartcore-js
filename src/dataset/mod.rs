@@ -72,7 +72,12 @@ macro_rules! dataset_struct {
 
             #[napi]
             pub fn dense_matrix_v2(&self, column_major: Option<bool>) -> Result<DenseMatrix> {
-                self.dense_matrix(column_major).map(|m| m.into())
+                DenseMatrix::$x(
+                    self.num_samples(),
+                    self.num_features(),
+                    self.data(),
+                    column_major,
+                )
             }
         }
 

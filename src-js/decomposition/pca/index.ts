@@ -1,16 +1,15 @@
-import { DenseMatrix, utilities, type InputType } from '../../index.js'
-import { type TransformerProvider, type Transformer } from '../../estimator.js'
-import { TransformerProvidersMap } from './estimator_providers_map/index.js'
+import { utilities, type InputType } from '../../index.js'
+import { type Transformer } from '../../estimator.js'
 import { DataFrame } from '../../data_frame.js'
-import type { NumberTypeRs } from '../index.js'
+import { DenseMatrix, PCABuilder, PCAV2, type DenseMatrixType } from '../../core-bindings/index.js'
 
 interface IPCABaseParameters {
-  nComponents?: number
-  correlationMatrix?: boolean
+  nComponents?: bigint
+  useCorrelationMatrix?: boolean
 }
 
 interface IPCAParameters extends IPCABaseParameters {
-  targetType?: NumberTypeRs
+  targetType?: DenseMatrixType
   columns?: string[]
 }
 
@@ -29,20 +28,11 @@ class PCA implements HasColumns {
   public readonly config: IPCAParameters
 
   private _isFitted: boolean = false
-  private estimatorProvider: TransformerProvider<IPCABaseParameters, any, any>
-  private parameters: any
   private estimator: Transformer | null = null
 
   constructor(params: IPCAParameters) {
     this.config = params
-    this.config.targetType = this.config.targetType ?? 'f32'
-    const estimatorProvider = TransformerProvidersMap.get(this.config.targetType)
-    if (!estimatorProvider) {
-      throw new Error(`Invalid value for target type '${this.config.targetType}'`)
-    }
-    const parameters = estimatorProvider.parameters(this.config)
-    this.estimatorProvider = estimatorProvider
-    this.parameters = parameters
+    this.config.targetType = this.config.targetType ?? ('F32' as DenseMatrixType)
   }
 
   get columns(): string[] | null {
@@ -54,7 +44,14 @@ class PCA implements HasColumns {
     if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
       matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
     else matrix = utilities.inputTypeToDenseMatrix(x)
-    this.estimator = this.estimatorProvider.estimator(matrix, [], this.parameters)
+    let builder = new PCABuilder(matrix)
+    if (this.config.nComponents !== undefined) {
+      builder.withNComponents(this.config.nComponents)
+    }
+    if (this.config.useCorrelationMatrix !== undefined) {
+      builder.useCorrelationMatrix(this.config.useCorrelationMatrix)
+    }
+    this.estimator = builder.build()
     this._isFitted = true
     return this
   }
@@ -74,14 +71,13 @@ class PCA implements HasColumns {
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
       const matrix = utilities.dataFrameToDenseMatrix(x, columns)
-      const matrixRs = this.estimatorProvider.toMatrix(matrix)
-      const transformedMatrix = this.estimator!.transform(matrixRs)
-      const transformed = utilities.denseMatrixToDataFrame(new DenseMatrix(transformedMatrix), columns)
+      const transformedMatrix = this.estimator!.transform(matrix)
+      const transformed = utilities.denseMatrixToDataFrame(transformedMatrix, columns)
       const remaining = utilities.getRemainingColumns(x, columns)
       return utilities.combineDataFrames(transformed, remaining)
     }
-    const matrixRs = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(x))
-    return new DenseMatrix(this.estimator!.transform(matrixRs))
+    const matrixRs = utilities.inputTypeToDenseMatrix(x)
+    return this.estimator!.transform(matrixRs)
   }
 
   serialize(): PCASerializedData {
@@ -97,7 +93,7 @@ class PCA implements HasColumns {
     if (this._isFitted) {
       throw new Error("Cannot call 'deserialize' on a fitted instance!")
     }
-    this.estimator = this.estimatorProvider.deserialize(data)
+    this.estimator = PCAV2.deserialize(data)
     return this
   }
 

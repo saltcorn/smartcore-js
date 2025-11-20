@@ -9,7 +9,7 @@ import {
   metrics,
   pipeline,
   cluster,
-  //   decomposition,
+  decomposition,
   //   naiveBayes,
   //   neighbors,
   dataFrame,
@@ -21,7 +21,10 @@ import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 // let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
 // let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
-// let { PCA, SVD } = decomposition
+let {
+  PCA,
+  // SVD
+} = decomposition
 // let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
 // let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
@@ -149,16 +152,16 @@ describe('Serialize + Deserialize', () => {
     assert.equal(score1, score2)
   })
 
-  //   it('PCA', () => {
-  //     const columns = df.columnNames.filter((column) => !column.startsWith('customer'))
-  //     const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
-  //     const pca = new PCA({ nComponents: 24, columns })
-  //     const transformedColumns1 = pca.fit(df).transform(df)
-  //     const pcaSerialized = pca.serialize()
-  //     const pcaDeserialized = PCA.deserialize(pcaSerialized)
-  //     const transformedColumns2 = pcaDeserialized.transform(df)
-  //     assert.deepEqual(transformedColumns1, transformedColumns2)
-  //   })
+  it('PCA', () => {
+    const columns = df.columnNames.filter((column) => !column.startsWith('customer'))
+    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
+    const pca = new PCA({ nComponents: 24n, columns })
+    const transformedColumns1 = pca.fit(df).transform(df)
+    const pcaSerialized = pca.serialize()
+    const pcaDeserialized = PCA.deserialize(pcaSerialized)
+    const transformedColumns2 = pcaDeserialized.transform(df)
+    assert.deepEqual(transformedColumns1, transformedColumns2)
+  })
 
   //   it('RidgeRegression', () => {
   //     const rr = new RidgeRegression({ targetType: 'f64' })

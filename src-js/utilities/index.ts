@@ -1,5 +1,5 @@
-// export * from './dense_matrix_to_data_frame.js'
-// export * from './data_frame_to_dense_matrix.js'
+export * from './dense_matrix_to_data_frame.js'
+export * from './data_frame_to_dense_matrix.js'
 export * from './input_type_to_dense_matrix.js'
 export * from './get_remaining_columns.js'
 export * from './combine_data_frames.js'

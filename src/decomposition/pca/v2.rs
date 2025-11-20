@@ -1,4 +1,4 @@
-use bincode::{config::standard, encode_to_vec};
+use bincode::{config::standard, decode_from_slice, encode_to_vec};
 use napi::{bindgen_prelude::Buffer, Error, Result, Status};
 use napi_derive::napi;
 
@@ -26,6 +26,14 @@ impl PCAV2 {
   pub fn serialize(&self) -> Result<Buffer> {
     let buffer_data = Estimator::serialize(self)?;
     Ok(Buffer::from(buffer_data))
+  }
+
+  #[napi(factory)]
+  pub fn deserialize(data: Buffer) -> Result<Self> {
+    let serialize_data: PCASerializeData = decode_from_slice(data.as_ref(), standard())
+      .map_err(|e| Error::new(Status::GenericFailure, e.to_string()))?
+      .0;
+    serialize_data.try_into()
   }
 }
 
