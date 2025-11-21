@@ -1,0 +1,21 @@
+import dbscan from './dbscan.ts'
+import extraTreesRegressor from './extra_trees_regressor.ts'
+import pca from './pca.ts'
+import svd from './svd.ts'
+import kmeans from './kmeans.ts'
+
+describe('Rust API', () => {
+  describe('cluster', () => {
+    describe('DBSCAN', dbscan)
+    describe('KMeans', kmeans)
+  })
+
+  describe('decomposition', () => {
+    describe('PCA', pca)
+    describe('SVD', svd)
+  })
+
+  describe('ensemble', () => {
+    describe('ExtraTreesRegressor', extraTreesRegressor)
+  })
+})

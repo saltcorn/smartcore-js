@@ -1,24 +1,17 @@
-import {
-  DBSCANBuilder,
-  DBSCAN,
-  DenseMatrix,
-  DenseMatrixF64,
-  DistanceVariantType,
-  DenseMatrixI32,
-} from '../dist/core-bindings/index.js'
-import { loadBoston, loadDigits, loadDigitsI32 } from '../dist/dataset/v2.js'
+import { DBSCANBuilder, DBSCAN, DistanceVariantType } from '../../dist/core-bindings/index.js'
+import { loadBoston, loadDigitsI32 } from '../../dist/dataset/v2.js'
 import assert from 'assert'
-import { trainTestSplit } from '../dist/model_selection/index.js'
-import { accuracyScore } from '../dist/metrics/index.js'
+import { trainTestSplit } from '../../dist/model_selection/index.js'
+import { accuracyScore } from '../../dist/metrics/index.js'
 
-describe('DBSCAN', () => {
+export default () => {
   it('create', () => {
     const bostonData = loadBoston({ returnXY: true })
     const [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const dbscan = new DBSCANBuilder(x).build()
+    const _ = new DBSCANBuilder(x).build()
   })
 
   describe('variants', () => {
@@ -72,7 +65,7 @@ describe('DBSCAN', () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const dbscanBuilder = new DBSCANBuilder(x)
     const dbscan = dbscanBuilder.build()
@@ -86,7 +79,7 @@ describe('DBSCAN', () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const dbscanBuilder = new DBSCANBuilder(x)
     const dbscan = dbscanBuilder.build()
@@ -96,4 +89,4 @@ describe('DBSCAN', () => {
     const score2 = accuracyScore(deserializedDBSCAN.predict(xTest).field0, yTest)
     assert.equal(score1, score2)
   })
-})
+}
