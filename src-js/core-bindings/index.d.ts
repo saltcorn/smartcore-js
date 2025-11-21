@@ -241,13 +241,6 @@ export declare class CategoricalNBU8 {
   static deserialize(data: Buffer): CategoricalNBU8
 }
 
-export declare class CrossValidationResult {
-  testScore(): Float64Array
-  trainScore(): Float64Array
-  meanTestScore(): number
-  meanTrainScore(): number
-}
-
 export declare class dataset {
   static boston(): Boston
   static breastCancer(): BreastCancer
@@ -806,93 +799,20 @@ export declare class Digits {
   loadDatasetI32(): DatasetI32I32
 }
 
-export declare class ElasticNetF32F32 {
-  constructor()
-  static fit(x: DenseMatrixF32, y: Float32Array, parameters: ElasticNetParameters): ElasticNetF32F32
-  predict(x: DenseMatrixF32): Float32Array
+export declare class ElasticNet {
+  predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
-  static deserialize(data: Buffer): ElasticNetF32F32
+  static deserialize(data: Buffer): ElasticNet
 }
 
-export declare class ElasticNetF32F64 {
-  constructor()
-  static fit(x: DenseMatrixF32, y: Float64Array, parameters: ElasticNetParameters): ElasticNetF32F64
-  predict(x: DenseMatrixF32): Float64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): ElasticNetF32F64
-}
-
-export declare class ElasticNetF32I32 {
-  constructor()
-  static fit(x: DenseMatrixF32, y: Int32Array, parameters: ElasticNetParameters): ElasticNetF32I32
-  predict(x: DenseMatrixF32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): ElasticNetF32I32
-}
-
-export declare class ElasticNetF32I64 {
-  constructor()
-  static fit(x: DenseMatrixF32, y: BigInt64Array, parameters: ElasticNetParameters): ElasticNetF32I64
-  predict(x: DenseMatrixF32): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): ElasticNetF32I64
-}
-
-export declare class ElasticNetF32U64 {
-  constructor()
-  static fit(x: DenseMatrixF32, y: BigUint64Array, parameters: ElasticNetParameters): ElasticNetF32U64
-  predict(x: DenseMatrixF32): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): ElasticNetF32U64
-}
-
-export declare class ElasticNetF64F32 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: Float32Array, parameters: ElasticNetParameters): ElasticNetF64F32
-  predict(x: DenseMatrixF64): Float32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): ElasticNetF64F32
-}
-
-export declare class ElasticNetF64F64 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: Float64Array, parameters: ElasticNetParameters): ElasticNetF64F64
-  predict(x: DenseMatrixF64): Float64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): ElasticNetF64F64
-}
-
-export declare class ElasticNetF64I32 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: Int32Array, parameters: ElasticNetParameters): ElasticNetF64I32
-  predict(x: DenseMatrixF64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): ElasticNetF64I32
-}
-
-export declare class ElasticNetF64I64 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: ElasticNetParameters): ElasticNetF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): ElasticNetF64I64
-}
-
-export declare class ElasticNetF64U64 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: ElasticNetParameters): ElasticNetF64U64
-  predict(x: DenseMatrixF64): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): ElasticNetF64U64
-}
-
-export declare class ElasticNetParameters {
-  constructor()
+export declare class ElasticNetBuilder {
+  constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
   withAlpha(alpha: number): void
   withL1Ratio(l1Ratio: number): void
   withNormalize(normalize: boolean): void
   withTol(tol: number): void
-  withMaxIter(maxIter: number): void
+  withMaxIter(maxIter: bigint): void
+  build(): ElasticNet
 }
 
 export declare class EuclidianF32 {
@@ -2415,12 +2335,6 @@ export declare class VecI64 {
   constructor(values: BigInt64Array)
 }
 
-export declare function crossValidateElasticNetF64F64(xs: DenseMatrixF64, ys: Float64Array, parameters: ElasticNetParameters, cv: KFold, score: (arg0: Float64Array, arg1: Float64Array) => number): CrossValidationResult
-
-export declare function crossValidateElasticNetF64I64(xs: DenseMatrixF64, ys: BigInt64Array, parameters: ElasticNetParameters, cv: KFold, score: (arg0: BigInt64Array, arg1: BigInt64Array) => number): CrossValidationResult
-
-export declare function crossValidateLogisticRegressionF64I64(xs: DenseMatrixF64, ys: BigInt64Array, parameters: LogisticRegressionParametersF64, cv: KFold, score: (arg0: BigInt64Array, arg1: BigInt64Array) => number): CrossValidationResult
-
 export declare const enum DenseMatrixType {
   F64 = 'F64',
   F32 = 'F32',
@@ -2444,6 +2358,14 @@ export declare const enum DistanceVariantType {
   Mahalanobis = 2,
   Manhattan = 3,
   Minkowski = 4
+}
+
+export declare const enum ElasticNetPredictOutputType {
+  F64 = 'F64',
+  F32 = 'F32',
+  I64 = 'I64',
+  U64 = 'U64',
+  I32 = 'I32'
 }
 
 export declare const enum ExtraTreesRegressorPredictOutputType {
