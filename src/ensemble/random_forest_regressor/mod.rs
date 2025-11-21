@@ -1,160 +1,69 @@
-mod parameters;
+mod builder;
+mod deserialize;
+mod factory;
+mod lib_random_forest_regressor_factory;
+mod predict_output_type;
+mod predictor_estimator;
+mod serialize_data;
+mod variants;
 
-use std::ops::Deref;
-
-use bincode::{
-  config::standard,
-  serde::{decode_from_slice, encode_to_vec},
-};
-use napi::bindgen_prelude::*;
+use bincode::{config::standard, decode_from_slice, encode_to_vec};
+use napi::{bindgen_prelude::Buffer, Error, Result, Status};
 use napi_derive::napi;
-use paste::paste;
-use smartcore::{
-  ensemble::random_forest_regressor::RandomForestRegressor as LibRandomForestRegressor,
-  linalg::basic::matrix::DenseMatrix,
+
+use crate::{
+  dense_matrix::{DenseMatrix, DenseMatrixType},
+  traits::{Estimator, Predictor, PredictorEstimator},
+  typed_array::TypedArrayWrapper,
 };
+use predict_output_type::RandomForestRegressorPredictOutputType;
+use serialize_data::RandomForestRegressorSerializeData;
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-use parameters::RandomForestRegressorParameters;
-
-macro_rules! random_forest_regressor_nb_struct {
-  (
-    feature_type: $feat:ty,
-    predict_output_type: $id:ty,
-    matrix_type: $matrix:ty,
-    array_type: $array:ty
-  ) => {
-    paste! {
-        #[napi(js_name=""[<RandomForestRegressor $feat:upper $id:upper>]"")]
-        #[derive(Debug)]
-        pub struct [<RandomForestRegressor $feat:upper $id:upper>] {
-            inner: LibRandomForestRegressor<$feat, $id, DenseMatrix<$feat>, Vec<$id>>,
-        }
-
-        #[napi]
-        impl [<RandomForestRegressor $feat:upper $id:upper>] {
-            #[napi(factory)]
-            pub fn fit(x: &$matrix, y: $array, parameters: &RandomForestRegressorParameters) -> Result<Self> {
-                let inner = LibRandomForestRegressor::fit(
-                    x as &DenseMatrix<$feat>,
-                    &y.to_vec(),
-                    parameters.owned_inner(),
-                )
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Self { inner })
-            }
-
-            #[napi]
-            pub fn predict(&self, x: &$matrix) -> Result<$array> {
-                let prediction_result = self
-                .inner
-                .predict(x as &DenseMatrix<$feat>)
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(prediction_result.into())
-            }
-
-            #[napi]
-            pub fn serialize(&self) -> Result<Buffer> {
-                let encoded = encode_to_vec(&self.inner, standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Buffer::from(encoded))
-            }
-
-            #[napi(factory)]
-            pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibRandomForestRegressor<$feat, $id, DenseMatrix<$feat>, Vec<$id>>, _>(data.as_ref(), standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
-                Ok(Self { inner })
-            }
-        }
-
-        impl Deref for [<RandomForestRegressor $feat:upper $id:upper>] {
-            type Target = LibRandomForestRegressor<$feat, $id, DenseMatrix<$feat>, Vec<$id>>;
-
-            fn deref(&self) -> &Self::Target {
-                &self.inner
-            }
-        }
-    }
-  };
+#[napi(js_name = "RandomForestRegressor")]
+#[derive(Debug)]
+pub struct RandomForestRegressor {
+  pub(super) inner: Box<dyn PredictorEstimator>,
+  pub(super) fit_data_variant_type: DenseMatrixType,
+  pub(super) predict_output_type: RandomForestRegressorPredictOutputType,
 }
 
-// [f32, f64]
-random_forest_regressor_nb_struct! {
-    feature_type: f32,
-    predict_output_type: f64,
-    matrix_type: DenseMatrixF32,
-    array_type: Float64Array
+#[napi]
+impl RandomForestRegressor {
+  #[napi]
+  pub fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
+    self.inner.predict(x)
+  }
+
+  #[napi]
+  pub fn serialize(&self) -> Result<Buffer> {
+    let buffer_data = Estimator::serialize(self)?;
+    Ok(Buffer::from(buffer_data))
+  }
+
+  #[napi(factory)]
+  pub fn deserialize(data: Buffer) -> Result<Self> {
+    let serialize_data: RandomForestRegressorSerializeData =
+      decode_from_slice(data.as_ref(), standard())
+        .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?
+        .0;
+    serialize_data.try_into()
+  }
 }
 
-// [f32, f32]
-random_forest_regressor_nb_struct! {
-    feature_type: f32,
-    predict_output_type: f32,
-    matrix_type: DenseMatrixF32,
-    array_type: Float32Array
+impl Predictor for RandomForestRegressor {
+  fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
+    self.inner.predict(x)
+  }
 }
 
-// [f32, i64]
-random_forest_regressor_nb_struct! {
-    feature_type: f32,
-    predict_output_type: i64,
-    matrix_type: DenseMatrixF32,
-    array_type: BigInt64Array
-}
-
-// [f32, u64]
-random_forest_regressor_nb_struct! {
-    feature_type: f32,
-    predict_output_type: u64,
-    matrix_type: DenseMatrixF32,
-    array_type: BigUint64Array
-}
-
-// [f32, i32]
-random_forest_regressor_nb_struct! {
-    feature_type: f32,
-    predict_output_type: i32,
-    matrix_type: DenseMatrixF32,
-    array_type: Int32Array
-}
-
-// [f64, f64]
-random_forest_regressor_nb_struct! {
-    feature_type: f64,
-    predict_output_type: f64,
-    matrix_type: DenseMatrixF64,
-    array_type: Float64Array
-}
-
-// [f64, f32]
-random_forest_regressor_nb_struct! {
-    feature_type: f64,
-    predict_output_type: f32,
-    matrix_type: DenseMatrixF64,
-    array_type: Float32Array
-}
-
-// [f64, i64]
-random_forest_regressor_nb_struct! {
-    feature_type: f64,
-    predict_output_type: i64,
-    matrix_type: DenseMatrixF64,
-    array_type: BigInt64Array
-}
-
-// [f64, u64]
-random_forest_regressor_nb_struct! {
-    feature_type: f64,
-    predict_output_type: u64,
-    matrix_type: DenseMatrixF64,
-    array_type: BigUint64Array
-}
-
-// [f64, i32]
-random_forest_regressor_nb_struct! {
-    feature_type: f64,
-    predict_output_type: i32,
-    matrix_type: DenseMatrixF64,
-    array_type: Int32Array
+impl Estimator for RandomForestRegressor {
+  fn serialize(&self) -> Result<Vec<u8>> {
+    let serialize_data = RandomForestRegressorSerializeData {
+      fit_data_variant_type: self.fit_data_variant_type,
+      predict_output_type: self.predict_output_type,
+      random_forest_regressor: self.inner.serialize()?,
+    };
+    encode_to_vec(serialize_data, standard())
+      .map_err(|e| Error::new(Status::GenericFailure, e.to_string()))
+  }
 }

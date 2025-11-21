@@ -2269,85 +2269,22 @@ export declare class RandomForestClassifierBuilder {
   build(): RandomForestClassifier
 }
 
-export declare class RandomForestRegressorF32F32 {
-  static fit(x: DenseMatrixF32, y: Float32Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32F32
-  predict(x: DenseMatrixF32): Float32Array
+export declare class RandomForestRegressor {
+  predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestRegressorF32F32
+  static deserialize(data: Buffer): RandomForestRegressor
 }
 
-export declare class RandomForestRegressorF32F64 {
-  static fit(x: DenseMatrixF32, y: Float64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32F64
-  predict(x: DenseMatrixF32): Float64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestRegressorF32F64
-}
-
-export declare class RandomForestRegressorF32I32 {
-  static fit(x: DenseMatrixF32, y: Int32Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32I32
-  predict(x: DenseMatrixF32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestRegressorF32I32
-}
-
-export declare class RandomForestRegressorF32I64 {
-  static fit(x: DenseMatrixF32, y: BigInt64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32I64
-  predict(x: DenseMatrixF32): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestRegressorF32I64
-}
-
-export declare class RandomForestRegressorF32U64 {
-  static fit(x: DenseMatrixF32, y: BigUint64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF32U64
-  predict(x: DenseMatrixF32): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestRegressorF32U64
-}
-
-export declare class RandomForestRegressorF64F32 {
-  static fit(x: DenseMatrixF64, y: Float32Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64F32
-  predict(x: DenseMatrixF64): Float32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestRegressorF64F32
-}
-
-export declare class RandomForestRegressorF64F64 {
-  static fit(x: DenseMatrixF64, y: Float64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64F64
-  predict(x: DenseMatrixF64): Float64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestRegressorF64F64
-}
-
-export declare class RandomForestRegressorF64I32 {
-  static fit(x: DenseMatrixF64, y: Int32Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64I32
-  predict(x: DenseMatrixF64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestRegressorF64I32
-}
-
-export declare class RandomForestRegressorF64I64 {
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestRegressorF64I64
-}
-
-export declare class RandomForestRegressorF64U64 {
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: RandomForestRegressorParameters): RandomForestRegressorF64U64
-  predict(x: DenseMatrixF64): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestRegressorF64U64
-}
-
-export declare class RandomForestRegressorParameters {
-  constructor()
+export declare class RandomForestRegressorBuilder {
+  constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
   withMaxDepth(maxDepth: number): void
   withMinSamplesLeaf(minSamplesLeaf: bigint): void
   withMinSamplesSplit(minSamplesSplit: bigint): void
-  withNTrees(nTrees: number): void
-  withM(m: number): void
+  withNTrees(nTrees: bigint): void
+  withM(m: bigint): void
   withKeepSamples(keepSamples: boolean): void
-  withSeed(seed: number): void
+  withSeed(seed: bigint): void
+  build(): RandomForestRegressor
 }
 
 export declare class RecallF64 {
@@ -2542,6 +2479,14 @@ export declare const enum LogisticRegressionSolverName {
 }
 
 export declare const enum RandomForestClassifierPredictOutputType {
+  I64 = 'I64',
+  U64 = 'U64',
+  I32 = 'I32'
+}
+
+export declare const enum RandomForestRegressorPredictOutputType {
+  F64 = 'F64',
+  F32 = 'F32',
   I64 = 'I64',
   U64 = 'U64',
   I32 = 'I32'
