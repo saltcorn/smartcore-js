@@ -19,7 +19,8 @@ import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 // let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
 let {
-  // RandomForestClassifier, RandomForestRegressor,
+  RandomForestClassifier,
+  //   RandomForestRegressor,
   ExtraTreesRegressor,
 } = ensemble
 // let { StandardScaler, OneHotEncoder } = preprocessing
@@ -72,21 +73,21 @@ describe('Serialize + Deserialize', () => {
   //     assert.equal(score1, score2)
   //   })
 
-  //   it('RandomForestClassifier', () => {
-  //     const rfc = new RandomForestClassifier()
-  //     const irisData = loadIris({ returnXY: true })
-  //     const [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
-  //     }
-  //     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     rfc.fit(xTrain, yTrain)
-  //     const score1 = accuracyScore(rfc.predict(xTest), yTest)
-  //     const rfcSerialized = rfc.serialize()
-  //     const rfcDeserialized = RandomForestClassifier.deserialize(rfcSerialized)
-  //     const score2 = accuracyScore(rfcDeserialized.predict(xTest), yTest)
-  //     assert.equal(score1, score2)
-  //   })
+  it('RandomForestClassifier', () => {
+    const rfc = new RandomForestClassifier()
+    const irisData = loadIris({ returnXY: true })
+    const [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadIris" to return an Array containing 2 items.')
+    }
+    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    rfc.fit(xTrain, yTrain)
+    const score1 = accuracyScore(rfc.predict(xTest), yTest)
+    const rfcSerialized = rfc.serialize()
+    const rfcDeserialized = RandomForestClassifier.deserialize(rfcSerialized)
+    const score2 = accuracyScore(rfcDeserialized.predict(xTest), yTest)
+    assert.equal(score1, score2)
+  })
 
   //   it('RandomForestRegressor', () => {
   //     const rfr = new RandomForestRegressor()

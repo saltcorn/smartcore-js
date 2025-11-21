@@ -21,9 +21,9 @@ export default () => {
     }
     const [, xTest, ,] = trainTestSplit(x, y, { testSize: 0.33 })
 
-    const dbscanBuilder = new PCABuilder(x)
-    const dbscan = dbscanBuilder.build()
-    const _ = dbscan.transform(xTest)
+    const pcaBuilder = new PCABuilder(x)
+    const pca = pcaBuilder.build()
+    const _ = pca.transform(xTest)
   })
 
   it('serialize + deserialize', () => {
@@ -34,10 +34,10 @@ export default () => {
     }
     const [, xTest, ,] = trainTestSplit(x, y, { testSize: 0.33 })
 
-    const dbscanBuilder = new PCABuilder(x)
-    const dbscan = dbscanBuilder.build()
-    const transformedMatrix1 = dbscan.transform(xTest)
-    const serializedPCA = dbscan.serialize()
+    const pcaBuilder = new PCABuilder(x)
+    const pca = pcaBuilder.build()
+    const transformedMatrix1 = pca.transform(xTest)
+    const serializedPCA = pca.serialize()
     const deserializedPCA = PCA.deserialize(serializedPCA)
     const transformedMatrix2 = deserializedPCA.transform(xTest)
     const [nrows, ncols] = transformedMatrix1.shape()

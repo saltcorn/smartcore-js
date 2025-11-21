@@ -1,8 +1,13 @@
 import { utilities, type InputType, type YType } from '../../index.js'
-import { type PredictorProvider, type Predictor } from '../../estimator.js'
-import { PredictorProvidersMap, type XTypeStr, type YTypeStr } from './estimator_providers_map/index.js'
+import { type RsPredictor } from '../../estimator.js'
 import { DataFrame } from '../../data_frame.js'
-import type { SplitCriterion } from '../../core-bindings/index.js'
+import {
+  RandomForestClassifier as LibRandomForestClassifier,
+  RandomForestClassifierBuilder,
+  type DenseMatrixType,
+  type SplitCriterion,
+  type TypedArrayType,
+} from '../../core-bindings/index.js'
 
 interface IRandomForestClassifierBaseParameters {
   splitCriterion?: SplitCriterion
@@ -10,14 +15,14 @@ interface IRandomForestClassifierBaseParameters {
   minSamplesLeaf?: bigint | number
   minSamplesSplit?: bigint | number
   nTrees?: number
-  m?: number
+  m?: bigint | number
   keepSamples?: boolean
-  seed?: number
+  seed?: bigint | number
 }
 
 interface IRandomForestClassifierParameters extends IRandomForestClassifierBaseParameters {
-  targetType?: XTypeStr
-  featureType?: YTypeStr
+  fitDataXType?: DenseMatrixType
+  fitDataYType?: TypedArrayType
   columns?: string[]
 }
 
@@ -36,25 +41,12 @@ class RandomForestClassifier implements HasColumns {
   public readonly config: IRandomForestClassifierParameters
 
   private _isFitted: boolean = false
-  private estimatorProvider: PredictorProvider<IRandomForestClassifierBaseParameters, any, any>
-  private parameters: any
-  private estimator: Predictor | null = null
+  private estimator: RsPredictor | null = null
 
   constructor(params?: IRandomForestClassifierParameters) {
     this.config = params || {}
-    this.config.targetType = this.config.targetType ?? 'f32'
-    this.config.featureType = this.config.featureType ?? 'i32'
-    const estimatorProviderMap = PredictorProvidersMap.get(this.config.targetType)
-    if (!estimatorProviderMap) {
-      throw new Error(`Invalid value for target type '${this.config.targetType}'`)
-    }
-    const estimatorProvider = estimatorProviderMap.get(this.config.featureType)
-    if (!estimatorProvider) {
-      throw new Error(`Invalid value for feature type '${this.config.featureType}'`)
-    }
-    const parameters = estimatorProvider.parameters(this.config)
-    this.estimatorProvider = estimatorProvider
-    this.parameters = parameters
+    this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
+    this.config.fitDataYType = this.config.fitDataYType ?? ('I32' as TypedArrayType)
   }
 
   get columns(): string[] | null {
@@ -66,7 +58,18 @@ class RandomForestClassifier implements HasColumns {
     if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
       matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
     else matrix = utilities.inputTypeToDenseMatrix(x)
-    this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters)
+    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y))
+    const builder = new RandomForestClassifierBuilder(matrix, yWrapped)
+    if (this.config.splitCriterion !== undefined) builder.withCriterion(this.config.splitCriterion)
+    if (this.config.maxDepth !== undefined) builder.withMaxDepth(this.config.maxDepth)
+    if (this.config.minSamplesLeaf !== undefined) builder.withMinSamplesLeaf(BigInt(this.config.minSamplesLeaf))
+    if (this.config.minSamplesSplit !== undefined) builder.withMinSamplesSplit(BigInt(this.config.minSamplesSplit))
+    if (this.config.nTrees !== undefined) builder.withNTrees(this.config.nTrees)
+    if (this.config.m !== undefined) builder.withM(BigInt(this.config.m))
+    if (this.config.keepSamples !== undefined) builder.withKeepSamples(this.config.keepSamples)
+    if (this.config.seed !== undefined) builder.withSeed(BigInt(this.config.seed))
+
+    this.estimator = builder.build()
     this._isFitted = true
     return this
   }
@@ -86,11 +89,10 @@ class RandomForestClassifier implements HasColumns {
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
       const matrix = utilities.dataFrameToDenseMatrix(x, columns)
-      const matrixRs = this.estimatorProvider.toMatrix(matrix)
-      return this.estimator!.predict(matrixRs)
+      return this.estimator!.predict(matrix).field0
     }
-    const matrixRs = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(x))
-    return this.estimator!.predict(matrixRs)
+    const matrixRs = utilities.inputTypeToDenseMatrix(x)
+    return this.estimator!.predict(matrixRs).field0
   }
 
   serialize(): RandomForestClassifierSerializedData {
@@ -106,7 +108,7 @@ class RandomForestClassifier implements HasColumns {
     if (this._isFitted) {
       throw new Error("Cannot call 'deserialize' on a fitted instance!")
     }
-    this.estimator = this.estimatorProvider.deserialize(data)
+    this.estimator = LibRandomForestClassifier.deserialize(data)
     return this
   }
 

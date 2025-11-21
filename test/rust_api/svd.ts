@@ -21,9 +21,9 @@ export default () => {
     }
     const [, xTest, ,] = trainTestSplit(x, y, { testSize: 0.33 })
 
-    const dbscanBuilder = new SVDBuilder(x)
-    const dbscan = dbscanBuilder.build()
-    const _ = dbscan.transform(xTest)
+    const svdBuilder = new SVDBuilder(x)
+    const svd = svdBuilder.build()
+    const _ = svd.transform(xTest)
   })
 
   it('serialize + deserialize', () => {
@@ -34,10 +34,10 @@ export default () => {
     }
     const [, xTest, ,] = trainTestSplit(x, y, { testSize: 0.33 })
 
-    const dbscanBuilder = new SVDBuilder(x)
-    const dbscan = dbscanBuilder.build()
-    const transformedMatrix1 = dbscan.transform(xTest)
-    const serializedSVD = dbscan.serialize()
+    const svdBuilder = new SVDBuilder(x)
+    const svd = svdBuilder.build()
+    const transformedMatrix1 = svd.transform(xTest)
+    const serializedSVD = svd.serialize()
     const deserializedSVD = SVD.deserialize(serializedSVD)
     const transformedMatrix2 = deserializedSVD.transform(xTest)
     const [nrows, ncols] = transformedMatrix1.shape()
