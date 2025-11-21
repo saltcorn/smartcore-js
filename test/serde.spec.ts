@@ -1,7 +1,7 @@
 import assert from 'assert'
 import chalk from 'chalk'
 import {
-  //   linearModel,
+  linearModel,
   //   preprocessing,
   dataset,
   ensemble,
@@ -17,7 +17,10 @@ import {
 import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-js/core-bindings/index.js'
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
-// let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
+let {
+  // LogisticRegression, LinearRegression, RidgeRegression, Lasso,
+  ElasticNet,
+} = linearModel
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
 // let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
@@ -232,21 +235,21 @@ describe('Serialize + Deserialize', () => {
   //     assert.equal(score1, score2)
   //   })
 
-  //   it('ElasticNet', () => {
-  //     const en = new ElasticNet()
-  //     const bostonData = loadBoston({ returnXY: true })
-  //     const [x, y] = bostonData instanceof Array ? bostonData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
-  //     }
-  //     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     en.fit(xTrain, yTrain)
-  //     let score1 = accuracyScore(en.predict(xTest), yTest)
-  //     const enSerialized = en.serialize()
-  //     const enDeserialized = ElasticNet.deserialize(enSerialized)
-  //     const score2 = accuracyScore(enDeserialized.predict(xTest), yTest)
-  //     assert.equal(score1, score2)
-  //   })
+  it('ElasticNet', () => {
+    const en = new ElasticNet()
+    const bostonData = loadBoston({ returnXY: true })
+    const [x, y] = bostonData instanceof Array ? bostonData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
+    }
+    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    en.fit(xTrain, yTrain)
+    let score1 = accuracyScore(en.predict(xTest), yTest)
+    const enSerialized = en.serialize()
+    const enDeserialized = ElasticNet.deserialize(enSerialized)
+    const score2 = accuracyScore(enDeserialized.predict(xTest), yTest)
+    assert.equal(score1, score2)
+  })
 
   //   it.skip('OneHotEncoder', () => {
   //     const ohe = new OneHotEncoder({ categoricalParams: new BigUint64Array() })

@@ -1,3 +1,4 @@
+import elasticNet from './elastic_net.ts'
 import dbscan from './dbscan.ts'
 import extraTreesRegressor from './extra_trees_regressor.ts'
 import pca from './pca.ts'
@@ -21,5 +22,9 @@ describe('Rust API', () => {
     describe('ExtraTreesRegressor', extraTreesRegressor)
     describe('RandomForestClassifier', randomForestClassifier)
     describe('RandomForestRegressor', randomForestRegressor)
+  })
+
+  describe('linear_model', () => {
+    describe('ElasticNet', elasticNet)
   })
 })

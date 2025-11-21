@@ -1,16 +1,24 @@
 import { utilities, type InputType, type YType } from '../../index.js'
-import { type PredictorProvider, type Predictor } from '../../estimator.js'
-import {
-  EstimatorProvidersMap,
-  type IElasticNetBaseParameters,
-  type XTypeStr,
-  type YTypeStr,
-} from './estimator_providers_map/index.js'
+import { type RsPredictor } from '../../estimator.js'
 import { DataFrame } from '../../data_frame.js'
+import {
+  ElasticNet as LibElasticNet,
+  ElasticNetBuilder,
+  type DenseMatrixType,
+  type TypedArrayType,
+} from '../../core-bindings/index.js'
+
+interface IElasticNetBaseParameters {
+  alpha?: number
+  l1Ratio?: number
+  normalize?: boolean
+  tol?: number
+  maxIter?: bigint | number
+}
 
 interface IElasticNetParameters extends IElasticNetBaseParameters {
-  featureType?: XTypeStr
-  targetType?: YTypeStr
+  fitDataXType?: DenseMatrixType
+  fitDataYType?: TypedArrayType
   columns?: string[]
 }
 
@@ -29,25 +37,12 @@ class ElasticNet implements HasColumns {
   public readonly config: IElasticNetParameters = {}
 
   private _isFitted: boolean = false
-  private estimatorProvider: PredictorProvider<IElasticNetBaseParameters, any, any>
-  private parameters: any
-  private estimator: Predictor | null = null
+  private estimator: RsPredictor | null = null
 
   constructor(params?: IElasticNetParameters) {
     this.config = params ?? {}
-    this.config.featureType = this.config.featureType ?? 'f32'
-    const estimatorProvidersMap = EstimatorProvidersMap.get(this.config.featureType)
-    if (!estimatorProvidersMap) {
-      throw new Error(`Invalid value for feature type '${this.config.featureType}'`)
-    }
-    this.config.targetType = this.config.targetType ?? 'f32'
-    const estimatorProvider = estimatorProvidersMap.get(this.config.targetType)
-    if (!estimatorProvider) {
-      throw new Error(`Invalid value for target type '${this.config.targetType}'`)
-    }
-    const parameters = estimatorProvider.parameters(this.config)
-    this.estimatorProvider = estimatorProvider
-    this.parameters = parameters
+    this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
+    this.config.fitDataYType = this.config.fitDataYType ?? ('F32' as TypedArrayType)
   }
 
   get columns(): string[] | null {
@@ -59,7 +54,14 @@ class ElasticNet implements HasColumns {
     if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
       matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
     else matrix = utilities.inputTypeToDenseMatrix(x)
-    this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters)
+    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y))
+    const builder = new ElasticNetBuilder(matrix, yWrapped)
+    if (this.config.alpha !== undefined) builder.withAlpha(this.config.alpha)
+    if (this.config.l1Ratio !== undefined) builder.withL1Ratio(this.config.l1Ratio)
+    if (this.config.normalize !== undefined) builder.withNormalize(this.config.normalize)
+    if (this.config.tol !== undefined) builder.withTol(this.config.tol)
+    if (this.config.maxIter !== undefined) builder.withMaxIter(BigInt(this.config.maxIter))
+    this.estimator = builder.build()
     this._isFitted = true
     return this
   }
@@ -79,11 +81,10 @@ class ElasticNet implements HasColumns {
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
       const matrix = utilities.dataFrameToDenseMatrix(x, columns)
-      const matrixRs = this.estimatorProvider.toMatrix(matrix)
-      return this.estimator!.predict(matrixRs)
+      return this.estimator!.predict(matrix).field0
     }
-    const matrixRs = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(x))
-    return this.estimator!.predict(matrixRs)
+    const matrixRs = utilities.inputTypeToDenseMatrix(x)
+    return this.estimator!.predict(matrixRs).field0
   }
 
   serialize(): ElasticNetSerializedData {
@@ -99,7 +100,7 @@ class ElasticNet implements HasColumns {
     if (this._isFitted) {
       throw new Error("Cannot call 'deserialize' on a fitted instance!")
     }
-    this.estimator = this.estimatorProvider.deserialize(data)
+    this.estimator = LibElasticNet.deserialize(data)
     return this
   }
 
