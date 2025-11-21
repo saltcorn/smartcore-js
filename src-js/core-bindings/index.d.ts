@@ -2250,58 +2250,23 @@ export declare class R2U64 {
 }
 export type R2u64 = R2U64
 
-export declare class RandomForestClassifierF32I32 {
-  static fit(x: DenseMatrixF32, y: Int32Array, parameters: RandomForestClassifierParameters): RandomForestClassifierF32I32
-  predict(x: DenseMatrixF32): Int32Array
+export declare class RandomForestClassifier {
+  predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestClassifierF32I32
+  static deserialize(data: Buffer): RandomForestClassifier
 }
 
-export declare class RandomForestClassifierF32I64 {
-  static fit(x: DenseMatrixF32, y: BigInt64Array, parameters: RandomForestClassifierParameters): RandomForestClassifierF32I64
-  predict(x: DenseMatrixF32): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestClassifierF32I64
-}
-
-export declare class RandomForestClassifierF32U64 {
-  static fit(x: DenseMatrixF32, y: BigUint64Array, parameters: RandomForestClassifierParameters): RandomForestClassifierF32U64
-  predict(x: DenseMatrixF32): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestClassifierF32U64
-}
-
-export declare class RandomForestClassifierF64I32 {
-  static fit(x: DenseMatrixF64, y: Int32Array, parameters: RandomForestClassifierParameters): RandomForestClassifierF64I32
-  predict(x: DenseMatrixF64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestClassifierF64I32
-}
-
-export declare class RandomForestClassifierF64I64 {
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: RandomForestClassifierParameters): RandomForestClassifierF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestClassifierF64I64
-}
-
-export declare class RandomForestClassifierF64U64 {
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: RandomForestClassifierParameters): RandomForestClassifierF64U64
-  predict(x: DenseMatrixF64): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RandomForestClassifierF64U64
-}
-
-export declare class RandomForestClassifierParameters {
-  constructor()
-  withCriterion(criterion: SplitCriterion): void
+export declare class RandomForestClassifierBuilder {
+  constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
+  withCriterion(splitCriterion: SplitCriterion): void
   withMaxDepth(maxDepth: number): void
   withMinSamplesLeaf(minSamplesLeaf: bigint): void
   withMinSamplesSplit(minSamplesSplit: bigint): void
   withNTrees(nTrees: number): void
-  withM(m: number): void
+  withM(m: bigint): void
   withKeepSamples(keepSamples: boolean): void
-  withSeed(seed: number): void
+  withSeed(seed: bigint): void
+  build(): RandomForestClassifier
 }
 
 export declare class RandomForestRegressorF32F32 {
@@ -2574,6 +2539,12 @@ export declare const enum LinearRegressionSolverName {
 
 export declare const enum LogisticRegressionSolverName {
   LBFGS = 'LBFGS'
+}
+
+export declare const enum RandomForestClassifierPredictOutputType {
+  I64 = 'I64',
+  U64 = 'U64',
+  I32 = 'I32'
 }
 
 export declare const enum RidgeRegressionSolverName {
