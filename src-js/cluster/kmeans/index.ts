@@ -1,6 +1,6 @@
 import { utilities, type InputType, type YType } from '../../index.js'
 import { type IKMeansBaseParameters } from './parameters.js'
-import { type Predictor } from '../../estimator.js'
+import { type RsPredictor } from '../../estimator.js'
 import { KMeans as KMeansV2, KMeansBuilder, type KMeansPredictOutputType } from '../../core-bindings/index.js'
 
 interface IKMeansParameters extends IKMeansBaseParameters {
@@ -18,7 +18,7 @@ class KMeans {
   public readonly config: IKMeansParameters
 
   private _isFitted: boolean = false
-  private estimator: Predictor | null = null
+  private estimator: RsPredictor | null = null
 
   constructor(params?: IKMeansParameters) {
     const config = params || {}

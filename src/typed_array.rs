@@ -66,3 +66,26 @@ impl From<TypedArrayWrapper> for TypedArrayVec {
     }
   }
 }
+
+#[napi(string_enum)]
+pub enum TypedArrayType {
+  F64,
+  F32,
+  I64,
+  U64,
+  I32,
+  U32,
+}
+
+impl From<TypedArrayWrapper> for TypedArrayType {
+  fn from(value: TypedArrayWrapper) -> Self {
+    match value {
+      TypedArrayWrapper::F32(_) => Self::F32,
+      TypedArrayWrapper::F64(_) => Self::F64,
+      TypedArrayWrapper::I64(_) => Self::I64,
+      TypedArrayWrapper::U64(_) => Self::U32,
+      TypedArrayWrapper::I32(_) => Self::I32,
+      TypedArrayWrapper::U32(_) => Self::U32,
+    }
+  }
+}

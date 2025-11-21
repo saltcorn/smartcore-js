@@ -482,3 +482,4 @@ module.exports.trainTestSplitU8F64 = __napiModule.exports.trainTestSplitU8F64
 module.exports.trainTestSplitU8I32 = __napiModule.exports.trainTestSplitU8I32
 module.exports.trainTestSplitU8I64 = __napiModule.exports.trainTestSplitU8I64
 module.exports.trainTestSplitU8U64 = __napiModule.exports.trainTestSplitU8U64
+module.exports.TypedArrayType = __napiModule.exports.TypedArrayType

@@ -5,8 +5,12 @@ interface Estimator {
   serialize(): Buffer
 }
 
-interface Predictor extends Estimator {
+interface RsPredictor extends Estimator {
   predict(x: DenseMatrix): TypedArrayWrapper
+}
+
+interface Predictor extends Estimator {
+  predict(x: DenseMatrix): YType
 }
 
 interface Transformer extends Estimator {
@@ -24,4 +28,12 @@ interface PredictorProvider<C, P, E extends Predictor> extends EstimatorProvider
 
 interface TransformerProvider<C, P, E extends Transformer> extends EstimatorProvider<C, P, E> {}
 
-export type { Predictor, Estimator, Transformer, EstimatorProvider, PredictorProvider, TransformerProvider }
+export type {
+  Predictor,
+  Estimator,
+  Transformer,
+  EstimatorProvider,
+  PredictorProvider,
+  TransformerProvider,
+  RsPredictor,
+}

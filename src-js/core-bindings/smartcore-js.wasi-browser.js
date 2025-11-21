@@ -430,3 +430,4 @@ export const trainTestSplitU8F64 = __napiModule.exports.trainTestSplitU8F64
 export const trainTestSplitU8I32 = __napiModule.exports.trainTestSplitU8I32
 export const trainTestSplitU8I64 = __napiModule.exports.trainTestSplitU8I64
 export const trainTestSplitU8U64 = __napiModule.exports.trainTestSplitU8U64
+export const TypedArrayType = __napiModule.exports.TypedArrayType

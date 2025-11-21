@@ -1,6 +1,6 @@
 import { utilities, type InputType, type YType } from '../../index.js'
 import { type IDBSCANBaseParameters } from './parameters.js'
-import { type Predictor } from '../../estimator.js'
+import { type RsPredictor } from '../../estimator.js'
 import { DBSCANBuilder, DBSCAN as DBSCANV2, type DistanceVariantType } from '../../core-bindings/index.js'
 
 interface IDBSCANParameters extends IDBSCANBaseParameters {
@@ -18,7 +18,7 @@ class DBSCAN {
   public readonly config: IDBSCANParameters
 
   private _isFitted: boolean = false
-  private estimator: Predictor | null = null
+  private estimator: RsPredictor | null = null
 
   constructor(config?: IDBSCANParameters) {
     this.config = config ?? {}

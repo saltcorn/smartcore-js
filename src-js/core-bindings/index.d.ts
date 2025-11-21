@@ -2667,6 +2667,15 @@ export declare function trainTestSplitU8I64(x: DenseMatrix, y: BigInt64Array, te
 
 export declare function trainTestSplitU8U64(x: DenseMatrix, y: BigUint64Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, BigUint64Array, BigUint64Array]
 
+export declare const enum TypedArrayType {
+  F64 = 'F64',
+  F32 = 'F32',
+  I64 = 'I64',
+  U64 = 'U64',
+  I32 = 'I32',
+  U32 = 'U32'
+}
+
 export type TypedArrayWrapper =
   | { type: 'F64', field0: Float64Array }
   | { type: 'F32', field0: Float32Array }

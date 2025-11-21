@@ -4,7 +4,7 @@ import {
   //   linearModel,
   //   preprocessing,
   dataset,
-  //   ensemble,
+  ensemble,
   modelSelection,
   metrics,
   pipeline,
@@ -18,7 +18,10 @@ import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-j
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 // let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
-// let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
+let {
+  // RandomForestClassifier, RandomForestRegressor,
+  ExtraTreesRegressor,
+} = ensemble
 // let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
 let { PCA, SVD } = decomposition
@@ -101,21 +104,21 @@ describe('Serialize + Deserialize', () => {
   //     assert.equal(score1, score2)
   //   })
 
-  //   it('ExtraTreesRegressor', () => {
-  //     const etr = new ExtraTreesRegressor()
-  //     const irisData = loadIris({ returnXY: true })
-  //     const [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
-  //     }
-  //     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     etr.fit(xTrain, yTrain)
-  //     const score1 = accuracyScore(etr.predict(xTest), yTest)
-  //     const etrSerialized = etr.serialize()
-  //     const etrDeserialized = ExtraTreesRegressor.deserialize(etrSerialized)
-  //     const score2 = accuracyScore(etrDeserialized.predict(xTest), yTest)
-  //     assert.equal(score1, score2)
-  //   })
+  it('ExtraTreesRegressor', () => {
+    const etr = new ExtraTreesRegressor()
+    const irisData = loadIris({ returnXY: true })
+    const [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadIris" to return an Array containing 2 items.')
+    }
+    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    etr.fit(xTrain, yTrain)
+    const score1 = accuracyScore(etr.predict(xTest), yTest)
+    const etrSerialized = etr.serialize()
+    const etrDeserialized = ExtraTreesRegressor.deserialize(etrSerialized)
+    const score2 = accuracyScore(etrDeserialized.predict(xTest), yTest)
+    assert.equal(score1, score2)
+  })
 
   it('KMeans', () => {
     const km = new KMeans()
