@@ -4,6 +4,7 @@ import pca from './pca.ts'
 import svd from './svd.ts'
 import kmeans from './kmeans.ts'
 import randomForestClassifier from './random_forest_classifier.ts'
+import randomForestRegressor from './random_forest_regressor.ts'
 
 describe('Rust API', () => {
   describe('cluster', () => {
@@ -19,5 +20,6 @@ describe('Rust API', () => {
   describe('ensemble', () => {
     describe('ExtraTreesRegressor', extraTreesRegressor)
     describe('RandomForestClassifier', randomForestClassifier)
+    describe('RandomForestRegressor', randomForestRegressor)
   })
 })

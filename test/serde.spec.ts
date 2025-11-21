@@ -18,11 +18,7 @@ import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-j
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 // let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
-let {
-  RandomForestClassifier,
-  //   RandomForestRegressor,
-  ExtraTreesRegressor,
-} = ensemble
+let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
 // let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
 let { PCA, SVD } = decomposition
@@ -89,21 +85,21 @@ describe('Serialize + Deserialize', () => {
     assert.equal(score1, score2)
   })
 
-  //   it('RandomForestRegressor', () => {
-  //     const rfr = new RandomForestRegressor()
-  //     const irisData = loadIris({ returnXY: true })
-  //     const [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
-  //     }
-  //     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     rfr.fit(xTrain, yTrain)
-  //     const score1 = accuracyScore(rfr.predict(xTest), yTest)
-  //     const rfrSerialized = rfr.serialize()
-  //     const rfrDeserialized = RandomForestRegressor.deserialize(rfrSerialized)
-  //     const score2 = accuracyScore(rfrDeserialized.predict(xTest), yTest)
-  //     assert.equal(score1, score2)
-  //   })
+  it('RandomForestRegressor', () => {
+    const rfr = new RandomForestRegressor()
+    const irisData = loadIris({ returnXY: true })
+    const [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadIris" to return an Array containing 2 items.')
+    }
+    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    rfr.fit(xTrain, yTrain)
+    const score1 = accuracyScore(rfr.predict(xTest), yTest)
+    const rfrSerialized = rfr.serialize()
+    const rfrDeserialized = RandomForestRegressor.deserialize(rfrSerialized)
+    const score2 = accuracyScore(rfrDeserialized.predict(xTest), yTest)
+    assert.equal(score1, score2)
+  })
 
   it('ExtraTreesRegressor', () => {
     const etr = new ExtraTreesRegressor()
