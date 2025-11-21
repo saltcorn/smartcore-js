@@ -1749,89 +1749,16 @@ export declare class LassoBuilder {
   build(): Lasso
 }
 
-export declare class LinearRegressionF32F32 {
-  constructor()
-  static fit(x: DenseMatrixF32, y: Float32Array, parameters: LinearRegressionParameters): LinearRegressionF32F32
-  predict(x: DenseMatrixF32): Float32Array
+export declare class LinearRegression {
+  predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
-  static deserialize(data: Buffer): LinearRegressionF32F32
+  static deserialize(data: Buffer): LinearRegression
 }
 
-export declare class LinearRegressionF32F64 {
-  constructor()
-  static fit(x: DenseMatrixF32, y: Float64Array, parameters: LinearRegressionParameters): LinearRegressionF32F64
-  predict(x: DenseMatrixF32): Float64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): LinearRegressionF32F64
-}
-
-export declare class LinearRegressionF32I32 {
-  constructor()
-  static fit(x: DenseMatrixF32, y: Int32Array, parameters: LinearRegressionParameters): LinearRegressionF32I32
-  predict(x: DenseMatrixF32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): LinearRegressionF32I32
-}
-
-export declare class LinearRegressionF32I64 {
-  constructor()
-  static fit(x: DenseMatrixF32, y: BigInt64Array, parameters: LinearRegressionParameters): LinearRegressionF32I64
-  predict(x: DenseMatrixF32): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): LinearRegressionF32I64
-}
-
-export declare class LinearRegressionF32U64 {
-  constructor()
-  static fit(x: DenseMatrixF32, y: BigUint64Array, parameters: LinearRegressionParameters): LinearRegressionF32U64
-  predict(x: DenseMatrixF32): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): LinearRegressionF32U64
-}
-
-export declare class LinearRegressionF64F32 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: Float32Array, parameters: LinearRegressionParameters): LinearRegressionF64F32
-  predict(x: DenseMatrixF64): Float32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): LinearRegressionF64F32
-}
-
-export declare class LinearRegressionF64F64 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: Float64Array, parameters: LinearRegressionParameters): LinearRegressionF64F64
-  predict(x: DenseMatrixF64): Float64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): LinearRegressionF64F64
-}
-
-export declare class LinearRegressionF64I32 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: Int32Array, parameters: LinearRegressionParameters): LinearRegressionF64I32
-  predict(x: DenseMatrixF64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): LinearRegressionF64I32
-}
-
-export declare class LinearRegressionF64I64 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: BigInt64Array, parameters: LinearRegressionParameters): LinearRegressionF64I64
-  predict(x: DenseMatrixF64): BigInt64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): LinearRegressionF64I64
-}
-
-export declare class LinearRegressionF64U64 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: LinearRegressionParameters): LinearRegressionF64U64
-  predict(x: DenseMatrixF64): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): LinearRegressionF64U64
-}
-
-export declare class LinearRegressionParameters {
-  constructor()
+export declare class LinearRegressionBuilder {
+  constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
   withSolver(solver: LinearRegressionSolverName): void
+  build(): LinearRegression
 }
 
 export declare class LogisticRegressionF32I32 {
@@ -2319,6 +2246,14 @@ export declare const enum KNNWeightFunction {
 }
 
 export declare const enum LassoPredictOutputType {
+  F64 = 'F64',
+  F32 = 'F32',
+  I64 = 'I64',
+  U64 = 'U64',
+  I32 = 'I32'
+}
+
+export declare const enum LinearRegressionPredictOutputType {
   F64 = 'F64',
   F32 = 'F32',
   I64 = 'I64',
