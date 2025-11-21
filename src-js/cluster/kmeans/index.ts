@@ -1,10 +1,10 @@
 import { utilities, type InputType, type YType } from '../../index.js'
 import { type IKMeansBaseParameters } from './parameters.js'
 import { type Predictor } from '../../estimator.js'
-import { KMeans as KMeansV2, KMeansBuilder, type PredictOutputType } from '../../core-bindings/index.js'
+import { KMeans as KMeansV2, KMeansBuilder, type KMeansPredictOutputType } from '../../core-bindings/index.js'
 
 interface IKMeansParameters extends IKMeansBaseParameters {
-  predictOutputType?: PredictOutputType
+  predictOutputType?: KMeansPredictOutputType
 }
 
 interface KMeansSerializedData {

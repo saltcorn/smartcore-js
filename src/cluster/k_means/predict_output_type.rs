@@ -3,7 +3,7 @@ use napi_derive::napi;
 
 #[derive(Debug, Clone, PartialEq, Eq, Copy, Default, Encode, Decode)]
 #[napi(string_enum)]
-pub enum PredictOutputType {
+pub enum KMeansPredictOutputType {
   #[default]
   I32,
   I64,

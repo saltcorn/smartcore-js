@@ -1,12 +1,12 @@
 import { type YType } from './index.js'
-import { DenseMatrix, type PredictOutput } from './core-bindings/index.js'
+import { DenseMatrix, type TypedArrayWrapper } from './core-bindings/index.js'
 
 interface Estimator {
   serialize(): Buffer
 }
 
 interface Predictor extends Estimator {
-  predict(x: DenseMatrix): PredictOutput
+  predict(x: DenseMatrix): TypedArrayWrapper
 }
 
 interface Transformer extends Estimator {

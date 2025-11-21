@@ -16,8 +16,8 @@ use napi_derive::napi;
 
 use crate::{
   dense_matrix::{DenseMatrix, DenseMatrixType},
-  predict_output::PredictOutput,
   traits::{Estimator, Predictor, PredictorEstimator},
+  typed_array::TypedArrayWrapper,
 };
 
 use distance_type::DistanceVariantType;
@@ -34,7 +34,7 @@ pub struct DBSCAN {
 #[napi]
 impl DBSCAN {
   #[napi]
-  pub fn predict(&self, x: &DenseMatrix) -> Result<PredictOutput> {
+  pub fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
     self.inner.predict(x)
   }
 
@@ -54,7 +54,7 @@ impl DBSCAN {
 }
 
 impl Predictor for DBSCAN {
-  fn predict(&self, x: &DenseMatrix) -> Result<PredictOutput> {
+  fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
     self.inner.predict(x)
   }
 }

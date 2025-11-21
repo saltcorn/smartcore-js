@@ -1,0 +1,68 @@
+use napi::bindgen_prelude::*;
+use napi_derive::napi;
+use paste::paste;
+
+#[napi]
+pub enum TypedArrayWrapper {
+  F64(Float64Array),
+  F32(Float32Array),
+  I64(BigInt64Array),
+  U64(BigUint64Array),
+  I32(Int32Array),
+  U32(Uint32Array),
+}
+
+macro_rules! from_vec_impl {
+  ($inner:ty) => {
+    paste! {
+        impl From<Vec<$inner>> for TypedArrayWrapper {
+            fn from(value: Vec<$inner>) -> Self {
+                Self::[<$inner:upper>](value.into())
+            }
+        }
+
+        impl<'a> TryFrom<&'a TypedArrayVec> for &'a Vec<$inner> {
+            type Error = Error;
+
+            fn try_from(value: &'a TypedArrayVec) -> Result<Self> {
+                match value {
+                    TypedArrayVec::[<$inner:upper>](v) => Ok(&v),
+                    _ => Err(Error::new(
+                        Status::GenericFailure,
+                        stringify!("Expected an ", $inner:upper, " variant of TypedArray!")
+                    )),
+                }
+            }
+        }
+    }
+  };
+}
+
+from_vec_impl! { f64 }
+from_vec_impl! { f32 }
+from_vec_impl! { i64 }
+from_vec_impl! { u64 }
+from_vec_impl! { i32 }
+from_vec_impl! { u32 }
+
+pub enum TypedArrayVec {
+  F64(Vec<f64>),
+  F32(Vec<f32>),
+  I64(Vec<i64>),
+  U64(Vec<u64>),
+  I32(Vec<i32>),
+  U32(Vec<u32>),
+}
+
+impl From<TypedArrayWrapper> for TypedArrayVec {
+  fn from(value: TypedArrayWrapper) -> Self {
+    match value {
+      TypedArrayWrapper::F64(float64_array) => Self::F64(float64_array.to_vec()),
+      TypedArrayWrapper::F32(float32_array) => Self::F32(float32_array.to_vec()),
+      TypedArrayWrapper::I64(big_int64_array) => Self::I64(big_int64_array.to_vec()),
+      TypedArrayWrapper::U64(big_uint64_array) => Self::U64(big_uint64_array.to_vec()),
+      TypedArrayWrapper::I32(int32_array) => Self::I32(int32_array.to_vec()),
+      TypedArrayWrapper::U32(uint32_array) => Self::U32(uint32_array.to_vec()),
+    }
+  }
+}

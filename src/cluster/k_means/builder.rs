@@ -5,7 +5,7 @@ use napi_derive::napi;
 
 use super::{
   factory::{self, KMeansFactory, KMeansParameters},
-  predict_output_type::PredictOutputType,
+  predict_output_type::KMeansPredictOutputType,
   KMeans,
 };
 use crate::dense_matrix::DenseMatrix;
@@ -15,7 +15,7 @@ pub struct KMeansBuilder {
   pub(super) fit_data: SharedReference<DenseMatrix, &'static mut DenseMatrix>,
   pub(super) max_iter: Option<usize>,
   pub(super) k: Option<usize>,
-  pub(super) predict_output_type: PredictOutputType,
+  pub(super) predict_output_type: KMeansPredictOutputType,
 }
 
 #[napi]
@@ -26,7 +26,7 @@ impl KMeansBuilder {
       fit_data: fit_data.share_with(env, Ok)?,
       max_iter: None,
       k: None,
-      predict_output_type: PredictOutputType::default(),
+      predict_output_type: KMeansPredictOutputType::default(),
     })
   }
 
@@ -43,7 +43,7 @@ impl KMeansBuilder {
   }
 
   #[napi]
-  pub fn with_predict_output_type(&mut self, predict_output_type: PredictOutputType) {
+  pub fn with_predict_output_type(&mut self, predict_output_type: KMeansPredictOutputType) {
     self.predict_output_type = predict_output_type
   }
 

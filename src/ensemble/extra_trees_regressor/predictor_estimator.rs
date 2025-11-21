@@ -32,15 +32,17 @@ macro_rules! predictor_estimator_impl {
   };
 }
 
-predictor_estimator_impl! { KMeansF64I32 }
-predictor_estimator_impl! { KMeansF64I64 }
-predictor_estimator_impl! { KMeansF32I32 }
-predictor_estimator_impl! { KMeansF32I64 }
-predictor_estimator_impl! { KMeansI64I32 }
-predictor_estimator_impl! { KMeansI64I64 }
-predictor_estimator_impl! { KMeansI32I32 }
-predictor_estimator_impl! { KMeansI32I64 }
-predictor_estimator_impl! { KMeansU64I32 }
-predictor_estimator_impl! { KMeansU64I64 }
-predictor_estimator_impl! { KMeansU32I32 }
-predictor_estimator_impl! { KMeansU32I64 }
+predictor_estimator_impl! { ExtraTreesRegressorF64F64 }
+predictor_estimator_impl! { ExtraTreesRegressorF32F64 }
+
+predictor_estimator_impl! { ExtraTreesRegressorF64F32 }
+predictor_estimator_impl! { ExtraTreesRegressorF32F32 }
+
+predictor_estimator_impl! { ExtraTreesRegressorF64I64 }
+predictor_estimator_impl! { ExtraTreesRegressorF32I64 }
+
+predictor_estimator_impl! { ExtraTreesRegressorF64U64 }
+predictor_estimator_impl! { ExtraTreesRegressorF32U64 }
+
+predictor_estimator_impl! { ExtraTreesRegressorF64I32 }
+predictor_estimator_impl! { ExtraTreesRegressorF32I32 }

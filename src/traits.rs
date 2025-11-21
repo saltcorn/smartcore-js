@@ -1,4 +1,4 @@
-use crate::{dense_matrix::DenseMatrix, predict_output::PredictOutput};
+use crate::{dense_matrix::DenseMatrix, typed_array::TypedArrayWrapper};
 use napi::bindgen_prelude::Result;
 
 pub trait Estimator {
@@ -6,7 +6,7 @@ pub trait Estimator {
 }
 
 pub trait Predictor: std::fmt::Debug {
-  fn predict(&self, x: &DenseMatrix) -> Result<PredictOutput>;
+  fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper>;
 }
 
 pub trait Transformer: std::fmt::Debug {

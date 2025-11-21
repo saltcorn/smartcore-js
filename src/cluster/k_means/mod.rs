@@ -13,10 +13,10 @@ use napi_derive::napi;
 
 use crate::{
   dense_matrix::{DenseMatrix, DenseMatrixType},
-  predict_output::PredictOutput,
   traits::{Estimator, Predictor, PredictorEstimator},
+  typed_array::TypedArrayWrapper,
 };
-use predict_output_type::PredictOutputType;
+use predict_output_type::KMeansPredictOutputType;
 use serialize_data::KMeansSerializeData;
 
 #[napi(js_name = "KMeans")]
@@ -24,13 +24,13 @@ use serialize_data::KMeansSerializeData;
 pub struct KMeans {
   pub(super) inner: Box<dyn PredictorEstimator>,
   pub(super) fit_data_variant_type: DenseMatrixType,
-  pub(super) predict_output_type: PredictOutputType,
+  pub(super) predict_output_type: KMeansPredictOutputType,
 }
 
 #[napi]
 impl KMeans {
   #[napi]
-  pub fn predict(&self, x: &DenseMatrix) -> Result<PredictOutput> {
+  pub fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
     self.inner.predict(x)
   }
 
@@ -50,7 +50,7 @@ impl KMeans {
 }
 
 impl Predictor for KMeans {
-  fn predict(&self, x: &DenseMatrix) -> Result<PredictOutput> {
+  fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
     self.inner.predict(x)
   }
 }
