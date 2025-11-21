@@ -18,8 +18,9 @@ import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-j
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 let {
-  // LogisticRegression, LinearRegression, RidgeRegression, Lasso,
+  // LogisticRegression, LinearRegression, RidgeRegression,
   ElasticNet,
+  Lasso,
 } = linearModel
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
 // let { StandardScaler, OneHotEncoder } = preprocessing
@@ -219,21 +220,21 @@ describe('Serialize + Deserialize', () => {
   //     assert.deepEqual(score1, score2)
   //   })
 
-  //   it('Lasso', () => {
-  //     const lasso = new Lasso()
-  //     const bostonData = loadBoston({ returnXY: true })
-  //     let [x, y] = bostonData instanceof Array ? bostonData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
-  //     }
-  //     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     lasso.fit(xTrain, yTrain)
-  //     const score1 = accuracyScore(lasso.predict(xTest), yTest)
-  //     const lassoSerialized = lasso.serialize()
-  //     const lassoDeserialized = Lasso.deserialize(lassoSerialized)
-  //     const score2 = accuracyScore(lassoDeserialized.predict(xTest), yTest)
-  //     assert.equal(score1, score2)
-  //   })
+  it('Lasso', () => {
+    const lasso = new Lasso()
+    const bostonData = loadBoston({ returnXY: true })
+    let [x, y] = bostonData instanceof Array ? bostonData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
+    }
+    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    lasso.fit(xTrain, yTrain)
+    const score1 = accuracyScore(lasso.predict(xTest), yTest)
+    const lassoSerialized = lasso.serialize()
+    const lassoDeserialized = Lasso.deserialize(lassoSerialized)
+    const score2 = accuracyScore(lassoDeserialized.predict(xTest), yTest)
+    assert.equal(score1, score2)
+  })
 
   it('ElasticNet', () => {
     const en = new ElasticNet()

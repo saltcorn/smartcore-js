@@ -1,3 +1,4 @@
+import lasso from './lasso.ts'
 import elasticNet from './elastic_net.ts'
 import dbscan from './dbscan.ts'
 import extraTreesRegressor from './extra_trees_regressor.ts'
@@ -26,5 +27,6 @@ describe('Rust API', () => {
 
   describe('linear_model', () => {
     describe('ElasticNet', elasticNet)
+    describe('Lasso', lasso)
   })
 })
