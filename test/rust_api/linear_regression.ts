@@ -1,0 +1,51 @@
+import { LinearRegressionBuilder, LinearRegression } from '../../dist/core-bindings/index.js'
+import { loadBoston } from '../../dist/dataset/v2.js'
+import assert from 'assert'
+import { trainTestSplit } from '../../dist/model_selection/index.js'
+import { accuracyScore } from '../../dist/metrics/index.js'
+import { utilities } from '../../src-js/index.js'
+
+export default () => {
+  it('create', () => {
+    const bostonData = loadBoston({ returnXY: true })
+    const [x, y] = bostonData instanceof Array ? bostonData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y))
+    const _ = new LinearRegressionBuilder(x, yWrapped).build()
+  })
+
+  it('predict', () => {
+    const bostonData = loadBoston({ returnXY: true })
+    const [x, y] = bostonData instanceof Array ? bostonData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y))
+    const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+
+    const linearRegressionBuilder = new LinearRegressionBuilder(x, yWrapped)
+    const linearRegression = linearRegressionBuilder.build()
+    const score = accuracyScore(linearRegression.predict(xTest).field0, yTest)
+    assert(score >= 0)
+  })
+
+  it('serialize + deserialize', () => {
+    const bostonData = loadBoston({ returnXY: true })
+    const [x, y] = bostonData instanceof Array ? bostonData : []
+    if (!(x && y)) {
+      assert.fail('Expected both x and y to be defined')
+    }
+    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y))
+    const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+
+    const linearRegressionBuilder = new LinearRegressionBuilder(x, yWrapped)
+    const linearRegression = linearRegressionBuilder.build()
+    const score1 = accuracyScore(linearRegression.predict(xTest).field0, yTest)
+    const serializedLinearRegression = linearRegression.serialize()
+    const deserializedLinearRegression = LinearRegression.deserialize(serializedLinearRegression)
+    const score2 = accuracyScore(deserializedLinearRegression.predict(xTest).field0, yTest)
+    assert.equal(score1, score2)
+  })
+}

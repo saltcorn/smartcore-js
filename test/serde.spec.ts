@@ -18,7 +18,8 @@ import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-j
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 let {
-  // LogisticRegression, LinearRegression, RidgeRegression,
+  // LogisticRegression, RidgeRegression,
+  LinearRegression,
   ElasticNet,
   Lasso,
 } = linearModel
@@ -204,21 +205,21 @@ describe('Serialize + Deserialize', () => {
     assert.deepEqual(xTransformed1, xTransformed2)
   })
 
-  //   it('LinearRegression', () => {
-  //     const lr = new LinearRegression()
-  //     const bostonData = loadBoston({ returnXY: true })
-  //     const [x, y] = bostonData instanceof Array ? bostonData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
-  //     }
-  //     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     lr.fit(xTrain, yTrain)
-  //     const score1 = accuracyScore(lr.predict(xTest), yTest)
-  //     const lrSerialized = lr.serialize()
-  //     const lrDeserialized = LinearRegression.deserialize(lrSerialized)
-  //     const score2 = accuracyScore(lrDeserialized.predict(xTest), yTest)
-  //     assert.deepEqual(score1, score2)
-  //   })
+  it('LinearRegression', () => {
+    const lr = new LinearRegression()
+    const bostonData = loadBoston({ returnXY: true })
+    const [x, y] = bostonData instanceof Array ? bostonData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
+    }
+    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    lr.fit(xTrain, yTrain)
+    const score1 = accuracyScore(lr.predict(xTest), yTest)
+    const lrSerialized = lr.serialize()
+    const lrDeserialized = LinearRegression.deserialize(lrSerialized)
+    const score2 = accuracyScore(lrDeserialized.predict(xTest), yTest)
+    assert.deepEqual(score1, score2)
+  })
 
   it('Lasso', () => {
     const lasso = new Lasso()

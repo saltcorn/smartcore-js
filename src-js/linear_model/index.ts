@@ -1,4 +1,4 @@
-// export { LinearRegression } from './linear_regression/index.js'
+export { LinearRegression } from './linear_regression/index.js'
 // export { LogisticRegression } from './logistic_regression/index.js'
 // export { RidgeRegression } from './ridge_regression/index.js'
 export { Lasso } from './lasso/index.js'

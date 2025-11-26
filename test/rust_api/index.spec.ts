@@ -7,6 +7,7 @@ import svd from './svd.ts'
 import kmeans from './kmeans.ts'
 import randomForestClassifier from './random_forest_classifier.ts'
 import randomForestRegressor from './random_forest_regressor.ts'
+import linearRegression from './linear_regression.ts'
 
 describe('Rust API', () => {
   describe('cluster', () => {
@@ -28,5 +29,6 @@ describe('Rust API', () => {
   describe('linear_model', () => {
     describe('ElasticNet', elasticNet)
     describe('Lasso', lasso)
+    describe('LinearRegression', linearRegression)
   })
 })
