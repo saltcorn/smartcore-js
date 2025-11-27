@@ -2020,50 +2020,17 @@ export declare class RecallF64 {
 }
 export type Recallf64 = RecallF64
 
-export declare class RidgeRegressionF32F32 {
-  constructor()
-  static fit(x: DenseMatrixF32, y: Float32Array, parameters: RidgeRegressionF32Parameters): RidgeRegressionF32F32
-  predict(x: DenseMatrixF32): Float32Array
+export declare class RidgeRegression {
+  predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
-  static deserialize(data: Buffer): RidgeRegressionF32F32
+  static deserialize(data: Buffer): RidgeRegression
 }
 
-export declare class RidgeRegressionF32F64 {
-  constructor()
-  static fit(x: DenseMatrixF32, y: Float64Array, parameters: RidgeRegressionF32Parameters): RidgeRegressionF32F64
-  predict(x: DenseMatrixF32): Float64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RidgeRegressionF32F64
-}
-
-export declare class RidgeRegressionF32Parameters {
-  constructor()
-  withAlpha(alpha: number): void
-  withNormalize(normalize: boolean): void
+export declare class RidgeRegressionBuilder {
+  constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
   withSolver(solver: RidgeRegressionSolverName): void
-}
-
-export declare class RidgeRegressionF64F32 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: Float32Array, parameters: RidgeRegressionF64Parameters): RidgeRegressionF64F32
-  predict(x: DenseMatrixF64): Float32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RidgeRegressionF64F32
-}
-
-export declare class RidgeRegressionF64F64 {
-  constructor()
-  static fit(x: DenseMatrixF64, y: Float64Array, parameters: RidgeRegressionF64Parameters): RidgeRegressionF64F64
-  predict(x: DenseMatrixF64): Float64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): RidgeRegressionF64F64
-}
-
-export declare class RidgeRegressionF64Parameters {
-  constructor()
-  withAlpha(alpha: number): void
-  withNormalize(normalize: boolean): void
-  withSolver(solver: RidgeRegressionSolverName): void
+  withAlpha(alpha: WrappedNumber): void
+  build(): RidgeRegression
 }
 
 export declare class StandardScalerF32 {
@@ -2250,9 +2217,17 @@ export declare const enum RandomForestRegressorPredictOutputType {
   I32 = 'I32'
 }
 
+export declare const enum RidgeRegressionPredictOutputType {
+  F64 = 'F64',
+  F32 = 'F32',
+  I64 = 'I64',
+  U64 = 'U64',
+  I32 = 'I32'
+}
+
 export declare const enum RidgeRegressionSolverName {
-  Cholesky = 0,
-  Svd = 1
+  SVD = 0,
+  Cholesky = 1
 }
 
 export declare const enum SplitCriterion {

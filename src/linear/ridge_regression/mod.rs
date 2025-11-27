@@ -1,94 +1,68 @@
-mod parameters;
+mod builder;
+mod deserialize;
+mod factory;
+mod lib_ridge_regression_factory;
+mod predict_output_type;
+mod predictor_estimator;
+mod serialize_data;
+mod variants;
 
-use bincode::{
-  config::standard,
-  serde::{decode_from_slice, encode_to_vec},
-};
-use napi::bindgen_prelude::*;
+use bincode::{config::standard, decode_from_slice, encode_to_vec};
+use napi::{bindgen_prelude::Buffer, Error, Result, Status};
 use napi_derive::napi;
-use paste::paste;
-use smartcore::{
-  api::SupervisedEstimator, linalg::basic::matrix::DenseMatrix,
-  linear::ridge_regression::RidgeRegression as LibRidgeRegression,
+
+use crate::{
+  dense_matrix::{DenseMatrix, DenseMatrixType},
+  traits::{Estimator, Predictor, PredictorEstimator},
+  typed_array::TypedArrayWrapper,
 };
+use predict_output_type::RidgeRegressionPredictOutputType;
+use serialize_data::RidgeRegressionSerializeData;
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-pub use parameters::{RidgeRegressionF32Parameters, RidgeRegressionF64Parameters};
-
-macro_rules! ridge_regression_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
-    paste! {
-        #[napi(js_name=""[<RidgeRegression $x:upper $y:upper>]"")]
-        #[derive(Debug)]
-        pub struct [<RidgeRegression $x:upper $y:upper>] {
-            inner: LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>,
-        }
-
-        impl Default for [<RidgeRegression $x:upper $y:upper>] {
-            fn default() -> Self {
-                Self {
-                    inner: LibRidgeRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
-                }
-            }
-        }
-
-        #[napi]
-        impl [<RidgeRegression $x:upper $y:upper>] {
-            #[napi(constructor)]
-            pub fn new() -> Self {
-                Self::default()
-            }
-
-            pub fn new_inner() -> LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>> {
-                LibRidgeRegression::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new()
-            }
-
-            #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &[<RidgeRegression $x:upper Parameters>]) -> Result<Self> {
-                let inner = LibRidgeRegression::fit(
-                    x as &DenseMatrix<$x>,
-                    &y.to_vec(),
-                    parameters.as_ref().to_owned(),
-                )
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Self { inner })
-            }
-
-            #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
-                let prediction_result = self
-                .inner
-                .predict(x as &DenseMatrix<$x>)
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(prediction_result.into())
-            }
-
-            #[napi]
-            pub fn serialize(&self) -> Result<Buffer> {
-                let encoded = encode_to_vec(&self.inner, standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Buffer::from(encoded))
-            }
-
-            #[napi(factory)]
-            pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
-                Ok(Self { inner })
-            }
-        }
-
-        impl AsRef<LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<RidgeRegression $x:upper $y:upper>] {
-            fn as_ref(&self) -> &LibRidgeRegression<$x, $y, DenseMatrix<$x>, Vec<$y>> {
-                &self.inner
-            }
-        }
-    }
-  };
+#[napi(js_name = "RidgeRegression")]
+#[derive(Debug)]
+pub struct RidgeRegression {
+  pub(super) inner: Box<dyn PredictorEstimator>,
+  pub(super) fit_data_variant_type: DenseMatrixType,
+  pub(super) predict_output_type: RidgeRegressionPredictOutputType,
 }
 
-ridge_regression_struct! {f64, f64, DenseMatrixF64, Float64Array}
-ridge_regression_struct! {f64, f32, DenseMatrixF64, Float32Array}
+#[napi]
+impl RidgeRegression {
+  #[napi]
+  pub fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
+    self.inner.predict(x)
+  }
 
-ridge_regression_struct! {f32, f64, DenseMatrixF32, Float64Array}
-ridge_regression_struct! {f32, f32, DenseMatrixF32, Float32Array}
+  #[napi]
+  pub fn serialize(&self) -> Result<Buffer> {
+    let buffer_data = Estimator::serialize(self)?;
+    Ok(Buffer::from(buffer_data))
+  }
+
+  #[napi(factory)]
+  pub fn deserialize(data: Buffer) -> Result<Self> {
+    let serialize_data: RidgeRegressionSerializeData = decode_from_slice(data.as_ref(), standard())
+      .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?
+      .0;
+    serialize_data.try_into()
+  }
+}
+
+impl Predictor for RidgeRegression {
+  fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
+    self.inner.predict(x)
+  }
+}
+
+impl Estimator for RidgeRegression {
+  fn serialize(&self) -> Result<Vec<u8>> {
+    let serialize_data = RidgeRegressionSerializeData {
+      fit_data_variant_type: self.fit_data_variant_type,
+      predict_output_type: self.predict_output_type,
+      ridge_regression: self.inner.serialize()?,
+    };
+    encode_to_vec(serialize_data, standard())
+      .map_err(|e| Error::new(Status::GenericFailure, e.to_string()))
+  }
+}
