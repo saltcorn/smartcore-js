@@ -17,13 +17,7 @@ import {
 import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-js/core-bindings/index.js'
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
-let {
-  LogisticRegression,
-  // RidgeRegression,
-  LinearRegression,
-  ElasticNet,
-  Lasso,
-} = linearModel
+let { LogisticRegression, RidgeRegression, LinearRegression, ElasticNet, Lasso } = linearModel
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
 // let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
@@ -166,30 +160,21 @@ describe('Serialize + Deserialize', () => {
     assert.deepEqual(transformedColumns1, transformedColumns2)
   })
 
-  //   it('RidgeRegression', () => {
-  //     const rr = new RidgeRegression({ targetType: 'f64' })
-  //     const bostonData = loadBoston({ returnXY: true })
-  //     const [x, y] = bostonData instanceof Array ? bostonData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
-  //     }
-  //     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.22 })
-  //     rr.fit(xTrain, yTrain)
-  //     const predictions1 = rr.predict(xTest)
-  //     assert(predictions1)
-  //     const rrSerialized = rr.serialize()
-  //     const rrDeserialized = RidgeRegression.deserialize(rrSerialized)
-  //     const predictions2 = rrDeserialized.predict(xTest)
-  //     assert(predictions2)
-  //     //TODO: Ensure parameters are being stored correctly
-  //     console.log(
-  //       chalk.red(
-  //         'Values in the RidgeRegression predict output deviate.' +
-  //           ' The deviation gets larger after serialization and deserialization.' +
-  //           ' Explore using pre-scaled data.',
-  //       ),
-  //     )
-  //   })
+  it('RidgeRegression', () => {
+    const rr = new RidgeRegression()
+    const bostonData = loadBoston({ returnXY: true })
+    const [x, y] = bostonData instanceof Array ? bostonData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
+    }
+    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.22 })
+    rr.fit(xTrain, yTrain)
+    const predictions1 = rr.predict(xTest)
+    const rrSerialized = rr.serialize()
+    const rrDeserialized = RidgeRegression.deserialize(rrSerialized)
+    const predictions2 = rrDeserialized.predict(xTest)
+    assert.deepEqual(predictions1, predictions2)
+  })
 
   it('SVD', () => {
     const svd = new SVD()

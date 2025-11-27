@@ -10,7 +10,7 @@ import {
 } from '../../core-bindings/index.js'
 
 interface ILogisticRegressionBaseParameters {
-  alpha?: number
+  alpha?: number | bigint
   solver?: LogisticRegressionSolverName
 }
 

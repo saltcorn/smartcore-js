@@ -15,6 +15,18 @@ impl TryFrom<RidgeRegressionSerializeData> for RidgeRegression {
   fn try_from(value: RidgeRegressionSerializeData) -> std::result::Result<Self, Self::Error> {
     let predictor_estimator: Box<dyn PredictorEstimator> =
       match (value.fit_data_variant_type, value.predict_output_type) {
+        (DenseMatrixType::F64, RidgeRegressionPredictOutputType::F64) => Box::new(
+          deserialize_variant::<RidgeRegressionF64F64>(&value.ridge_regression)?,
+        ),
+        (DenseMatrixType::F32, RidgeRegressionPredictOutputType::F64) => Box::new(
+          deserialize_variant::<RidgeRegressionF32F64>(&value.ridge_regression)?,
+        ),
+        (DenseMatrixType::F64, RidgeRegressionPredictOutputType::F32) => Box::new(
+          deserialize_variant::<RidgeRegressionF64F32>(&value.ridge_regression)?,
+        ),
+        (DenseMatrixType::F32, RidgeRegressionPredictOutputType::F32) => Box::new(
+          deserialize_variant::<RidgeRegressionF32F32>(&value.ridge_regression)?,
+        ),
         (DenseMatrixType::F64, RidgeRegressionPredictOutputType::I64) => Box::new(
           deserialize_variant::<RidgeRegressionF64I64>(&value.ridge_regression)?,
         ),
@@ -33,9 +45,7 @@ impl TryFrom<RidgeRegressionSerializeData> for RidgeRegression {
         (DenseMatrixType::F32, RidgeRegressionPredictOutputType::I32) => Box::new(
           deserialize_variant::<RidgeRegressionF32I32>(&value.ridge_regression)?,
         ),
-        (DenseMatrixType::F32, _)
-        | (DenseMatrixType::F64, _)
-        | (DenseMatrixType::U32, _)
+        (DenseMatrixType::U32, _)
         | (DenseMatrixType::U16, _)
         | (DenseMatrixType::U8, _)
         | (DenseMatrixType::I64, _)

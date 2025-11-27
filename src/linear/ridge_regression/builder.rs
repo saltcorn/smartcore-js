@@ -68,6 +68,11 @@ impl RidgeRegressionBuilder {
   }
 
   #[napi]
+  pub fn with_normalize(&mut self, normalize: bool) {
+    self.normalize = Some(normalize)
+  }
+
+  #[napi]
   pub fn build(&mut self) -> Result<RidgeRegression> {
     let fit_data_variant_type = self.fit_data_x.r#type();
     let params = factory::NewParameters {

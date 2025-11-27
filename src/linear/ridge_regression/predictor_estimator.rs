@@ -32,6 +32,12 @@ macro_rules! predictor_estimator_impl {
   };
 }
 
+predictor_estimator_impl! { RidgeRegressionF64F64 }
+predictor_estimator_impl! { RidgeRegressionF32F64 }
+
+predictor_estimator_impl! { RidgeRegressionF64F32 }
+predictor_estimator_impl! { RidgeRegressionF32F32 }
+
 predictor_estimator_impl! { RidgeRegressionF64I64 }
 predictor_estimator_impl! { RidgeRegressionF32I64 }
 

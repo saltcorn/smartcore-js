@@ -41,6 +41,18 @@ impl RidgeRegressionFactory {
     let fit_data_variant_type = params.fit_data_x.r#type();
     let fit_data_y_variant_type: RidgeRegressionPredictOutputType = params.fit_data_y.try_into()?;
     match (fit_data_variant_type, fit_data_y_variant_type) {
+      (DenseMatrixType::F64, RidgeRegressionPredictOutputType::F64) => {
+        LibRidgeRegressionFactory::f64_f64(params.into())
+      }
+      (DenseMatrixType::F32, RidgeRegressionPredictOutputType::F64) => {
+        LibRidgeRegressionFactory::f32_f64(params.into())
+      }
+      (DenseMatrixType::F64, RidgeRegressionPredictOutputType::F32) => {
+        LibRidgeRegressionFactory::f64_f32(params.into())
+      }
+      (DenseMatrixType::F32, RidgeRegressionPredictOutputType::F32) => {
+        LibRidgeRegressionFactory::f32_f32(params.into())
+      }
       (DenseMatrixType::F64, RidgeRegressionPredictOutputType::I64) => {
         LibRidgeRegressionFactory::f64_i64(params.into())
       }

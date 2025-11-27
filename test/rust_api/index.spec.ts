@@ -9,6 +9,7 @@ import randomForestClassifier from './random_forest_classifier.ts'
 import randomForestRegressor from './random_forest_regressor.ts'
 import linearRegression from './linear_regression.ts'
 import logisticRegression from './logistic_regression.ts'
+import ridgeRegression from './ridge_regression.ts'
 
 describe('Rust API', () => {
   describe('cluster', () => {
@@ -32,5 +33,6 @@ describe('Rust API', () => {
     describe('Lasso', lasso)
     describe('LinearRegression', linearRegression)
     describe('logisticRegression', logisticRegression)
+    describe('ridgeRegression', ridgeRegression)
   })
 })

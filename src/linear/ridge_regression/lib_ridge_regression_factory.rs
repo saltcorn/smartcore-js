@@ -49,6 +49,12 @@ macro_rules! create_impl {
   };
 }
 
+create_impl! { x_type:f32, y_type:f64 }
+create_impl! { x_type:f64, y_type:f64 }
+
+create_impl! { x_type:f32, y_type:f32 }
+create_impl! { x_type:f64, y_type:f32 }
+
 create_impl! { x_type:f32, y_type:i64 }
 create_impl! { x_type:f64, y_type:i64 }
 

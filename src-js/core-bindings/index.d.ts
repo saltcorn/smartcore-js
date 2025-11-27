@@ -2030,6 +2030,7 @@ export declare class RidgeRegressionBuilder {
   constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
   withSolver(solver: RidgeRegressionSolverName): void
   withAlpha(alpha: WrappedNumber): void
+  withNormalize(normalize: boolean): void
   build(): RidgeRegression
 }
 
