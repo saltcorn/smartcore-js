@@ -5,6 +5,7 @@ pub mod decomposition;
 pub mod dense_matrix;
 mod deserialize_variant;
 pub mod ensemble;
+pub mod js_number;
 pub mod linalg;
 pub mod linear;
 pub mod metrics;

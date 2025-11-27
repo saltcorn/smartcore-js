@@ -1,141 +1,69 @@
-mod parameters;
+mod builder;
+mod deserialize;
+mod factory;
+mod lib_logistic_regression_factory;
+mod predict_output_type;
+mod predictor_estimator;
+mod serialize_data;
+mod variants;
 
-use bincode::{
-  config::standard,
-  serde::{decode_from_slice, encode_to_vec},
-};
-use napi::bindgen_prelude::*;
+use bincode::{config::standard, decode_from_slice, encode_to_vec};
+use napi::{bindgen_prelude::Buffer, Error, Result, Status};
 use napi_derive::napi;
-use paste::paste;
-use smartcore::{
-  api::SupervisedEstimator, linalg::basic::matrix::DenseMatrix,
-  linear::logistic_regression::LogisticRegression as LibLogisticRegression,
+
+use crate::{
+  dense_matrix::{DenseMatrix, DenseMatrixType},
+  traits::{Estimator, Predictor, PredictorEstimator},
+  typed_array::TypedArrayWrapper,
 };
+use predict_output_type::LogisticRegressionPredictOutputType;
+use serialize_data::LogisticRegressionSerializeData;
 
-use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
-pub use parameters::{LogisticRegressionParametersF32, LogisticRegressionParametersF64};
-
-macro_rules! logistic_regression_struct {
-  (
-    feature_type: $feat:ty,
-    predict_output_type: $id:ty,
-    matrix_type: $matrix:ty,
-    array_type: $array:ty
-  ) => {
-    paste! {
-        #[napi(js_name=""[<LogisticRegression $feat:upper $id:upper>]"")]
-        #[derive(Debug)]
-        pub struct [<LogisticRegression $feat:upper $id:upper>] {
-            inner: LibLogisticRegression<$feat, $id, DenseMatrix<$feat>, Vec<$id>>,
-        }
-
-        impl Default for [<LogisticRegression $feat:upper $id:upper>] {
-            fn default() -> Self {
-                Self {
-                    inner: LibLogisticRegression::<$feat, $id, DenseMatrix<$feat>, Vec<$id>>::new(),
-                }
-            }
-        }
-
-        #[napi]
-        impl [<LogisticRegression $feat:upper $id:upper>] {
-            #[napi(constructor)]
-            pub fn new() -> Self {
-                Self::default()
-            }
-
-            pub fn new_inner() -> LibLogisticRegression<$feat, $id, DenseMatrix<$feat>, Vec<$id>> {
-                LibLogisticRegression::<$feat, $id, DenseMatrix<$feat>, Vec<$id>>::new()
-            }
-
-            #[napi(factory)]
-            pub fn fit(x: &$matrix, y: $array, parameters: &[<LogisticRegressionParameters $feat:upper>]) -> Result<Self> {
-                let inner = LibLogisticRegression::fit(
-                    x as &DenseMatrix<$feat>,
-                    &y.to_vec(),
-                    parameters.as_ref().to_owned(),
-                )
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Self { inner })
-            }
-
-            #[napi]
-            pub fn predict(&self, x: &$matrix) -> Result<$array> {
-                let prediction = self.inner.predict(
-                    x as &DenseMatrix<$feat>
-                )
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(prediction.into())
-            }
-
-            #[napi]
-            pub fn serialize(&self) -> Result<Buffer> {
-                let encoded = encode_to_vec(&self.inner, standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Buffer::from(encoded))
-            }
-
-            #[napi(factory)]
-            pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibLogisticRegression<$feat, $id, DenseMatrix<$feat>, Vec<$id>>, _>(data.as_ref(), standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
-                Ok(Self { inner })
-            }
-        }
-
-        impl AsRef<LibLogisticRegression<$feat, $id, DenseMatrix<$feat>, Vec<$id>>> for [<LogisticRegression $feat:upper $id:upper>] {
-            fn as_ref(&self) -> &LibLogisticRegression<$feat, $id, DenseMatrix<$feat>, Vec<$id>> {
-                &self.inner
-            }
-        }
-    }
-  };
+#[napi(js_name = "LogisticRegression")]
+#[derive(Debug)]
+pub struct LogisticRegression {
+  pub(super) inner: Box<dyn PredictorEstimator>,
+  pub(super) fit_data_variant_type: DenseMatrixType,
+  pub(super) predict_output_type: LogisticRegressionPredictOutputType,
 }
 
-// [f32, i64]
-logistic_regression_struct! {
-    feature_type: f32,
-    predict_output_type: i64,
-    matrix_type: DenseMatrixF32,
-    array_type: BigInt64Array
+#[napi]
+impl LogisticRegression {
+  #[napi]
+  pub fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
+    self.inner.predict(x)
+  }
+
+  #[napi]
+  pub fn serialize(&self) -> Result<Buffer> {
+    let buffer_data = Estimator::serialize(self)?;
+    Ok(Buffer::from(buffer_data))
+  }
+
+  #[napi(factory)]
+  pub fn deserialize(data: Buffer) -> Result<Self> {
+    let serialize_data: LogisticRegressionSerializeData =
+      decode_from_slice(data.as_ref(), standard())
+        .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?
+        .0;
+    serialize_data.try_into()
+  }
 }
 
-// [f32, u64]
-logistic_regression_struct! {
-    feature_type: f32,
-    predict_output_type: u64,
-    matrix_type: DenseMatrixF32,
-    array_type: BigUint64Array
+impl Predictor for LogisticRegression {
+  fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
+    self.inner.predict(x)
+  }
 }
 
-// [f32, i32]
-logistic_regression_struct! {
-    feature_type: f32,
-    predict_output_type: i32,
-    matrix_type: DenseMatrixF32,
-    array_type: Int32Array
-}
-
-// [f64, i64]
-logistic_regression_struct! {
-    feature_type: f64,
-    predict_output_type: i64,
-    matrix_type: DenseMatrixF64,
-    array_type: BigInt64Array
-}
-
-// [f64, u64]
-logistic_regression_struct! {
-    feature_type: f64,
-    predict_output_type: u64,
-    matrix_type: DenseMatrixF64,
-    array_type: BigUint64Array
-}
-
-// [f64, i32]
-logistic_regression_struct! {
-    feature_type: f64,
-    predict_output_type: i32,
-    matrix_type: DenseMatrixF64,
-    array_type: Int32Array
+impl Estimator for LogisticRegression {
+  fn serialize(&self) -> Result<Vec<u8>> {
+    let serialize_data = LogisticRegressionSerializeData {
+      fit_data_variant_type: self.fit_data_variant_type,
+      predict_output_type: self.predict_output_type,
+      logistic_regression: self.inner.serialize()?,
+    };
+    encode_to_vec(serialize_data, standard())
+      .map_err(|e| Error::new(Status::GenericFailure, e.to_string()))
+  }
 }
