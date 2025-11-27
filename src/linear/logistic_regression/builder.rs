@@ -10,7 +10,7 @@ use super::{
 };
 use crate::{
   dense_matrix::DenseMatrix,
-  js_number::JsNumber,
+  js_number::WrappedNumber,
   typed_array::{TypedArrayVec, TypedArrayWrapper},
 };
 
@@ -33,7 +33,7 @@ pub struct LogisticRegressionBuilder {
   pub(super) fit_data_x: SharedReference<DenseMatrix, &'static mut DenseMatrix>,
   pub(super) fit_data_y: TypedArrayVec,
   pub(super) solver: Option<LogisticRegressionSolverName>,
-  pub(super) alpha: Option<JsNumber>,
+  pub(super) alpha: Option<WrappedNumber>,
 }
 
 #[napi]
@@ -58,7 +58,7 @@ impl LogisticRegressionBuilder {
   }
 
   #[napi]
-  pub fn with_alpha(&mut self, alpha: &JsNumber) -> Result<()> {
+  pub fn with_alpha(&mut self, alpha: &WrappedNumber) -> Result<()> {
     self.alpha = Some(alpha.to_owned());
     Ok(())
   }

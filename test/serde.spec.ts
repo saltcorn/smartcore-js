@@ -18,7 +18,8 @@ import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-j
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 let {
-  // LogisticRegression, RidgeRegression,
+  LogisticRegression,
+  // RidgeRegression,
   LinearRegression,
   ElasticNet,
   Lasso,
@@ -58,21 +59,21 @@ describe('Serialize + Deserialize', () => {
   //     assert.deepEqual(xt, xt2)
   //   })
 
-  //   it('LogisticRegression', () => {
-  //     const lr = new LogisticRegression({ alpha: 0.2 })
-  //     const irisData = loadIris({ returnXY: true })
-  //     const [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
-  //     }
-  //     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     lr.fit(xTrain, yTrain)
-  //     const score1 = accuracyScore(lr.predict(xTest), yTest)
-  //     const lrSerialized = lr.serialize()
-  //     const lrDeserialized = LogisticRegression.deserialize(lrSerialized)
-  //     const score2 = accuracyScore(lrDeserialized.predict(xTest), yTest)
-  //     assert.equal(score1, score2)
-  //   })
+  it('LogisticRegression', () => {
+    const lr = new LogisticRegression({ alpha: 0.2 })
+    const irisData = loadIris({ returnXY: true })
+    const [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadIris" to return an Array containing 2 items.')
+    }
+    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    lr.fit(xTrain, yTrain)
+    const score1 = accuracyScore(lr.predict(xTest), yTest)
+    const lrSerialized = lr.serialize()
+    const lrDeserialized = LogisticRegression.deserialize(lrSerialized)
+    const score2 = accuracyScore(lrDeserialized.predict(xTest), yTest)
+    assert.equal(score1, score2)
+  })
 
   it('RandomForestClassifier', () => {
     const rfc = new RandomForestClassifier()

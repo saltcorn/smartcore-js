@@ -1010,11 +1010,6 @@ export declare class JsDenseMatrixF64Ref {
   transpose(): DenseMatrixF64
 }
 
-export declare class JsNumber {
-  static float(no: number): JsNumber
-  static int(no: bigint): JsNumber
-}
-
 export declare class JsVecF64Ref {
 
 }
@@ -1775,7 +1770,7 @@ export declare class LogisticRegression {
 export declare class LogisticRegressionBuilder {
   constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
   withSolver(solver: LogisticRegressionSolverName): void
-  withAlpha(alpha: number): void
+  withAlpha(alpha: WrappedNumber): void
   build(): LogisticRegression
 }
 
@@ -2145,6 +2140,11 @@ export declare class VecF64 {
 
 export declare class VecI64 {
   constructor(values: BigInt64Array)
+}
+
+export declare class WrappedNumber {
+  static float(no: number): WrappedNumber
+  static int(no: bigint): WrappedNumber
 }
 
 export declare const enum DenseMatrixType {

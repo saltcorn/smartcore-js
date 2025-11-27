@@ -9,12 +9,12 @@ enum NumberInner {
 
 #[napi]
 #[derive(Debug, Clone)]
-pub struct JsNumber {
+pub struct WrappedNumber {
   inner: NumberInner,
 }
 
 #[napi]
-impl JsNumber {
+impl WrappedNumber {
   #[napi(factory)]
   pub fn float(no: f64) -> Self {
     Self {
@@ -30,10 +30,10 @@ impl JsNumber {
   }
 }
 
-impl TryFrom<&JsNumber> for f64 {
+impl TryFrom<&WrappedNumber> for f64 {
   type Error = Error;
 
-  fn try_from(value: &JsNumber) -> std::result::Result<Self, Self::Error> {
+  fn try_from(value: &WrappedNumber) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
       NumberInner::Float(no) => Ok(*no),
       NumberInner::Int(no) => {
@@ -51,19 +51,19 @@ impl TryFrom<&JsNumber> for f64 {
           return Ok(no as f64);
         }
 
-        return Err(Error::new(
+        Err(Error::new(
           Status::GenericFailure,
           "Failed to convert JsNumber to f64. Out of range.",
-        ));
+        ))
       }
     }
   }
 }
 
-impl TryFrom<&JsNumber> for f32 {
+impl TryFrom<&WrappedNumber> for f32 {
   type Error = Error;
 
-  fn try_from(value: &JsNumber) -> std::result::Result<Self, Self::Error> {
+  fn try_from(value: &WrappedNumber) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
       NumberInner::Float(no) => {
         if *no > f32::MAX as f64 {
@@ -89,19 +89,19 @@ impl TryFrom<&JsNumber> for f32 {
           return Ok(no as f32);
         }
 
-        return Err(Error::new(
+        Err(Error::new(
           Status::GenericFailure,
           "Failed to convert JsNumber to f32. Out of range.",
-        ));
+        ))
       }
     }
   }
 }
 
-impl TryFrom<&JsNumber> for u64 {
+impl TryFrom<&WrappedNumber> for u64 {
   type Error = Error;
 
-  fn try_from(value: &JsNumber) -> std::result::Result<Self, Self::Error> {
+  fn try_from(value: &WrappedNumber) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
       NumberInner::Float(_) => Err(Error::new(
         Status::GenericFailure,
@@ -115,10 +115,10 @@ impl TryFrom<&JsNumber> for u64 {
   }
 }
 
-impl TryFrom<&JsNumber> for i64 {
+impl TryFrom<&WrappedNumber> for i64 {
   type Error = Error;
 
-  fn try_from(value: &JsNumber) -> std::result::Result<Self, Self::Error> {
+  fn try_from(value: &WrappedNumber) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
       NumberInner::Float(_) => Err(Error::new(
         Status::GenericFailure,
@@ -132,10 +132,10 @@ impl TryFrom<&JsNumber> for i64 {
   }
 }
 
-impl TryFrom<&JsNumber> for u32 {
+impl TryFrom<&WrappedNumber> for u32 {
   type Error = Error;
 
-  fn try_from(value: &JsNumber) -> std::result::Result<Self, Self::Error> {
+  fn try_from(value: &WrappedNumber) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
       NumberInner::Float(_) => Err(Error::new(
         Status::GenericFailure,
@@ -155,10 +155,10 @@ impl TryFrom<&JsNumber> for u32 {
   }
 }
 
-impl TryFrom<&JsNumber> for i32 {
+impl TryFrom<&WrappedNumber> for i32 {
   type Error = Error;
 
-  fn try_from(value: &JsNumber) -> std::result::Result<Self, Self::Error> {
+  fn try_from(value: &WrappedNumber) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
       NumberInner::Float(_) => Err(Error::new(
         Status::GenericFailure,
@@ -178,10 +178,10 @@ impl TryFrom<&JsNumber> for i32 {
   }
 }
 
-impl TryFrom<&JsNumber> for u16 {
+impl TryFrom<&WrappedNumber> for u16 {
   type Error = Error;
 
-  fn try_from(value: &JsNumber) -> std::result::Result<Self, Self::Error> {
+  fn try_from(value: &WrappedNumber) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
       NumberInner::Float(_) => Err(Error::new(
         Status::GenericFailure,
@@ -201,10 +201,10 @@ impl TryFrom<&JsNumber> for u16 {
   }
 }
 
-impl TryFrom<&JsNumber> for i16 {
+impl TryFrom<&WrappedNumber> for i16 {
   type Error = Error;
 
-  fn try_from(value: &JsNumber) -> std::result::Result<Self, Self::Error> {
+  fn try_from(value: &WrappedNumber) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
       NumberInner::Float(_) => Err(Error::new(
         Status::GenericFailure,
@@ -224,10 +224,10 @@ impl TryFrom<&JsNumber> for i16 {
   }
 }
 
-impl TryFrom<&JsNumber> for u8 {
+impl TryFrom<&WrappedNumber> for u8 {
   type Error = Error;
 
-  fn try_from(value: &JsNumber) -> std::result::Result<Self, Self::Error> {
+  fn try_from(value: &WrappedNumber) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
       NumberInner::Float(_) => Err(Error::new(
         Status::GenericFailure,
@@ -247,10 +247,10 @@ impl TryFrom<&JsNumber> for u8 {
   }
 }
 
-impl TryFrom<&JsNumber> for i8 {
+impl TryFrom<&WrappedNumber> for i8 {
   type Error = Error;
 
-  fn try_from(value: &JsNumber) -> std::result::Result<Self, Self::Error> {
+  fn try_from(value: &WrappedNumber) -> std::result::Result<Self, Self::Error> {
     match &value.inner {
       NumberInner::Float(_) => Err(Error::new(
         Status::GenericFailure,

@@ -9,14 +9,14 @@ use super::{
 };
 use crate::{
   dense_matrix::{DenseMatrix, DenseMatrixType},
-  js_number::JsNumber,
+  js_number::WrappedNumber,
   traits::PredictorEstimator,
   typed_array::TypedArrayVec,
 };
 
 pub(super) struct LogisticRegressionParameters<'a> {
   pub(super) solver: Option<LibLogisticRegressionSolverName>,
-  pub(super) alpha: Option<&'a JsNumber>,
+  pub(super) alpha: Option<&'a WrappedNumber>,
 }
 
 pub struct NewParameters<'a> {
