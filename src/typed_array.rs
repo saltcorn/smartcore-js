@@ -29,7 +29,7 @@ macro_rules! from_vec_impl {
                     TypedArrayVec::[<$inner:upper>](v) => Ok(&v),
                     _ => Err(Error::new(
                         Status::GenericFailure,
-                        stringify!("Expected an ", $inner:upper, " variant of TypedArray!")
+                        stringify!("Expected an "[<$inner:upper>]" variant of TypedArray!")
                     )),
                 }
             }

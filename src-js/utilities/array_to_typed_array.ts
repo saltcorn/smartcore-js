@@ -12,18 +12,6 @@ interface IArrayToDenseMatrixParams {
 }
 
 function arrayToTypedArray(y: YType, params?: IArrayToDenseMatrixParams): TypedArray {
-  if (
-    y instanceof Float64Array ||
-    y instanceof Float32Array ||
-    y instanceof BigInt64Array ||
-    y instanceof BigUint64Array ||
-    y instanceof Int32Array ||
-    y instanceof Uint16Array ||
-    y instanceof Uint8Array ||
-    y instanceof Uint32Array ||
-    y instanceof BigUint64Array
-  )
-    return y
   switch (params?.numberType) {
     case 'F32' as TypedArrayType:
       return yAsFloat32Array(y)
@@ -38,6 +26,18 @@ function arrayToTypedArray(y: YType, params?: IArrayToDenseMatrixParams): TypedA
     case 'U64' as TypedArrayType:
       return yAsUint64Array(y)
   }
+  if (
+    y instanceof Float64Array ||
+    y instanceof Float32Array ||
+    y instanceof BigInt64Array ||
+    y instanceof BigUint64Array ||
+    y instanceof Int32Array ||
+    y instanceof Uint16Array ||
+    y instanceof Uint8Array ||
+    y instanceof Uint32Array ||
+    y instanceof BigUint64Array
+  )
+    return y
   if (y.length === 0) return new Float64Array()
   let largestNo = y[0]
   let smallestNo = y[0]

@@ -4,6 +4,7 @@ import assert from 'assert'
 import { trainTestSplit } from '../../dist/model_selection/index.js'
 import { accuracyScore } from '../../dist/metrics/index.js'
 import { utilities } from '../../src-js/index.js'
+import { TypedArrayType } from '../../src-js/core-bindings/index.js'
 
 export default () => {
   it('create', () => {
@@ -12,7 +13,7 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y))
+    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
     const _ = new LogisticRegressionBuilder(x, yWrapped).build()
   })
 
@@ -22,7 +23,7 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y))
+    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const logisticRegressionBuilder = new LogisticRegressionBuilder(x, yWrapped)
@@ -37,7 +38,7 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y))
+    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const logisticRegressionBuilder = new LogisticRegressionBuilder(x, yWrapped)

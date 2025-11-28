@@ -1,16 +1,22 @@
-import { utilities, type InputType, type YType } from '../../index.js'
-import { type PredictorProvider, type Predictor } from '../../estimator.js'
+import { utilities, type InputType, type YType } from '../index.js'
+import { type RsPredictor } from '../estimator.js'
+import { DataFrame } from '../data_frame.js'
 import {
-  EstimatorProvidersMap,
-  type IBernoulliNBBaseParameters,
-  type XTypeStr,
-  type YTypeStr,
-} from './estimator_providers_map/index.js'
-import { DataFrame } from '../../data_frame.js'
+  type DenseMatrixType,
+  type TypedArrayType,
+  BernoulliNB as LibBernoulliNB,
+  BernoulliNBBuilder,
+} from '../core-bindings/index.js'
+
+interface IBernoulliNBBaseParameters {
+  priors?: Float64Array | number[]
+  alpha?: number
+  binarize?: number | bigint
+}
 
 interface IBernoulliNBParameters extends IBernoulliNBBaseParameters {
-  featureType?: XTypeStr
-  targetType?: YTypeStr
+  fitDataXType?: DenseMatrixType
+  fitDataYType?: TypedArrayType
   columns?: string[]
 }
 
@@ -29,25 +35,12 @@ class BernoulliNB implements HasColumns {
   public readonly config: IBernoulliNBParameters = {}
 
   private _isFitted: boolean = false
-  private estimatorProvider: PredictorProvider<IBernoulliNBBaseParameters, any, any>
-  private parameters: any
-  private estimator: Predictor | null = null
+  private estimator: RsPredictor | null = null
 
   constructor(params?: IBernoulliNBParameters) {
     this.config = params ?? {}
-    this.config.featureType = this.config.featureType ?? 'f32'
-    const estimatorProvidersMap = EstimatorProvidersMap.get(this.config.featureType)
-    if (!estimatorProvidersMap) {
-      throw new Error(`Invalid value for feature type '${this.config.featureType}'`)
-    }
-    this.config.targetType = this.config.targetType ?? 'u32'
-    const estimatorProvider = estimatorProvidersMap.get(this.config.targetType)
-    if (!estimatorProvider) {
-      throw new Error(`Invalid value for target type '${this.config.targetType}'`)
-    }
-    const parameters = estimatorProvider.parameters(this.config)
-    this.estimatorProvider = estimatorProvider
-    this.parameters = parameters
+    this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
+    this.config.fitDataYType = this.config.fitDataYType ?? ('U32' as TypedArrayType)
   }
 
   get columns(): string[] | null {
@@ -59,7 +52,20 @@ class BernoulliNB implements HasColumns {
     if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
       matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
     else matrix = utilities.inputTypeToDenseMatrix(x)
-    this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters)
+    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
+    const builder = new BernoulliNBBuilder(matrix, yWrapped)
+    if (this.config.alpha !== undefined) {
+      builder.withAlpha(this.config.alpha)
+    }
+    if (this.config.priors !== undefined) {
+      const priors =
+        this.config.priors instanceof Float64Array ? this.config.priors : Float64Array.from(this.config.priors)
+      builder.withPriors(priors)
+    }
+    if (this.config.binarize !== undefined) {
+      builder.withBinarize(utilities.wrapNumber(this.config.binarize))
+    }
+    this.estimator = builder.build()
     this._isFitted = true
     return this
   }
@@ -79,11 +85,10 @@ class BernoulliNB implements HasColumns {
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
       const matrix = utilities.dataFrameToDenseMatrix(x, columns)
-      const matrixRs = this.estimatorProvider.toMatrix(matrix)
-      return this.estimator!.predict(matrixRs)
+      return this.estimator!.predict(matrix).field0
     }
-    const matrixRs = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(x))
-    return this.estimator!.predict(matrixRs)
+    const matrixRs = utilities.inputTypeToDenseMatrix(x)
+    return this.estimator!.predict(matrixRs).field0
   }
 
   serialize(): BernoulliNBSerializedData {
@@ -99,7 +104,7 @@ class BernoulliNB implements HasColumns {
     if (this._isFitted) {
       throw new Error("Cannot call 'deserialize' on a fitted instance!")
     }
-    this.estimator = this.estimatorProvider.deserialize(data)
+    this.estimator = LibBernoulliNB.deserialize(data)
     return this
   }
 

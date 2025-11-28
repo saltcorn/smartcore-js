@@ -10,7 +10,7 @@ import {
   pipeline,
   cluster,
   decomposition,
-  //   naiveBayes,
+  naiveBayes,
   //   neighbors,
   dataFrame,
 } from '../src-js/index.js'
@@ -22,7 +22,10 @@ let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ens
 // let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
 let { PCA, SVD } = decomposition
-// let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
+let {
+  BernoulliNB,
+  // CategoricalNB, GaussianNB, MultinomialNB
+} = naiveBayes
 // let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
 let { trainTestSplit } = modelSelection
@@ -254,21 +257,21 @@ describe('Serialize + Deserialize', () => {
   //     assert.deepEqual(xTransformed1, xTransformed2)
   //   })
 
-  //   it('BernoulliNB', () => {
-  //     const bnb = new BernoulliNB()
-  //     const irisData = loadIris({ returnXY: true })
-  //     const [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
-  //     }
-  //     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     bnb.fit(xTrain, yTrain)
-  //     let score1 = accuracyScore(bnb.predict(xTest), yTest)
-  //     const bnbSerialized = bnb.serialize()
-  //     const bnbDeserialized = BernoulliNB.deserialize(bnbSerialized)
-  //     const score2 = accuracyScore(bnbDeserialized.predict(xTest), yTest)
-  //     assert.equal(score1, score2)
-  //   })
+  it('BernoulliNB', () => {
+    const bnb = new BernoulliNB()
+    const irisData = loadIris({ returnXY: true })
+    const [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadIris" to return an Array containing 2 items.')
+    }
+    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    bnb.fit(xTrain, yTrain)
+    let score1 = accuracyScore(bnb.predict(xTest), yTest)
+    const bnbSerialized = bnb.serialize()
+    const bnbDeserialized = BernoulliNB.deserialize(bnbSerialized)
+    const score2 = accuracyScore(bnbDeserialized.predict(xTest), yTest)
+    assert.equal(score1, score2)
+  })
 
   //   it('CategoricalNB', () => {
   //     const df = new DataFrame(parsedJson, {

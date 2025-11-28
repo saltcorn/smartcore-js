@@ -51,7 +51,7 @@ class LinearRegression implements HasColumns {
     if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
       matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
     else matrix = utilities.inputTypeToDenseMatrix(x)
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y))
+    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
     const builder = new LinearRegressionBuilder(matrix, yWrapped)
     if (this.config.solver !== undefined) {
       builder.withSolver(this.config.solver)

@@ -53,7 +53,7 @@ class Lasso implements HasColumns {
     if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
       matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
     else matrix = utilities.inputTypeToDenseMatrix(x)
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y))
+    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
     const builder = new LassoBuilder(matrix, yWrapped)
     if (this.config.alpha !== undefined) builder.withAlpha(this.config.alpha)
     if (this.config.normalize !== undefined) builder.withNormalize(this.config.normalize)

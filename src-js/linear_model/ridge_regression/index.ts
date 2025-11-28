@@ -53,7 +53,7 @@ class RidgeRegression implements HasColumns {
     if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
       matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
     else matrix = utilities.inputTypeToDenseMatrix(x)
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y))
+    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
     const builder = new RidgeRegressionBuilder(matrix, yWrapped)
     if (this.config.alpha !== undefined) {
       builder.withAlpha(utilities.wrapNumber(this.config.alpha))
