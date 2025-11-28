@@ -21,7 +21,6 @@ pub struct BernoulliNBBuilder {
   pub(super) alpha: Option<f64>,
   pub(super) priors: Option<Float64Array>,
   pub(super) binarize: Option<WrappedNumber>,
-  pub(super) predict_output_type: BernoulliNBPredictOutputType,
 }
 
 #[napi]
@@ -38,7 +37,6 @@ impl BernoulliNBBuilder {
       alpha: None,
       priors: None,
       binarize: None,
-      predict_output_type: BernoulliNBPredictOutputType::default(),
     })
   }
 
@@ -58,17 +56,11 @@ impl BernoulliNBBuilder {
   }
 
   #[napi]
-  pub fn with_predict_output_type(&mut self, predict_output_type: BernoulliNBPredictOutputType) {
-    self.predict_output_type = predict_output_type
-  }
-
-  #[napi]
   pub fn build(&mut self) -> Result<BernoulliNB> {
     let fit_data_variant_type = self.fit_data_x.r#type();
     let params = factory::NewParameters {
       fit_data_x: self.fit_data_x.deref(),
       fit_data_y: &self.fit_data_y,
-      predict_output_type: self.predict_output_type,
       bernoulli_nb_parameters: BernoulliNBParameters {
         alpha: self.alpha,
         priors: self.priors.as_ref().map(|v| v.to_vec()),
@@ -78,7 +70,7 @@ impl BernoulliNBBuilder {
     Ok(BernoulliNB {
       inner: BernoulliNBFactory::create(params)?,
       fit_data_variant_type,
-      predict_output_type: self.predict_output_type,
+      predict_output_type: self.fit_data_y.r#type().try_into()?,
     })
   }
 }

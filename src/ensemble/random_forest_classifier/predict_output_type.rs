@@ -2,7 +2,7 @@ use bincode::{Decode, Encode};
 use napi::{Error, Result, Status};
 use napi_derive::napi;
 
-use crate::typed_array::TypedArrayVec;
+use crate::typed_array::TypedArrayType;
 
 #[derive(Debug, Clone, PartialEq, Eq, Copy, Encode, Decode)]
 #[napi(string_enum)]
@@ -12,19 +12,22 @@ pub enum RandomForestClassifierPredictOutputType {
   I32,
 }
 
-impl TryFrom<&TypedArrayVec> for RandomForestClassifierPredictOutputType {
+impl TryFrom<TypedArrayType> for RandomForestClassifierPredictOutputType {
   type Error = napi::Error;
 
-  fn try_from(value: &TypedArrayVec) -> Result<Self> {
+  fn try_from(value: TypedArrayType) -> Result<Self> {
     match value {
-      TypedArrayVec::I64(_) => Ok(Self::I64),
-      TypedArrayVec::U64(_) => Ok(Self::U64),
-      TypedArrayVec::I32(_) => Ok(Self::I32),
-      TypedArrayVec::U32(_)
-      | TypedArrayVec::F32(_)
-      | TypedArrayVec::F64(_)
-      | TypedArrayVec::U16(_)
-      | TypedArrayVec::U8(_) => Err(Error::new(Status::GenericFailure, "TODO")),
+      TypedArrayType::I64 => Ok(Self::I64),
+      TypedArrayType::U64 => Ok(Self::U64),
+      TypedArrayType::I32 => Ok(Self::I32),
+      TypedArrayType::U32
+      | TypedArrayType::F32
+      | TypedArrayType::F64
+      | TypedArrayType::U16
+      | TypedArrayType::U8 => Err(Error::new(
+        Status::GenericFailure,
+        "Supported types for fit data y are: i64, u64, and i32.",
+      )),
     }
   }
 }

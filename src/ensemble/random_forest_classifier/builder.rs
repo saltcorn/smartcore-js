@@ -114,7 +114,7 @@ impl RandomForestClassifierBuilder {
     Ok(RandomForestClassifier {
       inner: RandomForestClassifierFactory::create(params)?,
       fit_data_variant_type,
-      predict_output_type: (&self.fit_data_y).try_into()?,
+      predict_output_type: self.fit_data_y.r#type().try_into()?,
     })
   }
 }

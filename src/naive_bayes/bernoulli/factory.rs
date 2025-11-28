@@ -18,7 +18,6 @@ pub struct BernoulliNBParameters<'a> {
 pub struct NewParameters<'a> {
   pub fit_data_x: &'a DenseMatrix,
   pub fit_data_y: &'a TypedArrayVec,
-  pub predict_output_type: BernoulliNBPredictOutputType,
   pub bernoulli_nb_parameters: BernoulliNBParameters<'a>,
 }
 
@@ -37,7 +36,8 @@ pub struct BernoulliNBFactory {}
 impl BernoulliNBFactory {
   pub fn create<'a>(params: NewParameters<'a>) -> Result<Box<dyn PredictorEstimator>> {
     let fit_data_variant_type = params.fit_data_x.r#type();
-    match (fit_data_variant_type, params.predict_output_type) {
+    let predict_output_type = params.fit_data_y.r#type().try_into()?;
+    match (fit_data_variant_type, predict_output_type) {
       (DenseMatrixType::F64, BernoulliNBPredictOutputType::U32) => {
         LibBernoulliNBFactory::f64_u32(params.into())
       }

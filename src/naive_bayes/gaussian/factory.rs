@@ -15,7 +15,6 @@ pub struct GaussianNBParameters {
 pub struct NewParameters<'a> {
   pub fit_data_x: &'a DenseMatrix,
   pub fit_data_y: &'a TypedArrayVec,
-  pub predict_output_type: GaussianNBPredictOutputType,
   pub gaussian_nb_parameters: GaussianNBParameters,
 }
 
@@ -34,7 +33,8 @@ pub struct GaussianNBFactory {}
 impl GaussianNBFactory {
   pub fn create<'a>(params: NewParameters<'a>) -> Result<Box<dyn PredictorEstimator>> {
     let fit_data_variant_type = params.fit_data_x.r#type();
-    match (fit_data_variant_type, params.predict_output_type) {
+    let predict_output_type = params.fit_data_y.r#type().try_into()?;
+    match (fit_data_variant_type, predict_output_type) {
       (DenseMatrixType::F64, GaussianNBPredictOutputType::U64) => {
         LibGaussianNBFactory::f64_u64(params.into())
       }

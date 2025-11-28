@@ -87,8 +87,8 @@ pub enum TypedArrayType {
   U8,
 }
 
-impl From<TypedArrayWrapper> for TypedArrayType {
-  fn from(value: TypedArrayWrapper) -> Self {
+impl From<&TypedArrayWrapper> for TypedArrayType {
+  fn from(value: &TypedArrayWrapper) -> Self {
     match value {
       TypedArrayWrapper::F32(_) => Self::F32,
       TypedArrayWrapper::F64(_) => Self::F64,
@@ -99,5 +99,32 @@ impl From<TypedArrayWrapper> for TypedArrayType {
       TypedArrayWrapper::U16(_) => Self::U16,
       TypedArrayWrapper::U8(_) => Self::U8,
     }
+  }
+}
+
+impl TypedArrayWrapper {
+  pub fn r#type(&self) -> TypedArrayType {
+    self.into()
+  }
+}
+
+impl From<&TypedArrayVec> for TypedArrayType {
+  fn from(value: &TypedArrayVec) -> Self {
+    match value {
+      TypedArrayVec::F32(_) => Self::F32,
+      TypedArrayVec::F64(_) => Self::F64,
+      TypedArrayVec::I64(_) => Self::I64,
+      TypedArrayVec::U64(_) => Self::U32,
+      TypedArrayVec::I32(_) => Self::I32,
+      TypedArrayVec::U32(_) => Self::U32,
+      TypedArrayVec::U16(_) => Self::U16,
+      TypedArrayVec::U8(_) => Self::U8,
+    }
+  }
+}
+
+impl TypedArrayVec {
+  pub fn r#type(&self) -> TypedArrayType {
+    self.into()
   }
 }

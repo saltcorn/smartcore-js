@@ -89,6 +89,7 @@ impl ExtraTreesRegressorBuilder {
   #[napi]
   pub fn build(&mut self) -> Result<ExtraTreesRegressor> {
     let fit_data_variant_type = self.fit_data_x.r#type();
+    let predict_output_type = self.fit_data_y.r#type().try_into()?;
     let params = factory::NewParameters {
       fit_data_x: self.fit_data_x.deref(),
       fit_data_y: &self.fit_data_y,
@@ -105,7 +106,7 @@ impl ExtraTreesRegressorBuilder {
     Ok(ExtraTreesRegressor {
       inner: ExtraTreesRegressorFactory::create(params)?,
       fit_data_variant_type,
-      predict_output_type: (&self.fit_data_y).try_into()?,
+      predict_output_type,
     })
   }
 }
