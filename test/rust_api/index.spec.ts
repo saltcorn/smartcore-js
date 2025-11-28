@@ -12,6 +12,7 @@ import logisticRegression from './logistic_regression.ts'
 import ridgeRegression from './ridge_regression.ts'
 import bernoulliNB from './bernoulli_nb.ts'
 import categoricalNB from './categorical_nb.ts'
+import gaussianNB from './gaussian_nb.ts'
 
 describe('Rust API', () => {
   describe('cluster', () => {
@@ -41,5 +42,6 @@ describe('Rust API', () => {
   describe('naive_bayes', () => {
     describe('BernoulliNB', bernoulliNB)
     describe('CategoricalNB', categoricalNB)
+    describe('GaussianNB', gaussianNB)
   })
 })

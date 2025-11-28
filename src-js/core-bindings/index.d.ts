@@ -43,7 +43,6 @@ export declare class BernoulliNBBuilder {
   withAlpha(alpha: number): void
   withPriors(priors: Float64Array): void
   withBinarize(binarize: WrappedNumber): void
-  withPredictOutputType(predictOutputType: BernoulliNBPredictOutputType): void
   build(): BernoulliNB
 }
 
@@ -714,7 +713,6 @@ export declare class GaussianNB {
 export declare class GaussianNBBuilder {
   constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
   withPriors(priors: Float64Array): void
-  withPredictOutputType(predictOutputType: GaussianNBPredictOutputType): void
   build(): GaussianNB
 }
 

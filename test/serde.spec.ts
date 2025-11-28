@@ -25,7 +25,8 @@ let { PCA, SVD } = decomposition
 let {
   BernoulliNB,
   CategoricalNB,
-  // GaussianNB, MultinomialNB
+  GaussianNB,
+  // MultinomialNB
 } = naiveBayes
 // let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
@@ -304,21 +305,21 @@ describe('Serialize + Deserialize', () => {
     assert.deepEqual(predictions1, predictions2)
   })
 
-  //   it('GaussianNB', () => {
-  //     const gnb = new GaussianNB()
-  //     const irisData = loadIris({ returnXY: true })
-  //     const [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
-  //     }
-  //     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     gnb.fit(xTrain, yTrain)
-  //     const score1 = accuracyScore(gnb.predict(xTest), yTest)
-  //     const gnbSerialized = gnb.serialize()
-  //     const gnbDeserialized = GaussianNB.deserialize(gnbSerialized)
-  //     const score2 = accuracyScore(gnbDeserialized.predict(xTest), yTest)
-  //     assert.equal(score1, score2)
-  //   })
+  it('GaussianNB', () => {
+    const gnb = new GaussianNB()
+    const irisData = loadIris({ returnXY: true })
+    const [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadIris" to return an Array containing 2 items.')
+    }
+    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    gnb.fit(xTrain, yTrain)
+    const score1 = accuracyScore(gnb.predict(xTest), yTest)
+    const gnbSerialized = gnb.serialize()
+    const gnbDeserialized = GaussianNB.deserialize(gnbSerialized)
+    const score2 = accuracyScore(gnbDeserialized.predict(xTest), yTest)
+    assert.equal(score1, score2)
+  })
 
   //   it('MultinomialNB', () => {
   //     const df = new DataFrame(parsedJson, {
