@@ -20,10 +20,11 @@ impl TryFrom<&TypedArrayVec> for RandomForestClassifierPredictOutputType {
       TypedArrayVec::I64(_) => Ok(Self::I64),
       TypedArrayVec::U64(_) => Ok(Self::U64),
       TypedArrayVec::I32(_) => Ok(Self::I32),
-      TypedArrayVec::U32(_) | TypedArrayVec::F32(_) | TypedArrayVec::F64(_) => Err(Error::new(
-        Status::GenericFailure,
-        "RandomForestClassifier supported predict output types are i64, u64, and i32.",
-      )),
+      TypedArrayVec::U32(_)
+      | TypedArrayVec::F32(_)
+      | TypedArrayVec::F64(_)
+      | TypedArrayVec::U16(_)
+      | TypedArrayVec::U8(_) => Err(Error::new(Status::GenericFailure, "TODO")),
     }
   }
 }

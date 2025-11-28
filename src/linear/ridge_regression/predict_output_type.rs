@@ -25,10 +25,9 @@ impl TryFrom<&TypedArrayVec> for RidgeRegressionPredictOutputType {
       TypedArrayVec::I64(_) => Ok(Self::I64),
       TypedArrayVec::U64(_) => Ok(Self::U64),
       TypedArrayVec::I32(_) => Ok(Self::I32),
-      TypedArrayVec::U32(_) => Err(Error::new(
-        Status::GenericFailure,
-        "RidgeRegression supported predict output types are f64, f32, i64, u64, and i32.",
-      )),
+      TypedArrayVec::U32(_) | TypedArrayVec::U16(_) | TypedArrayVec::U8(_) => {
+        Err(Error::new(Status::GenericFailure, "TODO"))
+      }
     }
   }
 }

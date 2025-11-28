@@ -55,37 +55,16 @@ export declare class BreastCancer {
   loadDataset(): DatasetF64I32
 }
 
-export declare class CategoricalNBParameters {
-  constructor()
+export declare class CategoricalNB {
+  predict(x: DenseMatrix): TypedArrayWrapper
+  serialize(): Buffer
+  static deserialize(data: Buffer): CategoricalNB
+}
+
+export declare class CategoricalNBBuilder {
+  constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
   withAlpha(alpha: number): void
-}
-
-export declare class CategoricalNBU16 {
-  static fit(x: DenseMatrixU16, y: Uint16Array, parameters: CategoricalNBParameters): CategoricalNBU16
-  predict(x: DenseMatrixU16): Uint16Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): CategoricalNBU16
-}
-
-export declare class CategoricalNBU32 {
-  static fit(x: DenseMatrixU32, y: Uint32Array, parameters: CategoricalNBParameters): CategoricalNBU32
-  predict(x: DenseMatrixU32): Uint32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): CategoricalNBU32
-}
-
-export declare class CategoricalNBU64 {
-  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: CategoricalNBParameters): CategoricalNBU64
-  predict(x: DenseMatrixU64): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): CategoricalNBU64
-}
-
-export declare class CategoricalNBU8 {
-  static fit(x: DenseMatrixU8, y: Uint8Array, parameters: CategoricalNBParameters): CategoricalNBU8
-  predict(x: DenseMatrixU8): Uint8Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): CategoricalNBU8
+  build(): CategoricalNB
 }
 
 export declare class dataset {
@@ -2175,7 +2154,9 @@ export declare const enum TypedArrayType {
   I64 = 'I64',
   U64 = 'U64',
   I32 = 'I32',
-  U32 = 'U32'
+  U32 = 'U32',
+  U16 = 'U16',
+  U8 = 'U8'
 }
 
 export type TypedArrayWrapper =
@@ -2185,3 +2166,5 @@ export type TypedArrayWrapper =
   | { type: 'U64', field0: BigUint64Array }
   | { type: 'I32', field0: Int32Array }
   | { type: 'U32', field0: Uint32Array }
+  | { type: 'U16', field0: Uint16Array }
+  | { type: 'U8', field0: Uint8Array }
