@@ -32,172 +32,19 @@ export declare class AUCF64 {
 }
 export type AUCf64 = AUCF64
 
-export declare class BernoulliNBF32Parameters {
-  constructor()
-  withPriors(priors: Float64Array): void
+export declare class BernoulliNB {
+  predict(x: DenseMatrix): TypedArrayWrapper
+  serialize(): Buffer
+  static deserialize(data: Buffer): BernoulliNB
+}
+
+export declare class BernoulliNBBuilder {
+  constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
   withAlpha(alpha: number): void
-  withBinarize(binarize: number): void
-}
-
-export declare class BernoulliNBF32U32 {
-  static fit(x: DenseMatrixF32, y: Uint32Array, parameters: BernoulliNBF32Parameters): BernoulliNBF32U32
-  predict(x: DenseMatrixF32): Uint32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBF32U32
-}
-
-export declare class BernoulliNBF32U64 {
-  static fit(x: DenseMatrixF32, y: BigUint64Array, parameters: BernoulliNBF32Parameters): BernoulliNBF32U64
-  predict(x: DenseMatrixF32): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBF32U64
-}
-
-export declare class BernoulliNBF64Parameters {
-  constructor()
   withPriors(priors: Float64Array): void
-  withAlpha(alpha: number): void
-  withBinarize(binarize: number): void
-}
-
-export declare class BernoulliNBF64U32 {
-  static fit(x: DenseMatrixF64, y: Uint32Array, parameters: BernoulliNBF64Parameters): BernoulliNBF64U32
-  predict(x: DenseMatrixF64): Uint32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBF64U32
-}
-
-export declare class BernoulliNBF64U64 {
-  static fit(x: DenseMatrixF64, y: BigUint64Array, parameters: BernoulliNBF64Parameters): BernoulliNBF64U64
-  predict(x: DenseMatrixF64): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBF64U64
-}
-
-export declare class BernoulliNBI32Parameters {
-  constructor()
-  withPriors(priors: Float64Array): void
-  withAlpha(alpha: number): void
-  withBinarize(binarize: number): void
-}
-
-export declare class BernoulliNBI32U32 {
-  static fit(x: DenseMatrixI32, y: Uint32Array, parameters: BernoulliNBI32Parameters): BernoulliNBI32U32
-  predict(x: DenseMatrixI32): Uint32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBI32U32
-}
-
-export declare class BernoulliNBI32U64 {
-  static fit(x: DenseMatrixI32, y: BigUint64Array, parameters: BernoulliNBI32Parameters): BernoulliNBI32U64
-  predict(x: DenseMatrixI32): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBI32U64
-}
-
-export declare class BernoulliNBI64Parameters {
-  constructor()
-  withPriors(priors: Float64Array): void
-  withAlpha(alpha: number): void
-  withBinarize(binarize: bigint): void
-}
-
-export declare class BernoulliNBI64U32 {
-  static fit(x: DenseMatrixI64, y: Uint32Array, parameters: BernoulliNBI64Parameters): BernoulliNBI64U32
-  predict(x: DenseMatrixI64): Uint32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBI64U32
-}
-
-export declare class BernoulliNBI64U64 {
-  static fit(x: DenseMatrixI64, y: BigUint64Array, parameters: BernoulliNBI64Parameters): BernoulliNBI64U64
-  predict(x: DenseMatrixI64): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBI64U64
-}
-
-export declare class BernoulliNBU16Parameters {
-  constructor()
-  withPriors(priors: Float64Array): void
-  withAlpha(alpha: number): void
-  withBinarize(binarize: number): void
-}
-
-export declare class BernoulliNBU16U32 {
-  static fit(x: DenseMatrixU16, y: Uint32Array, parameters: BernoulliNBU16Parameters): BernoulliNBU16U32
-  predict(x: DenseMatrixU16): Uint32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBU16U32
-}
-
-export declare class BernoulliNBU16U64 {
-  static fit(x: DenseMatrixU16, y: BigUint64Array, parameters: BernoulliNBU16Parameters): BernoulliNBU16U64
-  predict(x: DenseMatrixU16): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBU16U64
-}
-
-export declare class BernoulliNBU32Parameters {
-  constructor()
-  withPriors(priors: Float64Array): void
-  withAlpha(alpha: number): void
-  withBinarize(binarize: number): void
-}
-
-export declare class BernoulliNBU32U32 {
-  static fit(x: DenseMatrixU32, y: Uint32Array, parameters: BernoulliNBU32Parameters): BernoulliNBU32U32
-  predict(x: DenseMatrixU32): Uint32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBU32U32
-}
-
-export declare class BernoulliNBU32U64 {
-  static fit(x: DenseMatrixU32, y: BigUint64Array, parameters: BernoulliNBU32Parameters): BernoulliNBU32U64
-  predict(x: DenseMatrixU32): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBU32U64
-}
-
-export declare class BernoulliNBU64Parameters {
-  constructor()
-  withPriors(priors: Float64Array): void
-  withAlpha(alpha: number): void
-  withBinarize(binarize: bigint): void
-}
-
-export declare class BernoulliNBU64U32 {
-  static fit(x: DenseMatrixU64, y: Uint32Array, parameters: BernoulliNBU64Parameters): BernoulliNBU64U32
-  predict(x: DenseMatrixU64): Uint32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBU64U32
-}
-
-export declare class BernoulliNBU64U64 {
-  static fit(x: DenseMatrixU64, y: BigUint64Array, parameters: BernoulliNBU64Parameters): BernoulliNBU64U64
-  predict(x: DenseMatrixU64): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBU64U64
-}
-
-export declare class BernoulliNBU8Parameters {
-  constructor()
-  withPriors(priors: Float64Array): void
-  withAlpha(alpha: number): void
-  withBinarize(binarize: number): void
-}
-
-export declare class BernoulliNBU8U32 {
-  static fit(x: DenseMatrixU8, y: Uint32Array, parameters: BernoulliNBU8Parameters): BernoulliNBU8U32
-  predict(x: DenseMatrixU8): Uint32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBU8U32
-}
-
-export declare class BernoulliNBU8U64 {
-  static fit(x: DenseMatrixU8, y: BigUint64Array, parameters: BernoulliNBU8Parameters): BernoulliNBU8U64
-  predict(x: DenseMatrixU8): BigUint64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): BernoulliNBU8U64
+  withBinarize(binarize: WrappedNumber): void
+  withPredictOutputType(predictOutputType: BernoulliNBPredictOutputType): void
+  build(): BernoulliNB
 }
 
 export declare class Boston {
@@ -2113,6 +1960,11 @@ export declare class VecI64 {
 export declare class WrappedNumber {
   static float(no: number): WrappedNumber
   static int(no: bigint): WrappedNumber
+}
+
+export declare const enum BernoulliNBPredictOutputType {
+  U32 = 'U32',
+  U64 = 'U64'
 }
 
 export declare const enum DenseMatrixType {
