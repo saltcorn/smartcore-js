@@ -47,10 +47,10 @@ class LinearRegression implements HasColumns {
   }
 
   fit(x: InputType, y: YType): this {
-    let matrix
-    if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
-      matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
-    else matrix = utilities.inputTypeToDenseMatrix(x)
+    let matrix = utilities.inputTypeToDenseMatrix(x, {
+      columns: this.config.columns,
+      numberType: this.config.fitDataXType,
+    })
     const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
     const builder = new LinearRegressionBuilder(matrix, yWrapped)
     if (this.config.solver !== undefined) {
@@ -75,10 +75,13 @@ class LinearRegression implements HasColumns {
     this.ensureFitted('predict')
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
-      const matrix = utilities.dataFrameToDenseMatrix(x, columns)
+      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.config.fitDataXType })
       return this.estimator!.predict(matrix).field0
     }
-    const matrixRs = utilities.inputTypeToDenseMatrix(x)
+    const matrixRs = utilities.inputTypeToDenseMatrix(x, {
+      columns: this.config.columns,
+      numberType: this.config.fitDataXType,
+    })
     return this.estimator!.predict(matrixRs).field0
   }
 

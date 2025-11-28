@@ -1,15 +1,14 @@
 import { utilities, type InputType } from '../../index.js'
 import { type Transformer } from '../../estimator.js'
 import { DataFrame } from '../../data_frame.js'
-import type { NumberTypeRs } from '../index.js'
-import { SVD as LibSVD, SVDBuilder, DenseMatrix } from '../../core-bindings/index.js'
+import { SVD as LibSVD, SVDBuilder, DenseMatrix, type DenseMatrixType } from '../../core-bindings/index.js'
 
 interface ISVDBaseParameters {
   nComponents?: bigint
 }
 
 interface ISVDParameters extends ISVDBaseParameters {
-  targetType?: NumberTypeRs
+  fitDataXType?: DenseMatrixType
   columns?: string[]
 }
 
@@ -32,7 +31,7 @@ class SVD implements HasColumns {
 
   constructor(params?: ISVDParameters) {
     this.config = params ?? {}
-    this.config.targetType = this.config.targetType ?? 'f32'
+    this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
   }
 
   get columns(): string[] | null {
@@ -42,7 +41,7 @@ class SVD implements HasColumns {
   fit(x: InputType): this {
     let matrix
     if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
-      matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
+      matrix = utilities.dataFrameToDenseMatrix(x, { columns: this.columns, numberType: this.config.fitDataXType })
     else matrix = utilities.inputTypeToDenseMatrix(x)
     const builder = new SVDBuilder(matrix)
     if (this.config.nComponents) {
@@ -67,7 +66,7 @@ class SVD implements HasColumns {
     this.ensureFitted('transform')
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
-      const matrix = utilities.dataFrameToDenseMatrix(x, columns)
+      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.config.fitDataXType })
       const transformedMatrix = this.estimator!.transform(matrix)
       const transformed = utilities.denseMatrixToDataFrame(transformedMatrix, columns)
       const remaining = utilities.getRemainingColumns(x, columns)

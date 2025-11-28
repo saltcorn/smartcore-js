@@ -1,7 +1,7 @@
-import { utilities, type InputType } from '../../index.js'
-import { type Transformer } from '../../estimator.js'
-import { DataFrame } from '../../data_frame.js'
-import { DenseMatrix, PCABuilder, PCA as LibPCA, type DenseMatrixType } from '../../core-bindings/index.js'
+import { utilities, type InputType } from '../index.js'
+import { type Transformer } from '../estimator.js'
+import { DataFrame } from '../data_frame.js'
+import { DenseMatrix, PCABuilder, PCA as LibPCA, type DenseMatrixType } from '../core-bindings/index.js'
 
 interface IPCABaseParameters {
   nComponents?: bigint
@@ -9,7 +9,7 @@ interface IPCABaseParameters {
 }
 
 interface IPCAParameters extends IPCABaseParameters {
-  targetType?: DenseMatrixType
+  fitDataXType?: DenseMatrixType
   columns?: string[]
 }
 
@@ -32,7 +32,7 @@ class PCA implements HasColumns {
 
   constructor(params: IPCAParameters) {
     this.config = params
-    this.config.targetType = this.config.targetType ?? ('F32' as DenseMatrixType)
+    this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
   }
 
   get columns(): string[] | null {
@@ -40,10 +40,10 @@ class PCA implements HasColumns {
   }
 
   fit(x: InputType): this {
-    let matrix
-    if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
-      matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
-    else matrix = utilities.inputTypeToDenseMatrix(x)
+    let matrix = utilities.inputTypeToDenseMatrix(x, {
+      columns: this.config.columns,
+      numberType: this.config.fitDataXType,
+    })
     let builder = new PCABuilder(matrix)
     if (this.config.nComponents !== undefined) {
       builder.withNComponents(this.config.nComponents)
@@ -70,13 +70,16 @@ class PCA implements HasColumns {
     this.ensureFitted('transform')
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
-      const matrix = utilities.dataFrameToDenseMatrix(x, columns)
+      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.config.fitDataXType })
       const transformedMatrix = this.estimator!.transform(matrix)
       const transformed = utilities.denseMatrixToDataFrame(transformedMatrix, columns)
       const remaining = utilities.getRemainingColumns(x, columns)
       return utilities.combineDataFrames(transformed, remaining)
     }
-    const matrixRs = utilities.inputTypeToDenseMatrix(x)
+    const matrixRs = utilities.inputTypeToDenseMatrix(x, {
+      columns: this.config.columns,
+      numberType: this.config.fitDataXType,
+    })
     return this.estimator!.transform(matrixRs)
   }
 

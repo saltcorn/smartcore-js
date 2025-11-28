@@ -24,7 +24,8 @@ let { KMeans, DBSCAN } = cluster
 let { PCA, SVD } = decomposition
 let {
   BernoulliNB,
-  // CategoricalNB, GaussianNB, MultinomialNB
+  CategoricalNB,
+  // GaussianNB, MultinomialNB
 } = naiveBayes
 // let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
@@ -273,35 +274,35 @@ describe('Serialize + Deserialize', () => {
     assert.equal(score1, score2)
   })
 
-  //   it('CategoricalNB', () => {
-  //     const df = new DataFrame(parsedJson, {
-  //       include: [
-  //         'product_views',
-  //         'cart_additions',
-  //         'cart_removals',
-  //         'wishlist_additions',
-  //         'search_queries',
-  //         'page_scrolls',
-  //         'click_count',
-  //         'discount_used',
-  //         'customer_age',
-  //         'previous_purchases',
-  //         'days_since_last_purchase',
-  //         'email_opens_last_month',
-  //         'reviews_written',
-  //         'metrics.items_purchased',
-  //         'metrics.purchases',
-  //       ],
-  //     })
-  //     const cnb = new CategoricalNB()
-  //     const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
-  //     cnb.fit(df, y)
-  //     const predictions1 = cnb.predict(df)
-  //     const cnbSerialized = cnb.serialize()
-  //     const cnbDeserialized = CategoricalNB.deserialize(cnbSerialized)
-  //     const predictions2 = cnbDeserialized.predict(df)
-  //     assert.deepEqual(predictions1, predictions2)
-  //   })
+  it('CategoricalNB', () => {
+    const df = new DataFrame(parsedJson, {
+      include: [
+        'product_views',
+        'cart_additions',
+        'cart_removals',
+        'wishlist_additions',
+        'search_queries',
+        'page_scrolls',
+        'click_count',
+        'discount_used',
+        'customer_age',
+        'previous_purchases',
+        'days_since_last_purchase',
+        'email_opens_last_month',
+        'reviews_written',
+        'metrics.items_purchased',
+        'metrics.purchases',
+      ],
+    })
+    const cnb = new CategoricalNB()
+    const y = [1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1]
+    cnb.fit(df, y)
+    const predictions1 = cnb.predict(df)
+    const cnbSerialized = cnb.serialize()
+    const cnbDeserialized = CategoricalNB.deserialize(cnbSerialized)
+    const predictions2 = cnbDeserialized.predict(df)
+    assert.deepEqual(predictions1, predictions2)
+  })
 
   //   it('GaussianNB', () => {
   //     const gnb = new GaussianNB()

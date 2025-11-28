@@ -1,14 +1,19 @@
 import { utilities, type InputType, type YType } from '../../index.js'
-import { type PredictorProvider, type Predictor } from '../../estimator.js'
-import {
-  EstimatorProvidersMap,
-  type ICategoricalNBBaseParameters,
-  type XTypeStr,
-} from './estimator_providers_map/index.js'
+import { type RsPredictor } from '../../estimator.js'
 import { DataFrame } from '../../data_frame.js'
+import {
+  type DenseMatrixType,
+  type TypedArrayType,
+  CategoricalNB as LibCategoricalNB,
+  CategoricalNBBuilder,
+} from '../../core-bindings/index.js'
+
+interface ICategoricalNBBaseParameters {
+  alpha?: number
+}
 
 interface ICategoricalNBParameters extends ICategoricalNBBaseParameters {
-  featureType?: XTypeStr
+  fitDataXType?: DenseMatrixType
   columns?: string[]
 }
 
@@ -27,20 +32,11 @@ class CategoricalNB implements HasColumns {
   public readonly config: ICategoricalNBParameters = {}
 
   private _isFitted: boolean = false
-  private estimatorProvider: PredictorProvider<ICategoricalNBBaseParameters, any, any>
-  private parameters: any
-  private estimator: Predictor | null = null
+  private estimator: RsPredictor | null = null
 
   constructor(params?: ICategoricalNBParameters) {
     this.config = params ?? {}
-    this.config.featureType = this.config.featureType ?? 'u32'
-    const estimatorProvider = EstimatorProvidersMap.get(this.config.featureType)
-    if (!estimatorProvider) {
-      throw new Error(`Invalid value for feature type '${this.config.featureType}'`)
-    }
-    const parameters = estimatorProvider.parameters(this.config)
-    this.estimatorProvider = estimatorProvider
-    this.parameters = parameters
+    this.config.fitDataXType = this.config.fitDataXType ?? ('U32' as DenseMatrixType)
   }
 
   get columns(): string[] | null {
@@ -48,11 +44,20 @@ class CategoricalNB implements HasColumns {
   }
 
   fit(x: InputType, y: YType): this {
-    let matrix
-    if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
-      matrix = utilities.dataFrameToDenseMatrix(x, this.columns)
-    else matrix = utilities.inputTypeToDenseMatrix(x)
-    this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters)
+    let matrix = utilities.inputTypeToDenseMatrix(x, {
+      columns: this.config.columns,
+      numberType: this.config.fitDataXType,
+    })
+    const yWrapped = utilities.wrapTypedArray(
+      utilities.arrayToTypedArray(y, {
+        numberType: this.config.fitDataXType ? (this.config.fitDataXType as unknown as TypedArrayType) : undefined,
+      }),
+    )
+    const builder = new CategoricalNBBuilder(matrix, yWrapped)
+    if (this.config.alpha !== undefined) {
+      builder.withAlpha(this.config.alpha)
+    }
+    this.estimator = builder.build()
     this._isFitted = true
     return this
   }
@@ -71,12 +76,14 @@ class CategoricalNB implements HasColumns {
     this.ensureFitted('predict')
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
-      const matrix = utilities.dataFrameToDenseMatrix(x, columns)
-      const matrixRs = this.estimatorProvider.toMatrix(matrix)
-      return this.estimator!.predict(matrixRs)
+      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.config.fitDataXType })
+      return this.estimator!.predict(matrix).field0
     }
-    const matrixRs = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(x))
-    return this.estimator!.predict(matrixRs)
+    const matrixRs = utilities.inputTypeToDenseMatrix(x, {
+      columns: this.config.columns,
+      numberType: this.config.fitDataXType,
+    })
+    return this.estimator!.predict(matrixRs).field0
   }
 
   serialize(): CategoricalNBSerializedData {
@@ -92,7 +99,7 @@ class CategoricalNB implements HasColumns {
     if (this._isFitted) {
       throw new Error("Cannot call 'deserialize' on a fitted instance!")
     }
-    this.estimator = this.estimatorProvider.deserialize(data)
+    this.estimator = LibCategoricalNB.deserialize(data)
     return this
   }
 
