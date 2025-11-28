@@ -33,6 +33,9 @@ macro_rules! create_impl {
                 if let Some(priors) = params.multinomial_nb_parameters.priors {
                     parameters = parameters.with_priors(priors.to_vec());
                 }
+                if let Some(alpha) = params.multinomial_nb_parameters.alpha {
+                    parameters = parameters.with_alpha(alpha)
+                }
                 let multinomial_nb_instance = MultinomialNB::<$x, $y, LibDenseMatrix<$x>, Vec<$y>>::fit(x, y, parameters)
                     .map_err(|e| Error::new(Status::GenericFailure, e.to_string()))?;
                 Ok(Box::new(multinomial_nb_instance))

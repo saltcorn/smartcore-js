@@ -1631,6 +1631,7 @@ export declare class MultinomialNB {
 export declare class MultinomialNBBuilder {
   constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
   withPriors(priors: Float64Array): void
+  withAlpha(alpha: number): void
   build(): MultinomialNB
 }
 

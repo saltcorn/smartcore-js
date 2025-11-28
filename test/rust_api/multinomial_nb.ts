@@ -1,4 +1,4 @@
-import { CategoricalNBBuilder, CategoricalNB, DenseMatrixType, TypedArrayType } from '../../dist/core-bindings/index.js'
+import { MultinomialNBBuilder, MultinomialNB, DenseMatrixType, TypedArrayType } from '../../dist/core-bindings/index.js'
 import assert from 'assert'
 import { trainTestSplit } from '../../dist/model_selection/index.js'
 import { accuracyScore } from '../../dist/metrics/index.js'
@@ -33,27 +33,27 @@ export default () => {
   const y = utilities.wrapTypedArray(utilities.arrayToTypedArray(yPlain, { numberType: TypedArrayType.U32 }))
 
   it('create', () => {
-    const _ = new CategoricalNBBuilder(x, y).build()
+    const _ = new MultinomialNBBuilder(x, y).build()
   })
 
   it('predict', () => {
     const [, xTest, , yTest] = trainTestSplit(x, Int32Array.from(yPlain), { testSize: 0.33 })
 
-    const bernoulliNBBuilder = new CategoricalNBBuilder(x, y)
-    const bernoulliNB = bernoulliNBBuilder.build()
-    const score = accuracyScore(bernoulliNB.predict(xTest).field0, yTest)
+    const multinomialNBBuilder = new MultinomialNBBuilder(x, y)
+    const multinomialNB = multinomialNBBuilder.build()
+    const score = accuracyScore(multinomialNB.predict(xTest).field0, yTest)
     assert(score >= 0)
   })
 
   it('serialize + deserialize', () => {
     const [, xTest, , yTest] = trainTestSplit(x, Int32Array.from(yPlain), { testSize: 0.33 })
 
-    const bernoulliNBBuilder = new CategoricalNBBuilder(x, y)
-    const bernoulliNB = bernoulliNBBuilder.build()
-    const score1 = accuracyScore(bernoulliNB.predict(xTest).field0, yTest)
-    const serializedCategoricalNB = bernoulliNB.serialize()
-    const deserializedCategoricalNB = CategoricalNB.deserialize(serializedCategoricalNB)
-    const score2 = accuracyScore(deserializedCategoricalNB.predict(xTest).field0, yTest)
+    const multinomialNBBuilder = new MultinomialNBBuilder(x, y)
+    const multinomialNB = multinomialNBBuilder.build()
+    const score1 = accuracyScore(multinomialNB.predict(xTest).field0, yTest)
+    const serializedMultinomialNB = multinomialNB.serialize()
+    const deserializedMultinomialNB = MultinomialNB.deserialize(serializedMultinomialNB)
+    const score2 = accuracyScore(deserializedMultinomialNB.predict(xTest).field0, yTest)
     assert.equal(score1, score2)
   })
 }

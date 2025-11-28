@@ -17,6 +17,7 @@ pub struct MultinomialNBBuilder {
   pub(super) fit_data_x: SharedReference<DenseMatrix, &'static mut DenseMatrix>,
   pub(super) fit_data_y: TypedArrayVec,
   pub(super) priors: Option<Float64Array>,
+  pub(super) alpha: Option<f64>,
 }
 
 #[napi]
@@ -31,12 +32,18 @@ impl MultinomialNBBuilder {
       fit_data_x: fit_data_x.share_with(env, Ok)?,
       fit_data_y: fit_data_y.into(),
       priors: None,
+      alpha: None,
     })
   }
 
   #[napi]
   pub fn with_priors(&mut self, priors: Float64Array) {
     self.priors = Some(priors);
+  }
+
+  #[napi]
+  pub fn with_alpha(&mut self, alpha: f64) {
+    self.alpha = Some(alpha)
   }
 
   #[napi]
@@ -48,6 +55,7 @@ impl MultinomialNBBuilder {
       fit_data_y: &self.fit_data_y,
       multinomial_nb_parameters: MultinomialNBParameters {
         priors: self.priors.as_ref().map(|v| v.to_vec()),
+        alpha: self.alpha,
       },
     };
     Ok(MultinomialNB {

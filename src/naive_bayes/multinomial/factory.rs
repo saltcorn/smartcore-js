@@ -10,6 +10,7 @@ use crate::{
 
 pub struct MultinomialNBParameters {
   pub priors: Option<Vec<f64>>,
+  pub alpha: Option<f64>,
 }
 
 pub struct NewParameters<'a> {
