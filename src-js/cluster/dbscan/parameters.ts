@@ -1,6 +1,5 @@
 import { type InputType } from '../../index.js'
 import { type KNNAlgorithmName } from '../../core-bindings/index.js'
-import { type NumberTypeRs } from '../../linalg/dense-matrix/index.js'
 
 interface IDBSCANBaseParameters {
   minSamples?: bigint
@@ -28,5 +27,5 @@ function setDBSCANParametersValues(parameters: IDBSCANParameters, config: IDBSCA
   }
 }
 
-export type { IDBSCANBaseParameters, NumberTypeRs }
+export type { IDBSCANBaseParameters }
 export { setDBSCANParametersValues }
