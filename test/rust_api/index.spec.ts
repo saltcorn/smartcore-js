@@ -15,6 +15,8 @@ import categoricalNB from './categorical_nb.ts'
 import gaussianNB from './gaussian_nb.ts'
 import multinomialNB from './multinomial_nb.ts'
 import knnClassifier from './knn_classifier.ts'
+import knnRegressor from './knn_regressor.ts'
+import oneHotEncoder from './one_hot_encoder.ts'
 
 describe('Rust API', () => {
   describe('cluster', () => {
@@ -50,5 +52,6 @@ describe('Rust API', () => {
 
   describe('neighbors', () => {
     describe('KNNClassifier', knnClassifier)
+    describe('KNNRegressor', knnRegressor)
   })
 })

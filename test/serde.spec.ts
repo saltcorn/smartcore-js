@@ -2,7 +2,7 @@ import assert from 'assert'
 import chalk from 'chalk'
 import {
   linearModel,
-  //   preprocessing,
+  preprocessing,
   dataset,
   ensemble,
   modelSelection,
@@ -25,7 +25,10 @@ import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 let { LogisticRegression, RidgeRegression, LinearRegression, ElasticNet, Lasso } = linearModel
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
-// let { StandardScaler, OneHotEncoder } = preprocessing
+let {
+  // StandardScaler,
+  OneHotEncoder,
+} = preprocessing
 let { KMeans, DBSCAN } = cluster
 let { PCA, SVD } = decomposition
 let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
@@ -245,20 +248,21 @@ describe('Serialize + Deserialize', () => {
     assert.equal(score1, score2)
   })
 
-  //   it.skip('OneHotEncoder', () => {
-  //     const ohe = new OneHotEncoder({ categoricalParams: new BigUint64Array() })
-  //     const bostonData = loadBoston({ returnXY: true })
-  //     const [x, y] = bostonData instanceof Array ? bostonData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
-  //     }
-  //     ohe.fit(x)
-  //     const xTransformed1 = ohe.transform(x)
-  //     const oheSerialized = ohe.serialize()
-  //     const oheDeserialized = OneHotEncoder.deserialize(oheSerialized)
-  //     const xTransformed2 = oheDeserialized.transform(x)
-  //     assert.deepEqual(xTransformed1, xTransformed2)
-  //   })
+  it('OneHotEncoder', () => {
+    const ohe = new OneHotEncoder({ catIdx: new BigUint64Array() })
+    const bostonData = loadBoston({ returnXY: true })
+    const [x, y] = bostonData instanceof Array ? bostonData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
+    }
+    ohe.fit(x)
+    const xTransformed1 = ohe.transform(x)
+    console.log(chalk.red('OneHotEncoder does not implement serialize and deserialize.'))
+    //     const oheSerialized = ohe.serialize()
+    //     const oheDeserialized = OneHotEncoder.deserialize(oheSerialized)
+    //     const xTransformed2 = oheDeserialized.transform(x)
+    //     assert.deepEqual(xTransformed1, xTransformed2)
+  })
 
   it('BernoulliNB', () => {
     const bnb = new BernoulliNB()
