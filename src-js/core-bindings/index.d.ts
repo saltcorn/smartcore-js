@@ -1092,22 +1092,15 @@ export declare class RidgeRegressionBuilder {
   build(): RidgeRegression
 }
 
-export declare class StandardScalerF32 {
-  static fit(data: DenseMatrixF32, parameters: StandardScalerParameters): StandardScalerF32
-  transform(x: DenseMatrixF32): DenseMatrixF32
+export declare class StandardScaler {
+  transform(x: DenseMatrix): DenseMatrix
   serialize(): Buffer
-  static deserialize(data: Buffer): StandardScalerF32
+  static deserialize(data: Buffer): StandardScaler
 }
 
-export declare class StandardScalerF64 {
-  static fit(data: DenseMatrixF64, parameters: StandardScalerParameters): StandardScalerF64
-  transform(x: DenseMatrixF64): DenseMatrixF64
-  serialize(): Buffer
-  static deserialize(data: Buffer): StandardScalerF64
-}
-
-export declare class StandardScalerParameters {
-  constructor()
+export declare class StandardScalerBuilder {
+  constructor(fitData: DenseMatrix)
+  build(): StandardScaler
 }
 
 export declare class SVCF64I64 {
