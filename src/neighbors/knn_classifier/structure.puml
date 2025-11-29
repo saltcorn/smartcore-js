@@ -1,0 +1,27 @@
+@startuml structure
+
+interface Predictor {
+    predict(&DenseMatrix): PredictOutput
+}
+
+interface Estimator {
+    serialize(&self): Result<Vec<u8>>
+    deserialize(Vec<u8>): Result<Box<dyn Estimator>>
+}
+
+interface PredictorEstimator {
+    deserialize(Vec<u8>): Result<Box<dyn PredictorEstimator>>
+}
+
+Predictor <|-- PredictorEstimator
+Estimator <|-- PredictorEstimator
+
+class KNNClassifierFactory {
+    new(&KNNClassifierParameters): Box<dyn PredictorEstimator>
+}
+
+class LibKNNClassifierFactory {
+    f32_i32_euclidian(): Box<dyn LibKNNClassifier>
+}
+
+@enduml

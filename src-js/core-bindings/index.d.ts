@@ -820,349 +820,25 @@ export declare class KMeansBuilder {
   build(): KMeans
 }
 
-export declare class KNNClassifierF32EuclidianF32Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
+export declare class KNNClassifier {
+  predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
-  constructor()
-  withDistanceMahalanobisF32(distance: MahalanobisF32): KNNClassifierF32MahalanobisF32Parameters
-  withDistanceManhattanF32(distance: ManhattanF32): KNNClassifierF32ManhattanF32Parameters
-  withDistanceMinkowskiF32(distance: MinkowskiF32): KNNClassifierF32MinkowskiF32Parameters
+  static deserialize(data: Buffer): KNNClassifier
 }
 
-export declare class KNNClassifierF32I32EuclidianF32 {
-  static fit(x: DenseMatrixF32, y: Int32Array, parameters: KNNClassifierF32EuclidianF32Parameters): KNNClassifierF32I32EuclidianF32
-  predict(x: DenseMatrixF32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierF32I32EuclidianF32
-}
-
-export declare class KNNClassifierF32I32MahalanobisF32 {
-  static fit(x: DenseMatrixF32, y: Int32Array, parameters: KNNClassifierF32MahalanobisF32Parameters): KNNClassifierF32I32MahalanobisF32
-  predict(x: DenseMatrixF32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierF32I32MahalanobisF32
-}
-
-export declare class KNNClassifierF32I32ManhattanF32 {
-  static fit(x: DenseMatrixF32, y: Int32Array, parameters: KNNClassifierF32ManhattanF32Parameters): KNNClassifierF32I32ManhattanF32
-  predict(x: DenseMatrixF32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierF32I32ManhattanF32
-}
-
-export declare class KNNClassifierF32I32MinkowskiF32 {
-  static fit(x: DenseMatrixF32, y: Int32Array, parameters: KNNClassifierF32MinkowskiF32Parameters): KNNClassifierF32I32MinkowskiF32
-  predict(x: DenseMatrixF32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierF32I32MinkowskiF32
-}
-
-export declare class KNNClassifierF32MahalanobisF32Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierF32ManhattanF32Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierF32MinkowskiF32Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierF64EuclidianF64Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-  constructor()
-  withDistanceMahalanobisF64(distance: MahalanobisF64): KNNClassifierF64MahalanobisF64Parameters
-  withDistanceManhattanF64(distance: ManhattanF64): KNNClassifierF64ManhattanF64Parameters
-  withDistanceMinkowskiF64(distance: MinkowskiF64): KNNClassifierF64MinkowskiF64Parameters
-}
-
-export declare class KNNClassifierF64I32EuclidianF64 {
-  static fit(x: DenseMatrixF64, y: Int32Array, parameters: KNNClassifierF64EuclidianF64Parameters): KNNClassifierF64I32EuclidianF64
-  predict(x: DenseMatrixF64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierF64I32EuclidianF64
-}
-
-export declare class KNNClassifierF64I32MahalanobisF64 {
-  static fit(x: DenseMatrixF64, y: Int32Array, parameters: KNNClassifierF64MahalanobisF64Parameters): KNNClassifierF64I32MahalanobisF64
-  predict(x: DenseMatrixF64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierF64I32MahalanobisF64
-}
-
-export declare class KNNClassifierF64I32ManhattanF64 {
-  static fit(x: DenseMatrixF64, y: Int32Array, parameters: KNNClassifierF64ManhattanF64Parameters): KNNClassifierF64I32ManhattanF64
-  predict(x: DenseMatrixF64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierF64I32ManhattanF64
-}
-
-export declare class KNNClassifierF64I32MinkowskiF64 {
-  static fit(x: DenseMatrixF64, y: Int32Array, parameters: KNNClassifierF64MinkowskiF64Parameters): KNNClassifierF64I32MinkowskiF64
-  predict(x: DenseMatrixF64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierF64I32MinkowskiF64
-}
-
-export declare class KNNClassifierF64MahalanobisF64Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierF64ManhattanF64Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierF64MinkowskiF64Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierI32EuclidianI32Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-  constructor()
-  withDistanceHammingI32(distance: HammingI32): KNNClassifierI32HammingI32Parameters
-  withDistanceManhattanI32(distance: ManhattanI32): KNNClassifierI32ManhattanI32Parameters
-  withDistanceMinkowskiI32(distance: MinkowskiI32): KNNClassifierI32MinkowskiI32Parameters
-}
-
-export declare class KNNClassifierI32HammingI32Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierI32I32EuclidianI32 {
-  static fit(x: DenseMatrixI32, y: Int32Array, parameters: KNNClassifierI32EuclidianI32Parameters): KNNClassifierI32I32EuclidianI32
-  predict(x: DenseMatrixI32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierI32I32EuclidianI32
-}
-
-export declare class KNNClassifierI32I32HammingI32 {
-  static fit(x: DenseMatrixI32, y: Int32Array, parameters: KNNClassifierI32HammingI32Parameters): KNNClassifierI32I32HammingI32
-  predict(x: DenseMatrixI32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierI32I32HammingI32
-}
-
-export declare class KNNClassifierI32I32ManhattanI32 {
-  static fit(x: DenseMatrixI32, y: Int32Array, parameters: KNNClassifierI32ManhattanI32Parameters): KNNClassifierI32I32ManhattanI32
-  predict(x: DenseMatrixI32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierI32I32ManhattanI32
-}
-
-export declare class KNNClassifierI32I32MinkowskiI32 {
-  static fit(x: DenseMatrixI32, y: Int32Array, parameters: KNNClassifierI32MinkowskiI32Parameters): KNNClassifierI32I32MinkowskiI32
-  predict(x: DenseMatrixI32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierI32I32MinkowskiI32
-}
-
-export declare class KNNClassifierI32ManhattanI32Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierI32MinkowskiI32Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierI64EuclidianI64Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-  constructor()
-  withDistanceManhattanI64(distance: ManhattanI64): KNNClassifierI64ManhattanI64Parameters
-  withDistanceMinkowskiI64(distance: MinkowskiI64): KNNClassifierI64MinkowskiI64Parameters
-}
-
-export declare class KNNClassifierI64I32EuclidianI64 {
-  static fit(x: DenseMatrixI64, y: Int32Array, parameters: KNNClassifierI64EuclidianI64Parameters): KNNClassifierI64I32EuclidianI64
-  predict(x: DenseMatrixI64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierI64I32EuclidianI64
-}
-
-export declare class KNNClassifierI64I32ManhattanI64 {
-  static fit(x: DenseMatrixI64, y: Int32Array, parameters: KNNClassifierI64ManhattanI64Parameters): KNNClassifierI64I32ManhattanI64
-  predict(x: DenseMatrixI64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierI64I32ManhattanI64
-}
-
-export declare class KNNClassifierI64I32MinkowskiI64 {
-  static fit(x: DenseMatrixI64, y: Int32Array, parameters: KNNClassifierI64MinkowskiI64Parameters): KNNClassifierI64I32MinkowskiI64
-  predict(x: DenseMatrixI64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierI64I32MinkowskiI64
-}
-
-export declare class KNNClassifierI64ManhattanI64Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierI64MinkowskiI64Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierU16EuclidianU16Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-  constructor()
-  withDistanceHammingU16(distance: HammingU16): KNNClassifierU16HammingU16Parameters
-}
-
-export declare class KNNClassifierU16HammingU16Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierU16I32EuclidianU16 {
-  static fit(x: DenseMatrixU16, y: Int32Array, parameters: KNNClassifierU16EuclidianU16Parameters): KNNClassifierU16I32EuclidianU16
-  predict(x: DenseMatrixU16): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierU16I32EuclidianU16
-}
-
-export declare class KNNClassifierU16I32HammingU16 {
-  static fit(x: DenseMatrixU16, y: Int32Array, parameters: KNNClassifierU16HammingU16Parameters): KNNClassifierU16I32HammingU16
-  predict(x: DenseMatrixU16): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierU16I32HammingU16
-}
-
-export declare class KNNClassifierU32EuclidianU32Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-  constructor()
-  withDistanceManhattanU32(distance: ManhattanU32): KNNClassifierU32ManhattanU32Parameters
-}
-
-export declare class KNNClassifierU32I32EuclidianU32 {
-  static fit(x: DenseMatrixU32, y: Int32Array, parameters: KNNClassifierU32EuclidianU32Parameters): KNNClassifierU32I32EuclidianU32
-  predict(x: DenseMatrixU32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierU32I32EuclidianU32
-}
-
-export declare class KNNClassifierU32I32ManhattanU32 {
-  static fit(x: DenseMatrixU32, y: Int32Array, parameters: KNNClassifierU32ManhattanU32Parameters): KNNClassifierU32I32ManhattanU32
-  predict(x: DenseMatrixU32): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierU32I32ManhattanU32
-}
-
-export declare class KNNClassifierU32ManhattanU32Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierU64EuclidianU64Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-  constructor()
-  withDistanceManhattanU64(distance: ManhattanU64): KNNClassifierU64ManhattanU64Parameters
-}
-
-export declare class KNNClassifierU64I32EuclidianU64 {
-  static fit(x: DenseMatrixU64, y: Int32Array, parameters: KNNClassifierU64EuclidianU64Parameters): KNNClassifierU64I32EuclidianU64
-  predict(x: DenseMatrixU64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierU64I32EuclidianU64
-}
-
-export declare class KNNClassifierU64I32ManhattanU64 {
-  static fit(x: DenseMatrixU64, y: Int32Array, parameters: KNNClassifierU64ManhattanU64Parameters): KNNClassifierU64I32ManhattanU64
-  predict(x: DenseMatrixU64): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierU64I32ManhattanU64
-}
-
-export declare class KNNClassifierU64ManhattanU64Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierU8EuclidianU8Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-  constructor()
-  withDistanceHammingU8(distance: HammingU8): KNNClassifierU8HammingU8Parameters
-}
-
-export declare class KNNClassifierU8HammingU8Parameters {
-  withK(k: number): void
-  withAlgorithm(algorithm: KNNAlgorithmName): void
-  withWeight(weight: KNNWeightFunction): void
-  serialize(): Buffer
-}
-
-export declare class KNNClassifierU8I32EuclidianU8 {
-  static fit(x: DenseMatrixU8, y: Int32Array, parameters: KNNClassifierU8EuclidianU8Parameters): KNNClassifierU8I32EuclidianU8
-  predict(x: DenseMatrixU8): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierU8I32EuclidianU8
-}
-
-export declare class KNNClassifierU8I32HammingU8 {
-  static fit(x: DenseMatrixU8, y: Int32Array, parameters: KNNClassifierU8HammingU8Parameters): KNNClassifierU8I32HammingU8
-  predict(x: DenseMatrixU8): Int32Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): KNNClassifierU8I32HammingU8
+/**
+ * KNNClassifierBuilder allows you to set the parameters to be used to initialize a new KNNClassifier instance when you call
+ * .build() on it.
+ */
+export declare class KNNClassifierBuilder {
+  constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
+  set withWeight(weight: KNNWeightFunction)
+  set withDistanceType(distanceType: DistanceVariantType)
+  set withK(k: bigint)
+  set algorithm(algorithm: KNNAlgorithmName)
+  set data(data: DenseMatrix)
+  set p(p: number)
+  build(): KNNClassifier
 }
 
 export declare class KNNRegressorF32EuclidianF32Parameters {
@@ -1858,6 +1534,14 @@ export declare const enum DistanceVariantType {
   Minkowski = 4
 }
 
+export declare const enum DistanceVariantType {
+  Euclidian = 0,
+  Hamming = 1,
+  Mahalanobis = 2,
+  Manhattan = 3,
+  Minkowski = 4
+}
+
 export declare const enum ElasticNetPredictOutputType {
   F64 = 'F64',
   F32 = 'F32',
@@ -1889,6 +1573,13 @@ export declare const enum KMeansPredictOutputType {
 export declare const enum KNNAlgorithmName {
   LinearSearch = 0,
   CoverTree = 1
+}
+
+export declare const enum KNNClassifierPredictOutputType {
+  U64 = 'U64',
+  U32 = 'U32',
+  U16 = 'U16',
+  U8 = 'U8'
 }
 
 export declare const enum KNNWeightFunction {

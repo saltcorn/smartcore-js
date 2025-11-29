@@ -5,6 +5,7 @@ use napi_derive::napi;
 use smartcore::neighbors::KNNWeightFunction as LibKNNWeightFunction;
 
 #[napi]
+#[derive(Debug, Clone, Copy)]
 pub enum KNNWeightFunction {
   Uniform,
   Distance,
