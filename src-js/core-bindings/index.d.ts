@@ -987,22 +987,15 @@ export declare class MultinomialNBBuilder {
   build(): MultinomialNB
 }
 
-export declare class OneHotEncoderF32 {
-  static fit(data: DenseMatrixF32, parameters: OneHotEncoderParameters): OneHotEncoderF32
-  transform(x: DenseMatrixF32): DenseMatrixF32
+export declare class OneHotEncoder {
+  transform(x: DenseMatrix): DenseMatrix
   serialize(): Buffer
-  static deserialize(data: Buffer): OneHotEncoderF32
+  static deserialize(data: Buffer): OneHotEncoder
 }
 
-export declare class OneHotEncoderF64 {
-  static fit(data: DenseMatrixF64, parameters: OneHotEncoderParameters): OneHotEncoderF64
-  transform(x: DenseMatrixF64): DenseMatrixF64
-  serialize(): Buffer
-  static deserialize(data: Buffer): OneHotEncoderF64
-}
-
-export declare class OneHotEncoderParameters {
-  constructor(categoricalParams: BigUint64Array)
+export declare class OneHotEncoderBuilder {
+  constructor(fitData: DenseMatrix, catIdx: BigUint64Array)
+  build(): OneHotEncoder
 }
 
 export declare class PCA {
