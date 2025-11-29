@@ -7,11 +7,8 @@ use crate::typed_array::TypedArrayType;
 #[derive(Debug, Clone, PartialEq, Eq, Copy, Default, Encode, Decode)]
 #[napi(string_enum)]
 pub enum KNNClassifierPredictOutputType {
-  U64,
   #[default]
-  U32,
-  U16,
-  U8,
+  I32,
 }
 
 impl TryFrom<TypedArrayType> for KNNClassifierPredictOutputType {
@@ -19,16 +16,17 @@ impl TryFrom<TypedArrayType> for KNNClassifierPredictOutputType {
 
   fn try_from(value: TypedArrayType) -> Result<Self, Self::Error> {
     match value {
-      TypedArrayType::U64 => Ok(Self::U64),
-      TypedArrayType::U32 => Ok(Self::U32),
-      TypedArrayType::U16 => Ok(Self::U16),
-      TypedArrayType::U8 => Ok(Self::U8),
-      TypedArrayType::F64 | TypedArrayType::F32 | TypedArrayType::I64 | TypedArrayType::I32 => {
-        Err(Error::new(
-          Status::GenericFailure,
-          "Supported types for fit data y are: u64, u32, u16, and u8.",
-        ))
-      }
+      TypedArrayType::I32 => Ok(Self::I32),
+      TypedArrayType::U64
+      | TypedArrayType::U32
+      | TypedArrayType::U16
+      | TypedArrayType::U8
+      | TypedArrayType::F64
+      | TypedArrayType::F32
+      | TypedArrayType::I64 => Err(Error::new(
+        Status::GenericFailure,
+        "Supported types for fit data y are: i32",
+      )),
     }
   }
 }

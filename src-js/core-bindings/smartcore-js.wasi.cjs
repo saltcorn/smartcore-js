@@ -296,7 +296,6 @@ module.exports.WrappedNumber = __napiModule.exports.WrappedNumber
 module.exports.BernoulliNBPredictOutputType = __napiModule.exports.BernoulliNBPredictOutputType
 module.exports.DenseMatrixType = __napiModule.exports.DenseMatrixType
 module.exports.DistanceVariantType = __napiModule.exports.DistanceVariantType
-module.exports.DistanceVariantType = __napiModule.exports.DistanceVariantType
 module.exports.ElasticNetPredictOutputType = __napiModule.exports.ElasticNetPredictOutputType
 module.exports.ExtraTreesRegressorPredictOutputType = __napiModule.exports.ExtraTreesRegressorPredictOutputType
 module.exports.GaussianNBPredictOutputType = __napiModule.exports.GaussianNBPredictOutputType

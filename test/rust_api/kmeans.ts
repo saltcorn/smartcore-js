@@ -1,5 +1,5 @@
 import { KMeansBuilder, KMeans } from '../../dist/core-bindings/index.js'
-import { loadBoston } from '../../dist/dataset/v2.js'
+import { loadBoston } from '../../dist/dataset/index.js'
 import assert from 'assert'
 import { trainTestSplit } from '../../dist/model_selection/index.js'
 import { accuracyScore } from '../../dist/metrics/index.js'

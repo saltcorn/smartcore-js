@@ -1,7 +1,6 @@
 mod builder;
 mod dbscan_parameters;
 mod deserialize;
-mod distance_type;
 mod factory;
 mod lib_dbscan_factory;
 mod predictor_estimator;
@@ -16,11 +15,11 @@ use napi_derive::napi;
 
 use crate::{
   dense_matrix::{DenseMatrix, DenseMatrixType},
+  distance_type::DistanceVariantType,
   traits::{Estimator, Predictor, PredictorEstimator},
   typed_array::TypedArrayWrapper,
 };
 
-use distance_type::DistanceVariantType;
 use serialize_data::DBSCANSerializeData;
 
 #[napi(js_name = "DBSCAN")]

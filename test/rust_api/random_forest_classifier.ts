@@ -1,5 +1,5 @@
 import { RandomForestClassifierBuilder, RandomForestClassifier } from '../../dist/core-bindings/index.js'
-import { loadIris } from '../../dist/dataset/v2.js'
+import { loadIris } from '../../dist/dataset/index.js'
 import assert from 'assert'
 import { trainTestSplit } from '../../dist/model_selection/index.js'
 import { accuracyScore } from '../../dist/metrics/index.js'

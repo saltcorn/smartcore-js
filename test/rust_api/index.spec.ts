@@ -14,6 +14,7 @@ import bernoulliNB from './bernoulli_nb.ts'
 import categoricalNB from './categorical_nb.ts'
 import gaussianNB from './gaussian_nb.ts'
 import multinomialNB from './multinomial_nb.ts'
+import knnClassifier from './knn_classifier.ts'
 
 describe('Rust API', () => {
   describe('cluster', () => {
@@ -45,5 +46,9 @@ describe('Rust API', () => {
     describe('CategoricalNB', categoricalNB)
     describe('GaussianNB', gaussianNB)
     describe('MultinomialNB', multinomialNB)
+  })
+
+  describe('neighbors', () => {
+    describe('KNNClassifier', knnClassifier)
   })
 })

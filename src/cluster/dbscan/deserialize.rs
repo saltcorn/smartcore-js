@@ -1,9 +1,7 @@
-use super::{
-  distance_type::DistanceVariantType, serialize_data::DBSCANSerializeData, variants::*, DBSCAN,
-};
+use super::{serialize_data::DBSCANSerializeData, variants::*, DBSCAN};
 use crate::{
   dense_matrix::DenseMatrixType, deserialize_variant::deserialize_variant,
-  traits::PredictorEstimator,
+  distance_type::DistanceVariantType, traits::PredictorEstimator,
 };
 
 impl TryFrom<DBSCANSerializeData> for DBSCAN {

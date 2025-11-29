@@ -1,6 +1,5 @@
 mod builder;
 mod deserialize;
-mod distance_type;
 mod factory;
 mod knn_classifier_parameters;
 mod lib_knn_classifier_factory;
@@ -17,11 +16,11 @@ use napi_derive::napi;
 
 use crate::{
   dense_matrix::{DenseMatrix, DenseMatrixType},
+  distance_type::DistanceVariantType,
   traits::{Estimator, Predictor, PredictorEstimator},
   typed_array::TypedArrayWrapper,
 };
 
-use distance_type::DistanceVariantType;
 use predict_output_type::KNNClassifierPredictOutputType;
 use serialize_data::KNNClassifierSerializeData;
 

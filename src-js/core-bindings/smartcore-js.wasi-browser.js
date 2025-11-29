@@ -244,7 +244,6 @@ export const WrappedNumber = __napiModule.exports.WrappedNumber
 export const BernoulliNBPredictOutputType = __napiModule.exports.BernoulliNBPredictOutputType
 export const DenseMatrixType = __napiModule.exports.DenseMatrixType
 export const DistanceVariantType = __napiModule.exports.DistanceVariantType
-export const DistanceVariantType = __napiModule.exports.DistanceVariantType
 export const ElasticNetPredictOutputType = __napiModule.exports.ElasticNetPredictOutputType
 export const ExtraTreesRegressorPredictOutputType = __napiModule.exports.ExtraTreesRegressorPredictOutputType
 export const GaussianNBPredictOutputType = __napiModule.exports.GaussianNBPredictOutputType

@@ -4,7 +4,6 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 
 use super::{
-  distance_type::DistanceVariantType,
   factory::{self, KNNClassifierFactory},
   set_parameters::SetParametersParams,
   KNNClassifier,
@@ -12,6 +11,7 @@ use super::{
 use crate::{
   algorithm::neighbor::KNNAlgorithmName,
   dense_matrix::{DenseMatrix, DenseMatrixType},
+  distance_type::DistanceVariantType,
   neighbors::KNNWeightFunction,
   typed_array::{TypedArrayVec, TypedArrayWrapper},
 };
@@ -50,17 +50,22 @@ impl KNNClassifierBuilder {
     })
   }
 
-  #[napi(setter)]
+  #[napi]
   pub fn with_weight(&mut self, weight: KNNWeightFunction) {
     self.weight = Some(weight)
   }
 
-  #[napi(setter)]
+  #[napi]
+  pub fn with_algorithm(&mut self, algorithm: KNNAlgorithmName) {
+    self.algorithm = Some(algorithm)
+  }
+
+  #[napi]
   pub fn with_distance_type(&mut self, distance_type: DistanceVariantType) {
     self.distance_type = Some(distance_type)
   }
 
-  #[napi(setter)]
+  #[napi]
   pub fn with_k(&mut self, k: BigInt) -> Result<()> {
     let (sign_bit, k, ..) = k.get_u64();
     if sign_bit {
@@ -73,13 +78,8 @@ impl KNNClassifierBuilder {
     Ok(())
   }
 
-  #[napi(setter)]
-  pub fn algorithm(&mut self, algorithm: KNNAlgorithmName) {
-    self.algorithm = Some(algorithm)
-  }
-
-  #[napi(setter)]
-  pub fn data(&mut self, data: Reference<DenseMatrix>, env: Env) -> Result<()> {
+  #[napi]
+  pub fn with_data(&mut self, data: Reference<DenseMatrix>, env: Env) -> Result<()> {
     let data = data.share_with(env, Ok)?;
     match (self.fit_data_x.r#type(), data.r#type()) {
       (DenseMatrixType::F32, DenseMatrixType::F32) => (),
@@ -90,8 +90,8 @@ impl KNNClassifierBuilder {
     Ok(())
   }
 
-  #[napi(setter)]
-  pub fn p(&mut self, p: i32) -> Result<()> {
+  #[napi]
+  pub fn with_p(&mut self, p: i32) -> Result<()> {
     if p < 0 || p > (u16::MAX as i32) {
       return Err(Error::new(
         Status::InvalidArg,

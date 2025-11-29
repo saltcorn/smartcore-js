@@ -1,5 +1,4 @@
-use super::distance_type::DistanceVariantType;
-use crate::dense_matrix::DenseMatrixType;
+use crate::{dense_matrix::DenseMatrixType, distance_type::DistanceVariantType};
 
 pub trait SupportedDistances {
   fn supported_distances(&self) -> Vec<String>;

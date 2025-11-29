@@ -4,6 +4,7 @@ pub mod dataset;
 pub mod decomposition;
 pub mod dense_matrix;
 mod deserialize_variant;
+pub mod distance_type;
 pub mod ensemble;
 pub mod js_number;
 pub mod linalg;

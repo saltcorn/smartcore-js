@@ -13,7 +13,6 @@ class Dataset {
 
 interface LoadParams {
   returnXY?: boolean
-  v2?: boolean
 }
 
 function prepResponse(data: DatasetRs, params?: LoadParams): Dataset | [DenseMatrix, YType] {

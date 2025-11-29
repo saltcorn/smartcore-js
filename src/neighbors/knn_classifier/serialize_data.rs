@@ -1,8 +1,7 @@
 use bincode::{Decode, Encode};
 
-use super::distance_type::DistanceVariantType;
 use crate::{
-  dense_matrix::DenseMatrixType,
+  dense_matrix::DenseMatrixType, distance_type::DistanceVariantType,
   neighbors::knn_classifier::predict_output_type::KNNClassifierPredictOutputType,
 };
 

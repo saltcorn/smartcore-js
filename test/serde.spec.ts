@@ -11,10 +11,16 @@ import {
   cluster,
   decomposition,
   naiveBayes,
-  //   neighbors,
+  neighbors,
   dataFrame,
 } from '../src-js/index.js'
-import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-js/core-bindings/index.js'
+import {
+  DistanceVariantType,
+  HammingI32,
+  MahalanobisF64,
+  ManhattanF64,
+  MinkowskiF64,
+} from '../src-js/core-bindings/index.js'
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 let { LogisticRegression, RidgeRegression, LinearRegression, ElasticNet, Lasso } = linearModel
@@ -23,7 +29,10 @@ let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ens
 let { KMeans, DBSCAN } = cluster
 let { PCA, SVD } = decomposition
 let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
-// let { KNNClassifier, KNNRegressor } = neighbors
+let {
+  KNNClassifier,
+  // KNNRegressor
+} = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
 let { trainTestSplit } = modelSelection
 let { accuracyScore } = metrics
@@ -347,21 +356,21 @@ describe('Serialize + Deserialize', () => {
     assert.deepEqual(predictions1, predictions2)
   })
 
-  //   it('KNNClassifier', () => {
-  //     const knnc = new KNNClassifier({ distanceType: 'manhattan' })
-  //     const irisData = loadIris({ returnXY: true })
-  //     const [x, y] = irisData instanceof Array ? irisData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
-  //     }
-  //     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     knnc.fit(xTrain, yTrain)
-  //     const score1 = accuracyScore(knnc.predict(xTest), yTest)
-  //     const knncSerialized = knnc.serialize()
-  //     const knncDeserialized = KNNClassifier.deserialize(knncSerialized)
-  //     const score2 = accuracyScore(knncDeserialized.predict(xTest), yTest)
-  //     assert.equal(score1, score2)
-  //   })
+  it('KNNClassifier', () => {
+    const knnc = new KNNClassifier({ distanceType: DistanceVariantType.Manhattan })
+    const irisData = loadIris({ returnXY: true })
+    const [x, y] = irisData instanceof Array ? irisData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadIris" to return an Array containing 2 items.')
+    }
+    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    knnc.fit(xTrain, yTrain)
+    const score1 = accuracyScore(knnc.predict(xTest), yTest)
+    const knncSerialized = knnc.serialize()
+    const knncDeserialized = KNNClassifier.deserialize(knncSerialized)
+    const score2 = accuracyScore(knncDeserialized.predict(xTest), yTest)
+    assert.equal(score1, score2)
+  })
 
   //   it('KNNRegressor', () => {
   //     const knnr = new KNNRegressor({ distanceType: 'minkowski', p: 10 })

@@ -1,7 +1,6 @@
 use bincode::{Decode, Encode};
 
-use super::distance_type::DistanceVariantType;
-use crate::dense_matrix::DenseMatrixType;
+use crate::{dense_matrix::DenseMatrixType, distance_type::DistanceVariantType};
 
 #[derive(Encode, Decode)]
 pub struct DBSCANSerializeData {

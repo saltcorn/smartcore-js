@@ -832,12 +832,12 @@ export declare class KNNClassifier {
  */
 export declare class KNNClassifierBuilder {
   constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
-  set withWeight(weight: KNNWeightFunction)
-  set withDistanceType(distanceType: DistanceVariantType)
-  set withK(k: bigint)
-  set algorithm(algorithm: KNNAlgorithmName)
-  set data(data: DenseMatrix)
-  set p(p: number)
+  withWeight(weight: KNNWeightFunction): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withDistanceType(distanceType: DistanceVariantType): void
+  withK(k: bigint): void
+  withData(data: DenseMatrix): void
+  withP(p: number): void
   build(): KNNClassifier
 }
 
@@ -1534,14 +1534,6 @@ export declare const enum DistanceVariantType {
   Minkowski = 4
 }
 
-export declare const enum DistanceVariantType {
-  Euclidian = 0,
-  Hamming = 1,
-  Mahalanobis = 2,
-  Manhattan = 3,
-  Minkowski = 4
-}
-
 export declare const enum ElasticNetPredictOutputType {
   F64 = 'F64',
   F32 = 'F32',
@@ -1576,10 +1568,7 @@ export declare const enum KNNAlgorithmName {
 }
 
 export declare const enum KNNClassifierPredictOutputType {
-  U64 = 'U64',
-  U32 = 'U32',
-  U16 = 'U16',
-  U8 = 'U8'
+  I32 = 'I32'
 }
 
 export declare const enum KNNWeightFunction {
