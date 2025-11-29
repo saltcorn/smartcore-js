@@ -42,18 +42,18 @@ impl DBSCANBuilder {
     })
   }
 
-  #[napi(setter)]
-  pub fn eps(&mut self, eps: f64) {
+  #[napi]
+  pub fn with_eps(&mut self, eps: f64) {
     self.eps = Some(eps)
   }
 
-  #[napi(setter)]
-  pub fn distance_type(&mut self, distance_type: DistanceVariantType) {
+  #[napi]
+  pub fn with_distance_type(&mut self, distance_type: DistanceVariantType) {
     self.distance_type = Some(distance_type)
   }
 
-  #[napi(setter)]
-  pub fn min_samples(&mut self, min_samples: BigInt) -> Result<()> {
+  #[napi]
+  pub fn with_min_samples(&mut self, min_samples: BigInt) -> Result<()> {
     let (sign_bit, min_samples, ..) = min_samples.get_u64();
     if sign_bit {
       return Err(Error::new(
@@ -65,13 +65,13 @@ impl DBSCANBuilder {
     Ok(())
   }
 
-  #[napi(setter)]
-  pub fn algorithm(&mut self, algorithm: KNNAlgorithmName) {
+  #[napi]
+  pub fn with_algorithm(&mut self, algorithm: KNNAlgorithmName) {
     self.algorithm = Some(algorithm)
   }
 
-  #[napi(setter)]
-  pub fn data(&mut self, data: Reference<DenseMatrix>, env: Env) -> Result<()> {
+  #[napi]
+  pub fn with_data(&mut self, data: Reference<DenseMatrix>, env: Env) -> Result<()> {
     let data = data.share_with(env, Ok)?;
     match (self.fit_data.r#type(), data.r#type()) {
       (DenseMatrixType::F32, DenseMatrixType::F32) => (),
@@ -82,8 +82,8 @@ impl DBSCANBuilder {
     Ok(())
   }
 
-  #[napi(setter)]
-  pub fn p(&mut self, p: i32) -> Result<()> {
+  #[napi]
+  pub fn with_p(&mut self, p: i32) -> Result<()> {
     if p < 0 || p > (u16::MAX as i32) {
       return Err(Error::new(
         Status::InvalidArg,

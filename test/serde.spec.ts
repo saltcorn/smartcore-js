@@ -29,10 +29,7 @@ let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ens
 let { KMeans, DBSCAN } = cluster
 let { PCA, SVD } = decomposition
 let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
-let {
-  KNNClassifier,
-  // KNNRegressor
-} = neighbors
+let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
 let { trainTestSplit } = modelSelection
 let { accuracyScore } = metrics
@@ -372,19 +369,19 @@ describe('Serialize + Deserialize', () => {
     assert.equal(score1, score2)
   })
 
-  //   it('KNNRegressor', () => {
-  //     const knnr = new KNNRegressor({ distanceType: 'minkowski', p: 10 })
-  //     const bostonData = loadBoston({ returnXY: true })
-  //     const [x, y] = bostonData instanceof Array ? bostonData : []
-  //     if (!(x && y)) {
-  //       assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
-  //     }
-  //     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-  //     knnr.fit(xTrain, yTrain)
-  //     let score1 = accuracyScore(knnr.predict(xTest), yTest)
-  //     const knnrSerialized = knnr.serialize()
-  //     const knnrDeserialized = KNNRegressor.deserialize(knnrSerialized)
-  //     const score2 = accuracyScore(knnrDeserialized.predict(xTest), yTest)
-  //     assert.equal(score1, score2)
-  //   })
+  it('KNNRegressor', () => {
+    const knnr = new KNNRegressor({ distanceType: DistanceVariantType.Minkowski, p: 10 })
+    const bostonData = loadBoston({ returnXY: true })
+    const [x, y] = bostonData instanceof Array ? bostonData : []
+    if (!(x && y)) {
+      assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
+    }
+    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    knnr.fit(xTrain, yTrain)
+    let score1 = accuracyScore(knnr.predict(xTest), yTest)
+    const knnrSerialized = knnr.serialize()
+    const knnrDeserialized = KNNRegressor.deserialize(knnrSerialized)
+    const score2 = accuracyScore(knnrDeserialized.predict(xTest), yTest)
+    assert.equal(score1, score2)
+  })
 })

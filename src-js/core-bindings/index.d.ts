@@ -132,12 +132,12 @@ export declare class DBSCAN {
  */
 export declare class DBSCANBuilder {
   constructor(fitData: DenseMatrix)
-  set eps(eps: number)
-  set distanceType(distanceType: DistanceVariantType)
-  set minSamples(minSamples: bigint)
-  set algorithm(algorithm: KNNAlgorithmName)
-  set data(data: DenseMatrix)
-  set p(p: number)
+  withEps(eps: number): void
+  withDistanceType(distanceType: DistanceVariantType): void
+  withMinSamples(minSamples: bigint): void
+  withAlgorithm(algorithm: KNNAlgorithmName): void
+  withData(data: DenseMatrix): void
+  withP(p: number): void
   build(): DBSCAN
 }
 

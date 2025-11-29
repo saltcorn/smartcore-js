@@ -15,6 +15,8 @@ interface IKNNClassifierBaseParameters {
   k?: number
   algorithm?: KNNAlgorithmName
   weight?: KNNWeightFunction
+  data?: InputType
+  p?: number
 }
 
 interface IKNNClassifierParameters extends IKNNClassifierBaseParameters {
@@ -69,6 +71,12 @@ class KNNClassifier implements HasColumns {
     }
     if (this.config.distanceType !== undefined) {
       builder.withDistanceType(this.config.distanceType)
+    }
+    if (this.config.p !== undefined) {
+      builder.withP(this.config.p)
+    }
+    if (this.config.data !== undefined) {
+      builder.withData(utilities.inputTypeToDenseMatrix(this.config.data))
     }
     this.estimator = builder.build()
     this._isFitted = true

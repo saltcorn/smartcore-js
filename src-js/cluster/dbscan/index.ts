@@ -28,16 +28,22 @@ class DBSCAN {
     const matrix = utilities.inputTypeToDenseMatrix(x)
     let builder = new DBSCANBuilder(matrix)
     if (this.config.algorithm) {
-      builder.algorithm = this.config.algorithm
+      builder.withAlgorithm(this.config.algorithm)
     }
     if (this.config.eps) {
-      builder.eps = this.config.eps
+      builder.withEps(this.config.eps)
     }
     if (this.config.minSamples) {
-      builder.minSamples = this.config.minSamples
+      builder.withMinSamples(this.config.minSamples)
     }
     if (this.config.distanceType) {
-      builder.distanceType = this.config.distanceType
+      builder.withDistanceType(this.config.distanceType)
+    }
+    if (this.config.p !== undefined) {
+      builder.withP(this.config.p)
+    }
+    if (this.config.data !== undefined) {
+      builder.withData(utilities.inputTypeToDenseMatrix(this.config.data))
     }
     this.estimator = builder.build()
     this._isFitted = true
