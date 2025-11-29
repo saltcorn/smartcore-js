@@ -4,7 +4,7 @@ import { DataFrame } from '../data_frame.js'
 import { DenseMatrix, PCABuilder, PCA as LibPCA, type DenseMatrixType } from '../core-bindings/index.js'
 
 interface IPCABaseParameters {
-  nComponents?: bigint
+  nComponents?: number | bigint
   useCorrelationMatrix?: boolean
 }
 
@@ -46,7 +46,7 @@ class PCA implements HasColumns {
     })
     let builder = new PCABuilder(matrix)
     if (this.config.nComponents !== undefined) {
-      builder.withNComponents(this.config.nComponents)
+      builder.withNComponents(BigInt(this.config.nComponents))
     }
     if (this.config.useCorrelationMatrix !== undefined) {
       builder.useCorrelationMatrix(this.config.useCorrelationMatrix)
