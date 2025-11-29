@@ -15,6 +15,7 @@ import {
   dataFrame,
 } from '../src-js/index.js'
 import {
+  DenseMatrixType,
   DistanceVariantType,
   HammingI32,
   MahalanobisF64,
@@ -25,10 +26,7 @@ import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 let { LogisticRegression, RidgeRegression, LinearRegression, ElasticNet, Lasso } = linearModel
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
-let {
-  // StandardScaler,
-  OneHotEncoder,
-} = preprocessing
+let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
 let { PCA, SVD } = decomposition
 let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
@@ -44,23 +42,23 @@ const parsedJson = readJSONFile('e-commerce-enhanced.json')
 const df = new DataFrame(parsedJson, { exclude: ['transaction_id', 'customer_id', 'date', 'country', 'platform'] })
 
 describe('Serialize + Deserialize', () => {
-  //   it('StandardScaler', () => {
-  //     const ss = new StandardScaler()
-  //     const irisData = loadIris({ returnXY: true })
-  //     if (!(irisData instanceof Array)) {
-  //       assert.fail("Expected 'loadIris' to return an Array")
-  //     }
-  //     const [x] = irisData
-  //     if (!x) {
-  //       assert.fail("Expected 'loadIris' to return a non-empty Array")
-  //     }
-  //     ss.fit(x)
-  //     const xt = ss.transform(x)
-  //     const ssSerialized = ss.serialize()
-  //     const ssDeserialized = StandardScaler.deserialize(ssSerialized)
-  //     const xt2 = ssDeserialized.transform(x)
-  //     assert.deepEqual(xt, xt2)
-  //   })
+  it('StandardScaler', () => {
+    const ss = new StandardScaler({ fitDataXType: 'F64' as DenseMatrixType })
+    const irisData = loadIris({ returnXY: true })
+    if (!(irisData instanceof Array)) {
+      assert.fail("Expected 'loadIris' to return an Array")
+    }
+    const x = irisData[0]
+    if (!x) {
+      assert.fail("Expected 'loadIris' to return a non-empty Array")
+    }
+    ss.fit(x)
+    const xt = ss.transform(x)
+    const ssSerialized = ss.serialize()
+    const ssDeserialized = StandardScaler.deserialize(ssSerialized)
+    const xt2 = ssDeserialized.transform(x)
+    assert.deepEqual(xt, xt2)
+  })
 
   it('LogisticRegression', () => {
     const lr = new LogisticRegression({ alpha: 0.2 })

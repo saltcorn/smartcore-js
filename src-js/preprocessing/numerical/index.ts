@@ -1,13 +1,17 @@
-import { DenseMatrix, utilities, type InputType } from '../../index.js'
-import { type TransformerProvider, type Transformer } from '../../estimator.js'
-import { TransformerProvidersMap } from './estimator_providers_map/index.js'
-
-type NumberTypeRs = 'f32' | 'f64'
+import { utilities, type InputType } from '../../index.js'
+import { type Transformer } from '../../estimator.js'
+import {
+  DenseMatrix,
+  StandardScaler as LibStandardScaler,
+  StandardScalerBuilder,
+  type DenseMatrixType,
+} from '../../core-bindings/index.js'
 
 interface IStandardScalerBaseParameters {}
 
 interface IStandardScalerParameters extends IStandardScalerBaseParameters {
-  targetType?: NumberTypeRs
+  fitDataXType?: DenseMatrixType
+  columns?: string[]
 }
 
 interface StandardScalerSerializedData {
@@ -21,26 +25,24 @@ class StandardScaler {
   public readonly config: IStandardScalerParameters
 
   private _isFitted: boolean = false
-  private estimatorProvider: TransformerProvider<IStandardScalerBaseParameters, any, any>
-  private parameters: any
   private estimator: Transformer | null = null
 
   constructor(params?: IStandardScalerParameters) {
     const config = params || {}
     this.config = config
-    this.config.targetType = this.config.targetType ?? 'f32'
-    const estimatorProvider = TransformerProvidersMap.get(this.config.targetType)
-    if (!estimatorProvider) {
-      throw new Error(`Invalid value for target type '${this.config.targetType}'`)
-    }
-    const parameters = estimatorProvider.parameters(this.config)
-    this.estimatorProvider = estimatorProvider
-    this.parameters = parameters
+    this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
+  }
+
+  get columns(): string[] | null {
+    return this.config.columns ?? null
   }
 
   fit(x: InputType): this {
-    const matrix = utilities.inputTypeToDenseMatrix(x)
-    this.estimator = this.estimatorProvider.estimator(matrix, [], this.parameters)
+    const matrix = utilities.inputTypeToDenseMatrix(x, {
+      columns: this.config.columns,
+      numberType: this.config.fitDataXType,
+    })
+    this.estimator = new StandardScalerBuilder(matrix).build()
     this._isFitted = true
     return this
   }
@@ -57,8 +59,11 @@ class StandardScaler {
 
   transform(matrix: InputType): DenseMatrix {
     this.ensureFitted('transform')
-    let denseMatrix = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(matrix))
-    return new DenseMatrix(this.estimator!.transform(denseMatrix))
+    let denseMatrix = utilities.inputTypeToDenseMatrix(matrix, {
+      numberType: this.config.fitDataXType,
+      columns: this.config.columns,
+    })
+    return this.estimator!.transform(denseMatrix)
   }
 
   serialize(): StandardScalerSerializedData {
@@ -74,7 +79,7 @@ class StandardScaler {
     if (this._isFitted) {
       throw new Error("Cannot call 'deserialize' on a fitted instance!")
     }
-    this.estimator = this.estimatorProvider.deserialize(data)
+    this.estimator = LibStandardScaler.deserialize(data)
     return this
   }
 
@@ -86,4 +91,4 @@ class StandardScaler {
   }
 }
 
-export { StandardScaler, type IStandardScalerBaseParameters, type NumberTypeRs }
+export { StandardScaler, type IStandardScalerBaseParameters }

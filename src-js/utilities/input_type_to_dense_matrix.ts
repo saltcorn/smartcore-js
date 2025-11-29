@@ -9,6 +9,7 @@ interface InputTypeToDenseMatrixParameters {
 }
 
 function inputTypeToDenseMatrix(x: InputType, params?: InputTypeToDenseMatrixParameters): DenseMatrix {
+  // TODO: Transform DenseMatrix to have the DenseMatrixType specified by params.numberType
   if (x instanceof DenseMatrix) return x
   if (x instanceof DataFrame) return dataFrameToDenseMatrix(x, params)
   if (Array.isArray(x)) return utilities.arrayToDenseMatrix(x, { numberType: params?.numberType })
