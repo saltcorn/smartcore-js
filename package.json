@@ -58,7 +58,7 @@
     "access": "public"
   },
   "scripts": {
-    "artifacts": "napi artifacts --output-dir ./src-js/core-bindings",
+    "artifacts": "napi artifacts --build-output-dir ./src-js/core-bindings",
     "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
     "build": "napi build --platform --release --esm --output-dir ./src-js/core-bindings",
     "build:cjs": "napi build --platform --release --output-dir ./dist-cjs/core-bindings",
