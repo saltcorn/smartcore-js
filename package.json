@@ -58,7 +58,7 @@
     "access": "public"
   },
   "scripts": {
-    "artifacts": "napi artifacts",
+    "artifacts": "napi artifacts --build-output-dir ./src-js/core-bindings",
     "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
     "build": "napi build --platform --release --esm --output-dir ./src-js/core-bindings",
     "build:cjs": "napi build --platform --release --output-dir ./dist-cjs/core-bindings",
@@ -119,5 +119,5 @@
     "singleQuote": true,
     "arrowParens": "always"
   },
-  "packageManager": "yarn@4.9.4"
+  "packageManager": "yarn@4.11.0"
 }

@@ -1,7 +1,7 @@
 use napi_derive::napi;
 use smartcore::dataset::digits::load_dataset as lib_load_dataset;
 
-use super::DatasetF64F64;
+use super::{DatasetF64F64, DatasetI32I32};
 
 #[napi]
 pub struct Digits {}
@@ -10,6 +10,11 @@ pub struct Digits {}
 impl Digits {
   #[napi]
   pub fn load_dataset(&self) -> DatasetF64F64 {
+    lib_load_dataset().into()
+  }
+
+  #[napi]
+  pub fn load_dataset_i32(&self) -> DatasetI32I32 {
     lib_load_dataset().into()
   }
 }

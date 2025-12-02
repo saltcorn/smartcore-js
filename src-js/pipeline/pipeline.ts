@@ -374,6 +374,7 @@ interface EstimatorDeserializer {
   deserialize(serializedData: any): Estimator<any, any, any>
 }
 
+// TODO: Add all deserializers
 const EstimatorsDeserializers: Map<string, EstimatorDeserializer> = new Map()
 EstimatorsDeserializers.set(PCA.name, PCA)
 EstimatorsDeserializers.set(RidgeRegression.name, RidgeRegression)

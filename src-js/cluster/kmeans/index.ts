@@ -1,11 +1,10 @@
 import { utilities, type InputType, type YType } from '../../index.js'
-import { type IKMeansBaseParameters, type NumberTypeRs } from './parameters.js'
-import { type PredictorProvider, type Predictor } from '../../estimator.js'
-import { PredictorProvidersMap, type PredictOutputType } from './estimator_providers_map/index.js'
+import { type IKMeansBaseParameters } from './parameters.js'
+import { type RsPredictor } from '../../estimator.js'
+import { KMeans as KMeansV2, KMeansBuilder, type KMeansPredictOutputType } from '../../core-bindings/index.js'
 
 interface IKMeansParameters extends IKMeansBaseParameters {
-  targetType?: NumberTypeRs
-  predictOutputType?: PredictOutputType
+  predictOutputType?: KMeansPredictOutputType
 }
 
 interface KMeansSerializedData {
@@ -19,33 +18,26 @@ class KMeans {
   public readonly config: IKMeansParameters
 
   private _isFitted: boolean = false
-  private estimatorProvider: PredictorProvider<IKMeansBaseParameters, any, any>
-  private parameters: any
-  private estimator: Predictor | null = null
+  private estimator: RsPredictor | null = null
 
   constructor(params?: IKMeansParameters) {
     const config = params || {}
     this.config = config
-    this.config.targetType = this.config.targetType ?? 'f32'
-    this.config.predictOutputType = this.config.predictOutputType ?? 'i32'
-    const distanceTypeMap = PredictorProvidersMap.get(this.config.targetType)
-    if (!distanceTypeMap) {
-      throw new Error(`Invalid value for target type '${this.config.targetType}'`)
-    }
-    const estimatorProvider = distanceTypeMap.get(this.config.predictOutputType)
-    if (!estimatorProvider) {
-      throw new Error(
-        `Invalid value for predict output type '${this.config.predictOutputType}' for '${this.config.targetType}'`,
-      )
-    }
-    const parameters = estimatorProvider.parameters(this.config)
-    this.estimatorProvider = estimatorProvider
-    this.parameters = parameters
   }
 
-  fit(x: InputType, y: YType): this {
+  fit(x: InputType): this {
     const matrix = utilities.inputTypeToDenseMatrix(x)
-    this.estimator = this.estimatorProvider.estimator(matrix, y, this.parameters)
+    const builder = new KMeansBuilder(matrix)
+    if (this.config.maxIter) {
+      builder.withMaxIter(BigInt(this.config.maxIter))
+    }
+    if (this.config.k) {
+      builder.withK(BigInt(this.config.k))
+    }
+    if (this.config.predictOutputType) {
+      builder.withPredictOutputType(this.config.predictOutputType)
+    }
+    this.estimator = builder.build()
     this._isFitted = true
     return this
   }
@@ -62,8 +54,8 @@ class KMeans {
 
   predict(matrix: InputType): YType {
     this.ensureFitted('predict')
-    let denseMatrix = this.estimatorProvider.toMatrix(utilities.inputTypeToDenseMatrix(matrix))
-    return this.estimator!.predict(denseMatrix)
+    let denseMatrix = utilities.inputTypeToDenseMatrix(matrix)
+    return this.estimator!.predict(denseMatrix).field0
   }
 
   serialize(): KMeansSerializedData {
@@ -79,7 +71,7 @@ class KMeans {
     if (this._isFitted) {
       throw new Error("Cannot call 'deserialize' on a fitted instance!")
     }
-    this.estimator = this.estimatorProvider.deserialize(data)
+    this.estimator = KMeansV2.deserialize(data)
     return this
   }
 

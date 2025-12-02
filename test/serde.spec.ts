@@ -13,11 +13,13 @@ import {
   naiveBayes,
   neighbors,
   dataFrame,
+  coreBindings,
 } from '../src-js/index.js'
-import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-js/core-bindings/index.js'
-import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
+import { readJSONFile } from './helpers.js'
 
-let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
+const { DenseMatrixType, DistanceVariantType } = coreBindings
+
+let { LogisticRegression, RidgeRegression, LinearRegression, ElasticNet, Lasso } = linearModel
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
 let { StandardScaler, OneHotEncoder } = preprocessing
 let { KMeans, DBSCAN } = cluster
@@ -27,7 +29,7 @@ let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
 let { trainTestSplit } = modelSelection
 let { accuracyScore } = metrics
-type DistanceType = metrics.DistanceType
+// type DistanceType = metrics.DistanceType
 let { makePipeline, deserializePipeline } = pipeline
 const { DataFrame } = dataFrame
 
@@ -36,12 +38,12 @@ const df = new DataFrame(parsedJson, { exclude: ['transaction_id', 'customer_id'
 
 describe('Serialize + Deserialize', () => {
   it('StandardScaler', () => {
-    const ss = new StandardScaler()
+    const ss = new StandardScaler({ fitDataXType: DenseMatrixType.F64 })
     const irisData = loadIris({ returnXY: true })
     if (!(irisData instanceof Array)) {
       assert.fail("Expected 'loadIris' to return an Array")
     }
-    const [x] = irisData
+    const x = irisData[0]
     if (!x) {
       assert.fail("Expected 'loadIris' to return a non-empty Array")
     }
@@ -125,7 +127,7 @@ describe('Serialize + Deserialize', () => {
       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-    km.fit(xTrain, yTrain)
+    km.fit(xTrain)
     const score1 = accuracyScore(km.predict(xTest), yTest)
     const kmSerialized = km.serialize()
     const kmDeserialized = KMeans.deserialize(kmSerialized)
@@ -141,7 +143,7 @@ describe('Serialize + Deserialize', () => {
       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-    dbscan.fit(xTrain, yTrain)
+    dbscan.fit(xTrain)
     const score1 = accuracyScore(dbscan.predict(xTest), yTest)
     const dbscanSerialized = dbscan.serialize()
     const dbscanDeserialized = DBSCAN.deserialize(dbscanSerialized)
@@ -152,8 +154,8 @@ describe('Serialize + Deserialize', () => {
   it('PCA', () => {
     const columns = df.columnNames.filter((column) => !column.startsWith('customer'))
     const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
-    const pca = new PCA({ nComponents: 24, columns })
-    const transformedColumns1 = pca.fit(df, y).transform(df)
+    const pca = new PCA({ nComponents: 24n, columns })
+    const transformedColumns1 = pca.fit(df).transform(df)
     const pcaSerialized = pca.serialize()
     const pcaDeserialized = PCA.deserialize(pcaSerialized)
     const transformedColumns2 = pcaDeserialized.transform(df)
@@ -161,7 +163,7 @@ describe('Serialize + Deserialize', () => {
   })
 
   it('RidgeRegression', () => {
-    const rr = new RidgeRegression({ targetType: 'f64' })
+    const rr = new RidgeRegression()
     const bostonData = loadBoston({ returnXY: true })
     const [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
@@ -170,19 +172,10 @@ describe('Serialize + Deserialize', () => {
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.22 })
     rr.fit(xTrain, yTrain)
     const predictions1 = rr.predict(xTest)
-    assert(predictions1)
     const rrSerialized = rr.serialize()
     const rrDeserialized = RidgeRegression.deserialize(rrSerialized)
     const predictions2 = rrDeserialized.predict(xTest)
-    assert(predictions2)
-    //TODO: Ensure parameters are being stored correctly
-    console.log(
-      chalk.red(
-        'Values in the RidgeRegression predict output deviate.' +
-          ' The deviation gets larger after serialization and deserialization.' +
-          ' Explore using pre-scaled data.',
-      ),
-    )
+    assert.deepEqual(predictions1, predictions2)
   })
 
   it('SVD', () => {
@@ -192,7 +185,7 @@ describe('Serialize + Deserialize', () => {
     if (!(x && y)) {
       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
     }
-    svd.fit(x, [])
+    svd.fit(x)
     const xTransformed1 = svd.transform(x)
     const svdSerialized = svd.serialize()
     const svdDeserialized = SVD.deserialize(svdSerialized)
@@ -248,19 +241,20 @@ describe('Serialize + Deserialize', () => {
     assert.equal(score1, score2)
   })
 
-  it.skip('OneHotEncoder', () => {
-    const ohe = new OneHotEncoder({ categoricalParams: new BigUint64Array() })
+  it('OneHotEncoder', () => {
+    const ohe = new OneHotEncoder({ catIdx: new BigUint64Array() })
     const bostonData = loadBoston({ returnXY: true })
     const [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
     }
-    ohe.fit(x, [])
+    ohe.fit(x)
     const xTransformed1 = ohe.transform(x)
-    const oheSerialized = ohe.serialize()
-    const oheDeserialized = OneHotEncoder.deserialize(oheSerialized)
-    const xTransformed2 = oheDeserialized.transform(x)
-    assert.deepEqual(xTransformed1, xTransformed2)
+    console.log(chalk.red('OneHotEncoder does not implement serialize and deserialize.'))
+    //     const oheSerialized = ohe.serialize()
+    //     const oheDeserialized = OneHotEncoder.deserialize(oheSerialized)
+    //     const xTransformed2 = oheDeserialized.transform(x)
+    //     assert.deepEqual(xTransformed1, xTransformed2)
   })
 
   it('BernoulliNB', () => {
@@ -300,7 +294,7 @@ describe('Serialize + Deserialize', () => {
       ],
     })
     const cnb = new CategoricalNB()
-    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
+    const y = [1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1]
     cnb.fit(df, y)
     const predictions1 = cnb.predict(df)
     const cnbSerialized = cnb.serialize()
@@ -357,7 +351,7 @@ describe('Serialize + Deserialize', () => {
   })
 
   it('KNNClassifier', () => {
-    const knnc = new KNNClassifier({ distanceType: 'manhattan' })
+    const knnc = new KNNClassifier({ distanceType: DistanceVariantType.Manhattan })
     const irisData = loadIris({ returnXY: true })
     const [x, y] = irisData instanceof Array ? irisData : []
     if (!(x && y)) {
@@ -373,7 +367,7 @@ describe('Serialize + Deserialize', () => {
   })
 
   it('KNNRegressor', () => {
-    const knnr = new KNNRegressor({ distanceType: 'minkowski', p: 10 })
+    const knnr = new KNNRegressor({ distanceType: DistanceVariantType.Minkowski, p: 10 })
     const bostonData = loadBoston({ returnXY: true })
     const [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {

@@ -1,3 +1,4 @@
+use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
 use smartcore::linalg::basic::arrays::Array;
@@ -19,9 +20,9 @@ macro_rules! dense_matrix_array_impl {
             }
 
             #[napi]
-            pub fn shape(&self) -> (i64, i64) {
+            pub fn shape(&self) -> (BigInt, BigInt) {
                 let shape = self.inner.shape();
-                (shape.0 as i64, shape.1 as i64)
+                ((shape.0 as u128).into(), (shape.1 as u128).into())
             }
 
             #[napi]

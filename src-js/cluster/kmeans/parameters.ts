@@ -1,5 +1,3 @@
-import { type NumberTypeRs } from '../../linalg/dense-matrix/index.js'
-
 interface IKMeansBaseParameters {
   maxIter?: bigint | number
   k?: bigint | number
@@ -21,5 +19,5 @@ function setKMeansParametersValues(parameters: IKMeansParameters, config: IKMean
   }
 }
 
-export type { IKMeansBaseParameters, NumberTypeRs }
+export type { IKMeansBaseParameters }
 export { setKMeansParametersValues }

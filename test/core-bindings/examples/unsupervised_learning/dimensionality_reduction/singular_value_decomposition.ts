@@ -1,13 +1,13 @@
 import assert from 'assert'
-import { dataset, SVDParameters, SVDF64 } from '../../../../../src-js/core-bindings/index.js'
+import { dataset, SVDBuilder, SVD } from '../../../../../src-js/core-bindings/index.js'
 
 export default () => {
   it('Singlular Value Decomposition  (SVD)', () => {
     let digitsData = dataset.digits().loadDataset()
-    let x = digitsData.denseMatrix()
-    let parameters = new SVDParameters()
-    parameters.withNComponents(2)
-    let svd = SVDF64.fit(x, parameters)
+    let x = digitsData.denseMatrixV2()
+    let builder = new SVDBuilder(x)
+    builder.withNComponents(2n)
+    let svd = builder.build()
     let xTranformed = svd.transform(x)
     assert(xTranformed)
   })

@@ -1,6 +1,6 @@
-import { dataFrame } from '../src-js/index.js'
 import assert from 'assert'
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
+import { dataFrame } from '../src-js/index.js'
 
 const { DataFrame } = dataFrame
 type DataValue = dataFrame.DataValue
@@ -40,8 +40,8 @@ describe('DataFrame', () => {
     data.forEach((record) => {
       if (record.metrics instanceof Object && !Array.isArray(record.metrics)) {
         for (let key in record.metrics) {
-          let saveKey = `metrics.${key}`
-          let keyVals = refMap.get(saveKey)
+          const saveKey = `metrics.${key}`
+          const keyVals = refMap.get(saveKey)
           if (!Array.isArray(keyVals)) {
             refMap.set(saveKey, [record.metrics[key] as DataValue])
           } else {

@@ -1,3 +1,5 @@
+// TODO: Update this implementation
+// Idea: Use builder to get a parameters instance
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
@@ -7,10 +9,7 @@ use smartcore::model_selection::{
 
 use crate::{
   linalg::basic::matrix::DenseMatrixF64,
-  linear::{
-    elastic_net::{ElasticNetF64F64, ElasticNetF64I64, ElasticNetParameters},
-    logistic_regression::{LogisticRegressionF64I64, LogisticRegressionParametersF64},
-  },
+  linear::logistic_regression::{LogisticRegressionF64I64, LogisticRegressionParametersF64},
   model_selection::kfold::KFold,
 };
 

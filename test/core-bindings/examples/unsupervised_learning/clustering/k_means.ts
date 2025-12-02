@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import assert from 'assert'
-import { dataset, KMeansParameters, KMeansF64I64 } from '../../../../../src-js/core-bindings/index.js'
+import { dataset, DenseMatrix, KMeans, KMeansBuilder } from '../../../../../src-js/core-bindings/index.js'
 
 const isARM = process.arch === 'arm' || process.arch === 'arm64'
 const TIMEOUT = isARM ? 10000 : 2000
@@ -9,11 +9,11 @@ export default function (this: Mocha.Context) {
   this.timeout(TIMEOUT)
 
   let digitsData = dataset.digits().loadDataset()
-  let x = digitsData.denseMatrix()
+  let x = digitsData.denseMatrixV2()
   let trueLabels = digitsData.target
-  let parameters = new KMeansParameters()
-  parameters.withK(10n)
-  let labels = KMeansF64I64.fit(x, parameters).predict(x)
+  let builder = new KMeansBuilder(x)
+  builder.withK(10n)
+  let labels = builder.build().predict(x)
   // Missing metrics
   // - homogeneity_score
   // - completeness_score

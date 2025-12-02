@@ -1,10 +1,9 @@
-import type { DenseMatrix } from './linalg/index.js'
 import type { DataFrame } from './data_frame.js'
 import * as numberTypeCheckers from './number_type_checkers.js'
+import { type DenseMatrix, type TypedArray } from './core-bindings/index.js'
 
 export * as dataFrame from './data_frame.js'
 export * as utilities from './utilities/index.js'
-export * from './linalg/index.js'
 export * as linearModel from './linear_model/index.js'
 export * as ensemble from './ensemble/index.js'
 export * as preprocessing from './preprocessing/index.js'
@@ -19,17 +18,7 @@ export * as neighbors from './neighbors/index.js'
 export * as coreBindings from './core-bindings/index.js'
 
 type XType = DenseMatrix | number[][]
-type YType =
-  | (number | bigint)[]
-  | Float64Array
-  | Float32Array
-  | BigInt64Array
-  | BigUint64Array
-  | Int32Array
-  | Uint16Array
-  | Uint8Array
-  | Uint32Array
-  | BigUint64Array
+type YType = (number | bigint)[] | TypedArray
 type InputType = XType | DataFrame
 type OutputType = XType | DataFrame
 

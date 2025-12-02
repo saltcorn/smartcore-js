@@ -1,13 +1,13 @@
 import assert from 'assert'
-import { dataset, PCAParameters, PCAF64 } from '../../../../../src-js/core-bindings/index.js'
+import { dataset, PCABuilder, PCA } from '../../../../../src-js/core-bindings/index.js'
 
 export default () => {
   it('Principal Component Analysis (PCA)', () => {
     let loadedDataset = dataset.digits().loadDataset()
-    let x = loadedDataset.denseMatrix()
-    let parameters = new PCAParameters()
-    parameters.withNComponents(2)
-    let pca = PCAF64.fit(x, parameters)
+    let x = loadedDataset.denseMatrixV2()
+    let builder = new PCABuilder(x)
+    builder.withNComponents(2n)
+    let pca = builder.build()
     let xTranformed = pca.transform(x)
     assert(xTranformed)
   })

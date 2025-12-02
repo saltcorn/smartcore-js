@@ -6,6 +6,7 @@ use smartcore::tree::decision_tree_classifier::{
 };
 
 #[napi]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
 pub enum SplitCriterion {
   Gini,
   Entropy,

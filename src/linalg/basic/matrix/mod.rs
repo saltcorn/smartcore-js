@@ -25,15 +25,17 @@ macro_rules! dense_matrix_struct {
         impl [<DenseMatrix $ty:upper>] {
             #[napi(constructor)]
             pub fn new(
-                nrows: u32,
-                ncols: u32,
+                nrows: BigInt,
+                ncols: BigInt,
                 values: $values,
                 column_major: Option<bool>,
             ) -> Result<Self> {
+                let nrows = nrows.get_u64().1 as usize;
+                let ncols = ncols.get_u64().1 as usize;
                 let column_major = column_major.unwrap_or(true);
                 let matrix = LibDenseMatrix::new(
-                    nrows as usize,
-                    ncols as usize,
+                    nrows,
+                    ncols,
                     values.to_vec(),
                     column_major,
                 )
@@ -89,6 +91,12 @@ macro_rules! dense_matrix_struct {
                 let inner = decode_from_slice::<LibDenseMatrix<$ty>, _>(data.as_ref(), standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
                 Ok(Self { inner })
+            }
+        }
+
+        impl From<LibDenseMatrix<$ty>> for [<DenseMatrix $ty:upper>] {
+            fn from(value: LibDenseMatrix<$ty>) -> Self {
+                Self { inner: value }
             }
         }
 
@@ -206,8 +214,10 @@ macro_rules! convert_impl {
             pub fn [<as_ $to>](&self) -> Result<[<DenseMatrix $to:upper>]> {
                 let values = self.iterator(1).map(|n| *n as $to).collect::<Vec<_>>();
                 let (nrows, ncols) = self.shape();
-                let inner = LibDenseMatrix::new(nrows as usize, ncols as usize, values, true)
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
+                let nrows = nrows.get_u128().1 as usize;
+                let ncols = ncols.get_u128().1 as usize;
+                let inner = LibDenseMatrix::new(nrows, ncols, values, true)
+                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok([<DenseMatrix $to:upper>]::from_inner(inner))
             }
         }

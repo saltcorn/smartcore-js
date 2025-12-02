@@ -10,7 +10,10 @@ use napi_derive::napi;
 use paste::paste;
 use smartcore::dataset::Dataset as LibDataset;
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
+use crate::{
+  dense_matrix::DenseMatrix,
+  linalg::basic::matrix::{DenseMatrixF64, DenseMatrixI32},
+};
 
 macro_rules! dataset_struct {
   ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
@@ -33,13 +36,13 @@ macro_rules! dataset_struct {
             }
 
             #[napi(getter)]
-            pub fn num_samples(&self) -> u32 {
-                self.inner.num_samples as u32
+            pub fn num_samples(&self) -> BigInt {
+                (self.inner.num_samples as u128).into()
             }
 
             #[napi(getter)]
-            pub fn num_features(&self) -> u32 {
-                self.inner.num_features as u32
+            pub fn num_features(&self) -> BigInt {
+                (self.inner.num_features as u128).into()
             }
 
             #[napi(getter)]
@@ -66,6 +69,16 @@ macro_rules! dataset_struct {
                     column_major,
                 )
             }
+
+            #[napi]
+            pub fn dense_matrix_v2(&self, column_major: Option<bool>) -> Result<DenseMatrix> {
+                DenseMatrix::$x(
+                    self.num_samples(),
+                    self.num_features(),
+                    self.data(),
+                    column_major,
+                )
+            }
         }
 
         impl AsRef<LibDataset<$x, $y>> for [<Dataset $x:upper $y:upper>] {
@@ -85,6 +98,7 @@ macro_rules! dataset_struct {
 
 dataset_struct! {f64, f64, Float64Array, Float64Array}
 dataset_struct! {f64, i32, Float64Array, Int32Array}
+dataset_struct! {i32, i32, Int32Array, Int32Array}
 
 impl From<LibDataset<f32, f32>> for DatasetF64F64 {
   fn from(value: LibDataset<f32, f32>) -> Self {
@@ -107,6 +121,22 @@ impl From<LibDataset<f32, u32>> for DatasetF64I32 {
     Self {
       inner: LibDataset {
         data: value.data.into_iter().map(|x| x as f64).collect(),
+        target: value.target.into_iter().map(|y| y as i32).collect(),
+        num_samples: value.num_samples,
+        num_features: value.num_features,
+        feature_names: value.feature_names,
+        target_names: value.target_names,
+        description: value.description,
+      },
+    }
+  }
+}
+
+impl From<LibDataset<f32, f32>> for DatasetI32I32 {
+  fn from(value: LibDataset<f32, f32>) -> Self {
+    Self {
+      inner: LibDataset {
+        data: value.data.into_iter().map(|x| x as i32).collect(),
         target: value.target.into_iter().map(|y| y as i32).collect(),
         num_samples: value.num_samples,
         num_features: value.num_features,
