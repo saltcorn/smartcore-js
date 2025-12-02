@@ -5,6 +5,9 @@ const { OneHotEncoderBuilder } = coreBindings
 const { loadDigits } = dataset
 const { trainTestSplit } = modelSelection
 
+const isARM = process.arch === 'arm' || process.arch === 'arm64'
+const TIMEOUT = isARM ? 20000 : 10000
+
 export default () => {
   it('create', () => {
     const digitsData = loadDigits({ returnXY: true })
@@ -16,7 +19,8 @@ export default () => {
     const _ = new OneHotEncoderBuilder(x, catIdx).build()
   })
 
-  it('transform', () => {
+  it('transform', function (done) {
+    this.timeout(TIMEOUT)
     const digitsData = loadDigits({ returnXY: true })
     const [x, y] = digitsData instanceof Array ? digitsData : []
     if (!(x && y)) {
@@ -28,5 +32,6 @@ export default () => {
     const oneHotEncoderBuilder = new OneHotEncoderBuilder(x, catIdx)
     const oneHotEncoder = oneHotEncoderBuilder.build()
     const _ = oneHotEncoder.transform(xTest)
+    done()
   })
 }
