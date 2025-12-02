@@ -13,13 +13,13 @@ interface IPCAParameters extends IPCABaseParameters {
   columns?: string[]
 }
 
-interface PCASerializedData {
-  config: IPCAParameters
-  data: Buffer
+interface HasColumns {
+  columns: string[] | undefined
 }
 
-interface HasColumns {
-  columns: string[] | null
+interface ModelSaveData {
+  columns?: string[]
+  model: Buffer
 }
 
 class PCA implements HasColumns {
@@ -30,21 +30,21 @@ class PCA implements HasColumns {
   private _isFitted: boolean = false
   private estimator: Transformer | null = null
 
-  constructor(params: IPCAParameters) {
-    this.config = params
+  constructor(params?: IPCAParameters) {
+    this.config = params || {}
     this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
   }
 
-  get columns(): string[] | null {
-    return this.config.columns ?? null
+  get columns(): string[] | undefined {
+    return this.config.columns
   }
 
   fit(x: InputType): this {
-    let matrix = utilities.inputTypeToDenseMatrix(x, {
+    const matrix = utilities.inputTypeToDenseMatrix(x, {
       columns: this.config.columns,
       numberType: this.config.fitDataXType,
     })
-    let builder = new PCABuilder(matrix)
+    const builder = new PCABuilder(matrix)
     if (this.config.nComponents !== undefined) {
       builder.withNComponents(BigInt(this.config.nComponents))
     }
@@ -83,26 +83,18 @@ class PCA implements HasColumns {
     return this.estimator!.transform(matrixRs)
   }
 
-  serialize(): PCASerializedData {
+  serialize(): ModelSaveData {
     this.ensureFitted('serialize')
-
     return {
-      data: this.estimator!.serialize(),
-      config: this.config,
+      columns: this.columns,
+      model: this.estimator!.serialize(),
     }
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibPCA.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: PCASerializedData): PCA {
-    let instance = new PCA(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: ModelSaveData): PCA {
+    const instance = new PCA()
+    instance.estimator = LibPCA.deserialize(data.model)
+    instance.config.columns = data.columns
     instance._isFitted = true
     return instance
   }

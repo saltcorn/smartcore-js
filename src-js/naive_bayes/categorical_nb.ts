@@ -1,12 +1,12 @@
-import { utilities, type InputType, type YType } from '../../index.js'
-import { type RsPredictor } from '../../estimator.js'
-import { DataFrame } from '../../data_frame.js'
+import { utilities, type InputType, type YType } from '../index.js'
+import { type RsPredictor } from '../estimator.js'
+import { DataFrame } from '../data_frame.js'
 import {
   type DenseMatrixType,
   type TypedArrayType,
   CategoricalNB as LibCategoricalNB,
   CategoricalNBBuilder,
-} from '../../core-bindings/index.js'
+} from '../core-bindings/index.js'
 
 interface ICategoricalNBBaseParameters {
   alpha?: number
@@ -15,11 +15,6 @@ interface ICategoricalNBBaseParameters {
 interface ICategoricalNBParameters extends ICategoricalNBBaseParameters {
   fitDataXType?: DenseMatrixType
   columns?: string[]
-}
-
-interface CategoricalNBSerializedData {
-  config: ICategoricalNBParameters
-  data: Buffer
 }
 
 interface HasColumns {
@@ -86,26 +81,14 @@ class CategoricalNB implements HasColumns {
     return this.estimator!.predict(matrixRs).field0
   }
 
-  serialize(): CategoricalNBSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibCategoricalNB.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: CategoricalNBSerializedData): CategoricalNB {
-    let instance = new CategoricalNB(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): CategoricalNB {
+    const instance = new CategoricalNB()
+    instance.estimator = LibCategoricalNB.deserialize(data)
     instance._isFitted = true
     return instance
   }

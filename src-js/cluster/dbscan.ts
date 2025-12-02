@@ -1,15 +1,22 @@
-import { utilities, type InputType, type YType } from '../../index.js'
-import { type IDBSCANBaseParameters } from './parameters.js'
-import { type RsPredictor } from '../../estimator.js'
-import { DBSCANBuilder, DBSCAN as DBSCANV2, type DistanceVariantType } from '../../core-bindings/index.js'
+import { utilities, type InputType, type YType } from '../index.js'
+import { type RsPredictor } from '../estimator.js'
+import {
+  DBSCANBuilder,
+  DBSCAN as DBSCANV2,
+  type KNNAlgorithmName,
+  type DistanceVariantType,
+} from '../core-bindings/index.js'
+
+interface IDBSCANBaseParameters {
+  minSamples?: bigint
+  algorithm?: KNNAlgorithmName
+  eps?: number
+  data?: InputType
+  p?: number
+}
 
 interface IDBSCANParameters extends IDBSCANBaseParameters {
   distanceType?: DistanceVariantType
-}
-
-interface DBSCANSerializedData {
-  config: IDBSCANParameters
-  data: Buffer
 }
 
 class DBSCAN {
@@ -62,30 +69,18 @@ class DBSCAN {
 
   predict(matrix: InputType): YType {
     this.ensureFitted('predict')
-    let denseMatrix = utilities.inputTypeToDenseMatrix(matrix)
+    const denseMatrix = utilities.inputTypeToDenseMatrix(matrix)
     return this.estimator!.predict(denseMatrix).field0
   }
 
-  serialize(): DBSCANSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = DBSCANV2.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: DBSCANSerializedData): DBSCAN {
-    let instance = new DBSCAN(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): DBSCAN {
+    const instance = new DBSCAN()
+    instance.estimator = DBSCANV2.deserialize(data)
     instance._isFitted = true
     return instance
   }

@@ -1,22 +1,17 @@
-import { utilities, type InputType } from '../../index.js'
-import { type Transformer } from '../../estimator.js'
+import { utilities, type InputType } from '../index.js'
+import { type Transformer } from '../estimator.js'
 import {
   DenseMatrix,
   StandardScaler as LibStandardScaler,
   StandardScalerBuilder,
   type DenseMatrixType,
-} from '../../core-bindings/index.js'
+} from '../core-bindings/index.js'
 
 interface IStandardScalerBaseParameters {}
 
 interface IStandardScalerParameters extends IStandardScalerBaseParameters {
   fitDataXType?: DenseMatrixType
   columns?: string[]
-}
-
-interface StandardScalerSerializedData {
-  config: IStandardScalerParameters
-  data: Buffer
 }
 
 class StandardScaler {
@@ -59,33 +54,21 @@ class StandardScaler {
 
   transform(matrix: InputType): DenseMatrix {
     this.ensureFitted('transform')
-    let denseMatrix = utilities.inputTypeToDenseMatrix(matrix, {
+    const denseMatrix = utilities.inputTypeToDenseMatrix(matrix, {
       numberType: this.config.fitDataXType,
       columns: this.config.columns,
     })
     return this.estimator!.transform(denseMatrix)
   }
 
-  serialize(): StandardScalerSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibStandardScaler.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: StandardScalerSerializedData): StandardScaler {
-    let instance = new StandardScaler(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): StandardScaler {
+    const instance = new StandardScaler()
+    instance.estimator = LibStandardScaler.deserialize(data)
     instance._isFitted = true
     return instance
   }

@@ -1,7 +1,7 @@
-import { utilities, type InputType } from '../../index.js'
-import { type Transformer } from '../../estimator.js'
-import { DataFrame } from '../../data_frame.js'
-import { SVD as LibSVD, SVDBuilder, DenseMatrix, type DenseMatrixType } from '../../core-bindings/index.js'
+import { utilities, type InputType } from '../index.js'
+import { type Transformer } from '../estimator.js'
+import { DataFrame } from '../data_frame.js'
+import { SVD as LibSVD, SVDBuilder, DenseMatrix, type DenseMatrixType } from '../core-bindings/index.js'
 
 interface ISVDBaseParameters {
   nComponents?: bigint
@@ -10,11 +10,6 @@ interface ISVDBaseParameters {
 interface ISVDParameters extends ISVDBaseParameters {
   fitDataXType?: DenseMatrixType
   columns?: string[]
-}
-
-interface SVDSerializedData {
-  config: ISVDParameters
-  data: Buffer
 }
 
 interface HasColumns {
@@ -39,10 +34,10 @@ class SVD implements HasColumns {
   }
 
   fit(x: InputType): this {
-    let matrix
-    if (x instanceof DataFrame && this.columns !== null && this.columns.length !== 0)
-      matrix = utilities.dataFrameToDenseMatrix(x, { columns: this.columns, numberType: this.config.fitDataXType })
-    else matrix = utilities.inputTypeToDenseMatrix(x)
+    const matrix = utilities.inputTypeToDenseMatrix(x, {
+      columns: this.config.columns,
+      numberType: this.config.fitDataXType,
+    })
     const builder = new SVDBuilder(matrix)
     if (this.config.nComponents) {
       builder.withNComponents(this.config.nComponents)
@@ -76,26 +71,14 @@ class SVD implements HasColumns {
     return this.estimator!.transform(matrixRs)
   }
 
-  serialize(): SVDSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibSVD.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: SVDSerializedData): SVD {
-    let instance = new SVD(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): SVD {
+    const instance = new SVD()
+    instance.estimator = LibSVD.deserialize(data)
     instance._isFitted = true
     return instance
   }

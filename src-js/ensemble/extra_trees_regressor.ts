@@ -1,50 +1,45 @@
-import { utilities, type InputType, type YType } from '../../index.js'
-import { type RsPredictor } from '../../estimator.js'
-import { DataFrame } from '../../data_frame.js'
+import { utilities, type InputType, type YType } from '../index.js'
+import { type RsPredictor } from '../estimator.js'
+import { DataFrame } from '../data_frame.js'
 import {
-  RandomForestRegressorBuilder,
-  RandomForestRegressor as LibRandomForestRegressor,
+  ExtraTreesRegressor as LibExtraTreesRegressor,
+  ExtraTreesRegressorBuilder,
   type DenseMatrixType,
-  type TypedArrayType,
-} from '../../core-bindings/index.js'
+  type ExtraTreesRegressorPredictOutputType,
+} from '../core-bindings/index.js'
 
-interface IRandomForestRegressorBaseParameters {
+interface IExtraTreesRegressorBaseParameters {
   maxDepth?: number
   minSamplesLeaf?: bigint | number
   minSamplesSplit?: bigint | number
-  nTrees?: number
-  m?: number
+  nTrees?: bigint | number
+  m?: bigint | number
   keepSamples?: boolean
-  seed?: number
+  seed?: bigint | number
 }
 
-interface IRandomForestRegressorParameters extends IRandomForestRegressorBaseParameters {
+interface IExtraTreesRegressorParameters extends IExtraTreesRegressorBaseParameters {
   fitDataXType?: DenseMatrixType
-  fitDataYType?: TypedArrayType
+  fitDataYType?: ExtraTreesRegressorPredictOutputType
   columns?: string[]
-}
-
-interface RandomForestRegressorSerializedData {
-  config: IRandomForestRegressorParameters
-  data: Buffer
 }
 
 interface HasColumns {
   columns: string[] | null
 }
 
-class RandomForestRegressor implements HasColumns {
-  public static readonly className = 'RandomForestRegressor'
-  public readonly name: string = RandomForestRegressor.className
-  public readonly config: IRandomForestRegressorParameters
+class ExtraTreesRegressor implements HasColumns {
+  public static readonly className = 'ExtraTreesRegressor'
+  public readonly name: string = ExtraTreesRegressor.className
+  public readonly config: IExtraTreesRegressorParameters
 
   private _isFitted: boolean = false
   private estimator: RsPredictor | null = null
 
-  constructor(params?: IRandomForestRegressorParameters) {
+  constructor(params?: IExtraTreesRegressorParameters) {
     this.config = params || {}
     this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
-    this.config.fitDataYType = this.config.fitDataYType ?? ('F32' as TypedArrayType)
+    this.config.fitDataYType = this.config.fitDataYType ?? ('F32' as ExtraTreesRegressorPredictOutputType)
   }
 
   get columns(): string[] | null {
@@ -56,8 +51,8 @@ class RandomForestRegressor implements HasColumns {
       columns: this.config.columns,
       numberType: this.config.fitDataXType,
     })
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
-    const builder = new RandomForestRegressorBuilder(matrix, yWrapped)
+    let yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y))
+    const builder = new ExtraTreesRegressorBuilder(matrix, yWrapped)
     if (this.config.maxDepth !== undefined) {
       builder.withMaxDepth(this.config.maxDepth)
     }
@@ -85,7 +80,7 @@ class RandomForestRegressor implements HasColumns {
   }
 
   protected getComponentColumnName(index: number): string {
-    return `RandomForestRegressor${index + 1}`
+    return `ExtraTreesRegressor${index + 1}`
   }
 
   protected ensureFitted(methodName: string): void {
@@ -108,29 +103,17 @@ class RandomForestRegressor implements HasColumns {
     return this.estimator!.predict(matrixRs).field0
   }
 
-  serialize(): RandomForestRegressorSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibRandomForestRegressor.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: RandomForestRegressorSerializedData): RandomForestRegressor {
-    let instance = new RandomForestRegressor(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): ExtraTreesRegressor {
+    const instance = new ExtraTreesRegressor()
+    instance.estimator = LibExtraTreesRegressor.deserialize(data)
     instance._isFitted = true
     return instance
   }
 }
 
-export { RandomForestRegressor, type IRandomForestRegressorBaseParameters }
+export { ExtraTreesRegressor, type IExtraTreesRegressorBaseParameters }

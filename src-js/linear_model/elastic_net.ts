@@ -1,42 +1,40 @@
-import { utilities, type InputType, type YType } from '../../index.js'
-import { type RsPredictor } from '../../estimator.js'
-import { DataFrame } from '../../data_frame.js'
+import { utilities, type InputType, type YType } from '../index.js'
+import { type RsPredictor } from '../estimator.js'
+import { DataFrame } from '../data_frame.js'
 import {
-  LinearRegression as LibLinearRegression,
+  ElasticNet as LibElasticNet,
+  ElasticNetBuilder,
   type DenseMatrixType,
-  LinearRegressionBuilder,
-  type LinearRegressionSolverName,
   type TypedArrayType,
-} from '../../core-bindings/index.js'
+} from '../core-bindings/index.js'
 
-interface ILinearRegressionBaseParameters {
-  solver?: LinearRegressionSolverName
+interface IElasticNetBaseParameters {
+  alpha?: number
+  l1Ratio?: number
+  normalize?: boolean
+  tol?: number
+  maxIter?: bigint | number
 }
 
-interface ILinearRegressionParameters extends ILinearRegressionBaseParameters {
+interface IElasticNetParameters extends IElasticNetBaseParameters {
   fitDataXType?: DenseMatrixType
   fitDataYType?: TypedArrayType
   columns?: string[]
-}
-
-interface LinearRegressionSerializedData {
-  config: ILinearRegressionParameters
-  data: Buffer
 }
 
 interface HasColumns {
   columns: string[] | null
 }
 
-class LinearRegression implements HasColumns {
-  public static readonly className = 'LinearRegression'
-  public readonly name: string = LinearRegression.className
-  public readonly config: ILinearRegressionParameters = {}
+class ElasticNet implements HasColumns {
+  public static readonly className = 'ElasticNet'
+  public readonly name: string = ElasticNet.className
+  public readonly config: IElasticNetParameters = {}
 
   private _isFitted: boolean = false
   private estimator: RsPredictor | null = null
 
-  constructor(params?: ILinearRegressionParameters) {
+  constructor(params?: IElasticNetParameters) {
     this.config = params ?? {}
     this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
     this.config.fitDataYType = this.config.fitDataYType ?? ('F32' as TypedArrayType)
@@ -52,17 +50,19 @@ class LinearRegression implements HasColumns {
       numberType: this.config.fitDataXType,
     })
     const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
-    const builder = new LinearRegressionBuilder(matrix, yWrapped)
-    if (this.config.solver !== undefined) {
-      builder.withSolver(this.config.solver)
-    }
+    const builder = new ElasticNetBuilder(matrix, yWrapped)
+    if (this.config.alpha !== undefined) builder.withAlpha(this.config.alpha)
+    if (this.config.l1Ratio !== undefined) builder.withL1Ratio(this.config.l1Ratio)
+    if (this.config.normalize !== undefined) builder.withNormalize(this.config.normalize)
+    if (this.config.tol !== undefined) builder.withTol(this.config.tol)
+    if (this.config.maxIter !== undefined) builder.withMaxIter(BigInt(this.config.maxIter))
     this.estimator = builder.build()
     this._isFitted = true
     return this
   }
 
   protected getComponentColumnName(index: number): string {
-    return `LinearRegression${index + 1}`
+    return `ElasticNet${index + 1}`
   }
 
   protected ensureFitted(methodName: string): void {
@@ -85,29 +85,17 @@ class LinearRegression implements HasColumns {
     return this.estimator!.predict(matrixRs).field0
   }
 
-  serialize(): LinearRegressionSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibLinearRegression.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: LinearRegressionSerializedData): LinearRegression {
-    let instance = new LinearRegression(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): ElasticNet {
+    const instance = new ElasticNet()
+    instance.estimator = LibElasticNet.deserialize(data)
     instance._isFitted = true
     return instance
   }
 }
 
-export { LinearRegression, type ILinearRegressionBaseParameters }
+export { ElasticNet, type IElasticNetBaseParameters }

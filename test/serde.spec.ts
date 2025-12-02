@@ -142,7 +142,7 @@ describe('Serialize + Deserialize', () => {
     if (!(x && y)) {
       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
     }
-    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    const [xTrain, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     dbscan.fit(xTrain)
     const score1 = accuracyScore(dbscan.predict(xTest), yTest)
     const dbscanSerialized = dbscan.serialize()
@@ -153,7 +153,6 @@ describe('Serialize + Deserialize', () => {
 
   it('PCA', () => {
     const columns = df.columnNames.filter((column) => !column.startsWith('customer'))
-    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
     const pca = new PCA({ nComponents: 24n, columns })
     const transformedColumns1 = pca.fit(df).transform(df)
     const pcaSerialized = pca.serialize()
@@ -169,7 +168,7 @@ describe('Serialize + Deserialize', () => {
     if (!(x && y)) {
       assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
     }
-    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.22 })
+    const [xTrain, xTest, yTrain] = trainTestSplit(x, y, { testSize: 0.22 })
     rr.fit(xTrain, yTrain)
     const predictions1 = rr.predict(xTest)
     const rrSerialized = rr.serialize()

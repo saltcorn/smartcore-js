@@ -2,31 +2,30 @@ import assert from 'assert'
 import path from 'path'
 import fs from 'fs'
 import os from 'os'
-import {
-  dataset,
-  AccuracyI64,
-  KNNClassifierF64BigI64EuclidianF64,
-  KNNClassifierF64EuclidianF64Parameters,
-} from '../../../../src-js/core-bindings/index.js'
+import { utilities, coreBindings, dataset, metrics, neighbors } from '../../../../src-js/index.js'
+
+const { DistanceVariantType } = coreBindings
+const { loadIris } = dataset
+const { accuracyScore } = metrics
+const { KNNClassifier } = neighbors
 
 export default () => {
   it('Model Persistence', () => {
-    let irisData = dataset.iris().loadDataset()
-    let x = irisData.denseMatrix()
-    let y = irisData.target
-    let parameters = new KNNClassifierF64EuclidianF64Parameters()
-    let knn = KNNClassifierF64BigI64EuclidianF64.fit(x, y, parameters)
-    let filename = path.join(os.tmpdir(), 'iris_knn.model')
+    const irisData = loadIris({ returnXY: true })
+    if (!Array.isArray(irisData)) assert.fail('Expected irisData to be an Array')
+    const [x, y] = irisData
+    const knn = new KNNClassifier({ distanceType: DistanceVariantType.Euclidian }).fit(x, y)
+    const filename = path.join(os.tmpdir(), 'iris_knn.model')
     // save the model
-    let knnBytes = knn.serialize()
+    const knnBytes = knn.serialize()
     fs.writeFileSync(filename, knnBytes)
     // load the model
     knnBytes = fs.readFileSync(filename)
     knn = KNNClassifierF64BigI64EuclidianF64.deserialize(knnBytes)
     // predict class labels
-    let yHat = knn.predict(x)
-    let accuracy = new AccuracyI64()
-    let score = accuracy.getScore(y, yHat)
+    const yHat = knn.predict(x)
+    const accuracy = new AccuracyI64()
+    const score = accuracy.getScore(y, yHat)
     assert(score)
   })
 }

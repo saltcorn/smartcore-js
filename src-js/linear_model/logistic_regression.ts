@@ -1,47 +1,41 @@
-import { utilities, type InputType, type YType } from '../../index.js'
-import { type RsPredictor } from '../../estimator.js'
-import { DataFrame } from '../../data_frame.js'
+import { utilities, type InputType, type YType } from '../index.js'
+import { type RsPredictor } from '../estimator.js'
+import { DataFrame } from '../data_frame.js'
 import {
-  Lasso as LibLasso,
-  LassoBuilder,
-  type DenseMatrixType,
+  type LogisticRegressionSolverName,
+  LogisticRegression as LibLogisticRegression,
   type TypedArrayType,
-} from '../../core-bindings/index.js'
+  type DenseMatrixType,
+  LogisticRegressionBuilder,
+} from '../core-bindings/index.js'
 
-interface ILassoBaseParameters {
-  alpha?: number
-  normalize?: boolean
-  tol?: number
-  maxIter?: bigint | number
+interface ILogisticRegressionBaseParameters {
+  alpha?: number | bigint
+  solver?: LogisticRegressionSolverName
 }
 
-interface ILassoParameters extends ILassoBaseParameters {
+interface ILogisticRegressionParameters extends ILogisticRegressionBaseParameters {
   fitDataXType?: DenseMatrixType
   fitDataYType?: TypedArrayType
   columns?: string[]
-}
-
-interface LassoSerializedData {
-  config: ILassoParameters
-  data: Buffer
 }
 
 interface HasColumns {
   columns: string[] | null
 }
 
-class Lasso implements HasColumns {
-  public static readonly className = 'Lasso'
-  public readonly name: string = Lasso.className
-  public readonly config: ILassoParameters = {}
+class LogisticRegression implements HasColumns {
+  public static readonly className = 'LogisticRegression'
+  public readonly name: string = LogisticRegression.className
+  public readonly config: ILogisticRegressionParameters = {}
 
   private _isFitted: boolean = false
   private estimator: RsPredictor | null = null
 
-  constructor(params?: ILassoParameters) {
+  constructor(params?: ILogisticRegressionParameters) {
     this.config = params ?? {}
     this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
-    this.config.fitDataYType = this.config.fitDataYType ?? ('F32' as TypedArrayType)
+    this.config.fitDataYType = this.config.fitDataYType ?? ('I32' as TypedArrayType)
   }
 
   get columns(): string[] | null {
@@ -54,18 +48,20 @@ class Lasso implements HasColumns {
       numberType: this.config.fitDataXType,
     })
     const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
-    const builder = new LassoBuilder(matrix, yWrapped)
-    if (this.config.alpha !== undefined) builder.withAlpha(this.config.alpha)
-    if (this.config.normalize !== undefined) builder.withNormalize(this.config.normalize)
-    if (this.config.tol !== undefined) builder.withTol(this.config.tol)
-    if (this.config.maxIter !== undefined) builder.withMaxIter(BigInt(this.config.maxIter))
+    const builder = new LogisticRegressionBuilder(matrix, yWrapped)
+    if (this.config.alpha !== undefined) {
+      builder.withAlpha(utilities.wrapNumber(this.config.alpha))
+    }
+    if (this.config.solver !== undefined) {
+      builder.withSolver(this.config.solver)
+    }
     this.estimator = builder.build()
     this._isFitted = true
     return this
   }
 
   protected getComponentColumnName(index: number): string {
-    return `Lasso${index + 1}`
+    return `LogisticRegression${index + 1}`
   }
 
   protected ensureFitted(methodName: string): void {
@@ -88,29 +84,17 @@ class Lasso implements HasColumns {
     return this.estimator!.predict(matrixRs).field0
   }
 
-  serialize(): LassoSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibLasso.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: LassoSerializedData): Lasso {
-    let instance = new Lasso(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): LogisticRegression {
+    let instance = new LogisticRegression()
+    instance.estimator = LibLogisticRegression.deserialize(data)
     instance._isFitted = true
     return instance
   }
 }
 
-export { Lasso, type ILassoBaseParameters }
+export { LogisticRegression, type ILogisticRegressionBaseParameters }

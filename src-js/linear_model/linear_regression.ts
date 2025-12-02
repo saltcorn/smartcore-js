@@ -1,46 +1,40 @@
-import { utilities, type InputType, type YType } from '../../index.js'
-import { type RsPredictor } from '../../estimator.js'
-import { DataFrame } from '../../data_frame.js'
+import { utilities, type InputType, type YType } from '../index.js'
+import { type RsPredictor } from '../estimator.js'
+import { DataFrame } from '../data_frame.js'
 import {
-  type LogisticRegressionSolverName,
-  LogisticRegression as LibLogisticRegression,
-  type TypedArrayType,
+  LinearRegression as LibLinearRegression,
   type DenseMatrixType,
-  LogisticRegressionBuilder,
-} from '../../core-bindings/index.js'
+  LinearRegressionBuilder,
+  type LinearRegressionSolverName,
+  type TypedArrayType,
+} from '../core-bindings/index.js'
 
-interface ILogisticRegressionBaseParameters {
-  alpha?: number | bigint
-  solver?: LogisticRegressionSolverName
+interface ILinearRegressionBaseParameters {
+  solver?: LinearRegressionSolverName
 }
 
-interface ILogisticRegressionParameters extends ILogisticRegressionBaseParameters {
+interface ILinearRegressionParameters extends ILinearRegressionBaseParameters {
   fitDataXType?: DenseMatrixType
   fitDataYType?: TypedArrayType
   columns?: string[]
-}
-
-interface LogisticRegressionSerializedData {
-  config: ILogisticRegressionParameters
-  data: Buffer
 }
 
 interface HasColumns {
   columns: string[] | null
 }
 
-class LogisticRegression implements HasColumns {
-  public static readonly className = 'LogisticRegression'
-  public readonly name: string = LogisticRegression.className
-  public readonly config: ILogisticRegressionParameters = {}
+class LinearRegression implements HasColumns {
+  public static readonly className = 'LinearRegression'
+  public readonly name: string = LinearRegression.className
+  public readonly config: ILinearRegressionParameters = {}
 
   private _isFitted: boolean = false
   private estimator: RsPredictor | null = null
 
-  constructor(params?: ILogisticRegressionParameters) {
+  constructor(params?: ILinearRegressionParameters) {
     this.config = params ?? {}
     this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
-    this.config.fitDataYType = this.config.fitDataYType ?? ('I32' as TypedArrayType)
+    this.config.fitDataYType = this.config.fitDataYType ?? ('F32' as TypedArrayType)
   }
 
   get columns(): string[] | null {
@@ -53,10 +47,7 @@ class LogisticRegression implements HasColumns {
       numberType: this.config.fitDataXType,
     })
     const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
-    const builder = new LogisticRegressionBuilder(matrix, yWrapped)
-    if (this.config.alpha !== undefined) {
-      builder.withAlpha(utilities.wrapNumber(this.config.alpha))
-    }
+    const builder = new LinearRegressionBuilder(matrix, yWrapped)
     if (this.config.solver !== undefined) {
       builder.withSolver(this.config.solver)
     }
@@ -66,7 +57,7 @@ class LogisticRegression implements HasColumns {
   }
 
   protected getComponentColumnName(index: number): string {
-    return `LogisticRegression${index + 1}`
+    return `LinearRegression${index + 1}`
   }
 
   protected ensureFitted(methodName: string): void {
@@ -89,29 +80,17 @@ class LogisticRegression implements HasColumns {
     return this.estimator!.predict(matrixRs).field0
   }
 
-  serialize(): LogisticRegressionSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibLogisticRegression.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: LogisticRegressionSerializedData): LogisticRegression {
-    let instance = new LogisticRegression(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): LinearRegression {
+    let instance = new LinearRegression()
+    instance.estimator = LibLinearRegression.deserialize(data)
     instance._isFitted = true
     return instance
   }
 }
 
-export { LogisticRegression, type ILogisticRegressionBaseParameters }
+export { LinearRegression, type ILinearRegressionBaseParameters }

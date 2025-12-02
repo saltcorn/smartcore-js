@@ -1,6 +1,6 @@
-import { utilities, type InputType, type YType } from '../../index.js'
-import { type RsPredictor } from '../../estimator.js'
-import { DataFrame } from '../../data_frame.js'
+import { utilities, type InputType, type YType } from '../index.js'
+import { type RsPredictor } from '../estimator.js'
+import { DataFrame } from '../data_frame.js'
 import {
   KNNRegressor as LibKNNRegressor,
   KNNRegressorBuilder,
@@ -9,7 +9,7 @@ import {
   type KNNAlgorithmName,
   type KNNWeightFunction,
   type DistanceVariantType,
-} from '../../core-bindings/index.js'
+} from '../core-bindings/index.js'
 
 interface IKNNRegressorBaseParameters {
   k?: number
@@ -24,11 +24,6 @@ interface IKNNRegressorParameters extends IKNNRegressorBaseParameters {
   fitDataYType?: TypedArrayType
   distanceType?: DistanceVariantType
   columns?: string[]
-}
-
-interface KNNRegressorSerializedData {
-  config: IKNNRegressorParameters
-  data: Buffer
 }
 
 interface HasColumns {
@@ -107,26 +102,14 @@ class KNNRegressor implements HasColumns {
     return this.estimator!.predict(matrixRs).field0
   }
 
-  serialize(): KNNRegressorSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibKNNRegressor.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: KNNRegressorSerializedData): KNNRegressor {
-    let instance = new KNNRegressor(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): KNNRegressor {
+    const instance = new KNNRegressor()
+    instance.estimator = LibKNNRegressor.deserialize(data)
     instance._isFitted = true
     return instance
   }

@@ -1,43 +1,40 @@
-import { utilities, type InputType, type YType } from '../../index.js'
-import { type RsPredictor } from '../../estimator.js'
-import { DataFrame } from '../../data_frame.js'
+import { utilities, type InputType, type YType } from '../index.js'
+import { type RsPredictor } from '../estimator.js'
+import { DataFrame } from '../data_frame.js'
 import {
-  GaussianNB as LibGaussianNB,
-  GaussianNBBuilder,
+  MultinomialNB as LibMultinomialNB,
+  MultinomialNBBuilder,
   type DenseMatrixType,
   type TypedArrayType,
-} from '../../core-bindings/index.js'
+} from '../core-bindings/index.js'
 
-interface IGaussianNBBaseParameters {
+interface IMultinomialNBBaseParameters {
   priors?: Float64Array
+  alpha?: number
+  binarize?: number | bigint
 }
 
-interface IGaussianNBParameters extends IGaussianNBBaseParameters {
+interface IMultinomialNBParameters extends IMultinomialNBBaseParameters {
   fitDataXType?: DenseMatrixType
   fitDataYType?: TypedArrayType
   columns?: string[]
-}
-
-interface GaussianNBSerializedData {
-  config: IGaussianNBParameters
-  data: Buffer
 }
 
 interface HasColumns {
   columns: string[] | null
 }
 
-class GaussianNB implements HasColumns {
-  public static readonly className = 'GaussianNB'
-  public readonly name: string = GaussianNB.className
-  public readonly config: IGaussianNBParameters = {}
+class MultinomialNB implements HasColumns {
+  public static readonly className = 'MultinomialNB'
+  public readonly name: string = MultinomialNB.className
+  public readonly config: IMultinomialNBParameters = {}
 
   private _isFitted: boolean = false
   private estimator: RsPredictor | null = null
 
-  constructor(params?: IGaussianNBParameters) {
+  constructor(params?: IMultinomialNBParameters) {
     this.config = params ?? {}
-    this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
+    this.config.fitDataXType = this.config.fitDataXType ?? ('U32' as DenseMatrixType)
     this.config.fitDataYType = this.config.fitDataYType ?? ('U32' as TypedArrayType)
   }
 
@@ -51,9 +48,12 @@ class GaussianNB implements HasColumns {
       numberType: this.config.fitDataXType,
     })
     const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
-    const builder = new GaussianNBBuilder(matrix, yWrapped)
+    const builder = new MultinomialNBBuilder(matrix, yWrapped)
     if (this.config.priors !== undefined) {
       builder.withPriors(this.config.priors)
+    }
+    if (this.config.alpha !== undefined) {
+      builder.withAlpha(this.config.alpha)
     }
     this.estimator = builder.build()
     this._isFitted = true
@@ -61,7 +61,7 @@ class GaussianNB implements HasColumns {
   }
 
   protected getComponentColumnName(index: number): string {
-    return `GaussianNB${index + 1}`
+    return `MultinomialNB${index + 1}`
   }
 
   protected ensureFitted(methodName: string): void {
@@ -84,29 +84,17 @@ class GaussianNB implements HasColumns {
     return this.estimator!.predict(matrixRs).field0
   }
 
-  serialize(): GaussianNBSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibGaussianNB.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: GaussianNBSerializedData): GaussianNB {
-    let instance = new GaussianNB(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): MultinomialNB {
+    const instance = new MultinomialNB()
+    instance.estimator = LibMultinomialNB.deserialize(data)
     instance._isFitted = true
     return instance
   }
 }
 
-export { GaussianNB, type IGaussianNBBaseParameters }
+export { MultinomialNB, type IMultinomialNBBaseParameters }

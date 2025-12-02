@@ -20,11 +20,6 @@ interface IBernoulliNBParameters extends IBernoulliNBBaseParameters {
   columns?: string[]
 }
 
-interface BernoulliNBSerializedData {
-  config: IBernoulliNBParameters
-  data: Buffer
-}
-
 interface HasColumns {
   columns: string[] | null
 }
@@ -94,26 +89,14 @@ class BernoulliNB implements HasColumns {
     return this.estimator!.predict(matrixRs).field0
   }
 
-  serialize(): BernoulliNBSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibBernoulliNB.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: BernoulliNBSerializedData): BernoulliNB {
-    let instance = new BernoulliNB(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): BernoulliNB {
+    const instance = new BernoulliNB()
+    instance.estimator = LibBernoulliNB.deserialize(data)
     instance._isFitted = true
     return instance
   }

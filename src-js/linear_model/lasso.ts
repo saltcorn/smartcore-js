@@ -1,45 +1,34 @@
-import { utilities, type InputType, type YType } from '../../index.js'
-import { type RsPredictor } from '../../estimator.js'
-import { DataFrame } from '../../data_frame.js'
-import {
-  ElasticNet as LibElasticNet,
-  ElasticNetBuilder,
-  type DenseMatrixType,
-  type TypedArrayType,
-} from '../../core-bindings/index.js'
+import { utilities, type InputType, type YType } from '../index.js'
+import { type RsPredictor } from '../estimator.js'
+import { DataFrame } from '../data_frame.js'
+import { Lasso as LibLasso, LassoBuilder, type DenseMatrixType, type TypedArrayType } from '../core-bindings/index.js'
 
-interface IElasticNetBaseParameters {
+interface ILassoBaseParameters {
   alpha?: number
-  l1Ratio?: number
   normalize?: boolean
   tol?: number
   maxIter?: bigint | number
 }
 
-interface IElasticNetParameters extends IElasticNetBaseParameters {
+interface ILassoParameters extends ILassoBaseParameters {
   fitDataXType?: DenseMatrixType
   fitDataYType?: TypedArrayType
   columns?: string[]
-}
-
-interface ElasticNetSerializedData {
-  config: IElasticNetParameters
-  data: Buffer
 }
 
 interface HasColumns {
   columns: string[] | null
 }
 
-class ElasticNet implements HasColumns {
-  public static readonly className = 'ElasticNet'
-  public readonly name: string = ElasticNet.className
-  public readonly config: IElasticNetParameters = {}
+class Lasso implements HasColumns {
+  public static readonly className = 'Lasso'
+  public readonly name: string = Lasso.className
+  public readonly config: ILassoParameters = {}
 
   private _isFitted: boolean = false
   private estimator: RsPredictor | null = null
 
-  constructor(params?: IElasticNetParameters) {
+  constructor(params?: ILassoParameters) {
     this.config = params ?? {}
     this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
     this.config.fitDataYType = this.config.fitDataYType ?? ('F32' as TypedArrayType)
@@ -55,9 +44,8 @@ class ElasticNet implements HasColumns {
       numberType: this.config.fitDataXType,
     })
     const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
-    const builder = new ElasticNetBuilder(matrix, yWrapped)
+    const builder = new LassoBuilder(matrix, yWrapped)
     if (this.config.alpha !== undefined) builder.withAlpha(this.config.alpha)
-    if (this.config.l1Ratio !== undefined) builder.withL1Ratio(this.config.l1Ratio)
     if (this.config.normalize !== undefined) builder.withNormalize(this.config.normalize)
     if (this.config.tol !== undefined) builder.withTol(this.config.tol)
     if (this.config.maxIter !== undefined) builder.withMaxIter(BigInt(this.config.maxIter))
@@ -67,7 +55,7 @@ class ElasticNet implements HasColumns {
   }
 
   protected getComponentColumnName(index: number): string {
-    return `ElasticNet${index + 1}`
+    return `Lasso${index + 1}`
   }
 
   protected ensureFitted(methodName: string): void {
@@ -90,29 +78,17 @@ class ElasticNet implements HasColumns {
     return this.estimator!.predict(matrixRs).field0
   }
 
-  serialize(): ElasticNetSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibElasticNet.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: ElasticNetSerializedData): ElasticNet {
-    let instance = new ElasticNet(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): Lasso {
+    let instance = new Lasso()
+    instance.estimator = LibLasso.deserialize(data)
     instance._isFitted = true
     return instance
   }
 }
 
-export { ElasticNet, type IElasticNetBaseParameters }
+export { Lasso, type ILassoBaseParameters }

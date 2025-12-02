@@ -1,13 +1,13 @@
-import { utilities, type InputType, type YType } from '../../index.js'
-import { type RsPredictor } from '../../estimator.js'
-import { DataFrame } from '../../data_frame.js'
+import { utilities, type InputType, type YType } from '../index.js'
+import { type RsPredictor } from '../estimator.js'
+import { DataFrame } from '../data_frame.js'
 import {
   RandomForestClassifier as LibRandomForestClassifier,
   RandomForestClassifierBuilder,
   type DenseMatrixType,
   type SplitCriterion,
   type TypedArrayType,
-} from '../../core-bindings/index.js'
+} from '../core-bindings/index.js'
 
 interface IRandomForestClassifierBaseParameters {
   splitCriterion?: SplitCriterion
@@ -24,11 +24,6 @@ interface IRandomForestClassifierParameters extends IRandomForestClassifierBaseP
   fitDataXType?: DenseMatrixType
   fitDataYType?: TypedArrayType
   columns?: string[]
-}
-
-interface RandomForestClassifierSerializedData {
-  config: IRandomForestClassifierParameters
-  data: Buffer
 }
 
 interface HasColumns {
@@ -98,26 +93,14 @@ class RandomForestClassifier implements HasColumns {
     return this.estimator!.predict(matrixRs).field0
   }
 
-  serialize(): RandomForestClassifierSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibRandomForestClassifier.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: RandomForestClassifierSerializedData): RandomForestClassifier {
-    let instance = new RandomForestClassifier(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): RandomForestClassifier {
+    let instance = new RandomForestClassifier()
+    instance.estimator = LibRandomForestClassifier.deserialize(data)
     instance._isFitted = true
     return instance
   }
