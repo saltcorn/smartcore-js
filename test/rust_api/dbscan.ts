@@ -5,7 +5,9 @@ const { DBSCANBuilder, DBSCAN, DistanceVariantType } = coreBindings
 const { loadBoston, loadDigitsI32 } = dataset
 const { trainTestSplit } = modelSelection
 const { accuracyScore } = metrics
-const TIMEOUT = 10000
+
+const isARM = process.arch === 'arm' || process.arch === 'arm64'
+const TIMEOUT = isARM ? 20000 : 10000
 
 export default () => {
   it('create', () => {
