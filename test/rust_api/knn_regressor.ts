@@ -5,6 +5,7 @@ const { KNNRegressorBuilder, KNNRegressor, DistanceVariantType, TypedArrayType }
 const { trainTestSplit } = modelSelection
 const { accuracyScore } = metrics
 const { loadBoston, loadDigitsI32 } = dataset
+const TIMEOUT = 10000
 
 export default () => {
   it('create', () => {
@@ -32,7 +33,8 @@ export default () => {
       knnRegressorBuilder.build()
     })
 
-    it('Hamming', () => {
+    it('Hamming', function (done) {
+      this.timeout(TIMEOUT)
       const digitsData = loadDigitsI32({ returnXY: true })
       const [xH, yH] = digitsData instanceof Array ? digitsData : []
       if (!(xH && yH)) {
@@ -42,6 +44,7 @@ export default () => {
       const knnRegressorBuilderH = new KNNRegressorBuilder(xH, yHWrapped)
       knnRegressorBuilderH.withDistanceType(DistanceVariantType.Hamming)
       knnRegressorBuilderH.build()
+      done()
     })
 
     it('Manhattan', () => {

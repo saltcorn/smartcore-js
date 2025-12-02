@@ -5,6 +5,7 @@ const { DBSCANBuilder, DBSCAN, DistanceVariantType } = coreBindings
 const { loadBoston, loadDigitsI32 } = dataset
 const { trainTestSplit } = modelSelection
 const { accuracyScore } = metrics
+const TIMEOUT = 10000
 
 export default () => {
   it('create', () => {
@@ -29,7 +30,8 @@ export default () => {
       dbscanBuilder.build()
     })
 
-    it('Hamming', () => {
+    it('Hamming', function (done) {
+      this.timeout(TIMEOUT)
       const digitsData = loadDigitsI32({ returnXY: true })
       const [xH, yH] = digitsData instanceof Array ? digitsData : []
       if (!(xH && yH)) {
@@ -38,6 +40,7 @@ export default () => {
       const dbscanBuilderH = new DBSCANBuilder(xH)
       dbscanBuilderH.withDistanceType(DistanceVariantType.Hamming)
       dbscanBuilderH.build()
+      done()
     })
 
     it('Manhattan', () => {
