@@ -1,10 +1,10 @@
-import { LassoBuilder, Lasso } from '../../dist/core-bindings/index.js'
-import { loadIris } from '../../dist/dataset/index.js'
 import assert from 'assert'
-import { trainTestSplit } from '../../dist/model_selection/index.js'
-import { accuracyScore } from '../../dist/metrics/index.js'
-import { utilities } from '../../src-js/index.js'
-import { TypedArrayType } from '../../src-js/core-bindings/index.js'
+import { coreBindings, modelSelection, metrics, utilities, dataset } from '../../dist/index.js'
+
+const { LassoBuilder, Lasso, TypedArrayType } = coreBindings
+const { trainTestSplit } = modelSelection
+const { accuracyScore } = metrics
+const { loadIris } = dataset
 
 export default () => {
   it('create', () => {

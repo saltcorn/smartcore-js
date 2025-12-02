@@ -1,7 +1,9 @@
-import { OneHotEncoderBuilder, OneHotEncoder } from '../../dist/core-bindings/index.js'
-import { loadDigits } from '../../dist/dataset/index.js'
 import assert from 'assert'
-import { trainTestSplit } from '../../dist/model_selection/index.js'
+import { coreBindings, dataset, modelSelection } from '../../dist/index.js'
+
+const { OneHotEncoderBuilder } = coreBindings
+const { loadDigits } = dataset
+const { trainTestSplit } = modelSelection
 
 export default () => {
   it('create', () => {

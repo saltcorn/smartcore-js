@@ -1,10 +1,11 @@
-import { CategoricalNBBuilder, CategoricalNB, DenseMatrixType, TypedArrayType } from '../../dist/core-bindings/index.js'
 import assert from 'assert'
-import { trainTestSplit } from '../../dist/model_selection/index.js'
-import { accuracyScore } from '../../dist/metrics/index.js'
+import { coreBindings, modelSelection, metrics, dataFrame, utilities } from '../../dist/index.js'
 import { readJSONFile } from '../helpers.js'
-import { DataFrame } from '../../dist/data_frame.js'
-import { utilities } from '../../dist/index.js'
+
+const { CategoricalNBBuilder, CategoricalNB, DenseMatrixType, TypedArrayType } = coreBindings
+const { trainTestSplit } = modelSelection
+const { accuracyScore } = metrics
+const { DataFrame } = dataFrame
 
 const parsedJson = readJSONFile('e-commerce-enhanced.json')
 

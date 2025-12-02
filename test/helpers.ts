@@ -1,7 +1,7 @@
-import { dataFrame } from '../src-js/index.js'
 import fs from 'fs'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
+import { dataFrame } from '../dist/index.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)

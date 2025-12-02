@@ -1,8 +1,10 @@
-import { KMeansBuilder, KMeans } from '../../dist/core-bindings/index.js'
-import { loadBoston } from '../../dist/dataset/index.js'
 import assert from 'assert'
-import { trainTestSplit } from '../../dist/model_selection/index.js'
-import { accuracyScore } from '../../dist/metrics/index.js'
+import { coreBindings, dataset, modelSelection, metrics } from '../../dist/index.js'
+
+const { KMeansBuilder, KMeans } = coreBindings
+const { loadBoston } = dataset
+const { trainTestSplit } = modelSelection
+const { accuracyScore } = metrics
 
 export default () => {
   it('create', () => {

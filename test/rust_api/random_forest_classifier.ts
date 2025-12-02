@@ -1,10 +1,10 @@
-import { RandomForestClassifierBuilder, RandomForestClassifier } from '../../dist/core-bindings/index.js'
-import { loadIris } from '../../dist/dataset/index.js'
 import assert from 'assert'
-import { trainTestSplit } from '../../dist/model_selection/index.js'
-import { accuracyScore } from '../../dist/metrics/index.js'
-import { utilities } from '../../src-js/index.js'
-import { TypedArrayType } from '../../src-js/core-bindings/index.js'
+import { coreBindings, dataset, modelSelection, metrics, utilities } from '../../dist/index.js'
+
+const { RandomForestClassifierBuilder, RandomForestClassifier, TypedArrayType } = coreBindings
+const { loadIris } = dataset
+const { trainTestSplit } = modelSelection
+const { accuracyScore } = metrics
 
 export default () => {
   it('create', () => {

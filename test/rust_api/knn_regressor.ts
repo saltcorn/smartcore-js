@@ -1,14 +1,10 @@
-import {
-  KNNRegressorBuilder,
-  KNNRegressor,
-  DistanceVariantType,
-  TypedArrayType,
-} from '../../dist/core-bindings/index.js'
 import assert from 'assert'
-import { trainTestSplit } from '../../dist/model_selection/index.js'
-import { accuracyScore } from '../../dist/metrics/index.js'
-import { utilities } from '../../dist/index.js'
-import { loadBoston, loadDigitsI32 } from '../../dist/dataset/index.js'
+import { coreBindings, modelSelection, metrics, utilities, dataset } from '../../dist/index.js'
+
+const { KNNRegressorBuilder, KNNRegressor, DistanceVariantType, TypedArrayType } = coreBindings
+const { trainTestSplit } = modelSelection
+const { accuracyScore } = metrics
+const { loadBoston, loadDigitsI32 } = dataset
 
 export default () => {
   it('create', () => {

@@ -13,16 +13,10 @@ import {
   naiveBayes,
   neighbors,
   dataFrame,
-} from '../src-js/index.js'
-import {
-  DenseMatrixType,
-  DistanceVariantType,
-  HammingI32,
-  MahalanobisF64,
-  ManhattanF64,
-  MinkowskiF64,
-} from '../src-js/core-bindings/index.js'
-import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
+  coreBindings,
+} from '../dist/index.js'
+const { DenseMatrixType, DistanceVariantType } = coreBindings
+import { readJSONFile } from './helpers.js'
 
 let { LogisticRegression, RidgeRegression, LinearRegression, ElasticNet, Lasso } = linearModel
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble
@@ -43,7 +37,7 @@ const df = new DataFrame(parsedJson, { exclude: ['transaction_id', 'customer_id'
 
 describe('Serialize + Deserialize', () => {
   it('StandardScaler', () => {
-    const ss = new StandardScaler({ fitDataXType: 'F64' as DenseMatrixType })
+    const ss = new StandardScaler({ fitDataXType: DenseMatrixType.F64 })
     const irisData = loadIris({ returnXY: true })
     if (!(irisData instanceof Array)) {
       assert.fail("Expected 'loadIris' to return an Array")

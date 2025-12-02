@@ -1,8 +1,10 @@
-import { DBSCANBuilder, DBSCAN, DistanceVariantType } from '../../dist/core-bindings/index.js'
-import { loadBoston, loadDigitsI32 } from '../../dist/dataset/index.js'
 import assert from 'assert'
-import { trainTestSplit } from '../../dist/model_selection/index.js'
-import { accuracyScore } from '../../dist/metrics/index.js'
+import { coreBindings, dataset, modelSelection, metrics } from '../../dist/index.js'
+
+const { DBSCANBuilder, DBSCAN, DistanceVariantType } = coreBindings
+const { loadBoston, loadDigitsI32 } = dataset
+const { trainTestSplit } = modelSelection
+const { accuracyScore } = metrics
 
 export default () => {
   it('create', () => {
@@ -23,7 +25,7 @@ export default () => {
 
     it('Euclidian', () => {
       const dbscanBuilder = new DBSCANBuilder(x)
-      dbscanBuilder.distanceType = DistanceVariantType.Euclidian
+      dbscanBuilder.withDistanceType(DistanceVariantType.Euclidian)
       dbscanBuilder.build()
     })
 
@@ -34,27 +36,27 @@ export default () => {
         assert.fail('Expected both xH and yH to be defined')
       }
       const dbscanBuilderH = new DBSCANBuilder(xH)
-      dbscanBuilderH.distanceType = DistanceVariantType.Hamming
+      dbscanBuilderH.withDistanceType(DistanceVariantType.Hamming)
       dbscanBuilderH.build()
     })
 
     it('Manhattan', () => {
       const dbscanBuilder = new DBSCANBuilder(x)
-      dbscanBuilder.distanceType = DistanceVariantType.Manhattan
+      dbscanBuilder.withDistanceType(DistanceVariantType.Manhattan)
       dbscanBuilder.build()
     })
 
     it('Mahalanobis', () => {
       const dbscanBuilder = new DBSCANBuilder(x)
-      dbscanBuilder.distanceType = DistanceVariantType.Mahalanobis
-      dbscanBuilder.data = x
+      dbscanBuilder.withDistanceType(DistanceVariantType.Mahalanobis)
+      dbscanBuilder.withData(x)
       dbscanBuilder.build()
     })
 
     it('Minkowski', () => {
       const dbscanBuilder = new DBSCANBuilder(x)
-      dbscanBuilder.distanceType = DistanceVariantType.Minkowski
-      dbscanBuilder.p = 1
+      dbscanBuilder.withDistanceType(DistanceVariantType.Minkowski)
+      dbscanBuilder.withP(1)
       dbscanBuilder.build()
     })
   })

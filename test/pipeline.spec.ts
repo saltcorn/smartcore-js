@@ -12,15 +12,10 @@ import {
   naiveBayes,
   neighbors,
   dataFrame,
-} from '../src-js/index.js'
-import {
-  DistanceVariantType,
-  HammingI32,
-  MahalanobisF64,
-  ManhattanF64,
-  MinkowskiF64,
-} from '../src-js/core-bindings/index.js'
-import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
+  coreBindings,
+} from '../dist/index.js'
+const { DistanceVariantType } = coreBindings
+import { readJSONFile } from './helpers.js'
 
 let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble

@@ -1,7 +1,9 @@
-import { SVDBuilder, SVD } from '../../dist/core-bindings/index.js'
-import { loadBoston } from '../../dist/dataset/index.js'
 import assert from 'assert'
-import { trainTestSplit } from '../../dist/model_selection/index.js'
+import { coreBindings, dataset, modelSelection } from '../../dist/index.js'
+
+const { SVDBuilder, SVD } = coreBindings
+const { loadBoston } = dataset
+const { trainTestSplit } = modelSelection
 
 export default () => {
   it('create', () => {
