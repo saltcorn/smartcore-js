@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { coreBindings, modelSelection, metrics, dataset, utilities } from '../../dist/index.js'
+import { coreBindings, modelSelection, metrics, dataset, utilities } from '../../src-js/index.js'
 
 const { KNNClassifierBuilder, KNNClassifier, DistanceVariantType, TypedArrayType } = coreBindings
 const { trainTestSplit } = modelSelection

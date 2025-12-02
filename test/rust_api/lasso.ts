@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { coreBindings, modelSelection, metrics, utilities, dataset } from '../../dist/index.js'
+import { coreBindings, modelSelection, metrics, utilities, dataset } from '../../src-js/index.js'
 
 const { LassoBuilder, Lasso, TypedArrayType } = coreBindings
 const { trainTestSplit } = modelSelection

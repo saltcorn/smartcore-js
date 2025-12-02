@@ -1,6 +1,6 @@
 import assert from 'assert'
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
-import { dataFrame } from '../dist/index.js'
+import { dataFrame } from '../src-js/index.js'
 
 const { DataFrame } = dataFrame
 type DataValue = dataFrame.DataValue

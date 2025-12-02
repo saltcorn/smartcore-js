@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { coreBindings, dataset, modelSelection, metrics } from '../../dist/index.js'
+import { coreBindings, dataset, modelSelection, metrics } from '../../src-js/index.js'
 
 const { DBSCANBuilder, DBSCAN, DistanceVariantType } = coreBindings
 const { loadBoston, loadDigitsI32 } = dataset

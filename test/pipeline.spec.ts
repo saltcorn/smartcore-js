@@ -13,9 +13,10 @@ import {
   neighbors,
   dataFrame,
   coreBindings,
-} from '../dist/index.js'
-const { DistanceVariantType } = coreBindings
+} from '../src-js/index.js'
 import { readJSONFile } from './helpers.js'
+
+const { DistanceVariantType } = coreBindings
 
 let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
 let { RandomForestClassifier, RandomForestRegressor, ExtraTreesRegressor } = ensemble

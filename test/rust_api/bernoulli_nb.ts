@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { coreBindings, metrics, modelSelection, dataset, utilities } from '../../dist/index.js'
+import { coreBindings, metrics, modelSelection, dataset, utilities } from '../../src-js/index.js'
 
 const { BernoulliNBBuilder, BernoulliNB, TypedArrayType } = coreBindings
 const { loadIris } = dataset

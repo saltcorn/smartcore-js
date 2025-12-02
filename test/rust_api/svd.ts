@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { coreBindings, dataset, modelSelection } from '../../dist/index.js'
+import { coreBindings, dataset, modelSelection } from '../../src-js/index.js'
 
 const { SVDBuilder, SVD } = coreBindings
 const { loadBoston } = dataset

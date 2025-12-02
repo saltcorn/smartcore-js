@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { coreBindings, modelSelection, metrics, dataFrame, utilities } from '../../dist/index.js'
+import { coreBindings, modelSelection, metrics, dataFrame, utilities } from '../../src-js/index.js'
 import { readJSONFile } from '../helpers.js'
 
 const { CategoricalNBBuilder, CategoricalNB, DenseMatrixType, TypedArrayType } = coreBindings

@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { coreBindings, dataset, modelSelection, metrics } from '../../dist/index.js'
+import { coreBindings, dataset, modelSelection, metrics } from '../../src-js/index.js'
 
 const { KMeansBuilder, KMeans } = coreBindings
 const { loadBoston } = dataset

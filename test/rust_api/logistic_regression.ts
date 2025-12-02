@@ -1,5 +1,5 @@
 import assert from 'assert'
-import { coreBindings, dataset, modelSelection, metrics, utilities } from '../../dist/index.js'
+import { coreBindings, dataset, modelSelection, metrics, utilities } from '../../src-js/index.js'
 
 const { LogisticRegressionBuilder, LogisticRegression, TypedArrayType } = coreBindings
 const { loadIris } = dataset
