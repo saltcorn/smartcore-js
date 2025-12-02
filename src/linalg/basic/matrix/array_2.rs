@@ -6,7 +6,10 @@ use smartcore::linalg::basic::{
   matrix::DenseMatrix as LibDenseMatrix,
 };
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
+use crate::linalg::basic::matrix::{
+  DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32,
+  DenseMatrixU64, DenseMatrixU8,
+};
 
 macro_rules! boxed_array_struct_impls {
   ( $ty:ty, $ty_matrix:ty ) => {
@@ -39,8 +42,13 @@ macro_rules! boxed_array_struct_impls {
   };
 }
 
-boxed_array_struct_impls! { f32, DenseMatrixF64 }
+boxed_array_struct_impls! { f32, DenseMatrixF32 }
 boxed_array_struct_impls! { f64, DenseMatrixF64 }
+boxed_array_struct_impls! { i32, DenseMatrixI32 }
+boxed_array_struct_impls! { u32, DenseMatrixU32 }
+boxed_array_struct_impls! { u8, DenseMatrixU8 }
+boxed_array_struct_impls! { u16, DenseMatrixU16 }
+boxed_array_struct_impls! { i64, DenseMatrixI64 }
 
 macro_rules! dense_matrix_array_2_impl {
   ( $x_js:ty, $x_rs:ty, $inner_name:ty, $xs_js:ty ) => {
@@ -103,11 +111,6 @@ macro_rules! dense_matrix_array_2_impl {
             #[napi]
             pub fn eye(size: i64) -> Self {
                 Self::from_inner(LibDenseMatrix::<$x_rs>::eye(size as usize))
-            }
-
-            #[napi]
-            pub fn rand(nrows: i64, ncols: i64) -> Self {
-                Self::from_inner(LibDenseMatrix::<$x_rs>::rand(nrows as usize, ncols as usize))
             }
 
             #[napi]
@@ -243,21 +246,6 @@ macro_rules! dense_matrix_array_2_impl {
             }
 
             #[napi]
-            pub fn abs(&self) -> Self {
-                Self::from_inner(self.inner.abs())
-            }
-
-            #[napi]
-            pub fn neg(&self) -> Self {
-                Self::from_inner(self.inner.neg())
-            }
-
-            #[napi]
-            pub fn pow(&self, p: $x_js) -> Self {
-                Self::from_inner(self.inner.pow(p as $x_rs))
-            }
-
-            #[napi]
             pub fn column_mean(&self) -> Float64Array {
                 let mean = self.inner.column_mean();
                 Float64Array::new(mean)
@@ -266,6 +254,34 @@ macro_rules! dense_matrix_array_2_impl {
             #[napi]
             pub fn copy_col_as_vec(&self) -> Self {
                 unimplemented!()
+            }
+        }
+    }
+  };
+}
+
+dense_matrix_array_2_impl! { f64, f64, DenseMatrixF64, Float64Array }
+dense_matrix_array_2_impl! { f64, f32, DenseMatrixF32, Float32Array}
+dense_matrix_array_2_impl! { i32, i32, DenseMatrixI32, Int32Array}
+dense_matrix_array_2_impl! { u32, u32, DenseMatrixU32, Uint32Array}
+dense_matrix_array_2_impl! { u8, u8, DenseMatrixU8, Uint8Array}
+dense_matrix_array_2_impl! { u16, u16, DenseMatrixU16, Uint16Array}
+dense_matrix_array_2_impl! { i64, i64, DenseMatrixI64, BigInt64Array}
+// dense_matrix_array_2_impl! { BigInt, u64, DenseMatrixU64, BigUint64Array}
+
+macro_rules! dense_matrix_array_2_impl_real_numbers {
+  ( $x_js:ty, $x_rs:ty, $inner_name:ty, $xs_js:ty ) => {
+    paste! {
+        #[napi]
+        impl $inner_name {
+            #[napi]
+            pub fn rand(nrows: i64, ncols: i64) -> Self {
+                Self::from_inner(LibDenseMatrix::<$x_rs>::rand(nrows as usize, ncols as usize))
+            }
+
+            #[napi]
+            pub fn pow(&self, p: $x_js) -> Self {
+                Self::from_inner(self.inner.pow(p as $x_rs))
             }
 
             #[napi]
@@ -277,4 +293,29 @@ macro_rules! dense_matrix_array_2_impl {
   };
 }
 
-dense_matrix_array_2_impl! { f64, f64, DenseMatrixF64, Float64Array }
+dense_matrix_array_2_impl_real_numbers! { f64, f64, DenseMatrixF64, Float64Array }
+dense_matrix_array_2_impl_real_numbers! { f64, f32, DenseMatrixF32, Float32Array }
+
+macro_rules! dense_matrix_array_2_impl_signed_numbers {
+  ( $x_js:ty, $x_rs:ty, $inner_name:ty, $xs_js:ty ) => {
+    paste! {
+        #[napi]
+        impl $inner_name {
+            #[napi]
+            pub fn abs(&self) -> Self {
+                Self::from_inner(self.inner.abs())
+            }
+
+            #[napi]
+            pub fn neg(&self) -> Self {
+                Self::from_inner(self.inner.neg())
+            }
+        }
+    }
+  };
+}
+
+dense_matrix_array_2_impl_signed_numbers! { f64, f64, DenseMatrixF64, Float64Array }
+dense_matrix_array_2_impl_signed_numbers! { f64, f32, DenseMatrixF32, Float32Array }
+dense_matrix_array_2_impl_signed_numbers! { i32, i32, DenseMatrixI32, Int32Array}
+dense_matrix_array_2_impl_signed_numbers! { i64, i64, DenseMatrixI64, BigInt64Array}

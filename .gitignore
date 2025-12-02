@@ -264,3 +264,8 @@ out
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+
+# Auto-generated build files
+dist/
+dist-cjs/

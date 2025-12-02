@@ -155,6 +155,8 @@ jobs:
         shell: bash
       - name: Install dependencies
         run: yarn install
+      - name: Deduplicate packages
+        run: yarn dedupe
       - name: Build
         run: ${{ matrix.settings.build }}
         shell: bash
@@ -204,6 +206,7 @@ jobs:
             env
             freebsd-version
             yarn install
+            yarn dedupe
             yarn build
             yarn build:cjs
             yarn build:js
@@ -250,6 +253,8 @@ jobs:
           architecture: ${{ matrix.settings.architecture }}
       - name: Install dependencies
         run: yarn install
+      - name: Deduplicate packages
+        run: yarn dedupe
       - name: Download artifacts
         uses: actions/download-artifact@v5
         with:
@@ -308,6 +313,7 @@ jobs:
           yarn config set --json supportedArchitectures.cpu '["current", "arm64", "x64", "arm"]'
           yarn config set --json supportedArchitectures.libc '["current", "musl", "gnu"]'
           yarn install
+          yarn dedupe
       - name: Download artifacts
         uses: actions/download-artifact@v5
         with:
@@ -345,6 +351,7 @@ jobs:
         run: |
           yarn config set supportedArchitectures.cpu "wasm32"
           yarn install
+          yarn dedupe
       - name: Download artifacts
         uses: actions/download-artifact@v5
         with:
@@ -378,6 +385,8 @@ jobs:
           cache: yarn
       - name: Install dependencies
         run: yarn install
+      - name: Deduplicate packages
+        run: yarn dedupe
       - name: Compile TypeScript code
         run: yarn build:js
       - name: create npm dirs

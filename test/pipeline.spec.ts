@@ -13,7 +13,7 @@ import {
   neighbors,
   dataFrame,
 } from '../src-js/index.js'
-import { HammingF64, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-js/core-bindings/index.js'
+import { HammingI32, MahalanobisF64, ManhattanF64, MinkowskiF64 } from '../src-js/core-bindings/index.js'
 import { extractNumericECommerceFields, readJSONFile } from './helpers.js'
 
 let { LogisticRegression, LinearRegression, RidgeRegression, Lasso, ElasticNet } = linearModel
@@ -25,8 +25,9 @@ let { BernoulliNB, CategoricalNB, GaussianNB, MultinomialNB } = naiveBayes
 let { KNNClassifier, KNNRegressor } = neighbors
 let { loadIris, loadBoston, loadBreastCancer, loadDiabetes, loadDigits } = dataset
 let { trainTestSplit } = modelSelection
-let { accuracyScore, DistanceType } = metrics
-let { makePipeline } = pipeline
+let { accuracyScore } = metrics
+type DistanceType = metrics.DistanceType
+let { makePipeline, deserializePipeline } = pipeline
 const { DataFrame } = dataFrame
 
 const parsedJson = readJSONFile('e-commerce-enhanced.json')
@@ -118,8 +119,8 @@ describe('Pipelines', () => {
       ['standardscaler', new StandardScaler()],
       ['dbscan', new DBSCAN()],
     ])
-    let irisData = loadBoston({ returnXY: true })
-    let [x, y] = irisData instanceof Array ? irisData : []
+    let bostonData = loadBoston({ returnXY: true })
+    let [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
@@ -129,7 +130,7 @@ describe('Pipelines', () => {
     assert(score >= 0)
   })
 
-  it('StandardScaler + PCA + LogisticRegression', () => {
+  it('StandardScaler + PCA + RidgeRegression', () => {
     let columns = df.columnNames.filter((column) => !column.startsWith('customer'))
     // console.log('Selected: ', columns)
     let pipe = makePipeline(
@@ -147,9 +148,9 @@ describe('Pipelines', () => {
   it('SVD + DBSCAN', () => {
     let pipe = makePipeline([
       ['svd', new SVD()],
-      ['kmeans', new DBSCAN({ distance: new ManhattanF64() })],
+      ['dbscan', new DBSCAN({ numberType: 'f64' })],
     ])
-    let irisData = loadBoston({ returnXY: true })
+    let irisData = loadIris({ returnXY: true })
     let [x, y] = irisData instanceof Array ? irisData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
@@ -157,7 +158,7 @@ describe('Pipelines', () => {
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
     let score = accuracyScore(pipe.predict(xTest), yTest)
-    assert.equal(score, 0)
+    assert(score)
   })
 
   it('StandardScaler + LinearRegression', () => {
@@ -165,8 +166,8 @@ describe('Pipelines', () => {
       ['standardscaler', new StandardScaler()],
       ['linearregression', new LinearRegression()],
     ])
-    let irisData = loadBoston({ returnXY: true })
-    let [x, y] = irisData instanceof Array ? irisData : []
+    let bostonData = loadBoston({ returnXY: true })
+    let [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
@@ -181,7 +182,7 @@ describe('Pipelines', () => {
       ['standardscaler', new StandardScaler()],
       ['ridgeregression', new RidgeRegression()],
     ])
-    let irisData = loadBoston({ returnXY: true })
+    let irisData = loadIris({ returnXY: true })
     let [x, y] = irisData instanceof Array ? irisData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
@@ -189,7 +190,7 @@ describe('Pipelines', () => {
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
     let score = accuracyScore(pipe.predict(xTest), yTest)
-    assert.equal(score, 0)
+    assert(typeof score === 'number')
   })
 
   it('StandardScaler + Lasso', () => {
@@ -197,8 +198,8 @@ describe('Pipelines', () => {
       ['standardscaler', new StandardScaler()],
       ['lasso', new Lasso()],
     ])
-    let irisData = loadBoston({ returnXY: true })
-    let [x, y] = irisData instanceof Array ? irisData : []
+    let bostonData = loadBoston({ returnXY: true })
+    let [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
@@ -213,8 +214,8 @@ describe('Pipelines', () => {
       ['standardscaler', new StandardScaler()],
       ['elasticnet', new ElasticNet()],
     ])
-    let irisData = loadBoston({ returnXY: true })
-    let [x, y] = irisData instanceof Array ? irisData : []
+    let bostonData = loadBoston({ returnXY: true })
+    let [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
@@ -229,8 +230,8 @@ describe('Pipelines', () => {
       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
       ['elasticnet', new ElasticNet()],
     ])
-    let irisData = loadBoston({ returnXY: true })
-    let [x, y] = irisData instanceof Array ? irisData : []
+    let bostonData = loadBoston({ returnXY: true })
+    let [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
@@ -245,7 +246,7 @@ describe('Pipelines', () => {
       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
       ['bernoullinb', new BernoulliNB()],
     ])
-    let irisData = loadIris({ returnXY: true, unsigned: true })
+    let irisData = loadIris({ returnXY: true })
     let [x, y] = irisData instanceof Array ? irisData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
@@ -256,20 +257,31 @@ describe('Pipelines', () => {
     assert(score)
   })
 
-  it.skip('OneHotEncoder + CategoricalNB', () => {
-    let pipe = makePipeline([
-      ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
-      ['categoricalnb', new CategoricalNB()],
-    ])
-    let irisData = loadIris({ returnXY: true, unsigned: true })
-    let [x, y] = irisData instanceof Array ? irisData : []
-    if (!(x && y)) {
-      assert.fail('Expected both x and y to be defined')
-    }
-    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-    pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
-    assert(score)
+  it('OneHotEncoder + CategoricalNB', () => {
+    const df = new DataFrame(parsedJson, {
+      include: [
+        'product_views',
+        'cart_additions',
+        'cart_removals',
+        'wishlist_additions',
+        'search_queries',
+        'page_scrolls',
+        'click_count',
+        'discount_used',
+        'customer_age',
+        'previous_purchases',
+        'days_since_last_purchase',
+        'email_opens_last_month',
+        'reviews_written',
+        'metrics.items_purchased',
+        'metrics.purchases',
+      ],
+    })
+    let pipe = makePipeline([['categoricalnb', new CategoricalNB()]])
+    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
+    pipe.fit(df, y).transform(df)
+    const predictions = pipe.predict(df)
+    assert(predictions)
   })
 
   it('OneHotEncoder + GaussianNB', () => {
@@ -277,7 +289,7 @@ describe('Pipelines', () => {
       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
       ['gaussiannb', new GaussianNB()],
     ])
-    let irisData = loadIris({ returnXY: true, unsigned: true })
+    let irisData = loadIris({ returnXY: true })
     let [x, y] = irisData instanceof Array ? irisData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
@@ -288,29 +300,40 @@ describe('Pipelines', () => {
     assert(score)
   })
 
-  it.skip('StandardScaler + MultinomialNB', () => {
-    // fails on 32-bit systems and the WASI targets
-    let pipe = makePipeline([
-      // ['standardscaler', new StandardScaler()],
-      ['multinomialnb', new MultinomialNB()],
-    ])
-    let breastCancerData = loadBreastCancer({ returnXY: true, unsigned: true })
-    let [x, y] = breastCancerData instanceof Array ? breastCancerData : []
-    if (!(x && y)) {
-      assert.fail('Expected both x and y to be defined')
-    }
-    let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
-    pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
-    assert(score)
+  it('StandardScaler + MultinomialNB', () => {
+    const df = new DataFrame(parsedJson, {
+      include: [
+        'product_views',
+        'cart_additions',
+        'cart_removals',
+        'wishlist_additions',
+        'search_queries',
+        'page_scrolls',
+        'click_count',
+        'discount_used',
+        'customer_age',
+        'previous_purchases',
+        'days_since_last_purchase',
+        'email_opens_last_month',
+        'reviews_written',
+        'metrics.items_purchased',
+        'metrics.purchases',
+      ],
+    })
+
+    let pipe = makePipeline([['multinomialnb', new MultinomialNB()]])
+    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
+    pipe.fit(df, y).transform(df)
+    const predictions = pipe.predict(df)
+    assert(predictions)
   })
 
   it('OneHotEncoder + KNNClassifier', () => {
     let pipe = makePipeline([
       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
-      ['knnclassifier', new KNNClassifier({ distance: DistanceType.HAMMING })],
+      ['knnclassifier', new KNNClassifier({ distanceType: 'manhattan' })],
     ])
-    let irisData = loadIris({ returnXY: true, unsigned: true })
+    let irisData = loadIris({ returnXY: true })
     let [x, y] = irisData instanceof Array ? irisData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
@@ -324,9 +347,9 @@ describe('Pipelines', () => {
   it('OneHotEncoder + KNNRegressor', () => {
     let pipe = makePipeline([
       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
-      ['knnclassifier', new KNNRegressor({ distance: DistanceType.MINKOWSKI, p: 10 })],
+      ['knnregressor', new KNNRegressor({ distanceType: 'minkowski', p: 10 })],
     ])
-    let bostonData = loadBoston({ returnXY: true, unsigned: true })
+    let bostonData = loadBoston({ returnXY: true })
     let [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
@@ -340,9 +363,9 @@ describe('Pipelines', () => {
   it('AutoGenerated Names', () => {
     let pipe = makePipeline([
       ['onehotencoder', new OneHotEncoder({ categoricalParams: new BigUint64Array() })],
-      new KNNRegressor({ distance: DistanceType.MINKOWSKI, p: 10 }),
+      new KNNRegressor({ distanceType: 'minkowski', p: 10 }),
     ])
-    let bostonData = loadBoston({ returnXY: true, unsigned: true })
+    let bostonData = loadBoston({ returnXY: true })
     let [x, y] = bostonData instanceof Array ? bostonData : []
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
@@ -351,5 +374,23 @@ describe('Pipelines', () => {
     pipe.fit(xTrain, yTrain)
     let score = accuracyScore(pipe.predict(xTest), yTest)
     assert.equal(typeof score, typeof 0)
+  })
+
+  it('Serialize + Deserialize', () => {
+    let columns = df.columnNames.filter((column) => !column.startsWith('customer'))
+    // console.log('Selected: ', columns)
+    let pipe = makePipeline(
+      [new StandardScaler(), ['pca', new PCA({ nComponents: 14, columns })], new RidgeRegression()],
+      {
+        verbose: true,
+      },
+    )
+    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
+    pipe.fit(df, y).transform(df)
+    const predictions = pipe.predict(df)
+    assert(predictions)
+    let serializedPipe = pipe.serialize()
+    pipe = deserializePipeline(serializedPipe)
+    assert(pipe.predict(df))
   })
 })

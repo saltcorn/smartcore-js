@@ -59,3 +59,4 @@ macro_rules! logistic_regression_parameters_struct {
 }
 
 logistic_regression_parameters_struct! {f64}
+logistic_regression_parameters_struct! {f32}

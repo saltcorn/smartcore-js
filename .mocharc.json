@@ -1,8 +1,6 @@
 {
-  "require": "ts-node/register",
-  "extension": ["ts", "tsx"],
+  "require": ["tsx/cjs"],
+  "extensions": ["ts"],
   "spec": ["test/**/*.spec.ts"],
-  "ts-node": {
-    "project": "tsconfig.test.json"
-  }
+  "node-option": ["import=tsx"]
 }

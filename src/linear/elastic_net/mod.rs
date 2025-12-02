@@ -12,41 +12,46 @@ use smartcore::{
   linear::elastic_net::ElasticNet as LibElasticNet,
 };
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 pub use parameters::ElasticNetParameters;
 
 macro_rules! elastic_net_struct {
-  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty ) => {
+  (
+    feature_type: $feat:ty,
+    predict_output_type: $id:ty,
+    matrix_type: $matrix:ty,
+    array_type: $array:ty
+  ) => {
     paste! {
-        #[napi(js_name=""[<ElasticNet $x:upper $y_mod $y:upper>]"")]
+        #[napi(js_name=""[<ElasticNet $feat:upper $id:upper>]"")]
         #[derive(Debug)]
-        pub struct [<ElasticNet $x:upper $y_mod $y:upper>] {
-            inner: LibElasticNet<$x, $y, DenseMatrix<$x>, Vec<$y>>,
+        pub struct [<ElasticNet $feat:upper $id:upper>] {
+            inner: LibElasticNet<$feat, $id, DenseMatrix<$feat>, Vec<$id>>,
         }
 
-        impl Default for [<ElasticNet $x:upper $y_mod $y:upper>] {
+        impl Default for [<ElasticNet $feat:upper $id:upper>] {
             fn default() -> Self {
                 Self {
-                    inner: LibElasticNet::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new(),
+                    inner: LibElasticNet::<$feat, $id, DenseMatrix<$feat>, Vec<$id>>::new(),
                 }
             }
         }
 
         #[napi]
-        impl [<ElasticNet $x:upper $y_mod $y:upper>] {
+        impl [<ElasticNet $feat:upper $id:upper>] {
             #[napi(constructor)]
             pub fn new() -> Self {
                 Self::default()
             }
 
-            pub fn new_inner() -> LibElasticNet<$x, $y, DenseMatrix<$x>, Vec<$y>> {
-                LibElasticNet::<$x, $y, DenseMatrix<$x>, Vec<$y>>::new()
+            pub fn new_inner() -> LibElasticNet<$feat, $id, DenseMatrix<$feat>, Vec<$id>> {
+                LibElasticNet::<$feat, $id, DenseMatrix<$feat>, Vec<$id>>::new()
             }
 
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &ElasticNetParameters) -> Result<Self> {
+            pub fn fit(x: &$matrix, y: $array, parameters: &ElasticNetParameters) -> Result<Self> {
                 let inner = LibElasticNet::fit(
-                    x as &DenseMatrix<$x>,
+                    x as &DenseMatrix<$feat>,
                     &y.to_vec(),
                     parameters.as_ref().to_owned(),
                 )
@@ -55,10 +60,10 @@ macro_rules! elastic_net_struct {
             }
 
             #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
+            pub fn predict(&self, x: &$matrix) -> Result<$array> {
                 let prediction_result = self
                 .inner
-                .predict(x as &DenseMatrix<$x>)
+                .predict(x as &DenseMatrix<$feat>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok(prediction_result.into())
             }
@@ -72,14 +77,14 @@ macro_rules! elastic_net_struct {
 
             #[napi(factory)]
             pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibElasticNet::<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
+                let inner = decode_from_slice::<LibElasticNet::<$feat, $id, DenseMatrix<$feat>, Vec<$id>>, _>(data.as_ref(), standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
                 Ok(Self { inner })
             }
         }
 
-        impl AsRef<LibElasticNet<$x, $y, DenseMatrix<$x>, Vec<$y>>> for [<ElasticNet $x:upper $y_mod $y:upper>] {
-            fn as_ref(&self) -> &LibElasticNet<$x, $y, DenseMatrix<$x>, Vec<$y>> {
+        impl AsRef<LibElasticNet<$feat, $id, DenseMatrix<$feat>, Vec<$id>>> for [<ElasticNet $feat:upper $id:upper>] {
+            fn as_ref(&self) -> &LibElasticNet<$feat, $id, DenseMatrix<$feat>, Vec<$id>> {
                 &self.inner
             }
         }
@@ -87,7 +92,82 @@ macro_rules! elastic_net_struct {
   };
 }
 
-elastic_net_struct! {f64, f64, "", DenseMatrixF64, Float64Array}
-elastic_net_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
-elastic_net_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}
-elastic_net_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}
+// [f32, f64]
+elastic_net_struct! {
+    feature_type: f32,
+    predict_output_type: f64,
+    matrix_type: DenseMatrixF32,
+    array_type: Float64Array
+}
+
+// [f32, f32]
+elastic_net_struct! {
+    feature_type: f32,
+    predict_output_type: f32,
+    matrix_type: DenseMatrixF32,
+    array_type: Float32Array
+}
+
+// [f32, i64]
+elastic_net_struct! {
+    feature_type: f32,
+    predict_output_type: i64,
+    matrix_type: DenseMatrixF32,
+    array_type: BigInt64Array
+}
+
+// [f32, u64]
+elastic_net_struct! {
+    feature_type: f32,
+    predict_output_type: u64,
+    matrix_type: DenseMatrixF32,
+    array_type: BigUint64Array
+}
+
+// [f32, i32]
+elastic_net_struct! {
+    feature_type: f32,
+    predict_output_type: i32,
+    matrix_type: DenseMatrixF32,
+    array_type: Int32Array
+}
+
+// [f64, f64]
+elastic_net_struct! {
+    feature_type: f64,
+    predict_output_type: f64,
+    matrix_type: DenseMatrixF64,
+    array_type: Float64Array
+}
+
+// [f64, f32]
+elastic_net_struct! {
+    feature_type: f64,
+    predict_output_type: f32,
+    matrix_type: DenseMatrixF64,
+    array_type: Float32Array
+}
+
+// [f64, i64]
+elastic_net_struct! {
+    feature_type: f64,
+    predict_output_type: i64,
+    matrix_type: DenseMatrixF64,
+    array_type: BigInt64Array
+}
+
+// [f64, u64]
+elastic_net_struct! {
+    feature_type: f64,
+    predict_output_type: u64,
+    matrix_type: DenseMatrixF64,
+    array_type: BigUint64Array
+}
+
+// [f64, i32]
+elastic_net_struct! {
+    feature_type: f64,
+    predict_output_type: i32,
+    matrix_type: DenseMatrixF64,
+    array_type: Int32Array
+}

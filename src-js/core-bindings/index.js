@@ -81,8 +81,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-android-arm64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-android-arm64/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -97,8 +97,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-android-arm-eabi')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-android-arm-eabi/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -109,7 +109,24 @@ function requireNative() {
     }
   } else if (process.platform === 'win32') {
     if (process.arch === 'x64') {
+      if (process.config?.variables?.shlib_suffix === 'dll.a' || process.config?.variables?.node_target_type === 'shared_library') {
+        try {
+        return require('./smartcore-js.win32-x64-gnu.node')
+      } catch (e) {
+        loadErrors.push(e)
+      }
       try {
+        const binding = require('@saltcorn/smartcore-js-win32-x64-gnu')
+        const bindingPackageVersion = require('@saltcorn/smartcore-js-win32-x64-gnu/package.json').version
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        }
+        return binding
+      } catch (e) {
+        loadErrors.push(e)
+      }
+      } else {
+        try {
         return require('./smartcore-js.win32-x64-msvc.node')
       } catch (e) {
         loadErrors.push(e)
@@ -117,12 +134,13 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-win32-x64-msvc')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-win32-x64-msvc/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
         loadErrors.push(e)
+      }
       }
     } else if (process.arch === 'ia32') {
       try {
@@ -133,8 +151,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-win32-ia32-msvc')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-win32-ia32-msvc/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -149,8 +167,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-win32-arm64-msvc')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-win32-arm64-msvc/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -168,8 +186,8 @@ function requireNative() {
     try {
       const binding = require('@saltcorn/smartcore-js-darwin-universal')
       const bindingPackageVersion = require('@saltcorn/smartcore-js-darwin-universal/package.json').version
-      if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-        throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+      if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+        throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
       }
       return binding
     } catch (e) {
@@ -184,8 +202,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-darwin-x64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-darwin-x64/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -200,8 +218,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-darwin-arm64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-darwin-arm64/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -220,8 +238,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-freebsd-x64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-freebsd-x64/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -236,8 +254,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-freebsd-arm64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-freebsd-arm64/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -257,8 +275,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-x64-musl')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-x64-musl/package.json').version
-          if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -273,8 +291,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-x64-gnu')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-x64-gnu/package.json').version
-          if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -291,8 +309,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-arm64-musl')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-arm64-musl/package.json').version
-          if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -307,8 +325,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-arm64-gnu')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-arm64-gnu/package.json').version
-          if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -325,8 +343,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-arm-musleabihf')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-arm-musleabihf/package.json').version
-          if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -341,8 +359,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-arm-gnueabihf')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-arm-gnueabihf/package.json').version
-          if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -359,8 +377,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-loong64-musl')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-loong64-musl/package.json').version
-          if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -375,8 +393,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-loong64-gnu')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-loong64-gnu/package.json').version
-          if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -393,8 +411,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-riscv64-musl')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-riscv64-musl/package.json').version
-          if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -409,8 +427,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-riscv64-gnu')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-riscv64-gnu/package.json').version
-          if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -426,8 +444,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-linux-ppc64-gnu')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-ppc64-gnu/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -442,8 +460,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-linux-s390x-gnu')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-s390x-gnu/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -462,8 +480,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-openharmony-arm64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-openharmony-arm64/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -478,8 +496,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-openharmony-x64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-openharmony-x64/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -494,8 +512,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-openharmony-arm')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-openharmony-arm/package.json').version
-        if (bindingPackageVersion !== '0.2.8' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.8 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -557,69 +575,160 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { AccuracyF64, Accuracyf64, AccuracyI64, Accuracyi64, AccuracyU64, Accuracyu64, AUCF64, AUCf64, BernoulliNBF64BigU64, BernoulliNBF64Parameters, Boston, BreastCancer, CategoricalNBBigU64, CategoricalNBParameters, CrossValidationResult, dataset, Dataset, DatasetF64F64, DatasetF64F64JsVecRef, DatasetF64I64, DatasetF64I64JsVecRef, DatasetF64U64, DBSCANF64EuclidianF64Parameters, DBSCANF64F64EuclidianF64, DBSCANF64F64HammingF64, DBSCANF64F64MahalanobisF64, DBSCANF64F64ManhattanF64, DBSCANF64F64MinkowskiF64, DBSCANF64HammingF64Parameters, DBSCANF64MahalanobisF64Parameters, DBSCANF64ManhattanF64Parameters, DBSCANF64MinkowskiF64Parameters, DecisionTreeClassifierI64I64, DecisionTreeClassifierParameters, DecisionTreeRegressorI64I64, DecisionTreeRegressorParameters, DenseMatrixF64, DenseMatrixI64, DenseMatrixU64, Diabetes, Digits, ElasticNetF64BigI64, ElasticNetF64BigU64, ElasticNetF64F64, ElasticNetF64I64, ElasticNetParameters, EuclidianF64, EuclidianI64, EuclidianU64, ExtraTreesRegressorF64BigI64, ExtraTreesRegressorF64BigU64, ExtraTreesRegressorF64F64, ExtraTreesRegressorF64I64, ExtraTreesRegressorParameters, F1F64, F1f64, GaussianNBF64BigU64, GaussianNBParameters, Generator, HammingF64, HammingI64, HammingU64, HCVScoreI64, HCVScorei64, HCVScoreU64, HCVScoreu64, Iris, JsBoxedArrayF32Ref, JsBoxedArrayF64Ref, JsDenseMatrixF64Ref, JsVecF64Ref, JsVecI64Ref, Kernels, KFold, KMeansF64BigI64, KMeansF64F64, KMeansF64I64, KMeansParameters, KNNClassifierF64BigI64EuclidianF64, KNNClassifierF64BigI64HammingF64, KNNClassifierF64BigI64MahalanobisF64, KNNClassifierF64BigI64ManhattanF64, KNNClassifierF64BigI64MinkowskiF64, KNNClassifierF64BigU64EuclidianF64, KNNClassifierF64BigU64HammingF64, KNNClassifierF64BigU64MahalanobisF64, KNNClassifierF64BigU64ManhattanF64, KNNClassifierF64BigU64MinkowskiF64, KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64HammingF64Parameters, KNNClassifierF64I64EuclidianF64, KNNClassifierF64I64HammingF64, KNNClassifierF64I64MahalanobisF64, KNNClassifierF64I64ManhattanF64, KNNClassifierF64I64MinkowskiF64, KNNClassifierF64MahalanobisF64Parameters, KNNClassifierF64ManhattanF64Parameters, KNNClassifierF64MinkowskiF64Parameters, KNNRegressorF64BigI64EuclidianF64, KNNRegressorF64BigI64HammingF64, KNNRegressorF64BigI64MahalanobisF64, KNNRegressorF64BigI64ManhattanF64, KNNRegressorF64BigI64MinkowskiF64, KNNRegressorF64BigU64EuclidianF64, KNNRegressorF64BigU64HammingF64, KNNRegressorF64BigU64MahalanobisF64, KNNRegressorF64BigU64ManhattanF64, KNNRegressorF64BigU64MinkowskiF64, KNNRegressorF64EuclidianF64Parameters, KNNRegressorF64F64EuclidianF64, KNNRegressorF64F64HammingF64, KNNRegressorF64F64MahalanobisF64, KNNRegressorF64F64ManhattanF64, KNNRegressorF64F64MinkowskiF64, KNNRegressorF64HammingF64Parameters, KNNRegressorF64I64EuclidianF64, KNNRegressorF64I64HammingF64, KNNRegressorF64I64MahalanobisF64, KNNRegressorF64I64ManhattanF64, KNNRegressorF64I64MinkowskiF64, KNNRegressorF64MahalanobisF64Parameters, KNNRegressorF64ManhattanF64Parameters, KNNRegressorF64MinkowskiF64Parameters, LassoF64BigI64, LassoF64BigU64, LassoF64F64, LassoF64I64, LassoParameters, LinearRegressionF64BigI64, LinearRegressionF64BigU64, LinearRegressionF64F64, LinearRegressionF64I64, LinearRegressionParameters, LogisticRegressionF64BigI64, LogisticRegressionF64BigU64, LogisticRegressionF64I64, LogisticRegressionParametersF64, MahalanobisF64, ManhattanF64, ManhattanI64, ManhattanU64, MeanAbsoluteErrorF64, MeanAbsoluteErrorf64, MeanSquareErrorF64, MeanSquareErrorf64, MinkowskiF64, MinkowskiI64, MinkowskiU64, MultinomialNBParameters, MultinomialNBU64BigU64, OneHotEncoderF64, OneHotEncoderParameters, PCAF64, PCAParameters, PrecisionF64, Precisionf64, R2F64, R2f64, R2I64, R2i64, R2U64, R2u64, RandomForestClassifierF64BigI64, RandomForestClassifierF64BigU64, RandomForestClassifierF64I64, RandomForestClassifierParameters, RandomForestRegressorF64BigI64, RandomForestRegressorF64BigU64, RandomForestRegressorF64F64, RandomForestRegressorF64I64, RandomForestRegressorParameters, RecallF64, Recallf64, RidgeRegressionF64BigI64, RidgeRegressionF64BigU64, RidgeRegressionF64F64, RidgeRegressionF64I64, RidgeRegressionF64Parameters, StandardScalerF64, StandardScalerParameters, SVCF64I64, SVCParametersF64I64, SVDF64, SVDF64DenseMatrixF64, SVDParameters, SVRF64, SVRParametersF64, VecF64, VecI64, crossValidateElasticNetF64F64, crossValidateElasticNetF64I64, crossValidateLogisticRegressionF64I64, KNNAlgorithmName, KNNWeightFunction, LinearRegressionSolverName, LogisticRegressionSolverName, RidgeRegressionSolverName, SplitCriterion, trainTestSplitF64BigI64, trainTestSplitF64BigU64, trainTestSplitF64F64, trainTestSplitF64I64 } = nativeBinding
+const { AccuracyF64, Accuracyf64, AccuracyI32, Accuracyi32, AccuracyI64, Accuracyi64, AccuracyU64, Accuracyu64, AUCF64, AUCf64, BernoulliNBF32Parameters, BernoulliNBF32U32, BernoulliNBF32U64, BernoulliNBF64Parameters, BernoulliNBF64U32, BernoulliNBF64U64, BernoulliNBI32Parameters, BernoulliNBI32U32, BernoulliNBI32U64, BernoulliNBI64Parameters, BernoulliNBI64U32, BernoulliNBI64U64, BernoulliNBU16Parameters, BernoulliNBU16U32, BernoulliNBU16U64, BernoulliNBU32Parameters, BernoulliNBU32U32, BernoulliNBU32U64, BernoulliNBU64Parameters, BernoulliNBU64U32, BernoulliNBU64U64, BernoulliNBU8Parameters, BernoulliNBU8U32, BernoulliNBU8U64, Boston, BreastCancer, CategoricalNBParameters, CategoricalNBU16, CategoricalNBU32, CategoricalNBU64, CategoricalNBU8, CrossValidationResult, dataset, Dataset, DatasetF64F64, DatasetF64F64JsVecRef, DatasetF64I32, DatasetF64I32JsVecRef, DBSCANF32EuclidianF32Parameters, DBSCANF32I32EuclidianF32, DBSCANF32I32MahalanobisF32, DBSCANF32I32ManhattanF32, DBSCANF32I32MinkowskiF32, DBSCANF32MahalanobisF32Parameters, DBSCANF32ManhattanF32Parameters, DBSCANF32MinkowskiF32Parameters, DBSCANF64EuclidianF64Parameters, DBSCANF64I32EuclidianF64, DBSCANF64I32MahalanobisF64, DBSCANF64I32ManhattanF64, DBSCANF64I32MinkowskiF64, DBSCANF64MahalanobisF64Parameters, DBSCANF64ManhattanF64Parameters, DBSCANF64MinkowskiF64Parameters, DBSCANI32EuclidianI32Parameters, DBSCANI32HammingI32Parameters, DBSCANI32I32EuclidianI32, DBSCANI32I32HammingI32, DBSCANI32I32ManhattanI32, DBSCANI32I32MinkowskiI32, DBSCANI32ManhattanI32Parameters, DBSCANI32MinkowskiI32Parameters, DBSCANI64EuclidianI64Parameters, DBSCANI64I32EuclidianI64, DBSCANI64I32ManhattanI64, DBSCANI64I32MinkowskiI64, DBSCANI64ManhattanI64Parameters, DBSCANI64MinkowskiI64Parameters, DBSCANU16EuclidianU16Parameters, DBSCANU16HammingU16Parameters, DBSCANU16I32EuclidianU16, DBSCANU16I32HammingU16, DBSCANU32EuclidianU32Parameters, DBSCANU32I32EuclidianU32, DBSCANU32I32ManhattanU32, DBSCANU32ManhattanU32Parameters, DBSCANU64EuclidianU64Parameters, DBSCANU64I32EuclidianU64, DBSCANU64I32ManhattanU64, DBSCANU64ManhattanU64Parameters, DBSCANU8EuclidianU8Parameters, DBSCANU8HammingU8Parameters, DBSCANU8I32EuclidianU8, DBSCANU8I32HammingU8, DecisionTreeClassifierI64I64, DecisionTreeClassifierParameters, DecisionTreeRegressorI64I64, DecisionTreeRegressorParameters, DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32, DenseMatrixU64, DenseMatrixU8, Diabetes, Digits, ElasticNetF32F32, ElasticNetF32F64, ElasticNetF32I32, ElasticNetF32I64, ElasticNetF32U64, ElasticNetF64F32, ElasticNetF64F64, ElasticNetF64I32, ElasticNetF64I64, ElasticNetF64U64, ElasticNetParameters, EuclidianF32, EuclidianF64, EuclidianI32, EuclidianI64, EuclidianU16, EuclidianU32, EuclidianU64, EuclidianU8, ExtraTreesRegressorF32F32, ExtraTreesRegressorF32F64, ExtraTreesRegressorF32I32, ExtraTreesRegressorF32I64, ExtraTreesRegressorF32U64, ExtraTreesRegressorF64F32, ExtraTreesRegressorF64F64, ExtraTreesRegressorF64I32, ExtraTreesRegressorF64I64, ExtraTreesRegressorF64U64, ExtraTreesRegressorParameters, F1F64, F1f64, GaussianNBF32U16, GaussianNBF32U32, GaussianNBF32U64, GaussianNBF32U8, GaussianNBF64U16, GaussianNBF64U32, GaussianNBF64U64, GaussianNBF64U8, GaussianNBParameters, Generator, HammingI32, HammingU16, HammingU8, HCVScoreI64, HCVScorei64, HCVScoreU64, HCVScoreu64, Iris, JsBoxedArrayF32Ref, JsBoxedArrayF64Ref, JsBoxedArrayI32Ref, JsBoxedArrayI64Ref, JsBoxedArrayU16Ref, JsBoxedArrayU32Ref, JsBoxedArrayU8Ref, JsDenseMatrixF64Ref, JsVecF64Ref, JsVecI64Ref, Kernels, KFold, KMeansF32I32, KMeansF32I64, KMeansF64I32, KMeansF64I64, KMeansI32I32, KMeansI32I64, KMeansI64I32, KMeansI64I64, KMeansParameters, KMeansU32I32, KMeansU32I64, KMeansU64I32, KMeansU64I64, KNNClassifierF32EuclidianF32Parameters, KNNClassifierF32I32EuclidianF32, KNNClassifierF32I32MahalanobisF32, KNNClassifierF32I32ManhattanF32, KNNClassifierF32I32MinkowskiF32, KNNClassifierF32MahalanobisF32Parameters, KNNClassifierF32ManhattanF32Parameters, KNNClassifierF32MinkowskiF32Parameters, KNNClassifierF64EuclidianF64Parameters, KNNClassifierF64I32EuclidianF64, KNNClassifierF64I32MahalanobisF64, KNNClassifierF64I32ManhattanF64, KNNClassifierF64I32MinkowskiF64, KNNClassifierF64MahalanobisF64Parameters, KNNClassifierF64ManhattanF64Parameters, KNNClassifierF64MinkowskiF64Parameters, KNNClassifierI32EuclidianI32Parameters, KNNClassifierI32HammingI32Parameters, KNNClassifierI32I32EuclidianI32, KNNClassifierI32I32HammingI32, KNNClassifierI32I32ManhattanI32, KNNClassifierI32I32MinkowskiI32, KNNClassifierI32ManhattanI32Parameters, KNNClassifierI32MinkowskiI32Parameters, KNNClassifierI64EuclidianI64Parameters, KNNClassifierI64I32EuclidianI64, KNNClassifierI64I32ManhattanI64, KNNClassifierI64I32MinkowskiI64, KNNClassifierI64ManhattanI64Parameters, KNNClassifierI64MinkowskiI64Parameters, KNNClassifierU16EuclidianU16Parameters, KNNClassifierU16HammingU16Parameters, KNNClassifierU16I32EuclidianU16, KNNClassifierU16I32HammingU16, KNNClassifierU32EuclidianU32Parameters, KNNClassifierU32I32EuclidianU32, KNNClassifierU32I32ManhattanU32, KNNClassifierU32ManhattanU32Parameters, KNNClassifierU64EuclidianU64Parameters, KNNClassifierU64I32EuclidianU64, KNNClassifierU64I32ManhattanU64, KNNClassifierU64ManhattanU64Parameters, KNNClassifierU8EuclidianU8Parameters, KNNClassifierU8HammingU8Parameters, KNNClassifierU8I32EuclidianU8, KNNClassifierU8I32HammingU8, KNNRegressorF32EuclidianF32Parameters, KNNRegressorF32F32EuclidianF32, KNNRegressorF32F32MahalanobisF32, KNNRegressorF32F32ManhattanF32, KNNRegressorF32F32MinkowskiF32, KNNRegressorF32MahalanobisF32Parameters, KNNRegressorF32ManhattanF32Parameters, KNNRegressorF32MinkowskiF32Parameters, KNNRegressorF64EuclidianF64Parameters, KNNRegressorF64F32EuclidianF64, KNNRegressorF64F32MahalanobisF64, KNNRegressorF64F32ManhattanF64, KNNRegressorF64F32MinkowskiF64, KNNRegressorF64MahalanobisF64Parameters, KNNRegressorF64ManhattanF64Parameters, KNNRegressorF64MinkowskiF64Parameters, KNNRegressorI32EuclidianI32Parameters, KNNRegressorI32F32EuclidianI32, KNNRegressorI32F32HammingI32, KNNRegressorI32F32ManhattanI32, KNNRegressorI32F32MinkowskiI32, KNNRegressorI32HammingI32Parameters, KNNRegressorI32ManhattanI32Parameters, KNNRegressorI32MinkowskiI32Parameters, KNNRegressorI64EuclidianI64Parameters, KNNRegressorI64F32EuclidianI64, KNNRegressorI64F32ManhattanI64, KNNRegressorI64F32MinkowskiI64, KNNRegressorI64ManhattanI64Parameters, KNNRegressorI64MinkowskiI64Parameters, KNNRegressorU16EuclidianU16Parameters, KNNRegressorU16F32EuclidianU16, KNNRegressorU16F32HammingU16, KNNRegressorU16HammingU16Parameters, KNNRegressorU32EuclidianU32Parameters, KNNRegressorU32F32EuclidianU32, KNNRegressorU32F32ManhattanU32, KNNRegressorU32ManhattanU32Parameters, KNNRegressorU64EuclidianU64Parameters, KNNRegressorU64F32EuclidianU64, KNNRegressorU64F32ManhattanU64, KNNRegressorU64ManhattanU64Parameters, KNNRegressorU8EuclidianU8Parameters, KNNRegressorU8F32EuclidianU8, KNNRegressorU8F32HammingU8, KNNRegressorU8HammingU8Parameters, LassoF32F32, LassoF32F64, LassoF32I32, LassoF32I64, LassoF32U64, LassoF64F32, LassoF64F64, LassoF64I32, LassoF64I64, LassoF64U64, LassoParameters, LinearRegressionF32F32, LinearRegressionF32F64, LinearRegressionF32I32, LinearRegressionF32I64, LinearRegressionF32U64, LinearRegressionF64F32, LinearRegressionF64F64, LinearRegressionF64I32, LinearRegressionF64I64, LinearRegressionF64U64, LinearRegressionParameters, LogisticRegressionF32I32, LogisticRegressionF32I64, LogisticRegressionF32U64, LogisticRegressionF64I32, LogisticRegressionF64I64, LogisticRegressionF64U64, LogisticRegressionParametersF32, LogisticRegressionParametersF64, MahalanobisF32, MahalanobisF64, ManhattanF32, ManhattanF64, ManhattanI32, ManhattanI64, ManhattanU32, ManhattanU64, MeanAbsoluteErrorF64, MeanAbsoluteErrorf64, MeanSquareErrorF64, MeanSquareErrorf64, MinkowskiF32, MinkowskiF64, MinkowskiI32, MinkowskiI64, MultinomialNBParameters, MultinomialNBU16U16, MultinomialNBU16U8, MultinomialNBU32U16, MultinomialNBU32U32, MultinomialNBU32U8, MultinomialNBU64U16, MultinomialNBU64U32, MultinomialNBU64U64, MultinomialNBU64U8, MultinomialNBU8U8, OneHotEncoderF32, OneHotEncoderF64, OneHotEncoderParameters, PCAF32, PCAF64, PCAParameters, PrecisionF64, Precisionf64, R2F64, R2f64, R2I64, R2i64, R2U64, R2u64, RandomForestClassifierF32I32, RandomForestClassifierF32I64, RandomForestClassifierF32U64, RandomForestClassifierF64I32, RandomForestClassifierF64I64, RandomForestClassifierF64U64, RandomForestClassifierParameters, RandomForestRegressorF32F32, RandomForestRegressorF32F64, RandomForestRegressorF32I32, RandomForestRegressorF32I64, RandomForestRegressorF32U64, RandomForestRegressorF64F32, RandomForestRegressorF64F64, RandomForestRegressorF64I32, RandomForestRegressorF64I64, RandomForestRegressorF64U64, RandomForestRegressorParameters, RecallF64, Recallf64, RidgeRegressionF32F32, RidgeRegressionF32F64, RidgeRegressionF32Parameters, RidgeRegressionF64F32, RidgeRegressionF64F64, RidgeRegressionF64Parameters, StandardScalerF32, StandardScalerF64, StandardScalerParameters, SVCF64I64, SVCParametersF64I64, SVDF32, SVDF64, SVDF64DenseMatrixF64, SVDParameters, SVRF64, SVRParametersF64, VecF64, VecI64, crossValidateElasticNetF64F64, crossValidateElasticNetF64I64, crossValidateLogisticRegressionF64I64, KNNAlgorithmName, KNNWeightFunction, LinearRegressionSolverName, LogisticRegressionSolverName, RidgeRegressionSolverName, SplitCriterion, trainTestSplitF32F32, trainTestSplitF32F64, trainTestSplitF32I32, trainTestSplitF32I64, trainTestSplitF32U64, trainTestSplitF64F32, trainTestSplitF64F64, trainTestSplitF64I32, trainTestSplitF64I64, trainTestSplitF64U64, trainTestSplitI32F32, trainTestSplitI32F64, trainTestSplitI32I32, trainTestSplitI32I64, trainTestSplitI32U64, trainTestSplitI64F32, trainTestSplitI64F64, trainTestSplitI64I32, trainTestSplitI64I64, trainTestSplitI64U64, trainTestSplitU16F32, trainTestSplitU16F64, trainTestSplitU16I32, trainTestSplitU16I64, trainTestSplitU16U64, trainTestSplitU32F32, trainTestSplitU32F64, trainTestSplitU32I32, trainTestSplitU32I64, trainTestSplitU32U64, trainTestSplitU64F32, trainTestSplitU64F64, trainTestSplitU64I32, trainTestSplitU64I64, trainTestSplitU64U64, trainTestSplitU8F32, trainTestSplitU8F64, trainTestSplitU8I32, trainTestSplitU8I64, trainTestSplitU8U64 } = nativeBinding
 export { AccuracyF64 }
 export { Accuracyf64 }
+export { AccuracyI32 }
+export { Accuracyi32 }
 export { AccuracyI64 }
 export { Accuracyi64 }
 export { AccuracyU64 }
 export { Accuracyu64 }
 export { AUCF64 }
 export { AUCf64 }
-export { BernoulliNBF64BigU64 }
+export { BernoulliNBF32Parameters }
+export { BernoulliNBF32U32 }
+export { BernoulliNBF32U64 }
 export { BernoulliNBF64Parameters }
+export { BernoulliNBF64U32 }
+export { BernoulliNBF64U64 }
+export { BernoulliNBI32Parameters }
+export { BernoulliNBI32U32 }
+export { BernoulliNBI32U64 }
+export { BernoulliNBI64Parameters }
+export { BernoulliNBI64U32 }
+export { BernoulliNBI64U64 }
+export { BernoulliNBU16Parameters }
+export { BernoulliNBU16U32 }
+export { BernoulliNBU16U64 }
+export { BernoulliNBU32Parameters }
+export { BernoulliNBU32U32 }
+export { BernoulliNBU32U64 }
+export { BernoulliNBU64Parameters }
+export { BernoulliNBU64U32 }
+export { BernoulliNBU64U64 }
+export { BernoulliNBU8Parameters }
+export { BernoulliNBU8U32 }
+export { BernoulliNBU8U64 }
 export { Boston }
 export { BreastCancer }
-export { CategoricalNBBigU64 }
 export { CategoricalNBParameters }
+export { CategoricalNBU16 }
+export { CategoricalNBU32 }
+export { CategoricalNBU64 }
+export { CategoricalNBU8 }
 export { CrossValidationResult }
 export { dataset }
 export { Dataset }
 export { DatasetF64F64 }
 export { DatasetF64F64JsVecRef }
-export { DatasetF64I64 }
-export { DatasetF64I64JsVecRef }
-export { DatasetF64U64 }
+export { DatasetF64I32 }
+export { DatasetF64I32JsVecRef }
+export { DBSCANF32EuclidianF32Parameters }
+export { DBSCANF32I32EuclidianF32 }
+export { DBSCANF32I32MahalanobisF32 }
+export { DBSCANF32I32ManhattanF32 }
+export { DBSCANF32I32MinkowskiF32 }
+export { DBSCANF32MahalanobisF32Parameters }
+export { DBSCANF32ManhattanF32Parameters }
+export { DBSCANF32MinkowskiF32Parameters }
 export { DBSCANF64EuclidianF64Parameters }
-export { DBSCANF64F64EuclidianF64 }
-export { DBSCANF64F64HammingF64 }
-export { DBSCANF64F64MahalanobisF64 }
-export { DBSCANF64F64ManhattanF64 }
-export { DBSCANF64F64MinkowskiF64 }
-export { DBSCANF64HammingF64Parameters }
+export { DBSCANF64I32EuclidianF64 }
+export { DBSCANF64I32MahalanobisF64 }
+export { DBSCANF64I32ManhattanF64 }
+export { DBSCANF64I32MinkowskiF64 }
 export { DBSCANF64MahalanobisF64Parameters }
 export { DBSCANF64ManhattanF64Parameters }
 export { DBSCANF64MinkowskiF64Parameters }
+export { DBSCANI32EuclidianI32Parameters }
+export { DBSCANI32HammingI32Parameters }
+export { DBSCANI32I32EuclidianI32 }
+export { DBSCANI32I32HammingI32 }
+export { DBSCANI32I32ManhattanI32 }
+export { DBSCANI32I32MinkowskiI32 }
+export { DBSCANI32ManhattanI32Parameters }
+export { DBSCANI32MinkowskiI32Parameters }
+export { DBSCANI64EuclidianI64Parameters }
+export { DBSCANI64I32EuclidianI64 }
+export { DBSCANI64I32ManhattanI64 }
+export { DBSCANI64I32MinkowskiI64 }
+export { DBSCANI64ManhattanI64Parameters }
+export { DBSCANI64MinkowskiI64Parameters }
+export { DBSCANU16EuclidianU16Parameters }
+export { DBSCANU16HammingU16Parameters }
+export { DBSCANU16I32EuclidianU16 }
+export { DBSCANU16I32HammingU16 }
+export { DBSCANU32EuclidianU32Parameters }
+export { DBSCANU32I32EuclidianU32 }
+export { DBSCANU32I32ManhattanU32 }
+export { DBSCANU32ManhattanU32Parameters }
+export { DBSCANU64EuclidianU64Parameters }
+export { DBSCANU64I32EuclidianU64 }
+export { DBSCANU64I32ManhattanU64 }
+export { DBSCANU64ManhattanU64Parameters }
+export { DBSCANU8EuclidianU8Parameters }
+export { DBSCANU8HammingU8Parameters }
+export { DBSCANU8I32EuclidianU8 }
+export { DBSCANU8I32HammingU8 }
 export { DecisionTreeClassifierI64I64 }
 export { DecisionTreeClassifierParameters }
 export { DecisionTreeRegressorI64I64 }
 export { DecisionTreeRegressorParameters }
+export { DenseMatrixF32 }
 export { DenseMatrixF64 }
+export { DenseMatrixI32 }
 export { DenseMatrixI64 }
+export { DenseMatrixU16 }
+export { DenseMatrixU32 }
 export { DenseMatrixU64 }
+export { DenseMatrixU8 }
 export { Diabetes }
 export { Digits }
-export { ElasticNetF64BigI64 }
-export { ElasticNetF64BigU64 }
+export { ElasticNetF32F32 }
+export { ElasticNetF32F64 }
+export { ElasticNetF32I32 }
+export { ElasticNetF32I64 }
+export { ElasticNetF32U64 }
+export { ElasticNetF64F32 }
 export { ElasticNetF64F64 }
+export { ElasticNetF64I32 }
 export { ElasticNetF64I64 }
+export { ElasticNetF64U64 }
 export { ElasticNetParameters }
+export { EuclidianF32 }
 export { EuclidianF64 }
+export { EuclidianI32 }
 export { EuclidianI64 }
+export { EuclidianU16 }
+export { EuclidianU32 }
 export { EuclidianU64 }
-export { ExtraTreesRegressorF64BigI64 }
-export { ExtraTreesRegressorF64BigU64 }
+export { EuclidianU8 }
+export { ExtraTreesRegressorF32F32 }
+export { ExtraTreesRegressorF32F64 }
+export { ExtraTreesRegressorF32I32 }
+export { ExtraTreesRegressorF32I64 }
+export { ExtraTreesRegressorF32U64 }
+export { ExtraTreesRegressorF64F32 }
 export { ExtraTreesRegressorF64F64 }
+export { ExtraTreesRegressorF64I32 }
 export { ExtraTreesRegressorF64I64 }
+export { ExtraTreesRegressorF64U64 }
 export { ExtraTreesRegressorParameters }
 export { F1F64 }
 export { F1f64 }
-export { GaussianNBF64BigU64 }
+export { GaussianNBF32U16 }
+export { GaussianNBF32U32 }
+export { GaussianNBF32U64 }
+export { GaussianNBF32U8 }
+export { GaussianNBF64U16 }
+export { GaussianNBF64U32 }
+export { GaussianNBF64U64 }
+export { GaussianNBF64U8 }
 export { GaussianNBParameters }
 export { Generator }
-export { HammingF64 }
-export { HammingI64 }
-export { HammingU64 }
+export { HammingI32 }
+export { HammingU16 }
+export { HammingU8 }
 export { HCVScoreI64 }
 export { HCVScorei64 }
 export { HCVScoreU64 }
@@ -627,89 +736,182 @@ export { HCVScoreu64 }
 export { Iris }
 export { JsBoxedArrayF32Ref }
 export { JsBoxedArrayF64Ref }
+export { JsBoxedArrayI32Ref }
+export { JsBoxedArrayI64Ref }
+export { JsBoxedArrayU16Ref }
+export { JsBoxedArrayU32Ref }
+export { JsBoxedArrayU8Ref }
 export { JsDenseMatrixF64Ref }
 export { JsVecF64Ref }
 export { JsVecI64Ref }
 export { Kernels }
 export { KFold }
-export { KMeansF64BigI64 }
-export { KMeansF64F64 }
+export { KMeansF32I32 }
+export { KMeansF32I64 }
+export { KMeansF64I32 }
 export { KMeansF64I64 }
+export { KMeansI32I32 }
+export { KMeansI32I64 }
+export { KMeansI64I32 }
+export { KMeansI64I64 }
 export { KMeansParameters }
-export { KNNClassifierF64BigI64EuclidianF64 }
-export { KNNClassifierF64BigI64HammingF64 }
-export { KNNClassifierF64BigI64MahalanobisF64 }
-export { KNNClassifierF64BigI64ManhattanF64 }
-export { KNNClassifierF64BigI64MinkowskiF64 }
-export { KNNClassifierF64BigU64EuclidianF64 }
-export { KNNClassifierF64BigU64HammingF64 }
-export { KNNClassifierF64BigU64MahalanobisF64 }
-export { KNNClassifierF64BigU64ManhattanF64 }
-export { KNNClassifierF64BigU64MinkowskiF64 }
+export { KMeansU32I32 }
+export { KMeansU32I64 }
+export { KMeansU64I32 }
+export { KMeansU64I64 }
+export { KNNClassifierF32EuclidianF32Parameters }
+export { KNNClassifierF32I32EuclidianF32 }
+export { KNNClassifierF32I32MahalanobisF32 }
+export { KNNClassifierF32I32ManhattanF32 }
+export { KNNClassifierF32I32MinkowskiF32 }
+export { KNNClassifierF32MahalanobisF32Parameters }
+export { KNNClassifierF32ManhattanF32Parameters }
+export { KNNClassifierF32MinkowskiF32Parameters }
 export { KNNClassifierF64EuclidianF64Parameters }
-export { KNNClassifierF64HammingF64Parameters }
-export { KNNClassifierF64I64EuclidianF64 }
-export { KNNClassifierF64I64HammingF64 }
-export { KNNClassifierF64I64MahalanobisF64 }
-export { KNNClassifierF64I64ManhattanF64 }
-export { KNNClassifierF64I64MinkowskiF64 }
+export { KNNClassifierF64I32EuclidianF64 }
+export { KNNClassifierF64I32MahalanobisF64 }
+export { KNNClassifierF64I32ManhattanF64 }
+export { KNNClassifierF64I32MinkowskiF64 }
 export { KNNClassifierF64MahalanobisF64Parameters }
 export { KNNClassifierF64ManhattanF64Parameters }
 export { KNNClassifierF64MinkowskiF64Parameters }
-export { KNNRegressorF64BigI64EuclidianF64 }
-export { KNNRegressorF64BigI64HammingF64 }
-export { KNNRegressorF64BigI64MahalanobisF64 }
-export { KNNRegressorF64BigI64ManhattanF64 }
-export { KNNRegressorF64BigI64MinkowskiF64 }
-export { KNNRegressorF64BigU64EuclidianF64 }
-export { KNNRegressorF64BigU64HammingF64 }
-export { KNNRegressorF64BigU64MahalanobisF64 }
-export { KNNRegressorF64BigU64ManhattanF64 }
-export { KNNRegressorF64BigU64MinkowskiF64 }
+export { KNNClassifierI32EuclidianI32Parameters }
+export { KNNClassifierI32HammingI32Parameters }
+export { KNNClassifierI32I32EuclidianI32 }
+export { KNNClassifierI32I32HammingI32 }
+export { KNNClassifierI32I32ManhattanI32 }
+export { KNNClassifierI32I32MinkowskiI32 }
+export { KNNClassifierI32ManhattanI32Parameters }
+export { KNNClassifierI32MinkowskiI32Parameters }
+export { KNNClassifierI64EuclidianI64Parameters }
+export { KNNClassifierI64I32EuclidianI64 }
+export { KNNClassifierI64I32ManhattanI64 }
+export { KNNClassifierI64I32MinkowskiI64 }
+export { KNNClassifierI64ManhattanI64Parameters }
+export { KNNClassifierI64MinkowskiI64Parameters }
+export { KNNClassifierU16EuclidianU16Parameters }
+export { KNNClassifierU16HammingU16Parameters }
+export { KNNClassifierU16I32EuclidianU16 }
+export { KNNClassifierU16I32HammingU16 }
+export { KNNClassifierU32EuclidianU32Parameters }
+export { KNNClassifierU32I32EuclidianU32 }
+export { KNNClassifierU32I32ManhattanU32 }
+export { KNNClassifierU32ManhattanU32Parameters }
+export { KNNClassifierU64EuclidianU64Parameters }
+export { KNNClassifierU64I32EuclidianU64 }
+export { KNNClassifierU64I32ManhattanU64 }
+export { KNNClassifierU64ManhattanU64Parameters }
+export { KNNClassifierU8EuclidianU8Parameters }
+export { KNNClassifierU8HammingU8Parameters }
+export { KNNClassifierU8I32EuclidianU8 }
+export { KNNClassifierU8I32HammingU8 }
+export { KNNRegressorF32EuclidianF32Parameters }
+export { KNNRegressorF32F32EuclidianF32 }
+export { KNNRegressorF32F32MahalanobisF32 }
+export { KNNRegressorF32F32ManhattanF32 }
+export { KNNRegressorF32F32MinkowskiF32 }
+export { KNNRegressorF32MahalanobisF32Parameters }
+export { KNNRegressorF32ManhattanF32Parameters }
+export { KNNRegressorF32MinkowskiF32Parameters }
 export { KNNRegressorF64EuclidianF64Parameters }
-export { KNNRegressorF64F64EuclidianF64 }
-export { KNNRegressorF64F64HammingF64 }
-export { KNNRegressorF64F64MahalanobisF64 }
-export { KNNRegressorF64F64ManhattanF64 }
-export { KNNRegressorF64F64MinkowskiF64 }
-export { KNNRegressorF64HammingF64Parameters }
-export { KNNRegressorF64I64EuclidianF64 }
-export { KNNRegressorF64I64HammingF64 }
-export { KNNRegressorF64I64MahalanobisF64 }
-export { KNNRegressorF64I64ManhattanF64 }
-export { KNNRegressorF64I64MinkowskiF64 }
+export { KNNRegressorF64F32EuclidianF64 }
+export { KNNRegressorF64F32MahalanobisF64 }
+export { KNNRegressorF64F32ManhattanF64 }
+export { KNNRegressorF64F32MinkowskiF64 }
 export { KNNRegressorF64MahalanobisF64Parameters }
 export { KNNRegressorF64ManhattanF64Parameters }
 export { KNNRegressorF64MinkowskiF64Parameters }
-export { LassoF64BigI64 }
-export { LassoF64BigU64 }
+export { KNNRegressorI32EuclidianI32Parameters }
+export { KNNRegressorI32F32EuclidianI32 }
+export { KNNRegressorI32F32HammingI32 }
+export { KNNRegressorI32F32ManhattanI32 }
+export { KNNRegressorI32F32MinkowskiI32 }
+export { KNNRegressorI32HammingI32Parameters }
+export { KNNRegressorI32ManhattanI32Parameters }
+export { KNNRegressorI32MinkowskiI32Parameters }
+export { KNNRegressorI64EuclidianI64Parameters }
+export { KNNRegressorI64F32EuclidianI64 }
+export { KNNRegressorI64F32ManhattanI64 }
+export { KNNRegressorI64F32MinkowskiI64 }
+export { KNNRegressorI64ManhattanI64Parameters }
+export { KNNRegressorI64MinkowskiI64Parameters }
+export { KNNRegressorU16EuclidianU16Parameters }
+export { KNNRegressorU16F32EuclidianU16 }
+export { KNNRegressorU16F32HammingU16 }
+export { KNNRegressorU16HammingU16Parameters }
+export { KNNRegressorU32EuclidianU32Parameters }
+export { KNNRegressorU32F32EuclidianU32 }
+export { KNNRegressorU32F32ManhattanU32 }
+export { KNNRegressorU32ManhattanU32Parameters }
+export { KNNRegressorU64EuclidianU64Parameters }
+export { KNNRegressorU64F32EuclidianU64 }
+export { KNNRegressorU64F32ManhattanU64 }
+export { KNNRegressorU64ManhattanU64Parameters }
+export { KNNRegressorU8EuclidianU8Parameters }
+export { KNNRegressorU8F32EuclidianU8 }
+export { KNNRegressorU8F32HammingU8 }
+export { KNNRegressorU8HammingU8Parameters }
+export { LassoF32F32 }
+export { LassoF32F64 }
+export { LassoF32I32 }
+export { LassoF32I64 }
+export { LassoF32U64 }
+export { LassoF64F32 }
 export { LassoF64F64 }
+export { LassoF64I32 }
 export { LassoF64I64 }
+export { LassoF64U64 }
 export { LassoParameters }
-export { LinearRegressionF64BigI64 }
-export { LinearRegressionF64BigU64 }
+export { LinearRegressionF32F32 }
+export { LinearRegressionF32F64 }
+export { LinearRegressionF32I32 }
+export { LinearRegressionF32I64 }
+export { LinearRegressionF32U64 }
+export { LinearRegressionF64F32 }
 export { LinearRegressionF64F64 }
+export { LinearRegressionF64I32 }
 export { LinearRegressionF64I64 }
+export { LinearRegressionF64U64 }
 export { LinearRegressionParameters }
-export { LogisticRegressionF64BigI64 }
-export { LogisticRegressionF64BigU64 }
+export { LogisticRegressionF32I32 }
+export { LogisticRegressionF32I64 }
+export { LogisticRegressionF32U64 }
+export { LogisticRegressionF64I32 }
 export { LogisticRegressionF64I64 }
+export { LogisticRegressionF64U64 }
+export { LogisticRegressionParametersF32 }
 export { LogisticRegressionParametersF64 }
+export { MahalanobisF32 }
 export { MahalanobisF64 }
+export { ManhattanF32 }
 export { ManhattanF64 }
+export { ManhattanI32 }
 export { ManhattanI64 }
+export { ManhattanU32 }
 export { ManhattanU64 }
 export { MeanAbsoluteErrorF64 }
 export { MeanAbsoluteErrorf64 }
 export { MeanSquareErrorF64 }
 export { MeanSquareErrorf64 }
+export { MinkowskiF32 }
 export { MinkowskiF64 }
+export { MinkowskiI32 }
 export { MinkowskiI64 }
-export { MinkowskiU64 }
 export { MultinomialNBParameters }
-export { MultinomialNBU64BigU64 }
+export { MultinomialNBU16U16 }
+export { MultinomialNBU16U8 }
+export { MultinomialNBU32U16 }
+export { MultinomialNBU32U32 }
+export { MultinomialNBU32U8 }
+export { MultinomialNBU64U16 }
+export { MultinomialNBU64U32 }
+export { MultinomialNBU64U64 }
+export { MultinomialNBU64U8 }
+export { MultinomialNBU8U8 }
+export { OneHotEncoderF32 }
 export { OneHotEncoderF64 }
 export { OneHotEncoderParameters }
+export { PCAF32 }
 export { PCAF64 }
 export { PCAParameters }
 export { PrecisionF64 }
@@ -720,26 +922,38 @@ export { R2I64 }
 export { R2i64 }
 export { R2U64 }
 export { R2u64 }
-export { RandomForestClassifierF64BigI64 }
-export { RandomForestClassifierF64BigU64 }
+export { RandomForestClassifierF32I32 }
+export { RandomForestClassifierF32I64 }
+export { RandomForestClassifierF32U64 }
+export { RandomForestClassifierF64I32 }
 export { RandomForestClassifierF64I64 }
+export { RandomForestClassifierF64U64 }
 export { RandomForestClassifierParameters }
-export { RandomForestRegressorF64BigI64 }
-export { RandomForestRegressorF64BigU64 }
+export { RandomForestRegressorF32F32 }
+export { RandomForestRegressorF32F64 }
+export { RandomForestRegressorF32I32 }
+export { RandomForestRegressorF32I64 }
+export { RandomForestRegressorF32U64 }
+export { RandomForestRegressorF64F32 }
 export { RandomForestRegressorF64F64 }
+export { RandomForestRegressorF64I32 }
 export { RandomForestRegressorF64I64 }
+export { RandomForestRegressorF64U64 }
 export { RandomForestRegressorParameters }
 export { RecallF64 }
 export { Recallf64 }
-export { RidgeRegressionF64BigI64 }
-export { RidgeRegressionF64BigU64 }
+export { RidgeRegressionF32F32 }
+export { RidgeRegressionF32F64 }
+export { RidgeRegressionF32Parameters }
+export { RidgeRegressionF64F32 }
 export { RidgeRegressionF64F64 }
-export { RidgeRegressionF64I64 }
 export { RidgeRegressionF64Parameters }
+export { StandardScalerF32 }
 export { StandardScalerF64 }
 export { StandardScalerParameters }
 export { SVCF64I64 }
 export { SVCParametersF64I64 }
+export { SVDF32 }
 export { SVDF64 }
 export { SVDF64DenseMatrixF64 }
 export { SVDParameters }
@@ -756,7 +970,43 @@ export { LinearRegressionSolverName }
 export { LogisticRegressionSolverName }
 export { RidgeRegressionSolverName }
 export { SplitCriterion }
-export { trainTestSplitF64BigI64 }
-export { trainTestSplitF64BigU64 }
+export { trainTestSplitF32F32 }
+export { trainTestSplitF32F64 }
+export { trainTestSplitF32I32 }
+export { trainTestSplitF32I64 }
+export { trainTestSplitF32U64 }
+export { trainTestSplitF64F32 }
 export { trainTestSplitF64F64 }
+export { trainTestSplitF64I32 }
 export { trainTestSplitF64I64 }
+export { trainTestSplitF64U64 }
+export { trainTestSplitI32F32 }
+export { trainTestSplitI32F64 }
+export { trainTestSplitI32I32 }
+export { trainTestSplitI32I64 }
+export { trainTestSplitI32U64 }
+export { trainTestSplitI64F32 }
+export { trainTestSplitI64F64 }
+export { trainTestSplitI64I32 }
+export { trainTestSplitI64I64 }
+export { trainTestSplitI64U64 }
+export { trainTestSplitU16F32 }
+export { trainTestSplitU16F64 }
+export { trainTestSplitU16I32 }
+export { trainTestSplitU16I64 }
+export { trainTestSplitU16U64 }
+export { trainTestSplitU32F32 }
+export { trainTestSplitU32F64 }
+export { trainTestSplitU32I32 }
+export { trainTestSplitU32I64 }
+export { trainTestSplitU32U64 }
+export { trainTestSplitU64F32 }
+export { trainTestSplitU64F64 }
+export { trainTestSplitU64I32 }
+export { trainTestSplitU64I64 }
+export { trainTestSplitU64U64 }
+export { trainTestSplitU8F32 }
+export { trainTestSplitU8F64 }
+export { trainTestSplitU8I32 }
+export { trainTestSplitU8I64 }
+export { trainTestSplitU8U64 }

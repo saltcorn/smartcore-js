@@ -14,24 +14,29 @@ use smartcore::{
   linalg::basic::matrix::DenseMatrix,
 };
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 use parameters::ExtraTreesRegressorParameters;
 
 macro_rules! extra_trees_regressor_nb_struct {
-  ( $x:ty, $y:ty, $y_mod:literal, $xs:ty, $ys:ty ) => {
+  (
+    feature_type: $feat:ty,
+    predict_output_type: $id:ty,
+    matrix_type: $matrix:ty,
+    array_type: $array:ty
+  ) => {
     paste! {
-        #[napi(js_name=""[<ExtraTreesRegressor $x:upper $y_mod $y:upper>]"")]
+        #[napi(js_name=""[<ExtraTreesRegressor $feat:upper $id:upper>]"")]
         #[derive(Debug)]
-        pub struct [<ExtraTreesRegressor $x:upper $y_mod $y:upper>] {
-            inner: LibExtraTreesRegressor<$x, $y, DenseMatrix<$x>, Vec<$y>>,
+        pub struct [<ExtraTreesRegressor $feat:upper $id:upper>] {
+            inner: LibExtraTreesRegressor<$feat, $id, DenseMatrix<$feat>, Vec<$id>>,
         }
 
         #[napi]
-        impl [<ExtraTreesRegressor $x:upper $y_mod $y:upper>] {
+        impl [<ExtraTreesRegressor $feat:upper $id:upper>] {
             #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &ExtraTreesRegressorParameters) -> Result<Self> {
+            pub fn fit(x: &$matrix, y: $array, parameters: &ExtraTreesRegressorParameters) -> Result<Self> {
                 let inner = LibExtraTreesRegressor::fit(
-                    x as &DenseMatrix<$x>,
+                    x as &DenseMatrix<$feat>,
                     &y.to_vec(),
                     parameters.owned_inner(),
                 )
@@ -40,10 +45,10 @@ macro_rules! extra_trees_regressor_nb_struct {
             }
 
             #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
+            pub fn predict(&self, x: &$matrix) -> Result<$array> {
                 let prediction_result = self
                 .inner
-                .predict(x as &DenseMatrix<$x>)
+                .predict(x as &DenseMatrix<$feat>)
                 .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
                 Ok(prediction_result.into())
             }
@@ -57,14 +62,14 @@ macro_rules! extra_trees_regressor_nb_struct {
 
             #[napi(factory)]
             pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibExtraTreesRegressor<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
+                let inner = decode_from_slice::<LibExtraTreesRegressor<$feat, $id, DenseMatrix<$feat>, Vec<$id>>, _>(data.as_ref(), standard())
                     .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
                 Ok(Self { inner })
             }
         }
 
-        impl Deref for [<ExtraTreesRegressor $x:upper $y_mod $y:upper>] {
-            type Target = LibExtraTreesRegressor<$x, $y, DenseMatrix<$x>, Vec<$y>>;
+        impl Deref for [<ExtraTreesRegressor $feat:upper $id:upper>] {
+            type Target = LibExtraTreesRegressor<$feat, $id, DenseMatrix<$feat>, Vec<$id>>;
 
             fn deref(&self) -> &Self::Target {
                 &self.inner
@@ -74,7 +79,82 @@ macro_rules! extra_trees_regressor_nb_struct {
   };
 }
 
-extra_trees_regressor_nb_struct! {f64, f64, "", DenseMatrixF64, Float64Array}
-extra_trees_regressor_nb_struct! {f64, i64, "", DenseMatrixF64, Vec<i64>}
-extra_trees_regressor_nb_struct! {f64, i64, "Big", DenseMatrixF64, BigInt64Array}
-extra_trees_regressor_nb_struct! {f64, u64, "Big", DenseMatrixF64, BigUint64Array}
+// [f32, f64]
+extra_trees_regressor_nb_struct! {
+    feature_type: f32,
+    predict_output_type: f64,
+    matrix_type: DenseMatrixF32,
+    array_type: Float64Array
+}
+
+// [f32, f32]
+extra_trees_regressor_nb_struct! {
+    feature_type: f32,
+    predict_output_type: f32,
+    matrix_type: DenseMatrixF32,
+    array_type: Float32Array
+}
+
+// [f32, i64]
+extra_trees_regressor_nb_struct! {
+    feature_type: f32,
+    predict_output_type: i64,
+    matrix_type: DenseMatrixF32,
+    array_type: BigInt64Array
+}
+
+// [f32, u64]
+extra_trees_regressor_nb_struct! {
+    feature_type: f32,
+    predict_output_type: u64,
+    matrix_type: DenseMatrixF32,
+    array_type: BigUint64Array
+}
+
+// [f32, i32]
+extra_trees_regressor_nb_struct! {
+    feature_type: f32,
+    predict_output_type: i32,
+    matrix_type: DenseMatrixF32,
+    array_type: Int32Array
+}
+
+// [f64, f64]
+extra_trees_regressor_nb_struct! {
+    feature_type: f64,
+    predict_output_type: f64,
+    matrix_type: DenseMatrixF64,
+    array_type: Float64Array
+}
+
+// [f64, f32]
+extra_trees_regressor_nb_struct! {
+    feature_type: f64,
+    predict_output_type: f32,
+    matrix_type: DenseMatrixF64,
+    array_type: Float32Array
+}
+
+// [f64, i64]
+extra_trees_regressor_nb_struct! {
+    feature_type: f64,
+    predict_output_type: i64,
+    matrix_type: DenseMatrixF64,
+    array_type: BigInt64Array
+}
+
+// [f64, u64]
+extra_trees_regressor_nb_struct! {
+    feature_type: f64,
+    predict_output_type: u64,
+    matrix_type: DenseMatrixF64,
+    array_type: BigUint64Array
+}
+
+// [f64, i32]
+extra_trees_regressor_nb_struct! {
+    feature_type: f64,
+    predict_output_type: i32,
+    matrix_type: DenseMatrixF64,
+    array_type: Int32Array
+}

@@ -4,38 +4,29 @@ use paste::paste;
 use smartcore::metrics::distance::{minkowski::Minkowski as LibMinkowski, Distance};
 
 macro_rules! minkowski_struct {
-  ( $ty:ty ) => {
+  ( $feat:ty, $array_napi:ty ) => {
     paste! {
-        #[napi(js_name=""[<Minkowski $ty:upper>]"")]
+        #[napi(js_name=""[<Minkowski $feat:upper>]"")]
         #[derive(Debug, Clone)]
-        pub struct [<Minkowski $ty:upper>] {
-            inner: LibMinkowski<$ty>,
+        pub struct [<Minkowski $feat:upper>] {
+            inner: LibMinkowski<$feat>,
         }
 
         #[napi]
-        impl [<Minkowski $ty:upper>] {
+        impl [<Minkowski $feat:upper>] {
             #[napi(constructor)]
             pub fn new(p: u32) -> Self {
                 Self {
-                    inner: LibMinkowski::<$ty>::new(p as u16)
+                    inner: LibMinkowski::<$feat>::new(p as u16)
                 }
             }
 
-            pub fn owned_inner(&self) -> LibMinkowski<$ty> {
+            pub fn owned_inner(&self) -> LibMinkowski<$feat> {
                 self.inner.to_owned()
             }
-        }
-    }
-  };
-}
 
-macro_rules! minkowski_distance_impl {
-  ( $ty:ty, $x:ty, $y:ty ) => {
-    paste! {
-        #[napi]
-        impl [<Minkowski $ty:upper>] {
             #[napi]
-            pub fn distance(&self, x: $x, y: $y) -> f64 {
+            pub fn distance(&self, x: $array_napi, y: $array_napi) -> f64 {
                 let x = x.to_vec();
                 let y = y.to_vec();
                 self.inner.distance(&x, &y)
@@ -45,11 +36,13 @@ macro_rules! minkowski_distance_impl {
   };
 }
 
-minkowski_struct! {i64}
-minkowski_distance_impl! {i64, BigInt64Array, BigInt64Array}
+// Type choise depends on p parameter
+// p = any -> f64 | f32
+// p = 1 -> i32 // manhattan
+// p = 2 -> i32 // Euclidian
+// Integer with any other value of p is nonsensical
 
-minkowski_struct! {u64}
-minkowski_distance_impl! {u64, BigUint64Array, BigUint64Array}
-
-minkowski_struct! {f64}
-minkowski_distance_impl! {f64, Float64Array, Float64Array}
+minkowski_struct! {f32, Float32Array}
+minkowski_struct! {f64, Float64Array}
+minkowski_struct! {i32, Int32Array}
+minkowski_struct! {i64, BigInt64Array}

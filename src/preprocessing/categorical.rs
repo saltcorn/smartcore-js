@@ -10,7 +10,7 @@ use smartcore::{
   },
 };
 
-use crate::linalg::basic::matrix::DenseMatrixF64;
+use crate::linalg::basic::matrix::{DenseMatrixF32, DenseMatrixF64};
 
 #[derive(Debug, Clone)]
 #[napi]
@@ -50,7 +50,7 @@ macro_rules! one_hot_encoder_struct {
 
         #[napi]
         impl [<OneHotEncoder $ty:upper>] {
-            #[napi(constructor)]
+            #[napi]
             pub fn fit(data: &[<DenseMatrix $ty:upper>], parameters: &OneHotEncoderParameters) -> Result<Self> {
                 let pca = LibOneHotEncoder::fit(
                     data as &DenseMatrix<$ty>,
@@ -68,9 +68,20 @@ macro_rules! one_hot_encoder_struct {
                     .map_err(|e| Error::new(Status::InvalidArg, format!("{}", e)))?;
                 Ok([<DenseMatrix $ty:upper>]::from_inner(matrix))
             }
+
+            #[napi]
+            pub fn serialize(&self) -> Result<Buffer> {
+                unimplemented!()
+            }
+
+            #[napi(factory)]
+            pub fn deserialize(_data: Buffer) -> Result<Self> {
+                unimplemented!()
+            }
         }
     }
   };
 }
 
 one_hot_encoder_struct! {f64}
+one_hot_encoder_struct! {f32}

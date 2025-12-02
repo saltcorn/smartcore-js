@@ -46,10 +46,10 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
         }
       }
 
-      return DenseMatrix.f64(x.getNumericColumns(), true)
+      return new DenseMatrix(x.getNumericColumns(), { columnMajor: true })
     }
 
-    return DenseMatrix.f64(x)
+    return new DenseMatrix(x)
   }
 
   /**
@@ -126,39 +126,6 @@ abstract class BaseEstimator<TEstimator, TParams> implements Estimator<InputType
     if (!this._isFitted || this.estimator === null) {
       throw new Error(`${this.name}: Cannot call '${methodName}' before calling 'fit'. Please fit the model first.`)
     }
-  }
-
-  /**
-   * Converts DenseMatrix to DataFrame
-   */
-  protected toDataFrame(matrix: DenseMatrix): DataFrame {
-    const rows = matrix.nrows
-    const cols = matrix.ncols
-    const matrixData = matrix.asF64()
-
-    // Build records with component names
-    const records: Record<string, number>[] = []
-
-    for (let i = 0; i < rows; i++) {
-      const record: Record<string, number> = {}
-      for (let j = 0; j < cols; j++) {
-        let columnName: string
-        if (Array.isArray(this.columns) && this.columns.length !== 0) {
-          if (j >= this.columns.length) {
-            throw new Error(
-              `${this.name}: Column names count mismatch. Expected: ${cols} Found: ${this.columns.length}`,
-            )
-          }
-          columnName = this.columns[j]
-        } else {
-          columnName = this.getComponentColumnName(j)
-        }
-        record[columnName] = matrixData.get([i, j])
-      }
-      records.push(record)
-    }
-
-    return new DataFrame(records)
   }
 
   /**
