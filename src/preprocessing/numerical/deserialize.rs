@@ -15,8 +15,12 @@ impl TryFrom<StandardScalerSerializeData> for StandardScaler {
 
   fn try_from(value: StandardScalerSerializeData) -> Result<Self, Self::Error> {
     let transformer_estimator: Box<dyn TransformerEstimator> = match value.fit_data_type {
-      DenseMatrixType::F64 => Box::new(deserialize_variant::<StandardScalerF64>(&value.standard_scaler)?),
-      DenseMatrixType::F32 => Box::new(deserialize_variant::<StandardScalerF32>(&value.standard_scaler)?),
+      DenseMatrixType::F64 => Box::new(deserialize_variant::<StandardScalerF64>(
+        &value.standard_scaler,
+      )?),
+      DenseMatrixType::F32 => Box::new(deserialize_variant::<StandardScalerF32>(
+        &value.standard_scaler,
+      )?),
       DenseMatrixType::U64
       | DenseMatrixType::U32
       | DenseMatrixType::U16

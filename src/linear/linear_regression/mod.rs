@@ -42,9 +42,10 @@ impl LinearRegression {
 
   #[napi(factory)]
   pub fn deserialize(data: Buffer) -> Result<Self> {
-    let serialize_data: LinearRegressionSerializeData = decode_from_slice(data.as_ref(), standard())
-      .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?
-      .0;
+    let serialize_data: LinearRegressionSerializeData =
+      decode_from_slice(data.as_ref(), standard())
+        .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?
+        .0;
     serialize_data.try_into()
   }
 }

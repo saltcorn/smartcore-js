@@ -1,11 +1,11 @@
 use paste::paste;
 use smartcore::{
-  neighbors::knn_classifier::KNNClassifier,
   linalg::basic::matrix::DenseMatrix as LibDenseMatrix,
   metrics::distance::{
     euclidian::Euclidian, hamming::Hamming, mahalanobis::Mahalanobis as LibMahalanobis,
     manhattan::Manhattan, minkowski::Minkowski,
   },
+  neighbors::knn_classifier::KNNClassifier,
 };
 
 type Mahalanobis<T> = LibMahalanobis<T, LibDenseMatrix<f64>>;
