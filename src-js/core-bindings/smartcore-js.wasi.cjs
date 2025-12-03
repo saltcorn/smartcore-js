@@ -108,14 +108,6 @@ const { instance: __napiInstance, module: __wasiModule, napiModule: __napiModule
   },
 })
 module.exports = __napiModule.exports
-module.exports.AccuracyF64 = __napiModule.exports.AccuracyF64
-module.exports.Accuracyf64 = __napiModule.exports.Accuracyf64
-module.exports.AccuracyI32 = __napiModule.exports.AccuracyI32
-module.exports.Accuracyi32 = __napiModule.exports.Accuracyi32
-module.exports.AccuracyI64 = __napiModule.exports.AccuracyI64
-module.exports.Accuracyi64 = __napiModule.exports.Accuracyi64
-module.exports.AccuracyU64 = __napiModule.exports.AccuracyU64
-module.exports.Accuracyu64 = __napiModule.exports.Accuracyu64
 module.exports.AUCF64 = __napiModule.exports.AUCF64
 module.exports.AUCf64 = __napiModule.exports.AUCf64
 module.exports.BernoulliNB = __napiModule.exports.BernoulliNB

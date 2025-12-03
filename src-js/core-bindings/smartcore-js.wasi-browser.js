@@ -56,14 +56,6 @@ const {
   },
 })
 export default __napiModule.exports
-export const AccuracyF64 = __napiModule.exports.AccuracyF64
-export const Accuracyf64 = __napiModule.exports.Accuracyf64
-export const AccuracyI32 = __napiModule.exports.AccuracyI32
-export const Accuracyi32 = __napiModule.exports.Accuracyi32
-export const AccuracyI64 = __napiModule.exports.AccuracyI64
-export const Accuracyi64 = __napiModule.exports.Accuracyi64
-export const AccuracyU64 = __napiModule.exports.AccuracyU64
-export const Accuracyu64 = __napiModule.exports.Accuracyu64
 export const AUCF64 = __napiModule.exports.AUCF64
 export const AUCf64 = __napiModule.exports.AUCf64
 export const BernoulliNB = __napiModule.exports.BernoulliNB

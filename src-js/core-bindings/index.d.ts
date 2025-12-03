@@ -2,30 +2,6 @@
 /* eslint-disable */
 
 export type TypedArray = Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array | BigInt64Array | BigUint64Array
-export declare class AccuracyF64 {
-  constructor()
-  getScore(yTrue: Float64Array, yPred: Float64Array): number
-}
-export type Accuracyf64 = AccuracyF64
-
-export declare class AccuracyI32 {
-  constructor()
-  getScore(yTrue: Int32Array, yPred: Int32Array): number
-}
-export type Accuracyi32 = AccuracyI32
-
-export declare class AccuracyI64 {
-  constructor()
-  getScore(yTrue: BigInt64Array, yPred: BigInt64Array): number
-}
-export type Accuracyi64 = AccuracyI64
-
-export declare class AccuracyU64 {
-  constructor()
-  getScore(yTrue: BigUint64Array, yPred: BigUint64Array): number
-}
-export type Accuracyu64 = AccuracyU64
-
 export declare class AUCF64 {
   constructor()
   getScore(yTrue: Float64Array, yPred: Float64Array): number
