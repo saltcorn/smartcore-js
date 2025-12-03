@@ -48,7 +48,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert(score)
   })
 
@@ -64,7 +64,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert(score)
   })
 
@@ -80,7 +80,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert(score)
   })
 
@@ -96,7 +96,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert(score)
   })
 
@@ -112,7 +112,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert(score)
   })
 
@@ -128,7 +128,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert(score >= 0)
   })
 
@@ -159,7 +159,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert(score)
   })
 
@@ -175,7 +175,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert.equal(score, 0)
   })
 
@@ -191,7 +191,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert(typeof score === 'number')
   })
 
@@ -207,7 +207,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert.equal(score, 0)
   })
 
@@ -223,7 +223,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert.equal(score, 0)
   })
 
@@ -239,7 +239,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert.equal(score, 0)
   })
 
@@ -255,7 +255,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert(score)
   })
 
@@ -298,7 +298,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert(score)
   })
 
@@ -342,7 +342,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert(score)
   })
 
@@ -358,7 +358,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert.equal(typeof score, typeof 0)
   })
 
@@ -374,7 +374,7 @@ describe('Pipelines', () => {
     }
     let [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     pipe.fit(xTrain, yTrain)
-    let score = accuracyScore(pipe.predict(xTest), yTest)
+    let score = accuracyScore(pipe.predict(xTest), yTest, false)
     assert.equal(typeof score, typeof 0)
   })
 

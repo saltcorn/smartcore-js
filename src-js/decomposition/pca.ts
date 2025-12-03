@@ -1,4 +1,4 @@
-import { utilities, type InputType } from '../index.js'
+import { utilities, type InputType, type ModelSaveData } from '../index.js'
 import { type Transformer } from '../estimator.js'
 import { DataFrame } from '../data_frame.js'
 import { DenseMatrix, PCABuilder, PCA as LibPCA, type DenseMatrixType } from '../core-bindings/index.js'
@@ -15,11 +15,6 @@ interface IPCAParameters extends IPCABaseParameters {
 
 interface HasColumns {
   columns: string[] | undefined
-}
-
-interface ModelSaveData {
-  columns?: string[]
-  model: Buffer
 }
 
 class PCA implements HasColumns {

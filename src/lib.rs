@@ -9,6 +9,7 @@ pub mod ensemble;
 pub mod js_number;
 pub mod linalg;
 pub mod linear;
+mod match_array_types;
 pub mod metrics;
 pub mod model_selection;
 pub mod naive_bayes;

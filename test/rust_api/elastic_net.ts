@@ -28,7 +28,7 @@ export default () => {
 
     const elasticNetBuilder = new ElasticNetBuilder(x, yWrapped)
     const elasticNet = elasticNetBuilder.build()
-    const score = accuracyScore(elasticNet.predict(xTest).field0, yTest)
+    const score = accuracyScore(elasticNet.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -43,10 +43,10 @@ export default () => {
 
     const elasticNetBuilder = new ElasticNetBuilder(x, yWrapped)
     const elasticNet = elasticNetBuilder.build()
-    const score1 = accuracyScore(elasticNet.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(elasticNet.predict(xTest).field0, yTest, false)
     const serializedElasticNet = elasticNet.serialize()
     const deserializedElasticNet = ElasticNet.deserialize(serializedElasticNet)
-    const score2 = accuracyScore(deserializedElasticNet.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedElasticNet.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

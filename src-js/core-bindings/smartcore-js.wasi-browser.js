@@ -195,6 +195,7 @@ export const SVRParametersF64 = __napiModule.exports.SVRParametersF64
 export const VecF64 = __napiModule.exports.VecF64
 export const VecI64 = __napiModule.exports.VecI64
 export const WrappedNumber = __napiModule.exports.WrappedNumber
+export const accuracyScore = __napiModule.exports.accuracyScore
 export const BernoulliNBPredictOutputType = __napiModule.exports.BernoulliNBPredictOutputType
 export const DenseMatrixType = __napiModule.exports.DenseMatrixType
 export const DistanceVariantType = __napiModule.exports.DistanceVariantType

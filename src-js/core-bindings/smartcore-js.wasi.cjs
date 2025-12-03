@@ -247,6 +247,7 @@ module.exports.SVRParametersF64 = __napiModule.exports.SVRParametersF64
 module.exports.VecF64 = __napiModule.exports.VecF64
 module.exports.VecI64 = __napiModule.exports.VecI64
 module.exports.WrappedNumber = __napiModule.exports.WrappedNumber
+module.exports.accuracyScore = __napiModule.exports.accuracyScore
 module.exports.BernoulliNBPredictOutputType = __napiModule.exports.BernoulliNBPredictOutputType
 module.exports.DenseMatrixType = __napiModule.exports.DenseMatrixType
 module.exports.DistanceVariantType = __napiModule.exports.DistanceVariantType

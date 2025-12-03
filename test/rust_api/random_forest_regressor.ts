@@ -28,7 +28,7 @@ export default () => {
 
     const randomForestRegressorBuilder = new RandomForestRegressorBuilder(x, yWrapped)
     const randomForestRegressor = randomForestRegressorBuilder.build()
-    const score = accuracyScore(randomForestRegressor.predict(xTest).field0, yTest)
+    const score = accuracyScore(randomForestRegressor.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -43,10 +43,10 @@ export default () => {
 
     const randomForestRegressorBuilder = new RandomForestRegressorBuilder(x, yWrapped)
     const randomForestRegressor = randomForestRegressorBuilder.build()
-    const score1 = accuracyScore(randomForestRegressor.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(randomForestRegressor.predict(xTest).field0, yTest, false)
     const serializedRandomForestRegressor = randomForestRegressor.serialize()
     const deserializedRandomForestRegressor = RandomForestRegressor.deserialize(serializedRandomForestRegressor)
-    const score2 = accuracyScore(deserializedRandomForestRegressor.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedRandomForestRegressor.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

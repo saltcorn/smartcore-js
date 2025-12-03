@@ -28,7 +28,7 @@ export default () => {
 
     const logisticRegressionBuilder = new LogisticRegressionBuilder(x, yWrapped)
     const logisticRegression = logisticRegressionBuilder.build()
-    const score = accuracyScore(logisticRegression.predict(xTest).field0, yTest)
+    const score = accuracyScore(logisticRegression.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -43,10 +43,10 @@ export default () => {
 
     const logisticRegressionBuilder = new LogisticRegressionBuilder(x, yWrapped)
     const logisticRegression = logisticRegressionBuilder.build()
-    const score1 = accuracyScore(logisticRegression.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(logisticRegression.predict(xTest).field0, yTest, false)
     const serializedLogisticRegression = logisticRegression.serialize()
     const deserializedLogisticRegression = LogisticRegression.deserialize(serializedLogisticRegression)
-    const score2 = accuracyScore(deserializedLogisticRegression.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedLogisticRegression.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

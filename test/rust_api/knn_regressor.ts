@@ -80,7 +80,7 @@ export default () => {
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     const knnRegressorBuilder = new KNNRegressorBuilder(x, yWrapped)
     const knnRegressor = knnRegressorBuilder.build()
-    const score = accuracyScore(knnRegressor.predict(xTest).field0, yTest)
+    const score = accuracyScore(knnRegressor.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -94,10 +94,10 @@ export default () => {
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     const knnRegressorBuilder = new KNNRegressorBuilder(x, yWrapped)
     const knnRegressor = knnRegressorBuilder.build()
-    const score1 = accuracyScore(knnRegressor.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(knnRegressor.predict(xTest).field0, yTest, false)
     const serializedKNNRegressor = knnRegressor.serialize()
     const deserializedKNNRegressor = KNNRegressor.deserialize(serializedKNNRegressor)
-    const score2 = accuracyScore(deserializedKNNRegressor.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedKNNRegressor.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

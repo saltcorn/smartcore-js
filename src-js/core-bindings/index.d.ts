@@ -1166,6 +1166,8 @@ export declare class WrappedNumber {
   static int(no: bigint): WrappedNumber
 }
 
+export declare function accuracyScore(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+
 export declare const enum BernoulliNBPredictOutputType {
   U32 = 'U32',
   U64 = 'U64'

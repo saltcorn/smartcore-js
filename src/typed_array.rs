@@ -36,6 +36,20 @@ macro_rules! from_vec_impl {
                 }
             }
         }
+
+        impl TryFrom<TypedArrayWrapper> for Vec<$inner> {
+            type Error = Error;
+
+            fn try_from(value: TypedArrayWrapper) -> Result<Self> {
+                match value {
+                    TypedArrayWrapper::[<$inner:upper>](v) => Ok(v.to_vec()),
+                    _ => Err(Error::new(
+                        Status::InvalidArg,
+                        stringify!("Expected an "[<$inner:upper>]" variant of TypedArray!")
+                    ))
+                }
+            }
+        }
     }
   };
 }
@@ -76,6 +90,7 @@ impl From<TypedArrayWrapper> for TypedArrayVec {
 }
 
 #[napi(string_enum)]
+#[derive(Debug, Clone, PartialEq, Eq, Copy)]
 pub enum TypedArrayType {
   F64,
   F32,

@@ -28,7 +28,7 @@ export default () => {
 
     const gaussianNBBuilder = new GaussianNBBuilder(x, yWrapped)
     const gaussianNB = gaussianNBBuilder.build()
-    const score = accuracyScore(gaussianNB.predict(xTest).field0, yTest)
+    const score = accuracyScore(gaussianNB.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -43,10 +43,10 @@ export default () => {
 
     const gaussianNBBuilder = new GaussianNBBuilder(x, yWrapped)
     const gaussianNB = gaussianNBBuilder.build()
-    const score1 = accuracyScore(gaussianNB.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(gaussianNB.predict(xTest).field0, yTest, false)
     const serializedGaussianNB = gaussianNB.serialize()
     const deserializedGaussianNB = GaussianNB.deserialize(serializedGaussianNB)
-    const score2 = accuracyScore(deserializedGaussianNB.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedGaussianNB.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

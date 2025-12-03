@@ -1,3 +1,7 @@
+import assert from 'assert'
+import { tree, dataset, modelSelection, metrics } from '../../../../src-js/index.js'
+
+const { r2Score } = metrics
 import {
   dataset,
   trainTestSplitF64BigI64,
@@ -5,7 +9,6 @@ import {
   DecisionTreeClassifierParameters,
   R2I64,
 } from '../../../../src-js/core-bindings/index.js'
-import assert from 'assert'
 
 export default () => {
   it('Decision Tree Classifier', () => {

@@ -42,7 +42,7 @@ export default () => {
 
     const bernoulliNBBuilder = new CategoricalNBBuilder(x, y)
     const bernoulliNB = bernoulliNBBuilder.build()
-    const score = accuracyScore(bernoulliNB.predict(xTest).field0, yTest)
+    const score = accuracyScore(bernoulliNB.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -51,10 +51,10 @@ export default () => {
 
     const bernoulliNBBuilder = new CategoricalNBBuilder(x, y)
     const bernoulliNB = bernoulliNBBuilder.build()
-    const score1 = accuracyScore(bernoulliNB.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(bernoulliNB.predict(xTest).field0, yTest, false)
     const serializedCategoricalNB = bernoulliNB.serialize()
     const deserializedCategoricalNB = CategoricalNB.deserialize(serializedCategoricalNB)
-    const score2 = accuracyScore(deserializedCategoricalNB.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedCategoricalNB.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

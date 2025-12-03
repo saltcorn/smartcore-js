@@ -42,7 +42,7 @@ export default () => {
 
     const multinomialNBBuilder = new MultinomialNBBuilder(x, y)
     const multinomialNB = multinomialNBBuilder.build()
-    const score = accuracyScore(multinomialNB.predict(xTest).field0, yTest)
+    const score = accuracyScore(multinomialNB.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -51,10 +51,10 @@ export default () => {
 
     const multinomialNBBuilder = new MultinomialNBBuilder(x, y)
     const multinomialNB = multinomialNBBuilder.build()
-    const score1 = accuracyScore(multinomialNB.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(multinomialNB.predict(xTest).field0, yTest, false)
     const serializedMultinomialNB = multinomialNB.serialize()
     const deserializedMultinomialNB = MultinomialNB.deserialize(serializedMultinomialNB)
-    const score2 = accuracyScore(deserializedMultinomialNB.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedMultinomialNB.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

@@ -76,7 +76,7 @@ export default () => {
 
     const dbscanBuilder = new DBSCANBuilder(x)
     const dbscan = dbscanBuilder.build()
-    const score = accuracyScore(dbscan.predict(xTest).field0, yTest)
+    const score = accuracyScore(dbscan.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -90,10 +90,10 @@ export default () => {
 
     const dbscanBuilder = new DBSCANBuilder(x)
     const dbscan = dbscanBuilder.build()
-    const score1 = accuracyScore(dbscan.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(dbscan.predict(xTest).field0, yTest, false)
     const serializedDBSCAN = dbscan.serialize()
     const deserializedDBSCAN = DBSCAN.deserialize(serializedDBSCAN)
-    const score2 = accuracyScore(deserializedDBSCAN.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedDBSCAN.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

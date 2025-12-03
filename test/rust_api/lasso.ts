@@ -28,7 +28,7 @@ export default () => {
 
     const lassoBuilder = new LassoBuilder(x, yWrapped)
     const lasso = lassoBuilder.build()
-    const score = accuracyScore(lasso.predict(xTest).field0, yTest)
+    const score = accuracyScore(lasso.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -43,10 +43,10 @@ export default () => {
 
     const lassoBuilder = new LassoBuilder(x, yWrapped)
     const lasso = lassoBuilder.build()
-    const score1 = accuracyScore(lasso.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(lasso.predict(xTest).field0, yTest, false)
     const serializedLasso = lasso.serialize()
     const deserializedLasso = Lasso.deserialize(serializedLasso)
-    const score2 = accuracyScore(deserializedLasso.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedLasso.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

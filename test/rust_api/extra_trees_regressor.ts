@@ -28,7 +28,7 @@ export default () => {
 
     const extraTreesRegressorBuilder = new ExtraTreesRegressorBuilder(x, yWrapped)
     const extraTreesRegressor = extraTreesRegressorBuilder.build()
-    const score = accuracyScore(extraTreesRegressor.predict(xTest).field0, yTest)
+    const score = accuracyScore(extraTreesRegressor.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -43,10 +43,10 @@ export default () => {
 
     const extraTreesRegressorBuilder = new ExtraTreesRegressorBuilder(x, yWrapped)
     const extraTreesRegressor = extraTreesRegressorBuilder.build()
-    const score1 = accuracyScore(extraTreesRegressor.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(extraTreesRegressor.predict(xTest).field0, yTest, false)
     const serializedExtraTreesRegressor = extraTreesRegressor.serialize()
     const deserializedExtraTreesRegressor = ExtraTreesRegressor.deserialize(serializedExtraTreesRegressor)
-    const score2 = accuracyScore(deserializedExtraTreesRegressor.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedExtraTreesRegressor.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

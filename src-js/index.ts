@@ -75,5 +75,10 @@ function asTypedY(y: YType): YTyped {
   throw new Error(`Conversion to typed array failed!`)
 }
 
-export type { YType, XType, InputType, OutputType, YTyped }
+interface ModelSaveData {
+  columns?: string[]
+  model: Buffer
+}
+
+export type { YType, XType, InputType, OutputType, YTyped, ModelSaveData }
 export { asTypedY, numberTypeCheckers }

@@ -1,4 +1,4 @@
-mod accuracy;
+pub mod accuracy;
 mod auc;
 mod cluster_hcv;
 pub mod distance;
