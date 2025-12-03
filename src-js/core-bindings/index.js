@@ -575,9 +575,7 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { AUCF64, AUCf64, BernoulliNB, BernoulliNBBuilder, Boston, BreastCancer, CategoricalNB, CategoricalNBBuilder, dataset, Dataset, DatasetF64F64, DatasetF64F64JsVecRef, DatasetF64I32, DatasetF64I32JsVecRef, DatasetI32I32, DBSCAN, DBSCANBuilder, DecisionTreeClassifierI64I64, DecisionTreeClassifierParameters, DecisionTreeRegressorI64I64, DecisionTreeRegressorParameters, DenseMatrix, DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32, DenseMatrixU64, DenseMatrixU8, Diabetes, Digits, ElasticNet, ElasticNetBuilder, EuclidianF32, EuclidianF64, EuclidianI32, EuclidianI64, EuclidianU16, EuclidianU32, EuclidianU64, EuclidianU8, ExtraTreesRegressor, ExtraTreesRegressorBuilder, F1F64, F1f64, GaussianNB, GaussianNBBuilder, Generator, HammingI32, HammingU16, HammingU8, HCVScoreI64, HCVScorei64, HCVScoreU64, HCVScoreu64, Iris, JsBoxedArrayF32Ref, JsBoxedArrayF64Ref, JsBoxedArrayI32Ref, JsBoxedArrayI64Ref, JsBoxedArrayU16Ref, JsBoxedArrayU32Ref, JsBoxedArrayU8Ref, JsDenseMatrixF64Ref, JsVecF64Ref, JsVecI64Ref, Kernels, KFold, KMeans, KMeansBuilder, KNNClassifier, KNNClassifierBuilder, KNNRegressor, KNNRegressorBuilder, Lasso, LassoBuilder, LinearRegression, LinearRegressionBuilder, LogisticRegression, LogisticRegressionBuilder, MahalanobisF32, MahalanobisF64, ManhattanF32, ManhattanF64, ManhattanI32, ManhattanI64, ManhattanU32, ManhattanU64, MeanAbsoluteErrorF64, MeanAbsoluteErrorf64, MeanSquareErrorF64, MeanSquareErrorf64, MinkowskiF32, MinkowskiF64, MinkowskiI32, MinkowskiI64, MultinomialNB, MultinomialNBBuilder, OneHotEncoder, OneHotEncoderBuilder, PCA, PCABuilder, PrecisionF64, Precisionf64, R2F64, R2f64, R2I64, R2i64, R2U64, R2u64, RandomForestClassifier, RandomForestClassifierBuilder, RandomForestRegressor, RandomForestRegressorBuilder, RecallF64, Recallf64, RidgeRegression, RidgeRegressionBuilder, StandardScaler, StandardScalerBuilder, SVCF64I64, SVCParametersF64I64, SVD, SVDBuilder, SVDF64DenseMatrixF64, SVRF64, SVRParametersF64, VecF64, VecI64, WrappedNumber, accuracyScore, BernoulliNBPredictOutputType, DenseMatrixType, DistanceVariantType, ElasticNetPredictOutputType, ExtraTreesRegressorPredictOutputType, GaussianNBPredictOutputType, KMeansPredictOutputType, KNNAlgorithmName, KNNClassifierPredictOutputType, KNNRegressorPredictOutputType, KNNWeightFunction, LassoPredictOutputType, LinearRegressionPredictOutputType, LinearRegressionSolverName, LogisticRegressionPredictOutputType, LogisticRegressionSolverName, MultinomialNBPredictOutputType, RandomForestClassifierPredictOutputType, RandomForestRegressorPredictOutputType, RidgeRegressionPredictOutputType, RidgeRegressionSolverName, SplitCriterion, trainTestSplitF32F32, trainTestSplitF32F64, trainTestSplitF32I32, trainTestSplitF32I64, trainTestSplitF32U64, trainTestSplitF64F32, trainTestSplitF64F64, trainTestSplitF64I32, trainTestSplitF64I64, trainTestSplitF64U64, trainTestSplitI32F32, trainTestSplitI32F64, trainTestSplitI32I32, trainTestSplitI32I64, trainTestSplitI32U64, trainTestSplitI64F32, trainTestSplitI64F64, trainTestSplitI64I32, trainTestSplitI64I64, trainTestSplitI64U64, trainTestSplitU16F32, trainTestSplitU16F64, trainTestSplitU16I32, trainTestSplitU16I64, trainTestSplitU16U64, trainTestSplitU32F32, trainTestSplitU32F64, trainTestSplitU32I32, trainTestSplitU32I64, trainTestSplitU32U64, trainTestSplitU64F32, trainTestSplitU64F64, trainTestSplitU64I32, trainTestSplitU64I64, trainTestSplitU64U64, trainTestSplitU8F32, trainTestSplitU8F64, trainTestSplitU8I32, trainTestSplitU8I64, trainTestSplitU8U64, TypedArrayType } = nativeBinding
-export { AUCF64 }
-export { AUCf64 }
+const { BernoulliNB, BernoulliNBBuilder, Boston, BreastCancer, CategoricalNB, CategoricalNBBuilder, dataset, Dataset, DatasetF64F64, DatasetF64F64JsVecRef, DatasetF64I32, DatasetF64I32JsVecRef, DatasetI32I32, DBSCAN, DBSCANBuilder, DecisionTreeClassifierI64I64, DecisionTreeClassifierParameters, DecisionTreeRegressorI64I64, DecisionTreeRegressorParameters, DenseMatrix, DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32, DenseMatrixU64, DenseMatrixU8, Diabetes, Digits, ElasticNet, ElasticNetBuilder, EuclidianF32, EuclidianF64, EuclidianI32, EuclidianI64, EuclidianU16, EuclidianU32, EuclidianU64, EuclidianU8, ExtraTreesRegressor, ExtraTreesRegressorBuilder, GaussianNB, GaussianNBBuilder, Generator, HammingI32, HammingU16, HammingU8, Iris, JsBoxedArrayF32Ref, JsBoxedArrayF64Ref, JsBoxedArrayI32Ref, JsBoxedArrayI64Ref, JsBoxedArrayU16Ref, JsBoxedArrayU32Ref, JsBoxedArrayU8Ref, JsDenseMatrixF64Ref, JsVecF64Ref, JsVecI64Ref, Kernels, KFold, KMeans, KMeansBuilder, KNNClassifier, KNNClassifierBuilder, KNNRegressor, KNNRegressorBuilder, Lasso, LassoBuilder, LinearRegression, LinearRegressionBuilder, LogisticRegression, LogisticRegressionBuilder, MahalanobisF32, MahalanobisF64, ManhattanF32, ManhattanF64, ManhattanI32, ManhattanI64, ManhattanU32, ManhattanU64, MinkowskiF32, MinkowskiF64, MinkowskiI32, MinkowskiI64, MultinomialNB, MultinomialNBBuilder, OneHotEncoder, OneHotEncoderBuilder, PCA, PCABuilder, RandomForestClassifier, RandomForestClassifierBuilder, RandomForestRegressor, RandomForestRegressorBuilder, RidgeRegression, RidgeRegressionBuilder, StandardScaler, StandardScalerBuilder, SVCF64I64, SVCParametersF64I64, SVD, SVDBuilder, SVDF64DenseMatrixF64, SVRF64, SVRParametersF64, VecF64, VecI64, WrappedNumber, accuracyScore, auc, BernoulliNBPredictOutputType, DenseMatrixType, DistanceVariantType, ElasticNetPredictOutputType, ExtraTreesRegressorPredictOutputType, f1, GaussianNBPredictOutputType, hcvScore, KMeansPredictOutputType, KNNAlgorithmName, KNNClassifierPredictOutputType, KNNRegressorPredictOutputType, KNNWeightFunction, LassoPredictOutputType, LinearRegressionPredictOutputType, LinearRegressionSolverName, LogisticRegressionPredictOutputType, LogisticRegressionSolverName, meanAbsoluteError, meanSquaredError, MultinomialNBPredictOutputType, precision, r2, RandomForestClassifierPredictOutputType, RandomForestRegressorPredictOutputType, recall, RidgeRegressionPredictOutputType, RidgeRegressionSolverName, SplitCriterion, trainTestSplitF32F32, trainTestSplitF32F64, trainTestSplitF32I32, trainTestSplitF32I64, trainTestSplitF32U64, trainTestSplitF64F32, trainTestSplitF64F64, trainTestSplitF64I32, trainTestSplitF64I64, trainTestSplitF64U64, trainTestSplitI32F32, trainTestSplitI32F64, trainTestSplitI32I32, trainTestSplitI32I64, trainTestSplitI32U64, trainTestSplitI64F32, trainTestSplitI64F64, trainTestSplitI64I32, trainTestSplitI64I64, trainTestSplitI64U64, trainTestSplitU16F32, trainTestSplitU16F64, trainTestSplitU16I32, trainTestSplitU16I64, trainTestSplitU16U64, trainTestSplitU32F32, trainTestSplitU32F64, trainTestSplitU32I32, trainTestSplitU32I64, trainTestSplitU32U64, trainTestSplitU64F32, trainTestSplitU64F64, trainTestSplitU64I32, trainTestSplitU64I64, trainTestSplitU64U64, trainTestSplitU8F32, trainTestSplitU8F64, trainTestSplitU8I32, trainTestSplitU8I64, trainTestSplitU8U64, TypedArrayType } = nativeBinding
 export { BernoulliNB }
 export { BernoulliNBBuilder }
 export { Boston }
@@ -620,18 +618,12 @@ export { EuclidianU64 }
 export { EuclidianU8 }
 export { ExtraTreesRegressor }
 export { ExtraTreesRegressorBuilder }
-export { F1F64 }
-export { F1f64 }
 export { GaussianNB }
 export { GaussianNBBuilder }
 export { Generator }
 export { HammingI32 }
 export { HammingU16 }
 export { HammingU8 }
-export { HCVScoreI64 }
-export { HCVScorei64 }
-export { HCVScoreU64 }
-export { HCVScoreu64 }
 export { Iris }
 export { JsBoxedArrayF32Ref }
 export { JsBoxedArrayF64Ref }
@@ -665,10 +657,6 @@ export { ManhattanI32 }
 export { ManhattanI64 }
 export { ManhattanU32 }
 export { ManhattanU64 }
-export { MeanAbsoluteErrorF64 }
-export { MeanAbsoluteErrorf64 }
-export { MeanSquareErrorF64 }
-export { MeanSquareErrorf64 }
 export { MinkowskiF32 }
 export { MinkowskiF64 }
 export { MinkowskiI32 }
@@ -679,20 +667,10 @@ export { OneHotEncoder }
 export { OneHotEncoderBuilder }
 export { PCA }
 export { PCABuilder }
-export { PrecisionF64 }
-export { Precisionf64 }
-export { R2F64 }
-export { R2f64 }
-export { R2I64 }
-export { R2i64 }
-export { R2U64 }
-export { R2u64 }
 export { RandomForestClassifier }
 export { RandomForestClassifierBuilder }
 export { RandomForestRegressor }
 export { RandomForestRegressorBuilder }
-export { RecallF64 }
-export { Recallf64 }
 export { RidgeRegression }
 export { RidgeRegressionBuilder }
 export { StandardScaler }
@@ -708,12 +686,15 @@ export { VecF64 }
 export { VecI64 }
 export { WrappedNumber }
 export { accuracyScore }
+export { auc }
 export { BernoulliNBPredictOutputType }
 export { DenseMatrixType }
 export { DistanceVariantType }
 export { ElasticNetPredictOutputType }
 export { ExtraTreesRegressorPredictOutputType }
+export { f1 }
 export { GaussianNBPredictOutputType }
+export { hcvScore }
 export { KMeansPredictOutputType }
 export { KNNAlgorithmName }
 export { KNNClassifierPredictOutputType }
@@ -724,9 +705,14 @@ export { LinearRegressionPredictOutputType }
 export { LinearRegressionSolverName }
 export { LogisticRegressionPredictOutputType }
 export { LogisticRegressionSolverName }
+export { meanAbsoluteError }
+export { meanSquaredError }
 export { MultinomialNBPredictOutputType }
+export { precision }
+export { r2 }
 export { RandomForestClassifierPredictOutputType }
 export { RandomForestRegressorPredictOutputType }
+export { recall }
 export { RidgeRegressionPredictOutputType }
 export { RidgeRegressionSolverName }
 export { SplitCriterion }

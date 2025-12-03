@@ -1,10 +1,10 @@
 pub mod accuracy;
-mod auc;
-mod cluster_hcv;
+pub mod auc;
+pub mod cluster_hcv;
 pub mod distance;
-mod f1;
-mod mean_absolute_error;
-mod mean_squared_error;
-mod precision;
-mod r2;
-mod recall;
+pub mod f1;
+pub mod mean_absolute_error;
+pub mod mean_squared_error;
+pub mod precision;
+pub mod r2;
+pub mod recall;

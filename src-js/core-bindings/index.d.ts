@@ -2,12 +2,6 @@
 /* eslint-disable */
 
 export type TypedArray = Int8Array | Uint8Array | Uint8ClampedArray | Int16Array | Uint16Array | Int32Array | Uint32Array | Float32Array | Float64Array | BigInt64Array | BigUint64Array
-export declare class AUCF64 {
-  constructor()
-  getScore(yTrue: Float64Array, yPred: Float64Array): number
-}
-export type AUCf64 = AUCF64
-
 export declare class BernoulliNB {
   predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
@@ -674,12 +668,6 @@ export declare class ExtraTreesRegressorBuilder {
   build(): ExtraTreesRegressor
 }
 
-export declare class F1F64 {
-  constructor()
-  getScore(yTrue: Float64Array, yPred: Float64Array): number
-}
-export type F1f64 = F1F64
-
 export declare class GaussianNB {
   predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
@@ -712,18 +700,6 @@ export declare class HammingU8 {
   constructor()
   distance(x: Uint8Array, y: Uint8Array): number
 }
-
-export declare class HCVScoreI64 {
-  constructor()
-  getScore(yTrue: BigInt64Array, yPred: BigInt64Array): number
-}
-export type HCVScorei64 = HCVScoreI64
-
-export declare class HCVScoreU64 {
-  constructor()
-  getScore(yTrue: BigUint64Array, yPred: BigUint64Array): number
-}
-export type HCVScoreu64 = HCVScoreU64
 
 export declare class Iris {
   loadDataset(): DatasetF64I32
@@ -918,18 +894,6 @@ export declare class ManhattanU64 {
   distance(x: BigUint64Array, y: BigUint64Array): number
 }
 
-export declare class MeanAbsoluteErrorF64 {
-  constructor()
-  getScore(yTrue: Float64Array, yPred: Float64Array): number
-}
-export type MeanAbsoluteErrorf64 = MeanAbsoluteErrorF64
-
-export declare class MeanSquareErrorF64 {
-  constructor()
-  getScore(yTrue: Float64Array, yPred: Float64Array): number
-}
-export type MeanSquareErrorf64 = MeanSquareErrorF64
-
 export declare class MinkowskiF32 {
   constructor(p: number)
   distance(x: Float32Array, y: Float32Array): number
@@ -987,30 +951,6 @@ export declare class PCABuilder {
   build(): PCA
 }
 
-export declare class PrecisionF64 {
-  constructor()
-  getScore(yTrue: Float64Array, yPred: Float64Array): number
-}
-export type Precisionf64 = PrecisionF64
-
-export declare class R2F64 {
-  constructor()
-  getScore(yTrue: Float64Array, yPred: Float64Array): number
-}
-export type R2f64 = R2F64
-
-export declare class R2I64 {
-  constructor()
-  getScore(yTrue: BigInt64Array, yPred: BigInt64Array): number
-}
-export type R2i64 = R2I64
-
-export declare class R2U64 {
-  constructor()
-  getScore(yTrue: BigUint64Array, yPred: BigUint64Array): number
-}
-export type R2u64 = R2U64
-
 export declare class RandomForestClassifier {
   predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
@@ -1047,12 +987,6 @@ export declare class RandomForestRegressorBuilder {
   withSeed(seed: bigint): void
   build(): RandomForestRegressor
 }
-
-export declare class RecallF64 {
-  constructor()
-  getScore(yTrue: Float64Array, yPred: Float64Array): number
-}
-export type Recallf64 = RecallF64
 
 export declare class RidgeRegression {
   predict(x: DenseMatrix): TypedArrayWrapper
@@ -1144,6 +1078,8 @@ export declare class WrappedNumber {
 
 export declare function accuracyScore(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
 
+export declare function auc(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+
 export declare const enum BernoulliNBPredictOutputType {
   U32 = 'U32',
   U64 = 'U64'
@@ -1190,12 +1126,16 @@ export declare const enum ExtraTreesRegressorPredictOutputType {
   I32 = 'I32'
 }
 
+export declare function f1(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+
 export declare const enum GaussianNBPredictOutputType {
   U64 = 'U64',
   U32 = 'U32',
   U16 = 'U16',
   U8 = 'U8'
 }
+
+export declare function hcvScore(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
 
 export declare const enum KMeansPredictOutputType {
   I32 = 'I32',
@@ -1253,12 +1193,20 @@ export declare const enum LogisticRegressionSolverName {
   LBFGS = 0
 }
 
+export declare function meanAbsoluteError(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+
+export declare function meanSquaredError(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+
 export declare const enum MultinomialNBPredictOutputType {
   U64 = 'U64',
   U32 = 'U32',
   U16 = 'U16',
   U8 = 'U8'
 }
+
+export declare function precision(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+
+export declare function r2(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
 
 export declare const enum RandomForestClassifierPredictOutputType {
   I64 = 'I64',
@@ -1273,6 +1221,8 @@ export declare const enum RandomForestRegressorPredictOutputType {
   U64 = 'U64',
   I32 = 'I32'
 }
+
+export declare function recall(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
 
 export declare const enum RidgeRegressionPredictOutputType {
   F64 = 'F64',

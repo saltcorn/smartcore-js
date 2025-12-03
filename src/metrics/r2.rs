@@ -1,42 +1,26 @@
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
-use paste::paste;
 use smartcore::metrics::{r2::R2 as LibR2, Metrics};
 
-macro_rules! r2_struct {
-  ( $x:ty, $xs:ty ) => {
-    paste! {
-        #[napi(js_name=""[<R2 $x:upper>]"")]
-        pub struct [<R2 $x>] {
-            inner: LibR2<$x>,
-        }
+use crate::{
+  match_array_types::{match_array_type, MatchedArrays},
+  typed_array::TypedArrayWrapper,
+};
 
-        impl Default for [<R2 $x>] {
-            fn default() -> Self {
-                Self {
-                    inner: LibR2::<$x>::new(),
-                }
-            }
-        }
-
-        #[napi]
-        impl [<R2 $x>] {
-            #[napi(constructor)]
-            pub fn new() -> Self {
-                Self::default()
-            }
-
-            #[napi]
-            pub fn get_score(&self, y_true: $xs, y_pred: $xs) -> f64 {
-                let y_true = y_true.to_vec();
-                let y_pred = y_pred.to_vec();
-                self.inner.get_score(&y_true, &y_pred)
-            }
-        }
-    }
-  };
+#[napi]
+pub fn r2(
+  y_true: TypedArrayWrapper,
+  y_pred: TypedArrayWrapper,
+  losslessly: Option<bool>,
+) -> Result<f64> {
+  match match_array_type(y_true, y_pred, losslessly)? {
+    MatchedArrays::F64(y_true, y_pred) => Ok(LibR2::<f64>::new().get_score(&y_true, &y_pred)),
+    MatchedArrays::F32(y_true, y_pred) => Ok(LibR2::<f32>::new().get_score(&y_true, &y_pred)),
+    MatchedArrays::I64(y_true, y_pred) => Ok(LibR2::<i64>::new().get_score(&y_true, &y_pred)),
+    MatchedArrays::U64(y_true, y_pred) => Ok(LibR2::<u64>::new().get_score(&y_true, &y_pred)),
+    MatchedArrays::I32(y_true, y_pred) => Ok(LibR2::<i32>::new().get_score(&y_true, &y_pred)),
+    MatchedArrays::U32(y_true, y_pred) => Ok(LibR2::<u32>::new().get_score(&y_true, &y_pred)),
+    MatchedArrays::U16(y_true, y_pred) => Ok(LibR2::<u16>::new().get_score(&y_true, &y_pred)),
+    MatchedArrays::U8(y_true, y_pred) => Ok(LibR2::<u8>::new().get_score(&y_true, &y_pred)),
+  }
 }
-
-r2_struct! {f64, Float64Array}
-r2_struct! {i64, BigInt64Array}
-r2_struct! {u64, BigUint64Array}

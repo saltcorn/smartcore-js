@@ -5,7 +5,7 @@ import modelSelection from './model_selection/index.ts'
 
 describe('Examples', () => {
   quickStart()
-  //   supervised_learning()
+  // supervised_learning()
   unsupervisedLearning()
   modelSelection()
 })
