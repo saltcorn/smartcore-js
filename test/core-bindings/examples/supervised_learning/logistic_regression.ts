@@ -1,22 +1,18 @@
-import {
-  dataset,
-  trainTestSplitF64BigI64,
-  R2I64,
-  LogisticRegressionF64BigI64,
-  LogisticRegressionParametersF64,
-} from '../../../../src-js/core-bindings/index.js'
 import assert from 'assert'
+import { dataset, metrics, linearModel, modelSelection } from '../../../../src-js/index.js'
+
+const { trainTestSplit } = modelSelection
+const { r2 } = metrics
+const { LogisticRegression } = linearModel
 
 export default () => {
   it('Logistic Regression', () => {
-    let loadedDataset = dataset.breastCancer().loadDataset()
-    let matrix = loadedDataset.denseMatrix()
-    let y = loadedDataset.target
-    let [, xTest, , yTest] = trainTestSplitF64BigI64(matrix, y, 0.2, true)
-    let parameters = new LogisticRegressionParametersF64()
-    let yHatLr = LogisticRegressionF64BigI64.fit(matrix, loadedDataset.target, parameters).predict(xTest)
-    let r2 = new R2I64()
-    let score = r2.getScore(yTest, yHatLr)
+    let breastCancerData = dataset.loadBreastCancer({ returnXY: true })
+    if (!Array.isArray(breastCancerData)) assert.fail('Expected breastCancerData to be an Array')
+    const [x, y] = breastCancerData
+    let [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
+    let yHatLr = new LogisticRegression().fit(x, y).predict(xTest)
+    let score = r2(yTest, yHatLr)
     assert(score)
   })
 }

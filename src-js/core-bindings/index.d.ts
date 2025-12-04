@@ -111,33 +111,33 @@ export declare class DBSCANBuilder {
   build(): DBSCAN
 }
 
-export declare class DecisionTreeClassifierI64I64 {
-  static fit(x: DenseMatrixI64, y: BigInt64Array, parameters: DecisionTreeClassifierParameters): DecisionTreeClassifierI64I64
-  predict(x: DenseMatrixI64): BigInt64Array
+export declare class DecisionTreeClassifier {
+  predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
-  static deserialize(data: Buffer): DecisionTreeClassifierI64I64
+  static deserialize(data: Buffer): DecisionTreeClassifier
 }
 
-export declare class DecisionTreeClassifierParameters {
-  constructor()
-  withCriterion(criterion: SplitCriterion): void
+export declare class DecisionTreeClassifierBuilder {
+  constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
+  withCriterion(splitCriterion: SplitCriterion): void
   withMaxDepth(maxDepth: number): void
   withMinSamplesLeaf(minSamplesLeaf: bigint): void
   withMinSamplesSplit(minSamplesSplit: bigint): void
+  build(): DecisionTreeClassifier
 }
 
-export declare class DecisionTreeRegressorI64I64 {
-  static fit(x: DenseMatrixI64, y: BigInt64Array, parameters: DecisionTreeRegressorParameters): DecisionTreeRegressorI64I64
-  predict(x: DenseMatrixI64): BigInt64Array
+export declare class DecisionTreeRegressor {
+  predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
-  static deserialize(data: Buffer): DecisionTreeRegressorI64I64
+  static deserialize(data: Buffer): DecisionTreeRegressor
 }
 
-export declare class DecisionTreeRegressorParameters {
-  constructor()
+export declare class DecisionTreeRegressorBuilder {
+  constructor(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper)
   withMaxDepth(maxDepth: number): void
   withMinSamplesLeaf(minSamplesLeaf: bigint): void
   withMinSamplesSplit(minSamplesSplit: bigint): void
+  build(): DecisionTreeRegressor
 }
 
 export declare class DenseMatrix {
@@ -1083,6 +1083,16 @@ export declare function auc(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, 
 export declare const enum BernoulliNBPredictOutputType {
   U32 = 'U32',
   U64 = 'U64'
+}
+
+export declare const enum DecisionTreeClassifierPredictOutputType {
+  I64 = 'I64',
+  I32 = 'I32'
+}
+
+export declare const enum DecisionTreeRegressorPredictOutputType {
+  I64 = 'I64',
+  I32 = 'I32'
 }
 
 export declare const enum DenseMatrixType {

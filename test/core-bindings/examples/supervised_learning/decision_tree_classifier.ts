@@ -1,28 +1,18 @@
 import assert from 'assert'
 import { tree, dataset, modelSelection, metrics } from '../../../../src-js/index.js'
 
-const { r2Score } = metrics
-import {
-  dataset,
-  trainTestSplitF64BigI64,
-  DecisionTreeClassifierI64I64,
-  DecisionTreeClassifierParameters,
-  R2I64,
-} from '../../../../src-js/core-bindings/index.js'
+const { r2 } = metrics
+const { trainTestSplit } = modelSelection
+const { DecisionTreeClassifier } = tree
 
 export default () => {
   it('Decision Tree Classifier', () => {
-    let breastCancerData = dataset.breastCancer().loadDataset()
-    let x = breastCancerData.denseMatrix()
-    let y = breastCancerData.target
-    let [, xTest, , yTest] = trainTestSplitF64BigI64(x, y, 0.2, true)
-    let yHatTree = DecisionTreeClassifierI64I64.fit(
-      x,
-      breastCancerData.target,
-      new DecisionTreeClassifierParameters(),
-    ).predict(xTest)
-    let r2 = new R2I64()
-    let score = r2.getScore(yTest, yHatTree)
+    const breastCancerData = dataset.loadBreastCancer({ returnXY: true })
+    if (!Array.isArray(breastCancerData)) assert.fail('Expected breastCancerData to be an Array')
+    const [x, y] = breastCancerData
+    const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
+    const yHatTree = new DecisionTreeClassifier().fit(x, y).predict(xTest)
+    const score = r2(yTest, yHatTree)
     assert(score)
   })
 }

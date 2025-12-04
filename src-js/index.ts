@@ -16,6 +16,7 @@ export * as decomposition from './decomposition/index.js'
 export * as naiveBayes from './naive_bayes/index.js'
 export * as neighbors from './neighbors/index.js'
 export * as coreBindings from './core-bindings/index.js'
+export * as tree from './tree/index.js'
 
 type XType = DenseMatrix | number[][]
 type YType = (number | bigint)[] | TypedArray

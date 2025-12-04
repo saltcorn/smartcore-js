@@ -1,23 +1,18 @@
-import {
-  dataset,
-  trainTestSplitF64F64,
-  MeanSquareErrorF64,
-  LassoF64F64,
-  LassoParameters,
-} from '../../../../src-js/core-bindings/index.js'
 import assert from 'assert'
+import { dataset, metrics, linearModel, modelSelection } from '../../../../src-js/index.js'
+
+const { trainTestSplit } = modelSelection
+const { meanSquaredError } = metrics
+const { Lasso } = linearModel
 
 export default () => {
   it('Least Absolute Shrinkage and Selection Operator (LASSO)', () => {
-    let bostonData = dataset.boston().loadDataset()
-    let x = bostonData.denseMatrix()
-    let y = bostonData.target
-    let [, xTest, , yTest] = trainTestSplitF64F64(x, y, 0.2, true)
-    let parameters = new LassoParameters()
-    parameters.withAlpha(0.5)
-    let yHat_lasso = LassoF64F64.fit(x, bostonData.target, parameters).predict(xTest)
-    let meanSquareError = new MeanSquareErrorF64()
-    let score = meanSquareError.getScore(yTest, yHat_lasso)
+    const bostonData = dataset.loadBoston({ returnXY: true })
+    if (!Array.isArray(bostonData)) assert.fail('Expected bostonData to be an Array')
+    const [x, y] = bostonData
+    const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
+    const yHatLasso = new Lasso({ alpha: 0.5 }).fit(x, y).predict(xTest)
+    const score = meanSquaredError(yTest, yHatLasso)
     assert(score)
   })
 }

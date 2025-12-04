@@ -1,23 +1,18 @@
-import {
-  dataset,
-  trainTestSplitF64F64,
-  RandomForestRegressorF64F64,
-  RandomForestRegressorParameters,
-  MeanSquareErrorF64,
-} from '../../../../src-js/core-bindings/index.js'
 import assert from 'assert'
+import { dataset, modelSelection, ensemble, metrics } from '../../../../src-js/index.js'
+
+const { trainTestSplit } = modelSelection
+const { meanSquaredError } = metrics
+const { RandomForestRegressor } = ensemble
 
 export default () => {
   it('Random Forest Regressor', () => {
-    let bostonData = dataset.boston().loadDataset()
-    let x = bostonData.denseMatrix()
-    let y = bostonData.target
-    let [, xTest, , yTest] = trainTestSplitF64F64(x, y, 0.2, true)
-    let yHatRf = RandomForestRegressorF64F64.fit(x, bostonData.target, new RandomForestRegressorParameters()).predict(
-      xTest,
-    )
-    let meanSquareError = new MeanSquareErrorF64()
-    let score = meanSquareError.getScore(yTest, yHatRf)
+    const bostonData = dataset.loadBoston({ returnXY: true })
+    if (!Array.isArray(bostonData)) assert.fail('Expected bostonData to be an Array')
+    const [x, y] = bostonData
+    const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
+    const yHatRf = new RandomForestRegressor().fit(x, y).predict(xTest)
+    const score = meanSquaredError(yTest, yHatRf)
     assert(score)
   })
 }
