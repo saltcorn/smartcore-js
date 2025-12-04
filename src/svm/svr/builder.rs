@@ -2,7 +2,7 @@ use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use smartcore::svm::svr::SVRParameters as LibSVRParameters;
 
-use super::{factory::SVRFactory, lib_svr_factory::SVRParameters, v2::SVR};
+use super::{factory::SVRFactory, lib_svr_factory::SVRParameters, SVR};
 use crate::{
   dense_matrix::DenseMatrix,
   js_number::WrappedNumber,

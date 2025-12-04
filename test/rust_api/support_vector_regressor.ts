@@ -2,7 +2,7 @@ import assert from 'assert'
 import chalk from 'chalk'
 import { coreBindings, dataset, modelSelection, metrics, utilities } from '../../src-js/index.js'
 
-const { SVRBuilder, SVR, TypedArrayType, Kernels } = coreBindings
+const { SVRBuilder, TypedArrayType, Kernels } = coreBindings
 const { loadDiabetes } = dataset
 const { trainTestSplit } = modelSelection
 const { accuracyScore } = metrics

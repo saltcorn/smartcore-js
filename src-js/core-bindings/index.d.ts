@@ -1062,22 +1062,6 @@ export declare class SVRBuilder {
   build(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper): SVR
 }
 
-export declare class SVRF64 {
-  static setFitData(xRef: DenseMatrixF64, yRef: Float64Array, parametersRef: SVRParametersF64): SVRF64
-  fit(): void
-  predict(xRef: DenseMatrixF64): Float64Array
-  serialize(): Buffer
-  static deserialize(data: Buffer): SVRF64
-}
-
-export declare class SVRParametersF64 {
-  constructor()
-  withEps(eps: number): void
-  withC(c: number): void
-  withTol(tol: number): void
-  withKernel(kernel: Kernels): void
-}
-
 export declare class VecF64 {
   constructor(values: Float64Array)
 }

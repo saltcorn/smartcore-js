@@ -1,6 +1,6 @@
 use napi::{Error, Status};
 
-use super::{serialize_data::SVRSerializeData, v2::SVR, variants::*};
+use super::{serialize_data::SVRSerializeData, variants::*, SVR};
 use crate::{
   dense_matrix::DenseMatrixType, deserialize_variant::deserialize_variant,
   traits::PredictorEstimator,
