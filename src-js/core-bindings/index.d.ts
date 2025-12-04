@@ -721,6 +721,10 @@ export declare class JsBoxedArrayU32Ref {
 
 }
 
+export declare class JsBoxedArrayU64Ref {
+
+}
+
 export declare class JsBoxedArrayU8Ref {
 
 }
@@ -997,20 +1001,20 @@ export declare class StandardScalerBuilder {
   build(): StandardScaler
 }
 
-export declare class SVCF64I64 {
-  static setFitData(xRef: DenseMatrixF64, yRef: BigInt64Array, parametersRef: SVCParametersF64I64): SVCF64I64
-  fit(): void
-  predict(xRef: DenseMatrixF64): Float64Array
+export declare class SVC {
+  predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
-  static deserialize(data: Buffer): SVCF64I64
+  static deserialize(data: Buffer): SVC
 }
 
-export declare class SVCParametersF64I64 {
+export declare class SVCBuilder {
   constructor()
-  withEpoch(epoch: number): void
-  withC(c: number): void
-  withTol(tol: number): void
+  withEps(epoch: bigint): void
   withSeed(seed?: bigint | undefined | null): void
+  withC(c: WrappedNumber): void
+  withTol(tol: WrappedNumber): void
+  withKernel(kernel: Kernels): void
+  build(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper): SVC
 }
 
 export declare class SVD {
@@ -1226,6 +1230,11 @@ export declare const enum SplitCriterion {
   Gini = 0,
   Entropy = 1,
   ClassificationError = 2
+}
+
+export declare const enum SVCPredictOutputType {
+  I64 = 'I64',
+  I32 = 'I32'
 }
 
 export declare function trainTestSplitF32F32(x: DenseMatrix, y: Float32Array, testSize: number, shuffle: boolean, seed?: bigint | undefined | null): [DenseMatrix, DenseMatrix, Float32Array, Float32Array]

@@ -5,7 +5,6 @@ use napi_derive::napi;
 
 use super::{
   factory::{self, BernoulliNBFactory, BernoulliNBParameters},
-  predict_output_type::BernoulliNBPredictOutputType,
   BernoulliNB,
 };
 use crate::{
