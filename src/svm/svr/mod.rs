@@ -1,4 +1,12 @@
+mod builder;
+mod deserialize;
+mod factory;
+mod lib_svr_factory;
 mod parameters;
+mod predictor_estimator;
+mod serialize_data;
+mod v2;
+mod variants;
 
 use bincode::{
   config::standard,
