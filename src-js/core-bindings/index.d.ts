@@ -58,10 +58,6 @@ export declare class DatasetF64F64 {
   denseMatrixV2(columnMajor?: boolean | undefined | null): DenseMatrix
 }
 
-export declare class DatasetF64F64JsVecRef {
-  asArray(): Float64Array
-}
-
 export declare class DatasetF64I32 {
   get data(): Float64Array
   get target(): Int32Array
@@ -72,10 +68,6 @@ export declare class DatasetF64I32 {
   get description(): string
   denseMatrix(columnMajor?: boolean | undefined | null): DenseMatrixF64
   denseMatrixV2(columnMajor?: boolean | undefined | null): DenseMatrix
-}
-
-export declare class DatasetF64I32JsVecRef {
-  asArray(): BigInt64Array
 }
 
 export declare class DatasetI32I32 {
@@ -738,14 +730,6 @@ export declare class JsDenseMatrixF64Ref {
   transpose(): DenseMatrixF64
 }
 
-export declare class JsVecF64Ref {
-
-}
-
-export declare class JsVecI64Ref {
-
-}
-
 export declare class Kernels {
   static linear(): Kernels
   static rbf(gamma: number): Kernels
@@ -1060,14 +1044,6 @@ export declare class SVRBuilder {
   withTol(tol: WrappedNumber): void
   withKernel(kernel: Kernels): void
   build(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper): SVR
-}
-
-export declare class VecF64 {
-  constructor(values: Float64Array)
-}
-
-export declare class VecI64 {
-  constructor(values: BigInt64Array)
 }
 
 export declare class WrappedNumber {

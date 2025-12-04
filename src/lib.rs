@@ -15,7 +15,6 @@ pub mod model_selection;
 pub mod naive_bayes;
 pub mod neighbors;
 pub mod preprocessing;
-pub mod refs;
 pub mod svm;
 mod traits;
 pub mod tree;
