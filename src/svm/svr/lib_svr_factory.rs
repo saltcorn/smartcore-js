@@ -54,3 +54,16 @@ impl LibSVRFactory {
     Ok(Box::new(svr_instance))
   }
 }
+
+impl LibSVRFactory {
+  pub fn f32<'a, 'b: 'a>(
+    params: &'b SVRParametersDto<'a>,
+  ) -> Result<Box<dyn PredictorEstimator + 'a>> {
+    let x: &LibDenseMatrix<f32> = (&*params.fit_data_x).try_into()?;
+    let y: &Vec<f32> = (&params.fit_data_y).try_into()?;
+    let parameters: &LibSVRParameters<f32> = (&params.svr_parameters).try_into()?;
+    let svr_instance = LibSVR::<f32, LibDenseMatrix<f32>, Vec<f32>>::fit(x, y, parameters)
+      .map_err(|e| Error::new(Status::GenericFailure, e.to_string()))?;
+    Ok(Box::new(svr_instance))
+  }
+}

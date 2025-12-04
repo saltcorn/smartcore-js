@@ -11,6 +11,7 @@ use crate::{
 
 #[napi(js_name = "SVR")]
 #[derive(Debug)]
+#[allow(clippy::upper_case_acronyms)]
 pub struct SVR<'a> {
   pub(super) inner: Box<dyn PredictorEstimator + 'a>,
   pub(super) fit_data_variant_type: DenseMatrixType,

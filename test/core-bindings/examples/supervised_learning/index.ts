@@ -6,7 +6,7 @@ import lasso from './lasso.ts'
 import elastic_net from './elastic_net.ts'
 import logistic_regression from './logistic_regression.ts'
 // import support_vector_classifier from './support_vector_classifier.ts'
-// import support_vector_regressor from './support_vector_regressor.ts'
+import support_vector_regressor from './support_vector_regressor.ts'
 import decision_tree_classifier from './decision_tree_classifier.ts'
 import random_forest_regressor from './random_forest_regressor.ts'
 import naive_bayes from './naive_bayes.ts'
@@ -21,7 +21,7 @@ export default () => {
     elastic_net()
     logistic_regression()
     // support_vector_classifier()
-    // support_vector_regressor()
+    support_vector_regressor()
     decision_tree_classifier()
     random_forest_regressor()
     naive_bayes()

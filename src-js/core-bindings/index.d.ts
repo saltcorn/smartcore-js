@@ -1047,20 +1047,19 @@ export declare class SVDF64DenseMatrixF64 {
   S(): DenseMatrixF64
 }
 
-export declare class SVMBuilder {
+export declare class SVR {
+  predict(x: DenseMatrix): TypedArrayWrapper
+  serialize(): Buffer
+  static deserialize(data: Buffer): SVR
+}
+
+export declare class SVRBuilder {
   constructor()
   withEps(eps: WrappedNumber): void
   withC(c: WrappedNumber): void
   withTol(tol: WrappedNumber): void
   withKernel(kernel: Kernels): void
   build(fitDataX: DenseMatrix, fitDataY: TypedArrayWrapper): SVR
-}
-export type SVRBuilder = SVMBuilder
-
-export declare class SVR {
-  predict(x: DenseMatrix): TypedArrayWrapper
-  serialize(): Buffer
-  static deserialize(data: Buffer): SVR
 }
 
 export declare class SVRF64 {

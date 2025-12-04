@@ -12,7 +12,7 @@ impl SVRFactory {
     let fit_data_x_type = params.fit_data_x.r#type();
     match fit_data_x_type {
       DenseMatrixType::F64 => LibSVRFactory::f64(params),
-      //   DenseMatrixType::F32 => LibSVRFactory::f32(params.into()),
+      DenseMatrixType::F32 => LibSVRFactory::f32(params),
       _ => Err(Error::new(Status::InvalidArg, "TODO")),
     }
   }

@@ -10,7 +10,7 @@ use crate::{
   typed_array::{TypedArrayVec, TypedArrayWrapper},
 };
 
-#[napi(js_name = "SVMBuilder")]
+#[napi(js_name = "SVRBuilder")]
 pub struct SVRBuilder {
   pub(super) eps: Option<WrappedNumber>,
   pub(super) c: Option<WrappedNumber>,
@@ -67,7 +67,20 @@ impl SVRBuilder {
     env: Env,
   ) -> Result<SVR<'a>> {
     let fit_data_variant_type = fit_data_x.r#type();
-    let parameters = SVRParameters::F64(LibSVRParameters::default());
+    let mut parameters = LibSVRParameters::default();
+    if let Some(kernel) = &self.kernel {
+      parameters = parameters.with_kernel(kernel.owned_inner());
+    }
+    if let Some(tol) = &self.tol {
+      parameters = parameters.with_tol(tol.try_into()?)
+    }
+    if let Some(c) = &self.c {
+      parameters = parameters.with_c(c.try_into()?)
+    }
+    if let Some(eps) = &self.eps {
+      parameters = parameters.with_eps(eps.try_into()?)
+    }
+    let parameters = SVRParameters::F64(parameters);
     let params = fit_data_x.share_with(env, |d| {
       Ok(SVRParametersDto {
         fit_data_x: d,
@@ -78,7 +91,7 @@ impl SVRBuilder {
     self.svr_parameters = Some(params);
     let params = self.svr_parameters.as_ref().unwrap();
     Ok(SVR {
-      inner: SVRFactory::create(&params)?,
+      inner: SVRFactory::create(params)?,
       fit_data_variant_type,
     })
   }
