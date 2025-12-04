@@ -58,9 +58,8 @@ impl LogisticRegressionBuilder {
   }
 
   #[napi]
-  pub fn with_alpha(&mut self, alpha: &WrappedNumber) -> Result<()> {
+  pub fn with_alpha(&mut self, alpha: &WrappedNumber) {
     self.alpha = Some(alpha.to_owned());
-    Ok(())
   }
 
   #[napi]
