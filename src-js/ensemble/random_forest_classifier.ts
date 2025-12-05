@@ -40,20 +40,26 @@ class RandomForestClassifier implements HasColumns {
 
   constructor(params?: IRandomForestClassifierParameters) {
     this.config = params || {}
-    this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
-    this.config.fitDataYType = this.config.fitDataYType ?? ('I32' as TypedArrayType)
   }
 
   get columns(): string[] | null {
     return this.config.columns ?? null
   }
 
+  private get fitDataXType(): DenseMatrixType {
+    return this.config.fitDataXType ?? ('F32' as DenseMatrixType)
+  }
+
+  private get fitDataYType(): TypedArrayType {
+    return (this.config.fitDataYType ?? 'I32') as TypedArrayType
+  }
+
   fit(x: InputType, y: YType): this {
     let matrix = utilities.inputTypeToDenseMatrix(x, {
       columns: this.config.columns,
-      numberType: this.config.fitDataXType,
+      numberType: this.fitDataXType,
     })
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: this.fitDataYType })
     const builder = new RandomForestClassifierBuilder(matrix, yWrapped)
     if (this.config.splitCriterion !== undefined) builder.withCriterion(this.config.splitCriterion)
     if (this.config.maxDepth !== undefined) builder.withMaxDepth(this.config.maxDepth)
@@ -83,12 +89,12 @@ class RandomForestClassifier implements HasColumns {
     this.ensureFitted('predict')
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
-      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.config.fitDataXType })
+      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.fitDataXType })
       return this.estimator!.predict(matrix).field0
     }
     const matrixRs = utilities.inputTypeToDenseMatrix(x, {
       columns: this.config.columns,
-      numberType: this.config.fitDataXType,
+      numberType: this.fitDataXType,
     })
     return this.estimator!.predict(matrixRs).field0
   }

@@ -163,6 +163,7 @@ export const WrappedNumber = __napiModule.exports.WrappedNumber
 export const accuracyScore = __napiModule.exports.accuracyScore
 export const auc = __napiModule.exports.auc
 export const BernoulliNBPredictOutputType = __napiModule.exports.BernoulliNBPredictOutputType
+export const changeArrayType = __napiModule.exports.changeArrayType
 export const DecisionTreeClassifierPredictOutputType = __napiModule.exports.DecisionTreeClassifierPredictOutputType
 export const DecisionTreeRegressorPredictOutputType = __napiModule.exports.DecisionTreeRegressorPredictOutputType
 export const DenseMatrixType = __napiModule.exports.DenseMatrixType

@@ -1,5 +1,6 @@
 import assert from 'assert'
 import { dataset, metrics, svm, modelSelection } from '../../../../src-js/index.js'
+import { Kernels } from '../../../../src-js/core-bindings/index.js'
 
 const { auc } = metrics
 const { SVC } = svm
@@ -11,11 +12,11 @@ export default () => {
     if (!Array.isArray(breastCancerData)) assert.fail('Expected breastCancerData to be an Array')
     const [x, y] = breastCancerData
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
-    const yHatSVM = new SVC({ c: 10.0 }).fit(x, y).predict(xTest)
+    const yHatSVC = new SVC({ kernel: Kernels.rbf(0.5), c: 10.0 }).fit(x, y).predict(xTest)
     // Failed to reproduce this example due to type mismatches.
     // yTest is of type Uint32Array
     // getScore expects Float32Array
-    const score = auc(yTest, yHatSVM)
+    const score = auc(yTest, yHatSVC)
     assert(score)
   })
 }

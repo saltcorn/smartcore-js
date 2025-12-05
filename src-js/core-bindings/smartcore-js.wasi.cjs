@@ -215,6 +215,7 @@ module.exports.WrappedNumber = __napiModule.exports.WrappedNumber
 module.exports.accuracyScore = __napiModule.exports.accuracyScore
 module.exports.auc = __napiModule.exports.auc
 module.exports.BernoulliNBPredictOutputType = __napiModule.exports.BernoulliNBPredictOutputType
+module.exports.changeArrayType = __napiModule.exports.changeArrayType
 module.exports.DecisionTreeClassifierPredictOutputType = __napiModule.exports.DecisionTreeClassifierPredictOutputType
 module.exports.DecisionTreeRegressorPredictOutputType = __napiModule.exports.DecisionTreeRegressorPredictOutputType
 module.exports.DenseMatrixType = __napiModule.exports.DenseMatrixType

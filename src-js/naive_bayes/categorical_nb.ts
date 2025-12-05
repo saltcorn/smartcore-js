@@ -31,7 +31,10 @@ class CategoricalNB implements HasColumns {
 
   constructor(params?: ICategoricalNBParameters) {
     this.config = params ?? {}
-    this.config.fitDataXType = this.config.fitDataXType ?? ('U32' as DenseMatrixType)
+  }
+
+  private get fitDataXType(): DenseMatrixType {
+    return this.config.fitDataXType ?? ('U32' as DenseMatrixType)
   }
 
   get columns(): string[] | null {
@@ -41,13 +44,12 @@ class CategoricalNB implements HasColumns {
   fit(x: InputType, y: YType): this {
     let matrix = utilities.inputTypeToDenseMatrix(x, {
       columns: this.config.columns,
-      numberType: this.config.fitDataXType,
+      numberType: this.fitDataXType,
     })
-    const yWrapped = utilities.wrapTypedArray(
-      utilities.arrayToTypedArray(y, {
-        numberType: this.config.fitDataXType ? (this.config.fitDataXType as unknown as TypedArrayType) : undefined,
-      }),
-    )
+    const yWrapped = utilities.arrayToTypedArray(y, {
+      numberType: this.fitDataXType as unknown as TypedArrayType,
+    })
+
     const builder = new CategoricalNBBuilder(matrix, yWrapped)
     if (this.config.alpha !== undefined) {
       builder.withAlpha(this.config.alpha)
@@ -71,12 +73,12 @@ class CategoricalNB implements HasColumns {
     this.ensureFitted('predict')
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
-      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.config.fitDataXType })
+      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.fitDataXType })
       return this.estimator!.predict(matrix).field0
     }
     const matrixRs = utilities.inputTypeToDenseMatrix(x, {
       columns: this.config.columns,
-      numberType: this.config.fitDataXType,
+      numberType: this.fitDataXType,
     })
     return this.estimator!.predict(matrixRs).field0
   }

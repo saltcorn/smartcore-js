@@ -1009,7 +1009,7 @@ export declare class SVC {
 
 export declare class SVCBuilder {
   constructor()
-  withEps(epoch: bigint): void
+  withEpoch(epoch: bigint): void
   withSeed(seed?: bigint | undefined | null): void
   withC(c: WrappedNumber): void
   withTol(tol: WrappedNumber): void
@@ -1063,6 +1063,8 @@ export declare const enum BernoulliNBPredictOutputType {
   U32 = 'U32',
   U64 = 'U64'
 }
+
+export declare function changeArrayType(xs: TypedArrayWrapper, to: TypedArrayType): TypedArrayWrapper
 
 export declare const enum DecisionTreeClassifierPredictOutputType {
   I64 = 'I64',

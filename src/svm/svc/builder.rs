@@ -41,7 +41,7 @@ impl SVCBuilder {
   }
 
   #[napi]
-  pub fn with_eps(&mut self, epoch: BigInt) {
+  pub fn with_epoch(&mut self, epoch: BigInt) {
     let epoch = epoch.get_u128().1 as usize;
     self.epoch = Some(epoch);
   }
@@ -75,6 +75,8 @@ impl SVCBuilder {
     fit_data_y: TypedArrayWrapper,
     env: Env,
   ) -> Result<SVC<'a>> {
+    println!("Fit data X type: {}", fit_data_x.r#type());
+    println!("Fit data Y type: {}", fit_data_y.r#type());
     let fit_data_x_type = fit_data_x.r#type();
     let fit_data_y_type: SVCPredictOutputType = fit_data_y.r#type().try_into()?;
     let mut parameters = LibSVCParameters::default();

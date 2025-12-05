@@ -1,3 +1,5 @@
+use std::ops::Deref;
+
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
 use paste::paste;
@@ -43,6 +45,20 @@ macro_rules! from_vec_impl {
             fn try_from(value: TypedArrayWrapper) -> Result<Self> {
                 match value {
                     TypedArrayWrapper::[<$inner:upper>](v) => Ok(v.to_vec()),
+                    _ => Err(Error::new(
+                        Status::InvalidArg,
+                        stringify!("Expected an "[<$inner:upper>]" variant of TypedArray!")
+                    ))
+                }
+            }
+        }
+
+        impl<'a> TryFrom<&'a TypedArrayWrapper> for &'a[$inner] {
+            type Error = Error;
+
+            fn try_from(value: &'a TypedArrayWrapper) -> Result<Self> {
+                match value {
+                    TypedArrayWrapper::[<$inner:upper>](v) => Ok(v.deref()),
                     _ => Err(Error::new(
                         Status::InvalidArg,
                         stringify!("Expected an "[<$inner:upper>]" variant of TypedArray!")
@@ -100,6 +116,21 @@ pub enum TypedArrayType {
   U32,
   U16,
   U8,
+}
+
+impl std::fmt::Display for TypedArrayType {
+  fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+    match self {
+      TypedArrayType::F64 => f.write_str("f64"),
+      TypedArrayType::F32 => f.write_str("f32"),
+      TypedArrayType::I64 => f.write_str("i64"),
+      TypedArrayType::U64 => f.write_str("u64"),
+      TypedArrayType::I32 => f.write_str("i32"),
+      TypedArrayType::U32 => f.write_str("u32"),
+      TypedArrayType::U16 => f.write_str("u16"),
+      TypedArrayType::U8 => f.write_str("u8"),
+    }
+  }
 }
 
 impl From<&TypedArrayWrapper> for TypedArrayType {

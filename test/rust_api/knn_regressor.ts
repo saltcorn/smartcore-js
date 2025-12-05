@@ -42,7 +42,7 @@ export default () => {
       if (!(xH && yH)) {
         assert.fail('Expected both xH and yH to be defined')
       }
-      const yHWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(yH, { numberType: TypedArrayType.F32 }))
+      const yHWrapped = utilities.arrayToTypedArray(yH, { numberType: TypedArrayType.F32 })
       const knnRegressorBuilderH = new KNNRegressorBuilder(xH, yHWrapped)
       knnRegressorBuilderH.withDistanceType(DistanceVariantType.Hamming)
       knnRegressorBuilderH.build()

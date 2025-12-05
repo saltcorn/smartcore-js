@@ -14,7 +14,7 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.F64 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.F64 })
     const builder = new SVRBuilder()
     builder.withKernel(Kernels.rbf(0.5))
     builder.withC(utilities.wrapNumber(2000.0))
@@ -28,7 +28,7 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.F64 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.F64 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const builder = new SVRBuilder()
@@ -46,7 +46,7 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.F64 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.F64 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const builder = new SVRBuilder()

@@ -1,4 +1,5 @@
 pub mod algorithm;
+pub mod change_array_type;
 pub mod cluster;
 pub mod dataset;
 pub mod decomposition;

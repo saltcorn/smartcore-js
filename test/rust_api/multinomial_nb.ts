@@ -31,7 +31,7 @@ export default () => {
   })
   const x = utilities.dataFrameToDenseMatrix(df, { numberType: DenseMatrixType.U32 })
   const yPlain = [1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1]
-  const y = utilities.wrapTypedArray(utilities.arrayToTypedArray(yPlain, { numberType: TypedArrayType.U32 }))
+  const y = utilities.arrayToTypedArray(yPlain, { numberType: TypedArrayType.U32 })
 
   it('create', () => {
     const _ = new MultinomialNBBuilder(x, y).build()

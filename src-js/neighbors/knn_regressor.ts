@@ -40,8 +40,14 @@ class KNNRegressor implements HasColumns {
 
   constructor(params?: IKNNRegressorParameters) {
     this.config = params ?? {}
-    this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
-    this.config.fitDataYType = this.config.fitDataYType ?? ('F32' as TypedArrayType)
+  }
+
+  private get fitDataXType(): DenseMatrixType {
+    return this.config.fitDataXType ?? ('F32' as DenseMatrixType)
+  }
+
+  private get fitDataYType(): TypedArrayType {
+    return (this.config.fitDataYType ?? 'F32') as TypedArrayType
   }
 
   get columns(): string[] | null {
@@ -51,9 +57,9 @@ class KNNRegressor implements HasColumns {
   fit(x: InputType, y: YType): this {
     const matrix = utilities.inputTypeToDenseMatrix(x, {
       columns: this.config.columns,
-      numberType: this.config.fitDataXType,
+      numberType: this.fitDataXType,
     })
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: this.fitDataYType })
     const builder = new KNNRegressorBuilder(matrix, yWrapped)
     if (this.config.k !== undefined) {
       builder.withK(BigInt(this.config.k))
@@ -92,12 +98,12 @@ class KNNRegressor implements HasColumns {
     this.ensureFitted('predict')
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
-      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.config.fitDataXType })
+      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.fitDataXType })
       return this.estimator!.predict(matrix).field0
     }
     const matrixRs = utilities.inputTypeToDenseMatrix(x, {
       columns: this.config.columns,
-      numberType: this.config.fitDataXType,
+      numberType: this.fitDataXType,
     })
     return this.estimator!.predict(matrixRs).field0
   }

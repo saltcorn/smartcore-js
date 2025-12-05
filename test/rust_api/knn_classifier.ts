@@ -42,7 +42,7 @@ export default () => {
       if (!(xH && yH)) {
         assert.fail('Expected both xH and yH to be defined')
       }
-      const yHWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(yH, { numberType: TypedArrayType.I32 }))
+      const yHWrapped = utilities.arrayToTypedArray(yH, { numberType: TypedArrayType.I32 })
       const knnClassifierBuilderH = new KNNClassifierBuilder(xH, yHWrapped)
       knnClassifierBuilderH.withDistanceType(DistanceVariantType.Hamming)
       knnClassifierBuilderH.build()

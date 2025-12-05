@@ -2,19 +2,22 @@ import { utilities, type InputType, type YType } from '../index.js'
 import { type RsPredictor } from '../estimator.js'
 import { DataFrame } from '../data_frame.js'
 import {
-  type LogisticRegressionSolverName,
-  LogisticRegression as LibLogisticRegression,
-  type TypedArrayType,
   type DenseMatrixType,
-  LogisticRegressionBuilder,
+  Kernels,
+  SVC as LibSVC,
+  SVCBuilder,
+  type TypedArrayType,
 } from '../core-bindings/index.js'
 
-interface ILogisticRegressionBaseParameters {
-  alpha?: number | bigint
-  solver?: LogisticRegressionSolverName
+interface ISVCBaseParameters {
+  kernel?: Kernels
+  epoch?: number | bigint
+  c?: number
+  tol?: number
+  seed?: number | bigint
 }
 
-interface ILogisticRegressionParameters extends ILogisticRegressionBaseParameters {
+interface ISVCParameters extends ISVCBaseParameters {
   fitDataXType?: DenseMatrixType
   fitDataYType?: TypedArrayType
   columns?: string[]
@@ -24,24 +27,24 @@ interface HasColumns {
   columns: string[] | null
 }
 
-class LogisticRegression implements HasColumns {
-  public static readonly className = 'LogisticRegression'
-  public readonly name: string = LogisticRegression.className
-  public readonly config: ILogisticRegressionParameters = {}
+class SVC implements HasColumns {
+  public static readonly className = 'SVC'
+  public readonly name: string = SVC.className
+  public readonly config: ISVCParameters
 
   private _isFitted: boolean = false
   private estimator: RsPredictor | null = null
 
-  constructor(params?: ILogisticRegressionParameters) {
-    this.config = params ?? {}
+  constructor(params?: ISVCParameters) {
+    this.config = params || {}
   }
 
   private get fitDataXType(): DenseMatrixType {
-    return this.config.fitDataXType ?? ('F32' as DenseMatrixType)
+    return this.config.fitDataXType ?? ('F64' as DenseMatrixType)
   }
 
   private get fitDataYType(): TypedArrayType {
-    return (this.config.fitDataYType ?? 'I32') as TypedArrayType
+    return (this.config.fitDataYType ?? 'I64') as TypedArrayType
   }
 
   get columns(): string[] | null {
@@ -54,20 +57,22 @@ class LogisticRegression implements HasColumns {
       numberType: this.fitDataXType,
     })
     const yWrapped = utilities.arrayToTypedArray(y, { numberType: this.fitDataYType })
-    const builder = new LogisticRegressionBuilder(matrix, yWrapped)
-    if (this.config.alpha !== undefined) {
-      builder.withAlpha(utilities.wrapNumber(this.config.alpha))
-    }
-    if (this.config.solver !== undefined) {
-      builder.withSolver(this.config.solver)
-    }
-    this.estimator = builder.build()
+    const builder = new SVCBuilder()
+    if (this.config.kernel !== undefined) builder.withKernel(this.config.kernel)
+    if (this.config.c !== undefined) builder.withC(utilities.wrapNumber(this.config.c))
+    if (this.config.tol !== undefined) builder.withTol(utilities.wrapNumber(this.config.tol))
+    if (this.config.epoch !== undefined) builder.withEpoch(BigInt(this.config.epoch))
+    if (this.config.seed !== undefined) builder.withSeed(BigInt(this.config.seed))
+
+    console.log('Matrix type: ', matrix.type())
+
+    this.estimator = builder.build(matrix, yWrapped)
     this._isFitted = true
     return this
   }
 
   protected getComponentColumnName(index: number): string {
-    return `LogisticRegression${index + 1}`
+    return `SVC${index + 1}`
   }
 
   protected ensureFitted(methodName: string): void {
@@ -95,12 +100,12 @@ class LogisticRegression implements HasColumns {
     return this.estimator!.serialize()
   }
 
-  static deserialize(data: Buffer): LogisticRegression {
-    let instance = new LogisticRegression()
-    instance.estimator = LibLogisticRegression.deserialize(data)
+  static deserialize(data: Buffer): SVC {
+    let instance = new SVC()
+    instance.estimator = LibSVC.deserialize(data)
     instance._isFitted = true
     return instance
   }
 }
 
-export { LogisticRegression, type ILogisticRegressionBaseParameters }
+export { SVC, type ISVCBaseParameters, Kernels }

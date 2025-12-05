@@ -35,7 +35,10 @@ class SVR implements HasColumns {
 
   constructor(params?: ISVRParameters) {
     this.config = params || {}
-    this.config.fitDataXType = this.config.fitDataXType ?? ('F64' as DenseMatrixType)
+  }
+
+  private get fitDataXType(): DenseMatrixType {
+    return this.config.fitDataXType ?? ('F64' as DenseMatrixType)
   }
 
   get columns(): string[] | null {
@@ -45,16 +48,16 @@ class SVR implements HasColumns {
   fit(x: InputType, y: YType): this {
     let matrix = utilities.inputTypeToDenseMatrix(x, {
       columns: this.config.columns,
-      numberType: this.config.fitDataXType,
+      numberType: this.fitDataXType,
     })
     const yNumberType =
-      this.config.fitDataXType === ('F64' as DenseMatrixType)
+      this.fitDataXType === ('F64' as DenseMatrixType)
         ? ('F64' as TypedArrayType)
-        : this.config.fitDataXType === ('F32' as DenseMatrixType)
+        : this.fitDataXType === ('F32' as DenseMatrixType)
           ? ('F32' as TypedArrayType)
           : null
     if (yNumberType === null) throw new Error("Supported typed for 'fitDataXType' are 'F32' or 'F64'")
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: yNumberType }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: yNumberType })
     const builder = new SVRBuilder()
     if (this.config.kernel !== undefined) builder.withKernel(this.config.kernel)
     if (this.config.c !== undefined) builder.withC(utilities.wrapNumber(this.config.c))
@@ -80,12 +83,12 @@ class SVR implements HasColumns {
     this.ensureFitted('predict')
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
-      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.config.fitDataXType })
+      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.fitDataXType })
       return this.estimator!.predict(matrix).field0
     }
     const matrixRs = utilities.inputTypeToDenseMatrix(x, {
       columns: this.config.columns,
-      numberType: this.config.fitDataXType,
+      numberType: this.fitDataXType,
     })
     return this.estimator!.predict(matrixRs).field0
   }

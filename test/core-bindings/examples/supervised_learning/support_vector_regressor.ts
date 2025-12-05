@@ -14,5 +14,6 @@ export default () => {
     const svr = new SVR({ kernel: Kernels.rbf(0.5), c: 2000.0, eps: 10.0 }).fit(x, y)
     const yHatSVM = svr.predict(xTest)
     const score = meanSquaredError(yTest, yHatSVM)
+    assert(score)
   })
 }
