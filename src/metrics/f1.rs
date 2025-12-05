@@ -8,7 +8,7 @@ use crate::{
 };
 
 #[napi]
-pub fn f1(
+pub fn f1_score(
   y_true: TypedArrayWrapper,
   y_pred: TypedArrayWrapper,
   losslessly: Option<bool>,

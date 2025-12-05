@@ -22,7 +22,6 @@ function changeTypedArrayType(y: TypedArray, numberType?: TypedArrayType): Typed
     case 'I64' as TypedArrayType:
       return changeArrayType(yWrapped, 'I64' as TypedArrayType)
     case 'U32' as TypedArrayType:
-      console.log('Running ...')
       return changeArrayType(yWrapped, 'U32' as TypedArrayType)
     case 'U64' as TypedArrayType:
       return changeArrayType(yWrapped, 'U64' as TypedArrayType)

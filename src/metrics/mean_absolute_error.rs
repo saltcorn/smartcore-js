@@ -8,7 +8,7 @@ use crate::{
 };
 
 #[napi]
-pub fn mean_absolute_error(
+pub fn mean_absolute_error_score(
   y_true: TypedArrayWrapper,
   y_pred: TypedArrayWrapper,
   losslessly: Option<bool>,

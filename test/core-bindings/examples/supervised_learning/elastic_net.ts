@@ -2,7 +2,7 @@ import assert from 'assert'
 import { dataset, metrics, linearModel, modelSelection } from '../../../../src-js/index.js'
 
 const { trainTestSplit } = modelSelection
-const { meanSquaredError } = metrics
+const { meanSquaredErrorScore } = metrics
 const { ElasticNet } = linearModel
 
 export default () => {
@@ -12,7 +12,7 @@ export default () => {
     const [x, y] = bostonData
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
     const yHatEn = new ElasticNet({ alpha: 0.5, l1Ratio: 0.5 }).fit(x, y).predict(xTest)
-    const score = meanSquaredError(yTest, yHatEn)
+    const score = meanSquaredErrorScore(yTest, yHatEn)
     assert(score)
   })
 }

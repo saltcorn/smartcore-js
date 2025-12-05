@@ -2,7 +2,7 @@ import assert from 'assert'
 import { dataset, modelSelection, ensemble, metrics } from '../../../../src-js/index.js'
 
 const { trainTestSplit } = modelSelection
-const { meanSquaredError } = metrics
+const { meanSquaredErrorScore } = metrics
 const { RandomForestRegressor } = ensemble
 
 export default () => {
@@ -12,7 +12,7 @@ export default () => {
     const [x, y] = bostonData
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
     const yHatRf = new RandomForestRegressor().fit(x, y).predict(xTest)
-    const score = meanSquaredError(yTest, yHatRf)
+    const score = meanSquaredErrorScore(yTest, yHatRf)
     assert(score)
   })
 }

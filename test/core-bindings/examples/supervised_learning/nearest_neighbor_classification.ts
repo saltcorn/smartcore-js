@@ -2,7 +2,7 @@ import assert from 'assert'
 import { dataset, metrics, modelSelection, neighbors } from '../../../../src-js/index.js'
 
 const { trainTestSplit } = modelSelection
-const { r2 } = metrics
+const { r2Score } = metrics
 const { KNNClassifier } = neighbors
 
 export default () => {
@@ -12,7 +12,7 @@ export default () => {
     const [x, y] = breastCancerData
     let [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
     let yHatKnn = new KNNClassifier().fit(x, y).predict(xTest)
-    let score = r2(yTest, yHatKnn)
+    let score = r2Score(yTest, yHatKnn)
     assert(score)
   })
 }

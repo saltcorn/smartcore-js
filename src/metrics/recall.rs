@@ -8,7 +8,7 @@ use crate::{
 };
 
 #[napi]
-pub fn recall(
+pub fn recall_score(
   y_true: TypedArrayWrapper,
   y_pred: TypedArrayWrapper,
   losslessly: Option<bool>,

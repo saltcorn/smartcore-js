@@ -2,7 +2,7 @@ import assert from 'assert'
 import { dataset, metrics, svm, modelSelection } from '../../../../src-js/index.js'
 import { Kernels } from '../../../../src-js/core-bindings/index.js'
 
-const { auc } = metrics
+const { aucScore } = metrics
 const { SVC } = svm
 const { trainTestSplit } = modelSelection
 
@@ -16,7 +16,7 @@ export default () => {
     // Failed to reproduce this example due to type mismatches.
     // yTest is of type Uint32Array
     // getScore expects Float32Array
-    const score = auc(yTest, yHatSVC)
+    const score = aucScore(yTest, yHatSVC)
     assert(score)
   })
 }

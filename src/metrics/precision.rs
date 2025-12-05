@@ -8,7 +8,7 @@ use crate::{
 };
 
 #[napi]
-pub fn precision(
+pub fn precision_score(
   y_true: TypedArrayWrapper,
   y_pred: TypedArrayWrapper,
   losslessly: Option<bool>,

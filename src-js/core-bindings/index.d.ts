@@ -1057,7 +1057,7 @@ export declare class WrappedNumber {
 
 export declare function accuracyScore(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
 
-export declare function auc(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+export declare function aucScore(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
 
 export declare const enum BernoulliNBPredictOutputType {
   U32 = 'U32',
@@ -1117,7 +1117,7 @@ export declare const enum ExtraTreesRegressorPredictOutputType {
   I32 = 'I32'
 }
 
-export declare function f1(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+export declare function f1Score(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
 
 export declare const enum GaussianNBPredictOutputType {
   U64 = 'U64',
@@ -1184,9 +1184,9 @@ export declare const enum LogisticRegressionSolverName {
   LBFGS = 0
 }
 
-export declare function meanAbsoluteError(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+export declare function meanAbsoluteErrorScore(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
 
-export declare function meanSquaredError(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+export declare function meanSquaredErrorScore(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
 
 export declare const enum MultinomialNBPredictOutputType {
   U64 = 'U64',
@@ -1195,9 +1195,9 @@ export declare const enum MultinomialNBPredictOutputType {
   U8 = 'U8'
 }
 
-export declare function precision(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+export declare function precisionScore(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
 
-export declare function r2(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+export declare function r2Score(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
 
 export declare const enum RandomForestClassifierPredictOutputType {
   I64 = 'I64',
@@ -1213,7 +1213,7 @@ export declare const enum RandomForestRegressorPredictOutputType {
   I32 = 'I32'
 }
 
-export declare function recall(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
+export declare function recallScore(yTrue: TypedArrayWrapper, yPred: TypedArrayWrapper, losslessly?: boolean | undefined | null): number
 
 export declare const enum RidgeRegressionPredictOutputType {
   F64 = 'F64',

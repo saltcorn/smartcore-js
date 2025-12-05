@@ -2,7 +2,7 @@ import assert from 'assert'
 import { dataset, metrics, linearModel, modelSelection } from '../../../../src-js/index.js'
 
 const { trainTestSplit } = modelSelection
-const { meanSquaredError } = metrics
+const { meanSquaredErrorScore } = metrics
 const { Lasso } = linearModel
 
 export default () => {
@@ -12,7 +12,7 @@ export default () => {
     const [x, y] = bostonData
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
     const yHatLasso = new Lasso({ alpha: 0.5 }).fit(x, y).predict(xTest)
-    const score = meanSquaredError(yTest, yHatLasso)
+    const score = meanSquaredErrorScore(yTest, yHatLasso)
     assert(score)
   })
 }

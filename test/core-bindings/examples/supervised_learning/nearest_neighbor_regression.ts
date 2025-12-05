@@ -2,7 +2,7 @@ import assert from 'assert'
 import { dataset, modelSelection, metrics, neighbors } from '../../../../src-js/index.js'
 
 const { trainTestSplit } = modelSelection
-const { meanSquaredError } = metrics
+const { meanSquaredErrorScore } = metrics
 const { KNNRegressor } = neighbors
 
 export default () => {
@@ -12,7 +12,7 @@ export default () => {
     const [x, y] = bostonData
     let [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
     let yHatKnn = new KNNRegressor().fit(x, y).predict(xTest)
-    let score = meanSquaredError(yTest, yHatKnn)
+    let score = meanSquaredErrorScore(yTest, yHatKnn)
     assert(score)
   })
 }

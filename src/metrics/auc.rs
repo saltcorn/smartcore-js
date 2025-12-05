@@ -8,7 +8,7 @@ use crate::{
 };
 
 #[napi]
-pub fn auc(
+pub fn auc_score(
   y_true: TypedArrayWrapper,
   y_pred: TypedArrayWrapper,
   losslessly: Option<bool>,
