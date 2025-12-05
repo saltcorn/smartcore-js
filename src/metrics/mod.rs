@@ -1,7 +1,7 @@
 pub mod accuracy;
 pub mod auc;
 pub mod cluster_hcv;
-pub mod distance;
+// pub mod distance;
 pub mod f1;
 pub mod mean_absolute_error;
 pub mod mean_squared_error;

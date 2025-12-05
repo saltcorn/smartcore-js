@@ -602,46 +602,6 @@ export declare class ElasticNetBuilder {
   build(): ElasticNet
 }
 
-export declare class EuclidianF32 {
-  constructor()
-  distance(x: Float32Array, y: Float32Array): number
-}
-
-export declare class EuclidianF64 {
-  constructor()
-  distance(x: Float64Array, y: Float64Array): number
-}
-
-export declare class EuclidianI32 {
-  constructor()
-  distance(x: Int32Array, y: Int32Array): number
-}
-
-export declare class EuclidianI64 {
-  constructor()
-  distance(x: BigInt64Array, y: BigInt64Array): number
-}
-
-export declare class EuclidianU16 {
-  constructor()
-  distance(x: Uint16Array, y: Uint16Array): number
-}
-
-export declare class EuclidianU32 {
-  constructor()
-  distance(x: Uint32Array, y: Uint32Array): number
-}
-
-export declare class EuclidianU64 {
-  constructor()
-  distance(x: BigUint64Array, y: BigUint64Array): number
-}
-
-export declare class EuclidianU8 {
-  constructor()
-  distance(x: Uint8Array, y: Uint8Array): number
-}
-
 export declare class ExtraTreesRegressor {
   predict(x: DenseMatrix): TypedArrayWrapper
   serialize(): Buffer
@@ -676,21 +636,6 @@ export declare class Generator {
   makeBlobs(numSamples: number, numFeatures: number, numCenters: number): DatasetF64F64
   makeCircles(numSamples: number, factor: number, noise: number): DatasetF64I32
   makeMoons(numSamples: number, noise: number): DatasetF64I32
-}
-
-export declare class HammingI32 {
-  constructor()
-  distance(x: Int32Array, y: Int32Array): number
-}
-
-export declare class HammingU16 {
-  constructor()
-  distance(x: Uint16Array, y: Uint16Array): number
-}
-
-export declare class HammingU8 {
-  constructor()
-  distance(x: Uint8Array, y: Uint8Array): number
 }
 
 export declare class Iris {
@@ -840,66 +785,6 @@ export declare class LogisticRegressionBuilder {
   withSolver(solver: LogisticRegressionSolverName): void
   withAlpha(alpha: WrappedNumber): void
   build(): LogisticRegression
-}
-
-export declare class MahalanobisF32 {
-  constructor(data: DenseMatrixF32)
-  distance(x: Float32Array, y: Float32Array): number
-}
-
-export declare class MahalanobisF64 {
-  constructor(data: DenseMatrixF64)
-  distance(x: Float64Array, y: Float64Array): number
-}
-
-export declare class ManhattanF32 {
-  constructor()
-  distance(x: Float32Array, y: Float32Array): number
-}
-
-export declare class ManhattanF64 {
-  constructor()
-  distance(x: Float64Array, y: Float64Array): number
-}
-
-export declare class ManhattanI32 {
-  constructor()
-  distance(x: Int32Array, y: Int32Array): number
-}
-
-export declare class ManhattanI64 {
-  constructor()
-  distance(x: BigInt64Array, y: BigInt64Array): number
-}
-
-export declare class ManhattanU32 {
-  constructor()
-  distance(x: Uint32Array, y: Uint32Array): number
-}
-
-export declare class ManhattanU64 {
-  constructor()
-  distance(x: BigUint64Array, y: BigUint64Array): number
-}
-
-export declare class MinkowskiF32 {
-  constructor(p: number)
-  distance(x: Float32Array, y: Float32Array): number
-}
-
-export declare class MinkowskiF64 {
-  constructor(p: number)
-  distance(x: Float64Array, y: Float64Array): number
-}
-
-export declare class MinkowskiI32 {
-  constructor(p: number)
-  distance(x: Int32Array, y: Int32Array): number
-}
-
-export declare class MinkowskiI64 {
-  constructor(p: number)
-  distance(x: BigInt64Array, y: BigInt64Array): number
 }
 
 export declare class MultinomialNB {
