@@ -13,7 +13,7 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.U32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.U32 })
     const _ = new BernoulliNBBuilder(x, yWrapped).build()
   })
 
@@ -23,12 +23,12 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.U32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.U32 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const bernoulliNBBuilder = new BernoulliNBBuilder(x, yWrapped)
     const bernoulliNB = bernoulliNBBuilder.build()
-    const score = accuracyScore(bernoulliNB.predict(xTest).field0, yTest)
+    const score = accuracyScore(bernoulliNB.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -38,15 +38,15 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.U32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.U32 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const bernoulliNBBuilder = new BernoulliNBBuilder(x, yWrapped)
     const bernoulliNB = bernoulliNBBuilder.build()
-    const score1 = accuracyScore(bernoulliNB.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(bernoulliNB.predict(xTest).field0, yTest, false)
     const serializedBernoulliNB = bernoulliNB.serialize()
     const deserializedBernoulliNB = BernoulliNB.deserialize(serializedBernoulliNB)
-    const score2 = accuracyScore(deserializedBernoulliNB.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedBernoulliNB.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

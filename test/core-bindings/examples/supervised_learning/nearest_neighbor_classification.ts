@@ -1,22 +1,18 @@
-import {
-  dataset,
-  trainTestSplitF64BigI64,
-  R2I64,
-  KNNClassifierF64BigI64EuclidianF64,
-  KNNClassifierF64EuclidianF64Parameters,
-} from '../../../../src-js/core-bindings/index.js'
 import assert from 'assert'
+import { dataset, metrics, modelSelection, neighbors } from '../../../../src-js/index.js'
+
+const { trainTestSplit } = modelSelection
+const { r2Score } = metrics
+const { KNNClassifier } = neighbors
 
 export default () => {
   it('Nearest Neighbors Classification', () => {
-    let breastCancerData = dataset.breastCancer().loadDataset()
-    let x = breastCancerData.denseMatrix()
-    let y = breastCancerData.target
-    let [, xTest, , yTest] = trainTestSplitF64BigI64(x, y, 0.2, true)
-    let parameters = new KNNClassifierF64EuclidianF64Parameters()
-    let yHatKnn = KNNClassifierF64BigI64EuclidianF64.fit(x, breastCancerData.target, parameters).predict(xTest)
-    let r2 = new R2I64()
-    let score = r2.getScore(yTest, yHatKnn)
+    const breastCancerData = dataset.loadBreastCancer({ returnXY: true })
+    if (!Array.isArray(breastCancerData)) assert.fail('Expected breastCancerData to be an Array.')
+    const [x, y] = breastCancerData
+    let [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
+    let yHatKnn = new KNNClassifier().fit(x, y).predict(xTest)
+    let score = r2Score(yTest, yHatKnn)
     assert(score)
   })
 }

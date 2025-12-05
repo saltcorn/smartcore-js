@@ -1,7 +1,11 @@
-import { PCA } from '../decomposition/index.js'
+import { PCA, SVD } from '../decomposition/index.js'
+import { DBSCAN, KMeans } from '../cluster/index.js'
+import { ExtraTreesRegressor, RandomForestClassifier, RandomForestRegressor } from '../ensemble/index.js'
+import { ElasticNet, Lasso, LinearRegression, LogisticRegression, RidgeRegression } from '../linear_model/index.js'
+import { OneHotEncoder, StandardScaler } from '../preprocessing/index.js'
+import { DecisionTreeClassifier, DecisionTreeRegressor } from '../tree/index.js'
+
 import { type YType, type InputType, type OutputType, dataFrame } from '../index.js'
-import { RidgeRegression } from '../linear_model/index.js'
-import { StandardScaler } from '../preprocessing/index.js'
 import type { Estimator, Predictor, Transformer } from './index.js'
 import { StepAdapter } from './step_adapter.js'
 
@@ -374,11 +378,23 @@ interface EstimatorDeserializer {
   deserialize(serializedData: any): Estimator<any, any, any>
 }
 
-// TODO: Add all deserializers
 const EstimatorsDeserializers: Map<string, EstimatorDeserializer> = new Map()
 EstimatorsDeserializers.set(PCA.name, PCA)
+EstimatorsDeserializers.set(SVD.name, SVD)
+EstimatorsDeserializers.set(DBSCAN.name, DBSCAN)
+EstimatorsDeserializers.set(KMeans.name, KMeans)
+EstimatorsDeserializers.set(ExtraTreesRegressor.name, ExtraTreesRegressor)
+EstimatorsDeserializers.set(RandomForestClassifier.name, RandomForestClassifier)
+EstimatorsDeserializers.set(RandomForestRegressor.name, RandomForestRegressor)
+EstimatorsDeserializers.set(ElasticNet.name, ElasticNet)
+EstimatorsDeserializers.set(Lasso.name, Lasso)
+EstimatorsDeserializers.set(LinearRegression.name, LinearRegression)
+EstimatorsDeserializers.set(LogisticRegression.name, LogisticRegression)
 EstimatorsDeserializers.set(RidgeRegression.name, RidgeRegression)
+EstimatorsDeserializers.set(OneHotEncoder.name, OneHotEncoder)
 EstimatorsDeserializers.set(StandardScaler.name, StandardScaler)
+EstimatorsDeserializers.set(DecisionTreeClassifier.name, DecisionTreeClassifier)
+EstimatorsDeserializers.set(DecisionTreeRegressor.name, DecisionTreeRegressor)
 
 interface SerializedEstimator {
   typeKey: string

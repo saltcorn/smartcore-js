@@ -1,23 +1,18 @@
-import {
-  dataset,
-  RidgeRegressionF64F64,
-  RidgeRegressionF64Parameters,
-  trainTestSplitF64F64,
-  MeanSquareErrorF64,
-} from '../../../../src-js/core-bindings/index.js'
 import assert from 'assert'
+import { dataset, linearModel, metrics, modelSelection } from '../../../../src-js/index.js'
+
+const { RidgeRegression } = linearModel
+const { meanSquaredErrorScore } = metrics
+const { trainTestSplit } = modelSelection
 
 export default () => {
   it('Ridge Regression', () => {
-    let bostonData = dataset.boston().loadDataset()
-    let x = bostonData.denseMatrix()
-    let y = bostonData.target
-    let parameters = new RidgeRegressionF64Parameters()
-    parameters.withAlpha(0.5)
-    let [, xTest, , yTest] = trainTestSplitF64F64(x, y, 0.2, true)
-    let yHatRr = RidgeRegressionF64F64.fit(x, bostonData.target, parameters).predict(xTest)
-    let meanSquaredError = new MeanSquareErrorF64()
-    let score = meanSquaredError.getScore(yTest, yHatRr)
+    const bostonData = dataset.loadBoston({ returnXY: true })
+    if (!Array.isArray(bostonData)) assert.fail('Expected bostonData to be an Array')
+    const [x, y] = bostonData
+    const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
+    const yHatRr = new RidgeRegression({ alpha: 0.5 }).fit(x, y).predict(xTest)
+    const score = meanSquaredErrorScore(yTest, yHatRr)
     assert(score)
   })
 }

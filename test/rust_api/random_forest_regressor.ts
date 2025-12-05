@@ -13,7 +13,7 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const _ = new RandomForestRegressorBuilder(x, yWrapped).build()
   })
 
@@ -23,12 +23,12 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const randomForestRegressorBuilder = new RandomForestRegressorBuilder(x, yWrapped)
     const randomForestRegressor = randomForestRegressorBuilder.build()
-    const score = accuracyScore(randomForestRegressor.predict(xTest).field0, yTest)
+    const score = accuracyScore(randomForestRegressor.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -38,15 +38,15 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const randomForestRegressorBuilder = new RandomForestRegressorBuilder(x, yWrapped)
     const randomForestRegressor = randomForestRegressorBuilder.build()
-    const score1 = accuracyScore(randomForestRegressor.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(randomForestRegressor.predict(xTest).field0, yTest, false)
     const serializedRandomForestRegressor = randomForestRegressor.serialize()
     const deserializedRandomForestRegressor = RandomForestRegressor.deserialize(serializedRandomForestRegressor)
-    const score2 = accuracyScore(deserializedRandomForestRegressor.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedRandomForestRegressor.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

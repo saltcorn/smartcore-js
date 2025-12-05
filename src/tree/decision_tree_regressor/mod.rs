@@ -1,77 +1,69 @@
-mod parameters;
+mod builder;
+mod deserialize;
+mod factory;
+mod lib_decision_tree_regressor_factory;
+mod predict_output_type;
+mod predictor_estimator;
+mod serialize_data;
+mod variants;
 
-use std::ops::Deref;
-
-use bincode::{
-  config::standard,
-  serde::{decode_from_slice, encode_to_vec},
-};
-use napi::bindgen_prelude::*;
+use bincode::{config::standard, decode_from_slice, encode_to_vec};
+use napi::{bindgen_prelude::Buffer, Error, Result, Status};
 use napi_derive::napi;
-use paste::paste;
-use smartcore::{
-  linalg::basic::matrix::DenseMatrix,
-  tree::decision_tree_regressor::DecisionTreeRegressor as LibDecisionTreeRegressor,
+
+use crate::{
+  dense_matrix::{DenseMatrix, DenseMatrixType},
+  traits::{Estimator, Predictor, PredictorEstimator},
+  typed_array::TypedArrayWrapper,
 };
+use predict_output_type::DecisionTreeRegressorPredictOutputType;
+use serialize_data::DecisionTreeRegressorSerializeData;
 
-use crate::linalg::basic::matrix::DenseMatrixI64;
-use parameters::DecisionTreeRegressorParameters;
-
-macro_rules! decision_tree_regressor_nb_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
-    paste! {
-        #[napi(js_name=""[<DecisionTreeRegressor $x:upper $y:upper>]"")]
-        #[derive(Debug)]
-        pub struct [<DecisionTreeRegressor $x:upper $y:upper>] {
-            inner: LibDecisionTreeRegressor<$x, $y, DenseMatrix<$x>, Vec<$y>>,
-        }
-
-        #[napi]
-        impl [<DecisionTreeRegressor $x:upper $y:upper>] {
-            #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &DecisionTreeRegressorParameters) -> Result<Self> {
-                let inner = LibDecisionTreeRegressor::fit(
-                    x as &DenseMatrix<$x>,
-                    &y.to_vec(),
-                    parameters.owned_inner(),
-                )
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Self { inner })
-            }
-
-            #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
-                let prediction_result = self
-                .inner
-                .predict(x as &DenseMatrix<$x>)
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
-            }
-
-            #[napi]
-            pub fn serialize(&self) -> Result<Buffer> {
-                let encoded = encode_to_vec(&self.inner, standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Buffer::from(encoded))
-            }
-
-            #[napi(factory)]
-            pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibDecisionTreeRegressor<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
-                Ok(Self { inner })
-            }
-        }
-
-        impl Deref for [<DecisionTreeRegressor $x:upper $y:upper>] {
-            type Target = LibDecisionTreeRegressor<$x, $y, DenseMatrix<$x>, Vec<$y>>;
-
-            fn deref(&self) -> &Self::Target {
-                &self.inner
-            }
-        }
-    }
-  };
+#[napi(js_name = "DecisionTreeRegressor")]
+#[derive(Debug)]
+pub struct DecisionTreeRegressor {
+  pub(super) inner: Box<dyn PredictorEstimator>,
+  pub(super) fit_data_variant_type: DenseMatrixType,
+  pub(super) predict_output_type: DecisionTreeRegressorPredictOutputType,
 }
 
-decision_tree_regressor_nb_struct! {i64, i64, DenseMatrixI64, BigInt64Array}
+#[napi]
+impl DecisionTreeRegressor {
+  #[napi]
+  pub fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
+    self.inner.predict(x)
+  }
+
+  #[napi]
+  pub fn serialize(&self) -> Result<Buffer> {
+    let buffer_data = Estimator::serialize(self)?;
+    Ok(Buffer::from(buffer_data))
+  }
+
+  #[napi(factory)]
+  pub fn deserialize(data: Buffer) -> Result<Self> {
+    let serialize_data: DecisionTreeRegressorSerializeData =
+      decode_from_slice(data.as_ref(), standard())
+        .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?
+        .0;
+    serialize_data.try_into()
+  }
+}
+
+impl Predictor for DecisionTreeRegressor {
+  fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
+    self.inner.predict(x)
+  }
+}
+
+impl Estimator for DecisionTreeRegressor {
+  fn serialize(&self) -> Result<Vec<u8>> {
+    let serialize_data = DecisionTreeRegressorSerializeData {
+      fit_data_variant_type: self.fit_data_variant_type,
+      predict_output_type: self.predict_output_type,
+      decision_tree_regressor: self.inner.serialize()?,
+    };
+    encode_to_vec(serialize_data, standard())
+      .map_err(|e| Error::new(Status::GenericFailure, e.to_string()))
+  }
+}

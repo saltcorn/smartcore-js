@@ -1,2 +1,2 @@
-export { KMeans } from './kmeans/index.js'
-export { DBSCAN } from './dbscan/index.js'
+export { KMeans } from './kmean.js'
+export { DBSCAN } from './dbscan.js'

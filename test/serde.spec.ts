@@ -64,10 +64,10 @@ describe('Serialize + Deserialize', () => {
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     lr.fit(xTrain, yTrain)
-    const score1 = accuracyScore(lr.predict(xTest), yTest)
+    const score1 = accuracyScore(lr.predict(xTest), yTest, false)
     const lrSerialized = lr.serialize()
     const lrDeserialized = LogisticRegression.deserialize(lrSerialized)
-    const score2 = accuracyScore(lrDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(lrDeserialized.predict(xTest), yTest, false)
     assert.equal(score1, score2)
   })
 
@@ -80,10 +80,10 @@ describe('Serialize + Deserialize', () => {
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     rfc.fit(xTrain, yTrain)
-    const score1 = accuracyScore(rfc.predict(xTest), yTest)
+    const score1 = accuracyScore(rfc.predict(xTest), yTest, false)
     const rfcSerialized = rfc.serialize()
     const rfcDeserialized = RandomForestClassifier.deserialize(rfcSerialized)
-    const score2 = accuracyScore(rfcDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(rfcDeserialized.predict(xTest), yTest, false)
     assert.equal(score1, score2)
   })
 
@@ -96,10 +96,10 @@ describe('Serialize + Deserialize', () => {
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     rfr.fit(xTrain, yTrain)
-    const score1 = accuracyScore(rfr.predict(xTest), yTest)
+    const score1 = accuracyScore(rfr.predict(xTest), yTest, false)
     const rfrSerialized = rfr.serialize()
     const rfrDeserialized = RandomForestRegressor.deserialize(rfrSerialized)
-    const score2 = accuracyScore(rfrDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(rfrDeserialized.predict(xTest), yTest, false)
     assert.equal(score1, score2)
   })
 
@@ -112,10 +112,10 @@ describe('Serialize + Deserialize', () => {
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     etr.fit(xTrain, yTrain)
-    const score1 = accuracyScore(etr.predict(xTest), yTest)
+    const score1 = accuracyScore(etr.predict(xTest), yTest, false)
     const etrSerialized = etr.serialize()
     const etrDeserialized = ExtraTreesRegressor.deserialize(etrSerialized)
-    const score2 = accuracyScore(etrDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(etrDeserialized.predict(xTest), yTest, false)
     assert.equal(score1, score2)
   })
 
@@ -128,10 +128,10 @@ describe('Serialize + Deserialize', () => {
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     km.fit(xTrain)
-    const score1 = accuracyScore(km.predict(xTest), yTest)
+    const score1 = accuracyScore(km.predict(xTest), yTest, false)
     const kmSerialized = km.serialize()
     const kmDeserialized = KMeans.deserialize(kmSerialized)
-    const score2 = accuracyScore(kmDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(kmDeserialized.predict(xTest), yTest, false)
     assert.equal(score1, score2)
   })
 
@@ -142,18 +142,17 @@ describe('Serialize + Deserialize', () => {
     if (!(x && y)) {
       assert.fail('Expected "loadIris" to return an Array containing 2 items.')
     }
-    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
+    const [xTrain, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     dbscan.fit(xTrain)
-    const score1 = accuracyScore(dbscan.predict(xTest), yTest)
+    const score1 = accuracyScore(dbscan.predict(xTest), yTest, false)
     const dbscanSerialized = dbscan.serialize()
     const dbscanDeserialized = DBSCAN.deserialize(dbscanSerialized)
-    const score2 = accuracyScore(dbscanDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(dbscanDeserialized.predict(xTest), yTest, false)
     assert.equal(score1, score2)
   })
 
   it('PCA', () => {
     const columns = df.columnNames.filter((column) => !column.startsWith('customer'))
-    const y = new Float64Array([1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1])
     const pca = new PCA({ nComponents: 24n, columns })
     const transformedColumns1 = pca.fit(df).transform(df)
     const pcaSerialized = pca.serialize()
@@ -169,7 +168,7 @@ describe('Serialize + Deserialize', () => {
     if (!(x && y)) {
       assert.fail('Expected "loadBoston" to return an Array containing 2 items.')
     }
-    const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.22 })
+    const [xTrain, xTest, yTrain] = trainTestSplit(x, y, { testSize: 0.22 })
     rr.fit(xTrain, yTrain)
     const predictions1 = rr.predict(xTest)
     const rrSerialized = rr.serialize()
@@ -202,10 +201,10 @@ describe('Serialize + Deserialize', () => {
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     lr.fit(xTrain, yTrain)
-    const score1 = accuracyScore(lr.predict(xTest), yTest)
+    const score1 = accuracyScore(lr.predict(xTest), yTest, false)
     const lrSerialized = lr.serialize()
     const lrDeserialized = LinearRegression.deserialize(lrSerialized)
-    const score2 = accuracyScore(lrDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(lrDeserialized.predict(xTest), yTest, false)
     assert.deepEqual(score1, score2)
   })
 
@@ -218,10 +217,10 @@ describe('Serialize + Deserialize', () => {
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     lasso.fit(xTrain, yTrain)
-    const score1 = accuracyScore(lasso.predict(xTest), yTest)
+    const score1 = accuracyScore(lasso.predict(xTest), yTest, false)
     const lassoSerialized = lasso.serialize()
     const lassoDeserialized = Lasso.deserialize(lassoSerialized)
-    const score2 = accuracyScore(lassoDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(lassoDeserialized.predict(xTest), yTest, false)
     assert.equal(score1, score2)
   })
 
@@ -234,10 +233,10 @@ describe('Serialize + Deserialize', () => {
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     en.fit(xTrain, yTrain)
-    let score1 = accuracyScore(en.predict(xTest), yTest)
+    let score1 = accuracyScore(en.predict(xTest), yTest, false)
     const enSerialized = en.serialize()
     const enDeserialized = ElasticNet.deserialize(enSerialized)
-    const score2 = accuracyScore(enDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(enDeserialized.predict(xTest), yTest, false)
     assert.equal(score1, score2)
   })
 
@@ -266,10 +265,10 @@ describe('Serialize + Deserialize', () => {
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     bnb.fit(xTrain, yTrain)
-    let score1 = accuracyScore(bnb.predict(xTest), yTest)
+    let score1 = accuracyScore(bnb.predict(xTest), yTest, false)
     const bnbSerialized = bnb.serialize()
     const bnbDeserialized = BernoulliNB.deserialize(bnbSerialized)
-    const score2 = accuracyScore(bnbDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(bnbDeserialized.predict(xTest), yTest, false)
     assert.equal(score1, score2)
   })
 
@@ -312,10 +311,10 @@ describe('Serialize + Deserialize', () => {
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     gnb.fit(xTrain, yTrain)
-    const score1 = accuracyScore(gnb.predict(xTest), yTest)
+    const score1 = accuracyScore(gnb.predict(xTest), yTest, false)
     const gnbSerialized = gnb.serialize()
     const gnbDeserialized = GaussianNB.deserialize(gnbSerialized)
-    const score2 = accuracyScore(gnbDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(gnbDeserialized.predict(xTest), yTest, false)
     assert.equal(score1, score2)
   })
 
@@ -359,10 +358,10 @@ describe('Serialize + Deserialize', () => {
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     knnc.fit(xTrain, yTrain)
-    const score1 = accuracyScore(knnc.predict(xTest), yTest)
+    const score1 = accuracyScore(knnc.predict(xTest), yTest, false)
     const knncSerialized = knnc.serialize()
     const knncDeserialized = KNNClassifier.deserialize(knncSerialized)
-    const score2 = accuracyScore(knncDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(knncDeserialized.predict(xTest), yTest, false)
     assert.equal(score1, score2)
   })
 
@@ -375,10 +374,10 @@ describe('Serialize + Deserialize', () => {
     }
     const [xTrain, xTest, yTrain, yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     knnr.fit(xTrain, yTrain)
-    let score1 = accuracyScore(knnr.predict(xTest), yTest)
+    let score1 = accuracyScore(knnr.predict(xTest), yTest, false)
     const knnrSerialized = knnr.serialize()
     const knnrDeserialized = KNNRegressor.deserialize(knnrSerialized)
-    const score2 = accuracyScore(knnrDeserialized.predict(xTest), yTest)
+    const score2 = accuracyScore(knnrDeserialized.predict(xTest), yTest, false)
     assert.equal(score1, score2)
   })
 })

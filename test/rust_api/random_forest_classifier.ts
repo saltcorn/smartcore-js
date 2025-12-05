@@ -13,7 +13,7 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const _ = new RandomForestClassifierBuilder(x, yWrapped).build()
   })
 
@@ -23,12 +23,12 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const randomForestClassifierBuilder = new RandomForestClassifierBuilder(x, yWrapped)
     const randomForestClassifier = randomForestClassifierBuilder.build()
-    const score = accuracyScore(randomForestClassifier.predict(xTest).field0, yTest)
+    const score = accuracyScore(randomForestClassifier.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -38,15 +38,15 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const randomForestClassifierBuilder = new RandomForestClassifierBuilder(x, yWrapped)
     const randomForestClassifier = randomForestClassifierBuilder.build()
-    const score1 = accuracyScore(randomForestClassifier.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(randomForestClassifier.predict(xTest).field0, yTest, false)
     const serializedRandomForestClassifier = randomForestClassifier.serialize()
     const deserializedRandomForestClassifier = RandomForestClassifier.deserialize(serializedRandomForestClassifier)
-    const score2 = accuracyScore(deserializedRandomForestClassifier.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedRandomForestClassifier.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

@@ -16,6 +16,8 @@ export * as decomposition from './decomposition/index.js'
 export * as naiveBayes from './naive_bayes/index.js'
 export * as neighbors from './neighbors/index.js'
 export * as coreBindings from './core-bindings/index.js'
+export * as svm from './svm/index.js'
+export * as tree from './tree/index.js'
 
 type XType = DenseMatrix | number[][]
 type YType = (number | bigint)[] | TypedArray
@@ -75,5 +77,10 @@ function asTypedY(y: YType): YTyped {
   throw new Error(`Conversion to typed array failed!`)
 }
 
-export type { YType, XType, InputType, OutputType, YTyped }
+interface ModelSaveData {
+  columns?: string[]
+  model: Buffer
+}
+
+export type { YType, XType, InputType, OutputType, YTyped, ModelSaveData }
 export { asTypedY, numberTypeCheckers }

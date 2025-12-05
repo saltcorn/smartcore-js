@@ -42,7 +42,7 @@ export default () => {
       if (!(xH && yH)) {
         assert.fail('Expected both xH and yH to be defined')
       }
-      const yHWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(yH, { numberType: TypedArrayType.I32 }))
+      const yHWrapped = utilities.arrayToTypedArray(yH, { numberType: TypedArrayType.I32 })
       const knnClassifierBuilderH = new KNNClassifierBuilder(xH, yHWrapped)
       knnClassifierBuilderH.withDistanceType(DistanceVariantType.Hamming)
       knnClassifierBuilderH.build()
@@ -80,7 +80,7 @@ export default () => {
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     const knnClassifierBuilder = new KNNClassifierBuilder(x, yWrapped)
     const knnClassifier = knnClassifierBuilder.build()
-    const score = accuracyScore(knnClassifier.predict(xTest).field0, yTest)
+    const score = accuracyScore(knnClassifier.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -94,10 +94,10 @@ export default () => {
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
     const knnClassifierBuilder = new KNNClassifierBuilder(x, yWrapped)
     const knnClassifier = knnClassifierBuilder.build()
-    const score1 = accuracyScore(knnClassifier.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(knnClassifier.predict(xTest).field0, yTest, false)
     const serializedKNNClassifier = knnClassifier.serialize()
     const deserializedKNNClassifier = KNNClassifier.deserialize(serializedKNNClassifier)
-    const score2 = accuracyScore(deserializedKNNClassifier.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedKNNClassifier.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

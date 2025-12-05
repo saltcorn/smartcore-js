@@ -10,7 +10,7 @@ use super::{
 };
 use crate::{
   dense_matrix::DenseMatrix,
-  tree::decision_tree_classifier::parameters::SplitCriterion,
+  tree::decision_tree_classifier::SplitCriterion,
   typed_array::{TypedArrayVec, TypedArrayWrapper},
 };
 

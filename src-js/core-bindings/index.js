@@ -81,8 +81,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-android-arm64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-android-arm64/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -97,8 +97,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-android-arm-eabi')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-android-arm-eabi/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -118,8 +118,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-win32-x64-gnu')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-win32-x64-gnu/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -134,8 +134,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-win32-x64-msvc')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-win32-x64-msvc/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -151,8 +151,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-win32-ia32-msvc')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-win32-ia32-msvc/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -167,8 +167,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-win32-arm64-msvc')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-win32-arm64-msvc/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -186,8 +186,8 @@ function requireNative() {
     try {
       const binding = require('@saltcorn/smartcore-js-darwin-universal')
       const bindingPackageVersion = require('@saltcorn/smartcore-js-darwin-universal/package.json').version
-      if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-        throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+      if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+        throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
       }
       return binding
     } catch (e) {
@@ -202,8 +202,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-darwin-x64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-darwin-x64/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -218,8 +218,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-darwin-arm64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-darwin-arm64/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -238,8 +238,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-freebsd-x64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-freebsd-x64/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -254,8 +254,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-freebsd-arm64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-freebsd-arm64/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -275,8 +275,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-x64-musl')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-x64-musl/package.json').version
-          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -291,8 +291,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-x64-gnu')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-x64-gnu/package.json').version
-          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -309,8 +309,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-arm64-musl')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-arm64-musl/package.json').version
-          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -325,8 +325,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-arm64-gnu')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-arm64-gnu/package.json').version
-          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -343,8 +343,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-arm-musleabihf')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-arm-musleabihf/package.json').version
-          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -359,8 +359,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-arm-gnueabihf')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-arm-gnueabihf/package.json').version
-          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -377,8 +377,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-loong64-musl')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-loong64-musl/package.json').version
-          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -393,8 +393,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-loong64-gnu')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-loong64-gnu/package.json').version
-          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -411,8 +411,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-riscv64-musl')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-riscv64-musl/package.json').version
-          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -427,8 +427,8 @@ function requireNative() {
         try {
           const binding = require('@saltcorn/smartcore-js-linux-riscv64-gnu')
           const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-riscv64-gnu/package.json').version
-          if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-            throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+          if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+            throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
           }
           return binding
         } catch (e) {
@@ -444,8 +444,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-linux-ppc64-gnu')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-ppc64-gnu/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -460,8 +460,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-linux-s390x-gnu')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-linux-s390x-gnu/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -480,8 +480,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-openharmony-arm64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-openharmony-arm64/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -496,8 +496,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-openharmony-x64')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-openharmony-x64/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -512,8 +512,8 @@ function requireNative() {
       try {
         const binding = require('@saltcorn/smartcore-js-openharmony-arm')
         const bindingPackageVersion = require('@saltcorn/smartcore-js-openharmony-arm/package.json').version
-        if (bindingPackageVersion !== '0.2.9' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
-          throw new Error(`Native binding package version mismatch, expected 0.2.9 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
+        if (bindingPackageVersion !== '0.2.11' && process.env.NAPI_RS_ENFORCE_VERSION_CHECK && process.env.NAPI_RS_ENFORCE_VERSION_CHECK !== '0') {
+          throw new Error(`Native binding package version mismatch, expected 0.2.11 but got ${bindingPackageVersion}. You can reinstall dependencies to fix this issue.`)
         }
         return binding
       } catch (e) {
@@ -575,17 +575,7 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { AccuracyF64, Accuracyf64, AccuracyI32, Accuracyi32, AccuracyI64, Accuracyi64, AccuracyU64, Accuracyu64, AUCF64, AUCf64, BernoulliNB, BernoulliNBBuilder, Boston, BreastCancer, CategoricalNB, CategoricalNBBuilder, dataset, Dataset, DatasetF64F64, DatasetF64F64JsVecRef, DatasetF64I32, DatasetF64I32JsVecRef, DatasetI32I32, DBSCAN, DBSCANBuilder, DecisionTreeClassifierI64I64, DecisionTreeClassifierParameters, DecisionTreeRegressorI64I64, DecisionTreeRegressorParameters, DenseMatrix, DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32, DenseMatrixU64, DenseMatrixU8, Diabetes, Digits, ElasticNet, ElasticNetBuilder, EuclidianF32, EuclidianF64, EuclidianI32, EuclidianI64, EuclidianU16, EuclidianU32, EuclidianU64, EuclidianU8, ExtraTreesRegressor, ExtraTreesRegressorBuilder, F1F64, F1f64, GaussianNB, GaussianNBBuilder, Generator, HammingI32, HammingU16, HammingU8, HCVScoreI64, HCVScorei64, HCVScoreU64, HCVScoreu64, Iris, JsBoxedArrayF32Ref, JsBoxedArrayF64Ref, JsBoxedArrayI32Ref, JsBoxedArrayI64Ref, JsBoxedArrayU16Ref, JsBoxedArrayU32Ref, JsBoxedArrayU8Ref, JsDenseMatrixF64Ref, JsVecF64Ref, JsVecI64Ref, Kernels, KFold, KMeans, KMeansBuilder, KNNClassifier, KNNClassifierBuilder, KNNRegressor, KNNRegressorBuilder, Lasso, LassoBuilder, LinearRegression, LinearRegressionBuilder, LogisticRegression, LogisticRegressionBuilder, MahalanobisF32, MahalanobisF64, ManhattanF32, ManhattanF64, ManhattanI32, ManhattanI64, ManhattanU32, ManhattanU64, MeanAbsoluteErrorF64, MeanAbsoluteErrorf64, MeanSquareErrorF64, MeanSquareErrorf64, MinkowskiF32, MinkowskiF64, MinkowskiI32, MinkowskiI64, MultinomialNB, MultinomialNBBuilder, OneHotEncoder, OneHotEncoderBuilder, PCA, PCABuilder, PrecisionF64, Precisionf64, R2F64, R2f64, R2I64, R2i64, R2U64, R2u64, RandomForestClassifier, RandomForestClassifierBuilder, RandomForestRegressor, RandomForestRegressorBuilder, RecallF64, Recallf64, RidgeRegression, RidgeRegressionBuilder, StandardScaler, StandardScalerBuilder, SVCF64I64, SVCParametersF64I64, SVD, SVDBuilder, SVDF64DenseMatrixF64, SVRF64, SVRParametersF64, VecF64, VecI64, WrappedNumber, BernoulliNBPredictOutputType, DenseMatrixType, DistanceVariantType, ElasticNetPredictOutputType, ExtraTreesRegressorPredictOutputType, GaussianNBPredictOutputType, KMeansPredictOutputType, KNNAlgorithmName, KNNClassifierPredictOutputType, KNNRegressorPredictOutputType, KNNWeightFunction, LassoPredictOutputType, LinearRegressionPredictOutputType, LinearRegressionSolverName, LogisticRegressionPredictOutputType, LogisticRegressionSolverName, MultinomialNBPredictOutputType, RandomForestClassifierPredictOutputType, RandomForestRegressorPredictOutputType, RidgeRegressionPredictOutputType, RidgeRegressionSolverName, SplitCriterion, trainTestSplitF32F32, trainTestSplitF32F64, trainTestSplitF32I32, trainTestSplitF32I64, trainTestSplitF32U64, trainTestSplitF64F32, trainTestSplitF64F64, trainTestSplitF64I32, trainTestSplitF64I64, trainTestSplitF64U64, trainTestSplitI32F32, trainTestSplitI32F64, trainTestSplitI32I32, trainTestSplitI32I64, trainTestSplitI32U64, trainTestSplitI64F32, trainTestSplitI64F64, trainTestSplitI64I32, trainTestSplitI64I64, trainTestSplitI64U64, trainTestSplitU16F32, trainTestSplitU16F64, trainTestSplitU16I32, trainTestSplitU16I64, trainTestSplitU16U64, trainTestSplitU32F32, trainTestSplitU32F64, trainTestSplitU32I32, trainTestSplitU32I64, trainTestSplitU32U64, trainTestSplitU64F32, trainTestSplitU64F64, trainTestSplitU64I32, trainTestSplitU64I64, trainTestSplitU64U64, trainTestSplitU8F32, trainTestSplitU8F64, trainTestSplitU8I32, trainTestSplitU8I64, trainTestSplitU8U64, TypedArrayType } = nativeBinding
-export { AccuracyF64 }
-export { Accuracyf64 }
-export { AccuracyI32 }
-export { Accuracyi32 }
-export { AccuracyI64 }
-export { Accuracyi64 }
-export { AccuracyU64 }
-export { Accuracyu64 }
-export { AUCF64 }
-export { AUCf64 }
+const { BernoulliNB, BernoulliNBBuilder, Boston, BreastCancer, CategoricalNB, CategoricalNBBuilder, dataset, Dataset, DatasetF64F64, DatasetF64I32, DatasetI32I32, DBSCAN, DBSCANBuilder, DecisionTreeClassifier, DecisionTreeClassifierBuilder, DecisionTreeRegressor, DecisionTreeRegressorBuilder, DenseMatrix, DenseMatrixF32, DenseMatrixF64, DenseMatrixI32, DenseMatrixI64, DenseMatrixU16, DenseMatrixU32, DenseMatrixU64, DenseMatrixU8, Diabetes, Digits, ElasticNet, ElasticNetBuilder, ExtraTreesRegressor, ExtraTreesRegressorBuilder, GaussianNB, GaussianNBBuilder, Generator, Iris, JsBoxedArrayF32Ref, JsBoxedArrayF64Ref, JsBoxedArrayI32Ref, JsBoxedArrayI64Ref, JsBoxedArrayU16Ref, JsBoxedArrayU32Ref, JsBoxedArrayU64Ref, JsBoxedArrayU8Ref, JsDenseMatrixF64Ref, Kernels, KFold, KMeans, KMeansBuilder, KNNClassifier, KNNClassifierBuilder, KNNRegressor, KNNRegressorBuilder, Lasso, LassoBuilder, LinearRegression, LinearRegressionBuilder, LogisticRegression, LogisticRegressionBuilder, MultinomialNB, MultinomialNBBuilder, OneHotEncoder, OneHotEncoderBuilder, PCA, PCABuilder, RandomForestClassifier, RandomForestClassifierBuilder, RandomForestRegressor, RandomForestRegressorBuilder, RidgeRegression, RidgeRegressionBuilder, StandardScaler, StandardScalerBuilder, SVC, SVCBuilder, SVD, SVDBuilder, SVDF64DenseMatrixF64, SVR, SVRBuilder, WrappedNumber, accuracyScore, aucScore, BernoulliNBPredictOutputType, changeArrayType, DecisionTreeClassifierPredictOutputType, DecisionTreeRegressorPredictOutputType, DenseMatrixType, DistanceVariantType, ElasticNetPredictOutputType, ExtraTreesRegressorPredictOutputType, f1Score, GaussianNBPredictOutputType, hcvScore, KMeansPredictOutputType, KNNAlgorithmName, KNNClassifierPredictOutputType, KNNRegressorPredictOutputType, KNNWeightFunction, LassoPredictOutputType, LinearRegressionPredictOutputType, LinearRegressionSolverName, LogisticRegressionPredictOutputType, LogisticRegressionSolverName, meanAbsoluteErrorScore, meanSquaredErrorScore, MultinomialNBPredictOutputType, precisionScore, r2Score, RandomForestClassifierPredictOutputType, RandomForestRegressorPredictOutputType, recallScore, RidgeRegressionPredictOutputType, RidgeRegressionSolverName, SplitCriterion, SVCPredictOutputType, trainTestSplitF32F32, trainTestSplitF32F64, trainTestSplitF32I32, trainTestSplitF32I64, trainTestSplitF32U64, trainTestSplitF64F32, trainTestSplitF64F64, trainTestSplitF64I32, trainTestSplitF64I64, trainTestSplitF64U64, trainTestSplitI32F32, trainTestSplitI32F64, trainTestSplitI32I32, trainTestSplitI32I64, trainTestSplitI32U64, trainTestSplitI64F32, trainTestSplitI64F64, trainTestSplitI64I32, trainTestSplitI64I64, trainTestSplitI64U64, trainTestSplitU16F32, trainTestSplitU16F64, trainTestSplitU16I32, trainTestSplitU16I64, trainTestSplitU16U64, trainTestSplitU32F32, trainTestSplitU32F64, trainTestSplitU32I32, trainTestSplitU32I64, trainTestSplitU32U64, trainTestSplitU64F32, trainTestSplitU64F64, trainTestSplitU64I32, trainTestSplitU64I64, trainTestSplitU64U64, trainTestSplitU8F32, trainTestSplitU8F64, trainTestSplitU8I32, trainTestSplitU8I64, trainTestSplitU8U64, TypedArrayType } = nativeBinding
 export { BernoulliNB }
 export { BernoulliNBBuilder }
 export { Boston }
@@ -595,16 +585,14 @@ export { CategoricalNBBuilder }
 export { dataset }
 export { Dataset }
 export { DatasetF64F64 }
-export { DatasetF64F64JsVecRef }
 export { DatasetF64I32 }
-export { DatasetF64I32JsVecRef }
 export { DatasetI32I32 }
 export { DBSCAN }
 export { DBSCANBuilder }
-export { DecisionTreeClassifierI64I64 }
-export { DecisionTreeClassifierParameters }
-export { DecisionTreeRegressorI64I64 }
-export { DecisionTreeRegressorParameters }
+export { DecisionTreeClassifier }
+export { DecisionTreeClassifierBuilder }
+export { DecisionTreeRegressor }
+export { DecisionTreeRegressorBuilder }
 export { DenseMatrix }
 export { DenseMatrixF32 }
 export { DenseMatrixF64 }
@@ -618,28 +606,11 @@ export { Diabetes }
 export { Digits }
 export { ElasticNet }
 export { ElasticNetBuilder }
-export { EuclidianF32 }
-export { EuclidianF64 }
-export { EuclidianI32 }
-export { EuclidianI64 }
-export { EuclidianU16 }
-export { EuclidianU32 }
-export { EuclidianU64 }
-export { EuclidianU8 }
 export { ExtraTreesRegressor }
 export { ExtraTreesRegressorBuilder }
-export { F1F64 }
-export { F1f64 }
 export { GaussianNB }
 export { GaussianNBBuilder }
 export { Generator }
-export { HammingI32 }
-export { HammingU16 }
-export { HammingU8 }
-export { HCVScoreI64 }
-export { HCVScorei64 }
-export { HCVScoreU64 }
-export { HCVScoreu64 }
 export { Iris }
 export { JsBoxedArrayF32Ref }
 export { JsBoxedArrayF64Ref }
@@ -647,10 +618,9 @@ export { JsBoxedArrayI32Ref }
 export { JsBoxedArrayI64Ref }
 export { JsBoxedArrayU16Ref }
 export { JsBoxedArrayU32Ref }
+export { JsBoxedArrayU64Ref }
 export { JsBoxedArrayU8Ref }
 export { JsDenseMatrixF64Ref }
-export { JsVecF64Ref }
-export { JsVecI64Ref }
 export { Kernels }
 export { KFold }
 export { KMeans }
@@ -665,62 +635,41 @@ export { LinearRegression }
 export { LinearRegressionBuilder }
 export { LogisticRegression }
 export { LogisticRegressionBuilder }
-export { MahalanobisF32 }
-export { MahalanobisF64 }
-export { ManhattanF32 }
-export { ManhattanF64 }
-export { ManhattanI32 }
-export { ManhattanI64 }
-export { ManhattanU32 }
-export { ManhattanU64 }
-export { MeanAbsoluteErrorF64 }
-export { MeanAbsoluteErrorf64 }
-export { MeanSquareErrorF64 }
-export { MeanSquareErrorf64 }
-export { MinkowskiF32 }
-export { MinkowskiF64 }
-export { MinkowskiI32 }
-export { MinkowskiI64 }
 export { MultinomialNB }
 export { MultinomialNBBuilder }
 export { OneHotEncoder }
 export { OneHotEncoderBuilder }
 export { PCA }
 export { PCABuilder }
-export { PrecisionF64 }
-export { Precisionf64 }
-export { R2F64 }
-export { R2f64 }
-export { R2I64 }
-export { R2i64 }
-export { R2U64 }
-export { R2u64 }
 export { RandomForestClassifier }
 export { RandomForestClassifierBuilder }
 export { RandomForestRegressor }
 export { RandomForestRegressorBuilder }
-export { RecallF64 }
-export { Recallf64 }
 export { RidgeRegression }
 export { RidgeRegressionBuilder }
 export { StandardScaler }
 export { StandardScalerBuilder }
-export { SVCF64I64 }
-export { SVCParametersF64I64 }
+export { SVC }
+export { SVCBuilder }
 export { SVD }
 export { SVDBuilder }
 export { SVDF64DenseMatrixF64 }
-export { SVRF64 }
-export { SVRParametersF64 }
-export { VecF64 }
-export { VecI64 }
+export { SVR }
+export { SVRBuilder }
 export { WrappedNumber }
+export { accuracyScore }
+export { aucScore }
 export { BernoulliNBPredictOutputType }
+export { changeArrayType }
+export { DecisionTreeClassifierPredictOutputType }
+export { DecisionTreeRegressorPredictOutputType }
 export { DenseMatrixType }
 export { DistanceVariantType }
 export { ElasticNetPredictOutputType }
 export { ExtraTreesRegressorPredictOutputType }
+export { f1Score }
 export { GaussianNBPredictOutputType }
+export { hcvScore }
 export { KMeansPredictOutputType }
 export { KNNAlgorithmName }
 export { KNNClassifierPredictOutputType }
@@ -731,12 +680,18 @@ export { LinearRegressionPredictOutputType }
 export { LinearRegressionSolverName }
 export { LogisticRegressionPredictOutputType }
 export { LogisticRegressionSolverName }
+export { meanAbsoluteErrorScore }
+export { meanSquaredErrorScore }
 export { MultinomialNBPredictOutputType }
+export { precisionScore }
+export { r2Score }
 export { RandomForestClassifierPredictOutputType }
 export { RandomForestRegressorPredictOutputType }
+export { recallScore }
 export { RidgeRegressionPredictOutputType }
 export { RidgeRegressionSolverName }
 export { SplitCriterion }
+export { SVCPredictOutputType }
 export { trainTestSplitF32F32 }
 export { trainTestSplitF32F64 }
 export { trainTestSplitF32I32 }

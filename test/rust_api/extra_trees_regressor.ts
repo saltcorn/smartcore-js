@@ -13,7 +13,7 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const _ = new ExtraTreesRegressorBuilder(x, yWrapped).build()
   })
 
@@ -23,12 +23,12 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const extraTreesRegressorBuilder = new ExtraTreesRegressorBuilder(x, yWrapped)
     const extraTreesRegressor = extraTreesRegressorBuilder.build()
-    const score = accuracyScore(extraTreesRegressor.predict(xTest).field0, yTest)
+    const score = accuracyScore(extraTreesRegressor.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -38,15 +38,15 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const extraTreesRegressorBuilder = new ExtraTreesRegressorBuilder(x, yWrapped)
     const extraTreesRegressor = extraTreesRegressorBuilder.build()
-    const score1 = accuracyScore(extraTreesRegressor.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(extraTreesRegressor.predict(xTest).field0, yTest, false)
     const serializedExtraTreesRegressor = extraTreesRegressor.serialize()
     const deserializedExtraTreesRegressor = ExtraTreesRegressor.deserialize(serializedExtraTreesRegressor)
-    const score2 = accuracyScore(deserializedExtraTreesRegressor.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedExtraTreesRegressor.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

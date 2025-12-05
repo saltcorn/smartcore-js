@@ -26,7 +26,7 @@ export default () => {
 
     const kmeansBuilder = new KMeansBuilder(x)
     const kmeans = kmeansBuilder.build()
-    const score = accuracyScore(kmeans.predict(xTest).field0, yTest)
+    const score = accuracyScore(kmeans.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -40,10 +40,10 @@ export default () => {
 
     const kmeansBuilder = new KMeansBuilder(x)
     const kmeans = kmeansBuilder.build()
-    const score1 = accuracyScore(kmeans.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(kmeans.predict(xTest).field0, yTest, false)
     const serializedKMeans = kmeans.serialize()
     const deserializedKMeans = KMeans.deserialize(serializedKMeans)
-    const score2 = accuracyScore(deserializedKMeans.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedKMeans.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

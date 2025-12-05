@@ -1,40 +1,38 @@
 use napi::bindgen_prelude::*;
 use napi_derive::napi;
-use paste::paste;
 use smartcore::metrics::{f1::F1 as LibF1, Metrics};
 
-macro_rules! f1_struct {
-  ( $x:ty, $xs:ty ) => {
-    paste! {
-        #[napi(js_name=""[<F1 $x:upper>]"")]
-        pub struct [<F1 $x>] {
-            inner: LibF1<$x>,
-        }
+use crate::{
+  match_array_types::{match_array_type, MatchedArrays},
+  typed_array::{TypedArrayType, TypedArrayWrapper},
+};
 
-        impl Default for [<F1 $x>] {
-            fn default() -> Self {
-                Self {
-                    inner: LibF1::<$x>::new(),
-                }
-            }
-        }
-
-        #[napi]
-        impl [<F1 $x>] {
-            #[napi(constructor)]
-            pub fn new() -> Self {
-                Self::default()
-            }
-
-            #[napi]
-            pub fn get_score(&self, y_true: $xs, y_pred: $xs) -> f64 {
-                let y_true = y_true.to_vec();
-                let y_pred = y_pred.to_vec();
-                self.inner.get_score(&y_true, &y_pred)
-            }
-        }
+#[napi]
+pub fn f1_score(
+  y_true: TypedArrayWrapper,
+  y_pred: TypedArrayWrapper,
+  losslessly: Option<bool>,
+) -> Result<f64> {
+  match (y_true.r#type(), y_pred.r#type()) {
+    (TypedArrayType::F64, _)
+    | (TypedArrayType::F32, _)
+    | (_, TypedArrayType::F64)
+    | (_, TypedArrayType::F32) => (),
+    _ => {
+      return Err(Error::new(
+        Status::InvalidArg,
+        "Expected an array of floating point values.",
+      ))
     }
-  };
+  }
+  match match_array_type(y_true, y_pred, losslessly)? {
+    MatchedArrays::F64(y_true, y_pred) => Ok(LibF1::<f64>::new().get_score(&y_true, &y_pred)),
+    MatchedArrays::F32(y_true, y_pred) => Ok(LibF1::<f32>::new().get_score(&y_true, &y_pred)),
+    MatchedArrays::I64(_, _)
+    | MatchedArrays::U64(_, _)
+    | MatchedArrays::I32(_, _)
+    | MatchedArrays::U32(_, _)
+    | MatchedArrays::U16(_, _)
+    | MatchedArrays::U8(_, _) => unimplemented!(),
+  }
 }
-
-f1_struct! {f64, Float64Array}

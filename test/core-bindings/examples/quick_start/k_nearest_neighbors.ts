@@ -1,19 +1,18 @@
 import assert from 'assert'
-import {
-  dataset,
-  KNNClassifierF64BigI64EuclidianF64,
-  AccuracyI64,
-  KNNClassifierF64EuclidianF64Parameters,
-} from '../../../../src-js/core-bindings/index.js'
+import { dataset, metrics, neighbors } from '../../../../src-js/index.js'
+
+const { accuracyScore } = metrics
+const { KNNClassifier } = neighbors
 
 export default () => {
   it('K-Nearest Neigbors', () => {
-    let loadedData = dataset.iris().loadDataset()
-    let x = loadedData.denseMatrix()
-    let y = loadedData.target
-    let parameters = new KNNClassifierF64EuclidianF64Parameters()
-    let yHat = KNNClassifierF64BigI64EuclidianF64.fit(x, y, parameters).predict(x)
-    let accuracy = new AccuracyI64().getScore(y, yHat)
+    let irisData = dataset.loadIris({ returnXY: true })
+    if (!Array.isArray(irisData)) {
+      assert.fail('Expected irisData to be an Array')
+    }
+    let [x, y] = irisData
+    let yHat = new KNNClassifier().fit(x, y).predict(x)
+    let accuracy = accuracyScore(y, yHat, false)
     assert(accuracy)
   })
 }

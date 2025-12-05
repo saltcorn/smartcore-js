@@ -13,7 +13,7 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const _ = new ElasticNetBuilder(x, yWrapped).build()
   })
 
@@ -23,12 +23,12 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const elasticNetBuilder = new ElasticNetBuilder(x, yWrapped)
     const elasticNet = elasticNetBuilder.build()
-    const score = accuracyScore(elasticNet.predict(xTest).field0, yTest)
+    const score = accuracyScore(elasticNet.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -38,15 +38,15 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const elasticNetBuilder = new ElasticNetBuilder(x, yWrapped)
     const elasticNet = elasticNetBuilder.build()
-    const score1 = accuracyScore(elasticNet.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(elasticNet.predict(xTest).field0, yTest, false)
     const serializedElasticNet = elasticNet.serialize()
     const deserializedElasticNet = ElasticNet.deserialize(serializedElasticNet)
-    const score2 = accuracyScore(deserializedElasticNet.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedElasticNet.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

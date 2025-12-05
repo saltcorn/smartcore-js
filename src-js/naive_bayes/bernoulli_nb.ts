@@ -20,11 +20,6 @@ interface IBernoulliNBParameters extends IBernoulliNBBaseParameters {
   columns?: string[]
 }
 
-interface BernoulliNBSerializedData {
-  config: IBernoulliNBParameters
-  data: Buffer
-}
-
 interface HasColumns {
   columns: string[] | null
 }
@@ -39,8 +34,14 @@ class BernoulliNB implements HasColumns {
 
   constructor(params?: IBernoulliNBParameters) {
     this.config = params ?? {}
-    this.config.fitDataXType = this.config.fitDataXType ?? ('F32' as DenseMatrixType)
-    this.config.fitDataYType = this.config.fitDataYType ?? ('U32' as TypedArrayType)
+  }
+
+  private get fitDataXType(): DenseMatrixType {
+    return this.config.fitDataXType ?? ('F32' as DenseMatrixType)
+  }
+
+  private get fitDataYType(): TypedArrayType {
+    return (this.config.fitDataYType ?? 'U32') as TypedArrayType
   }
 
   get columns(): string[] | null {
@@ -50,9 +51,9 @@ class BernoulliNB implements HasColumns {
   fit(x: InputType, y: YType): this {
     let matrix = utilities.inputTypeToDenseMatrix(x, {
       columns: this.config.columns,
-      numberType: this.config.fitDataXType,
+      numberType: this.fitDataXType,
     })
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: this.config.fitDataYType }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: this.fitDataYType })
     const builder = new BernoulliNBBuilder(matrix, yWrapped)
     if (this.config.alpha !== undefined) {
       builder.withAlpha(this.config.alpha)
@@ -84,36 +85,24 @@ class BernoulliNB implements HasColumns {
     this.ensureFitted('predict')
     if (x instanceof DataFrame) {
       const columns = Array.isArray(this.columns) ? this.columns : x.columnNames
-      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.config.fitDataXType })
+      const matrix = utilities.dataFrameToDenseMatrix(x, { columns, numberType: this.fitDataXType })
       return this.estimator!.predict(matrix).field0
     }
     const matrixRs = utilities.inputTypeToDenseMatrix(x, {
       columns: this.config.columns,
-      numberType: this.config.fitDataXType,
+      numberType: this.fitDataXType,
     })
     return this.estimator!.predict(matrixRs).field0
   }
 
-  serialize(): BernoulliNBSerializedData {
+  serialize(): Buffer {
     this.ensureFitted('serialize')
-
-    return {
-      data: this.estimator!.serialize(),
-      config: this.config,
-    }
+    return this.estimator!.serialize()
   }
 
-  private _deserialize(data: Buffer): this {
-    if (this._isFitted) {
-      throw new Error("Cannot call 'deserialize' on a fitted instance!")
-    }
-    this.estimator = LibBernoulliNB.deserialize(data)
-    return this
-  }
-
-  static deserialize(data: BernoulliNBSerializedData): BernoulliNB {
-    let instance = new BernoulliNB(data.config)
-    instance._deserialize(data.data)
+  static deserialize(data: Buffer): BernoulliNB {
+    const instance = new BernoulliNB()
+    instance.estimator = LibBernoulliNB.deserialize(data)
     instance._isFitted = true
     return instance
   }

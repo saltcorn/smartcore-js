@@ -1,77 +1,88 @@
-pub mod parameters;
+mod builder;
+mod deserialize;
+mod factory;
+mod lib_decision_tree_classifier_factory;
+mod predict_output_type;
+mod predictor_estimator;
+mod serialize_data;
+mod variants;
 
-use std::ops::Deref;
-
-use bincode::{
-  config::standard,
-  serde::{decode_from_slice, encode_to_vec},
-};
-use napi::bindgen_prelude::*;
+use bincode::{config::standard, decode_from_slice, encode_to_vec};
+use napi::{bindgen_prelude::Buffer, Error, Result, Status};
 use napi_derive::napi;
-use paste::paste;
-use smartcore::{
-  linalg::basic::matrix::DenseMatrix,
-  tree::decision_tree_classifier::DecisionTreeClassifier as LibDecisionTreeClassifier,
+use smartcore::tree::decision_tree_classifier::SplitCriterion as LibSplitCriterion;
+
+use crate::{
+  dense_matrix::{DenseMatrix, DenseMatrixType},
+  traits::{Estimator, Predictor, PredictorEstimator},
+  typed_array::TypedArrayWrapper,
 };
+use predict_output_type::DecisionTreeClassifierPredictOutputType;
+use serialize_data::DecisionTreeClassifierSerializeData;
 
-use crate::linalg::basic::matrix::DenseMatrixI64;
-use parameters::DecisionTreeClassifierParameters;
-
-macro_rules! decision_tree_classifier_nb_struct {
-  ( $x:ty, $y:ty, $xs:ty, $ys:ty ) => {
-    paste! {
-        #[napi(js_name=""[<DecisionTreeClassifier $x:upper $y:upper>]"")]
-        #[derive(Debug)]
-        pub struct [<DecisionTreeClassifier $x:upper $y:upper>] {
-            inner: LibDecisionTreeClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>>,
-        }
-
-        #[napi]
-        impl [<DecisionTreeClassifier $x:upper $y:upper>] {
-            #[napi(factory)]
-            pub fn fit(x: &$xs, y: $ys, parameters: &DecisionTreeClassifierParameters) -> Result<Self> {
-                let inner = LibDecisionTreeClassifier::fit(
-                    x as &DenseMatrix<$x>,
-                    &y.to_vec(),
-                    parameters.owned_inner(),
-                )
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Self { inner })
-            }
-
-            #[napi]
-            pub fn predict(&self, x: &$xs) -> Result<$ys> {
-                let prediction_result = self
-                .inner
-                .predict(x as &DenseMatrix<$x>)
-                .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok($ys::new(prediction_result))
-            }
-
-            #[napi]
-            pub fn serialize(&self) -> Result<Buffer> {
-                let encoded = encode_to_vec(&self.inner, standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?;
-                Ok(Buffer::from(encoded))
-            }
-
-            #[napi(factory)]
-            pub fn deserialize(data: Buffer) -> Result<Self> {
-                let inner = decode_from_slice::<LibDecisionTreeClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>>, _>(data.as_ref(), standard())
-                    .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?.0;
-                Ok(Self { inner })
-            }
-        }
-
-        impl Deref for [<DecisionTreeClassifier $x:upper $y:upper>] {
-            type Target = LibDecisionTreeClassifier<$x, $y, DenseMatrix<$x>, Vec<$y>>;
-
-            fn deref(&self) -> &Self::Target {
-                &self.inner
-            }
-        }
-    }
-  };
+#[napi]
+#[derive(Debug, Clone, Copy, Eq, PartialEq)]
+pub enum SplitCriterion {
+  Gini,
+  Entropy,
+  ClassificationError,
 }
 
-decision_tree_classifier_nb_struct! {i64, i64, DenseMatrixI64, BigInt64Array}
+impl From<SplitCriterion> for LibSplitCriterion {
+  fn from(value: SplitCriterion) -> Self {
+    match value {
+      SplitCriterion::Gini => LibSplitCriterion::Gini,
+      SplitCriterion::Entropy => LibSplitCriterion::Entropy,
+      SplitCriterion::ClassificationError => LibSplitCriterion::ClassificationError,
+    }
+  }
+}
+
+#[napi(js_name = "DecisionTreeClassifier")]
+#[derive(Debug)]
+pub struct DecisionTreeClassifier {
+  pub(super) inner: Box<dyn PredictorEstimator>,
+  pub(super) fit_data_variant_type: DenseMatrixType,
+  pub(super) predict_output_type: DecisionTreeClassifierPredictOutputType,
+}
+
+#[napi]
+impl DecisionTreeClassifier {
+  #[napi]
+  pub fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
+    self.inner.predict(x)
+  }
+
+  #[napi]
+  pub fn serialize(&self) -> Result<Buffer> {
+    let buffer_data = Estimator::serialize(self)?;
+    Ok(Buffer::from(buffer_data))
+  }
+
+  #[napi(factory)]
+  pub fn deserialize(data: Buffer) -> Result<Self> {
+    let serialize_data: DecisionTreeClassifierSerializeData =
+      decode_from_slice(data.as_ref(), standard())
+        .map_err(|e| Error::new(Status::GenericFailure, format!("{}", e)))?
+        .0;
+    serialize_data.try_into()
+  }
+}
+
+impl Predictor for DecisionTreeClassifier {
+  fn predict(&self, x: &DenseMatrix) -> Result<TypedArrayWrapper> {
+    self.inner.predict(x)
+  }
+}
+
+impl Estimator for DecisionTreeClassifier {
+  fn serialize(&self) -> Result<Vec<u8>> {
+    let serialize_data = DecisionTreeClassifierSerializeData {
+      fit_data_variant_type: self.fit_data_variant_type,
+      predict_output_type: self.predict_output_type,
+      decision_tree_classifier: self.inner.serialize()?,
+    };
+    encode_to_vec(serialize_data, standard())
+      .map_err(|e| Error::new(Status::GenericFailure, e.to_string()))
+  }
+}

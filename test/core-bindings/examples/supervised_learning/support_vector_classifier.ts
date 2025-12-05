@@ -1,28 +1,22 @@
 import assert from 'assert'
-import {
-  AUCF64,
-  dataset,
-  SVCF64I64,
-  SVCParametersF64I64,
-  trainTestSplitF64BigI64,
-} from '../../../../src-js/core-bindings/index.js'
+import { dataset, metrics, svm, modelSelection } from '../../../../src-js/index.js'
+import { Kernels } from '../../../../src-js/core-bindings/index.js'
+
+const { aucScore } = metrics
+const { SVC } = svm
+const { trainTestSplit } = modelSelection
 
 export default () => {
   it.skip('Support Vector Classifier (SVC)', () => {
-    let cancerData = dataset.breastCancer().loadDataset()
-    let x = cancerData.denseMatrix()
-    let y = cancerData.target
-    let [, xTest, , yTest] = trainTestSplitF64BigI64(x, y, 0.2, true)
-    let params = new SVCParametersF64I64()
-    params.withC(10.0)
-    let svm = SVCF64I64.setFitData(x, y, params)
-    svm.fit()
-    let yHatSVM = svm.predict(xTest)
-    let auc = new AUCF64()
+    const breastCancerData = dataset.loadBreastCancer({ returnXY: true })
+    if (!Array.isArray(breastCancerData)) assert.fail('Expected breastCancerData to be an Array')
+    const [x, y] = breastCancerData
+    const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.2, shuffle: true })
+    const yHatSVC = new SVC({ kernel: Kernels.rbf(0.5), c: 10.0 }).fit(x, y).predict(xTest)
     // Failed to reproduce this example due to type mismatches.
     // yTest is of type Uint32Array
     // getScore expects Float32Array
-    // let score = auc.getScore(yTest, yHatSVM)
-    assert.fail('Irreproducible')
+    const score = aucScore(yTest, yHatSVC)
+    assert(score)
   })
 }

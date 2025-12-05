@@ -49,6 +49,7 @@ boxed_array_struct_impls! { u32, DenseMatrixU32 }
 boxed_array_struct_impls! { u8, DenseMatrixU8 }
 boxed_array_struct_impls! { u16, DenseMatrixU16 }
 boxed_array_struct_impls! { i64, DenseMatrixI64 }
+boxed_array_struct_impls! { u64, DenseMatrixU64 }
 
 macro_rules! dense_matrix_array_2_impl {
   ( $x_js:ty, $x_rs:ty, $inner_name:ty, $xs_js:ty ) => {

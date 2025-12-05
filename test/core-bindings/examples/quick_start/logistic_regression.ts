@@ -1,19 +1,16 @@
 import assert from 'assert'
-import {
-  dataset,
-  AccuracyI64,
-  LogisticRegressionF64BigI64,
-  LogisticRegressionParametersF64,
-} from '../../../../src-js/core-bindings/index.js'
+import { linearModel, metrics, dataset } from '../../../../src-js/index.js'
+
+const { LogisticRegression } = linearModel
+const { accuracyScore } = metrics
 
 export default () => {
   it('Logistic Regression', () => {
-    let loadedData = dataset.iris().loadDataset()
-    let x = loadedData.denseMatrix()
-    let y = loadedData.target
-    let params = new LogisticRegressionParametersF64()
-    let yHat = LogisticRegressionF64BigI64.fit(x, y, params).predict(x)
-    let accuracy = new AccuracyI64().getScore(y, yHat)
+    let irisData = dataset.loadIris({ returnXY: true })
+    if (!Array.isArray(irisData)) assert.fail('Expected irisData to be an Array.')
+    const [x, y] = irisData
+    let yHat = new LogisticRegression().fit(x, y).predict(x)
+    let accuracy = accuracyScore(y, yHat, false)
     assert(accuracy)
   })
 }

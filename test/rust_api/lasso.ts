@@ -13,7 +13,7 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const _ = new LassoBuilder(x, yWrapped).build()
   })
 
@@ -23,12 +23,12 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const lassoBuilder = new LassoBuilder(x, yWrapped)
     const lasso = lassoBuilder.build()
-    const score = accuracyScore(lasso.predict(xTest).field0, yTest)
+    const score = accuracyScore(lasso.predict(xTest).field0, yTest, false)
     assert(score >= 0)
   })
 
@@ -38,15 +38,15 @@ export default () => {
     if (!(x && y)) {
       assert.fail('Expected both x and y to be defined')
     }
-    const yWrapped = utilities.wrapTypedArray(utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 }))
+    const yWrapped = utilities.arrayToTypedArray(y, { numberType: TypedArrayType.I32 })
     const [, xTest, , yTest] = trainTestSplit(x, y, { testSize: 0.33 })
 
     const lassoBuilder = new LassoBuilder(x, yWrapped)
     const lasso = lassoBuilder.build()
-    const score1 = accuracyScore(lasso.predict(xTest).field0, yTest)
+    const score1 = accuracyScore(lasso.predict(xTest).field0, yTest, false)
     const serializedLasso = lasso.serialize()
     const deserializedLasso = Lasso.deserialize(serializedLasso)
-    const score2 = accuracyScore(deserializedLasso.predict(xTest).field0, yTest)
+    const score2 = accuracyScore(deserializedLasso.predict(xTest).field0, yTest, false)
     assert.equal(score1, score2)
   })
 }

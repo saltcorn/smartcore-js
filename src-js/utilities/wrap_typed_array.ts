@@ -7,6 +7,8 @@ function wrapTypedArray(y: TypedArray): TypedArrayWrapper {
   if (y instanceof BigUint64Array) return { type: 'U64', field0: y }
   if (y instanceof Int32Array) return { type: 'I32', field0: y }
   if (y instanceof Uint32Array) return { type: 'U32', field0: y }
+  if (y instanceof Uint16Array) return { type: 'U16', field0: y }
+  if (y instanceof Uint8Array) return { type: 'U8', field0: y }
   throw new Error(`[wrapTypedArray] Wrapping typed array (${y?.constructor?.name || typeof y}) failed!`)
 }
 

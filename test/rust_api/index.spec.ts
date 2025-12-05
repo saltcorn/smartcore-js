@@ -18,6 +18,7 @@ import knnClassifier from './knn_classifier.ts'
 import knnRegressor from './knn_regressor.ts'
 import oneHotEncoder from './one_hot_encoder.ts'
 import standardScaler from './standard_scaler.ts'
+import supportVectorRegressor from './support_vector_regressor.ts'
 
 describe('Rust API', () => {
   describe('cluster', () => {
@@ -59,5 +60,9 @@ describe('Rust API', () => {
   describe('preprocessing', () => {
     describe('OneHotEncoder', oneHotEncoder)
     describe('StandardScaler', standardScaler)
+  })
+
+  describe('svm', () => {
+    describe('Support Vector Regressor (SVR)', supportVectorRegressor)
   })
 })
