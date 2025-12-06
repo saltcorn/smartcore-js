@@ -1,6 +1,5 @@
-import { readdirSync, statSync, existsSync, mkdirSync, copyFileSync } from 'fs'
+import { mkdirSync } from 'fs'
 import { writeFileSync } from 'fs'
-import path from 'path'
 
 try {
   mkdirSync('./dist-cjs', { recursive: true })

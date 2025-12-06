@@ -58,14 +58,17 @@
     "access": "public"
   },
   "scripts": {
-    "artifacts": "napi artifacts --build-output-dir ./src-js/core-bindings",
+    "artifacts": "napi artifacts  --build-output-dir ./src-js/core-bindings",
     "bench": "node --import @oxc-node/core/register benchmark/bench.ts",
-    "build": "napi build --platform --release --esm --output-dir ./src-js/core-bindings",
-    "build:cjs": "napi build --platform --release --output-dir ./dist-cjs/core-bindings",
-    "copy:bindings": "copyfiles -u 1 \"src-js/core-bindings/**/*\" dist/",
+    "build:esm": "napi build --platform --release --esm --output-dir ./core-bindings/esm",
+    "build:cjs": "napi build --platform --release --output-dir ./core-bindings/cjs",
+    "copy:esm:bindings": "copyfiles -u 2 \"core-bindings/esm/*\" dist/core-bindings",
+    "copy:cjs:bindings": "copyfiles -u 2 \"core-bindings/cjs/*\" dist-cjs/core-bindings",
+    "copy:src:bindings": "copyfiles -u 2 \"core-bindings/esm/*\" src-js/core-bindings",
+    "copy:bindings": "yarn run copy:esm:bindings && yarn run copy:cjs:bindings && yarn run copy:src:bindings",
     "build:js:esm": "tsc -p ./tsconfig.json",
     "build:js:cjs": "tsc -p ./tsconfig.cjs.json && node scripts/create-cjs-package.js",
-    "build:js": "yarn run build:js:esm && yarn run build:js:cjs && yarn run copy:bindings",
+    "build:js": "yarn run copy:bindings && yarn run build:js:esm && yarn run build:js:cjs",
     "build:debug": "napi build --platform --esm --output-dir ./core-bindings",
     "format": "run-p format:prettier format:rs format:toml",
     "format:prettier": "prettier . -w",
@@ -76,7 +79,7 @@
     "test": "tsx node_modules/mocha/bin/mocha.js",
     "version": "napi version",
     "prepare": "husky",
-    "clean": "rm -rf ./node_modules ./src-js/core-bindings ./dist-cjs/core-bindings Cargo.lock yarn.lock && cargo clean"
+    "clean": "rm -rf ./node_modules ./src-js/core-bindings ./dist ./dist-cjs ./core-bindings Cargo.lock yarn.lock && cargo clean"
   },
   "devDependencies": {
     "@emnapi/core": "^1.6.0",

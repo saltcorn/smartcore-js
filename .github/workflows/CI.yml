@@ -51,67 +51,67 @@ jobs:
           - host: macos-latest
             target: x86_64-apple-darwin
             build: |
-              yarn build --target x86_64-apple-darwin
+              yarn build:esm --target x86_64-apple-darwin
               yarn build:cjs --target x86_64-apple-darwin
           - host: windows-latest
             build: |
-              yarn build --target x86_64-pc-windows-msvc
+              yarn build:esm --target x86_64-pc-windows-msvc
               yarn build:cjs --target x86_64-pc-windows-msvc
             target: x86_64-pc-windows-msvc
           - host: windows-latest
             build: |
-              yarn build --target i686-pc-windows-msvc
+              yarn build:esm --target i686-pc-windows-msvc
               yarn build:cjs --target i686-pc-windows-msvc
             target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             build: |
-              yarn build --target x86_64-unknown-linux-gnu --use-napi-cross
+              yarn build:esm --target x86_64-unknown-linux-gnu --use-napi-cross
               yarn build:cjs --target x86_64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: x86_64-unknown-linux-musl
             build: |
-              yarn build --target x86_64-unknown-linux-musl -x
+              yarn build:esm --target x86_64-unknown-linux-musl -x
               yarn build:cjs --target x86_64-unknown-linux-musl -x
           - host: macos-latest
             target: aarch64-apple-darwin
             build: |
-              yarn build --target aarch64-apple-darwin
+              yarn build:esm --target aarch64-apple-darwin
               yarn build:cjs --target aarch64-apple-darwin
           - host: ubuntu-latest
             target: aarch64-unknown-linux-gnu
             build: |
-              yarn build --target aarch64-unknown-linux-gnu --use-napi-cross
+              yarn build:esm --target aarch64-unknown-linux-gnu --use-napi-cross
               yarn build:cjs --target aarch64-unknown-linux-gnu --use-napi-cross
           - host: ubuntu-latest
             target: armv7-unknown-linux-gnueabihf
             build: |
-              yarn build --target armv7-unknown-linux-gnueabihf --use-napi-cross
+              yarn build:esm --target armv7-unknown-linux-gnueabihf --use-napi-cross
               yarn build:cjs --target armv7-unknown-linux-gnueabihf --use-napi-cross
           - host: ubuntu-latest
             target: aarch64-linux-android
             build: |
-              yarn build --target aarch64-linux-android
+              yarn build:esm --target aarch64-linux-android
               yarn build:cjs --target aarch64-linux-android
           - host: ubuntu-latest
             target: armv7-linux-androideabi
             build: |
-              yarn build --target armv7-linux-androideabi
+              yarn build:esm --target armv7-linux-androideabi
               yarn build:cjs --target armv7-linux-androideabi
           - host: ubuntu-latest
             target: aarch64-unknown-linux-musl
             build: |
-              yarn build --target aarch64-unknown-linux-musl -x
+              yarn build:esm --target aarch64-unknown-linux-musl -x
               yarn build:cjs --target aarch64-unknown-linux-musl -x
           - host: windows-latest
             target: aarch64-pc-windows-msvc
             build: |
-              yarn build --target aarch64-pc-windows-msvc
+              yarn build:esm --target aarch64-pc-windows-msvc
               yarn build:cjs --target aarch64-pc-windows-msvc
           - host: ubuntu-latest
             target: wasm32-wasip1-threads
             build: |
-              yarn build --target wasm32-wasip1-threads
+              yarn build:esm --target wasm32-wasip1-threads
               yarn build:cjs --target wasm32-wasip1-threads
     name: stable - ${{ matrix.settings.target }} - node@22
     runs-on: ${{ matrix.settings.host }}
@@ -207,7 +207,7 @@ jobs:
             freebsd-version
             yarn install
             yarn dedupe
-            yarn build
+            yarn build:esm
             yarn build:cjs
             yarn build:js
             rm -rf node_modules
