@@ -207,7 +207,7 @@ jobs:
             freebsd-version
             yarn install
             yarn dedupe
-            yarn build
+            yarn build:esm
             yarn build:cjs
             yarn build:js
             rm -rf node_modules
