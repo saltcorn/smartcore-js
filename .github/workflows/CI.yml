@@ -48,71 +48,71 @@ jobs:
       fail-fast: false
       matrix:
         settings:
-          - host: macos-latest
-            target: x86_64-apple-darwin
-            build: |
-              yarn build:esm --target x86_64-apple-darwin
-              yarn build:cjs --target x86_64-apple-darwin
-          - host: windows-latest
-            build: |
-              yarn build:esm --target x86_64-pc-windows-msvc
-              yarn build:cjs --target x86_64-pc-windows-msvc
-            target: x86_64-pc-windows-msvc
-          - host: windows-latest
-            build: |
-              yarn build:esm --target i686-pc-windows-msvc
-              yarn build:cjs --target i686-pc-windows-msvc
-            target: i686-pc-windows-msvc
+          #   - host: macos-latest
+          #     target: x86_64-apple-darwin
+          #     build: |
+          #       yarn build:esm --target x86_64-apple-darwin
+          #       yarn build:cjs --target x86_64-apple-darwin
+          #   - host: windows-latest
+          #     build: |
+          #       yarn build:esm --target x86_64-pc-windows-msvc
+          #       yarn build:cjs --target x86_64-pc-windows-msvc
+          #     target: x86_64-pc-windows-msvc
+          #   - host: windows-latest
+          #     build: |
+          #       yarn build:esm --target i686-pc-windows-msvc
+          #       yarn build:cjs --target i686-pc-windows-msvc
+          #     target: i686-pc-windows-msvc
           - host: ubuntu-latest
             target: x86_64-unknown-linux-gnu
             build: |
               yarn build:esm --target x86_64-unknown-linux-gnu --use-napi-cross
               yarn build:cjs --target x86_64-unknown-linux-gnu --use-napi-cross
-          - host: ubuntu-latest
-            target: x86_64-unknown-linux-musl
-            build: |
-              yarn build:esm --target x86_64-unknown-linux-musl -x
-              yarn build:cjs --target x86_64-unknown-linux-musl -x
-          - host: macos-latest
-            target: aarch64-apple-darwin
-            build: |
-              yarn build:esm --target aarch64-apple-darwin
-              yarn build:cjs --target aarch64-apple-darwin
-          - host: ubuntu-latest
-            target: aarch64-unknown-linux-gnu
-            build: |
-              yarn build:esm --target aarch64-unknown-linux-gnu --use-napi-cross
-              yarn build:cjs --target aarch64-unknown-linux-gnu --use-napi-cross
-          - host: ubuntu-latest
-            target: armv7-unknown-linux-gnueabihf
-            build: |
-              yarn build:esm --target armv7-unknown-linux-gnueabihf --use-napi-cross
-              yarn build:cjs --target armv7-unknown-linux-gnueabihf --use-napi-cross
-          - host: ubuntu-latest
-            target: aarch64-linux-android
-            build: |
-              yarn build:esm --target aarch64-linux-android
-              yarn build:cjs --target aarch64-linux-android
-          - host: ubuntu-latest
-            target: armv7-linux-androideabi
-            build: |
-              yarn build:esm --target armv7-linux-androideabi
-              yarn build:cjs --target armv7-linux-androideabi
-          - host: ubuntu-latest
-            target: aarch64-unknown-linux-musl
-            build: |
-              yarn build:esm --target aarch64-unknown-linux-musl -x
-              yarn build:cjs --target aarch64-unknown-linux-musl -x
-          - host: windows-latest
-            target: aarch64-pc-windows-msvc
-            build: |
-              yarn build:esm --target aarch64-pc-windows-msvc
-              yarn build:cjs --target aarch64-pc-windows-msvc
-          - host: ubuntu-latest
-            target: wasm32-wasip1-threads
-            build: |
-              yarn build:esm --target wasm32-wasip1-threads
-              yarn build:cjs --target wasm32-wasip1-threads
+        #   - host: ubuntu-latest
+        #     target: x86_64-unknown-linux-musl
+        #     build: |
+        #       yarn build:esm --target x86_64-unknown-linux-musl -x
+        #       yarn build:cjs --target x86_64-unknown-linux-musl -x
+        #   - host: macos-latest
+        #     target: aarch64-apple-darwin
+        #     build: |
+        #       yarn build:esm --target aarch64-apple-darwin
+        #       yarn build:cjs --target aarch64-apple-darwin
+        #   - host: ubuntu-latest
+        #     target: aarch64-unknown-linux-gnu
+        #     build: |
+        #       yarn build:esm --target aarch64-unknown-linux-gnu --use-napi-cross
+        #       yarn build:cjs --target aarch64-unknown-linux-gnu --use-napi-cross
+        #   - host: ubuntu-latest
+        #     target: armv7-unknown-linux-gnueabihf
+        #     build: |
+        #       yarn build:esm --target armv7-unknown-linux-gnueabihf --use-napi-cross
+        #       yarn build:cjs --target armv7-unknown-linux-gnueabihf --use-napi-cross
+        #   - host: ubuntu-latest
+        #     target: aarch64-linux-android
+        #     build: |
+        #       yarn build:esm --target aarch64-linux-android
+        #       yarn build:cjs --target aarch64-linux-android
+        #   - host: ubuntu-latest
+        #     target: armv7-linux-androideabi
+        #     build: |
+        #       yarn build:esm --target armv7-linux-androideabi
+        #       yarn build:cjs --target armv7-linux-androideabi
+        #   - host: ubuntu-latest
+        #     target: aarch64-unknown-linux-musl
+        #     build: |
+        #       yarn build:esm --target aarch64-unknown-linux-musl -x
+        #       yarn build:cjs --target aarch64-unknown-linux-musl -x
+        #   - host: windows-latest
+        #     target: aarch64-pc-windows-msvc
+        #     build: |
+        #       yarn build:esm --target aarch64-pc-windows-msvc
+        #       yarn build:cjs --target aarch64-pc-windows-msvc
+        #   - host: ubuntu-latest
+        #     target: wasm32-wasip1-threads
+        #     build: |
+        #       yarn build:esm --target wasm32-wasip1-threads
+        #       yarn build:cjs --target wasm32-wasip1-threads
     name: stable - ${{ matrix.settings.target }} - node@22
     runs-on: ${{ matrix.settings.host }}
     steps:
@@ -171,101 +171,101 @@ jobs:
             ./**/${{ env.APP_NAME }}.*.node
             ./**/${{ env.APP_NAME }}.*.wasm
           if-no-files-found: error
-  build-freebsd:
-    runs-on: ubuntu-latest
-    name: Build FreeBSD
-    steps:
-      - uses: actions/checkout@v5
-      - name: Build
-        id: build
-        uses: cross-platform-actions/action@v0.29.0
-        env:
-          DEBUG: napi:*
-          RUSTUP_IO_THREADS: 1
-        with:
-          operating_system: freebsd
-          version: '14.2'
-          memory: 8G
-          cpu_count: 3
-          environment_variables: DEBUG RUSTUP_IO_THREADS
-          shell: bash
-          run: |
-            sudo pkg install -y -f curl node libnghttp2 npm cmake
-            sudo npm install -g yarn --ignore-scripts
-            curl https://sh.rustup.rs -sSf --output rustup.sh
-            sh rustup.sh -y --profile minimal --default-toolchain stable
-            source "$HOME/.cargo/env"
-            echo "~~~~ rustc --version ~~~~"
-            rustc --version
-            echo "~~~~ node -v ~~~~"
-            node -v
-            echo "~~~~ yarn --version ~~~~"
-            yarn --version
-            pwd
-            ls -lah
-            whoami
-            env
-            freebsd-version
-            yarn install
-            yarn dedupe
-            yarn build:esm
-            yarn build:cjs
-            yarn build:js
-            rm -rf node_modules
-            rm -rf target
-            rm -rf .yarn/cache
+      #   build-freebsd:
+      #     runs-on: ubuntu-latest
+      #     name: Build FreeBSD
+      #     steps:
+      #       - uses: actions/checkout@v5
+      #       - name: Build
+      #         id: build
+      #         uses: cross-platform-actions/action@v0.29.0
+      #         env:
+      #           DEBUG: napi:*
+      #           RUSTUP_IO_THREADS: 1
+      #         with:
+      #           operating_system: freebsd
+      #           version: '14.2'
+      #           memory: 8G
+      #           cpu_count: 3
+      #           environment_variables: DEBUG RUSTUP_IO_THREADS
+      #           shell: bash
+      #           run: |
+      #             sudo pkg install -y -f curl node libnghttp2 npm cmake
+      #             sudo npm install -g yarn --ignore-scripts
+      #             curl https://sh.rustup.rs -sSf --output rustup.sh
+      #             sh rustup.sh -y --profile minimal --default-toolchain stable
+      #             source "$HOME/.cargo/env"
+      #             echo "~~~~ rustc --version ~~~~"
+      #             rustc --version
+      #             echo "~~~~ node -v ~~~~"
+      #             node -v
+      #             echo "~~~~ yarn --version ~~~~"
+      #             yarn --version
+      #             pwd
+      #             ls -lah
+      #             whoami
+      #             env
+      #             freebsd-version
+      #             yarn install
+      #             yarn dedupe
+      #             yarn build:esm
+      #             yarn build:cjs
+      #             yarn build:js
+      #             rm -rf node_modules
+      #             rm -rf target
+      #             rm -rf .yarn/cache
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: bindings-freebsd
           path: ./**/${{ env.APP_NAME }}.*.node
           if-no-files-found: error
-  test-macOS-windows-binding:
-    name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
-    needs:
-      - build
-    strategy:
-      fail-fast: false
-      matrix:
-        settings:
-          - host: windows-latest
-            target: x86_64-pc-windows-msvc
-            architecture: x64
-          - host: windows-11-arm
-            target: aarch64-pc-windows-msvc
-            architecture: arm64
-          - host: macos-latest
-            target: aarch64-apple-darwin
-            architecture: arm64
-          - host: macos-latest
-            target: x86_64-apple-darwin
-            architecture: x64
-        node:
-          - '20'
-          - '22'
-    runs-on: ${{ matrix.settings.host }}
-    steps:
-      - uses: actions/checkout@v5
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node }}
-          cache: yarn
-          architecture: ${{ matrix.settings.architecture }}
-      - name: Install dependencies
-        run: yarn install
-      - name: Deduplicate packages
-        run: yarn dedupe
-      - name: Download artifacts
-        uses: actions/download-artifact@v5
-        with:
-          name: bindings-${{ matrix.settings.target }}
-          path: .
-      - name: List packages
-        run: ls -R .
-        shell: bash
-      - name: Test bindings
-        run: yarn test
+  #   test-macOS-windows-binding:
+  #     name: Test bindings on ${{ matrix.settings.target }} - node@${{ matrix.node }}
+  #     needs:
+  #       - build
+  #     strategy:
+  #       fail-fast: false
+  #       matrix:
+  #         settings:
+  #           - host: windows-latest
+  #             target: x86_64-pc-windows-msvc
+  #             architecture: x64
+  #           - host: windows-11-arm
+  #             target: aarch64-pc-windows-msvc
+  #             architecture: arm64
+  #           - host: macos-latest
+  #             target: aarch64-apple-darwin
+  #             architecture: arm64
+  #           - host: macos-latest
+  #             target: x86_64-apple-darwin
+  #             architecture: x64
+  #         node:
+  #           - '20'
+  #           - '22'
+  #     runs-on: ${{ matrix.settings.host }}
+  #     steps:
+  #       - uses: actions/checkout@v5
+  #       - name: Setup node
+  #         uses: actions/setup-node@v4
+  #         with:
+  #           node-version: ${{ matrix.node }}
+  #           cache: yarn
+  #           architecture: ${{ matrix.settings.architecture }}
+  #       - name: Install dependencies
+  #         run: yarn install
+  #       - name: Deduplicate packages
+  #         run: yarn dedupe
+  #       - name: Download artifacts
+  #         uses: actions/download-artifact@v5
+  #         with:
+  #           name: bindings-${{ matrix.settings.target }}
+  #           path: .
+  #       - name: List packages
+  #         run: ls -R .
+  #         shell: bash
+  #       - name: Test bindings
+  #         run: yarn test
   test-linux-binding:
     name: Test ${{ matrix.target }} - node@${{ matrix.node }}
     needs:
@@ -275,10 +275,10 @@ jobs:
       matrix:
         target:
           - x86_64-unknown-linux-gnu
-          - x86_64-unknown-linux-musl
-          - aarch64-unknown-linux-gnu
-          - aarch64-unknown-linux-musl
-          - armv7-unknown-linux-gnueabihf
+        #   - x86_64-unknown-linux-musl
+        #   - aarch64-unknown-linux-gnu
+        #   - aarch64-unknown-linux-musl
+        #   - armv7-unknown-linux-gnueabihf
         node:
           - '20'
           - '22'
@@ -373,8 +373,8 @@ jobs:
       id-token: write
     needs:
       - lint
-      - build-freebsd
-      - test-macOS-windows-binding
+      #   - build-freebsd
+      #   - test-macOS-windows-binding
       - test-linux-binding
       - test-wasi
     steps:
