@@ -3,15 +3,18 @@ import { writeFileSync } from 'fs'
 import path from 'path'
 
 function copyFolderSync(src, dest) {
-  if (!existsSync(dest)) {
-    mkdirSync(dest, { recursive: true })
+  const absSrc = path.resolve(src)
+  const absDest = path.resolve(dest)
+
+  if (!existsSync(absDest)) {
+    mkdirSync(absDest, { recursive: true })
   }
 
-  const files = readdirSync(src)
+  const files = readdirSync(absSrc)
 
   for (const file of files) {
-    const srcPath = path.join(src, file)
-    const destPath = path.join(dest, file)
+    const srcPath = path.join(absSrc, file)
+    const destPath = path.join(absDest, file)
     const stat = statSync(srcPath)
 
     if (stat.isDirectory()) {

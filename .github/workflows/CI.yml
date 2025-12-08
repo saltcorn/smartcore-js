@@ -388,14 +388,14 @@ jobs:
         run: yarn install
       - name: Deduplicate packages
         run: yarn dedupe
-      - name: Download all artifacts
-        uses: actions/download-artifact@v5
-        with:
-          path: artifacts
       - name: Compile TypeScript code
         run: yarn build:js
       - name: create npm dirs
         run: yarn napi create-npm-dirs
+      - name: Download all artifacts
+        uses: actions/download-artifact@v5
+        with:
+          path: artifacts
       - name: Move artifacts
         run: yarn artifacts
       - name: List packages
