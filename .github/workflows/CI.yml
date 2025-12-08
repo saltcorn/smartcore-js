@@ -167,9 +167,15 @@ jobs:
         with:
           name: bindings-${{ matrix.settings.target }}
           path: |
-            ./core-bindings
             ./**/${{ env.APP_NAME }}.*.node
             ./**/${{ env.APP_NAME }}.*.wasm
+          if-no-files-found: error
+      - name: Upload 'core-bindings' artifact
+        if: ${{ contains(matrix.settings.target, 'x86_64-unknown-linux-gnu') }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: core-bindings
+          path: core-bindings/
           if-no-files-found: error
       #   build-freebsd:
       #     runs-on: ubuntu-latest
@@ -388,6 +394,10 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           path: artifacts
+      - name: Download 'core-bindings' artifacts
+        uses: actions/download-artifact@v5
+        with:
+          name: core-bindings
       - name: List packages
         run: ls -R .
         shell: bash
