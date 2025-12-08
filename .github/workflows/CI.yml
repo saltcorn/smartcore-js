@@ -398,6 +398,7 @@ jobs:
         uses: actions/download-artifact@v5
         with:
           name: core-bindings
+          path: core-bindings
       - name: List packages
         run: ls -R .
         shell: bash
