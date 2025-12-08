@@ -6,6 +6,9 @@ function copyFolderSync(src, dest) {
   const absSrc = path.resolve(src)
   const absDest = path.resolve(dest)
 
+  console.log(`Copying: '${absSrc}'`)
+  console.log(`To: '${absSrc}'`)
+
   if (!existsSync(absDest)) {
     mkdirSync(absDest, { recursive: true })
   }
@@ -35,10 +38,10 @@ writeFileSync('./dist-cjs/package.json', JSON.stringify({ type: 'commonjs' }, nu
 console.log('Created dist-cjs/package.json')
 
 copyFolderSync('./core-bindings/esm/', './src-js/core-bindings/')
-console.log("Copied the auto-generated ESM 'core-bindings' folder into the 'src-js' folder.")
+console.log("Copied the auto-generated ESM 'core-bindings' folder into the 'src-js' folder.\n")
 
 copyFolderSync('./core-bindings/esm/', './dist/core-bindings/')
-console.log("Copied the auto-generated ESM 'core-bindings' folder into the 'dist' folder.")
+console.log("Copied the auto-generated ESM 'core-bindings' folder into the 'dist' folder.\n")
 
 copyFolderSync('./core-bindings/cjs/', './dist-cjs/core-bindings/')
-console.log("Copied the auto-generated CommonJS 'core-bindings' folder into the 'dist-cjs' folder.")
+console.log("Copied the auto-generated CommonJS 'core-bindings' folder into the 'dist-cjs' folder.\n")
