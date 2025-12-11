@@ -270,3 +270,5 @@ vite.config.ts.timestamp-*
 dist/
 dist-cjs/
 core-bindings/
+
+scratchpad.md
